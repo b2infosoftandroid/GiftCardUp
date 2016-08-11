@@ -21,6 +21,10 @@
         android:background="@color/menu"
         app:itemIconTint="@color/menu_item_icon"
         app:itemTextColor="@color/menu_item_name"
-        app:headerLayout="@layout/nav_header_main"
+
         app:menu="@menu/activity_main_drawer" />
+
+    <!--
+    app:headerLayout="@layout/nav_header_main"
+    -->
 </android.support.v4.widget.DrawerLayout>

@@ -4,10 +4,8 @@ import android.content.Intent;
 import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -21,6 +19,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.fragments.Profile;
 import com.b2infosoft.giftcardup.fragments.profile.BankInformation;
 import com.b2infosoft.giftcardup.fragments.profile.Identification;
@@ -29,21 +28,17 @@ import com.b2infosoft.giftcardup.utils.Utils1;
 import com.b2infosoft.giftcardup.utils.Utils2;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
-import java.lang.reflect.Array;
-import java.util.List;
-
 public class Main extends GiftCardUp {
+    Active active;
     NavigationView navigationView;
     View headerView;
-    RelativeLayout content;
     CircularImageView user_profile_icon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        active = Active.getInstance(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -55,11 +50,10 @@ public class Main extends GiftCardUp {
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new MenuSelect());
-        headerView = LayoutInflater.from(this).inflate(R.layout.nav_header_main, navigationView, true);
+        headerView = LayoutInflater.from(this).inflate(R.layout.nav_header_main, navigationView, false);
         user_profile_icon = (CircularImageView) headerView.findViewById(R.id.user_profile_icon);
         user_profile_icon.setOnClickListener(this);
-
-        content = (RelativeLayout) findViewById(R.id.main_content);
+        setNavigationMenu();
     }
 
     @Override
@@ -116,11 +110,9 @@ public class Main extends GiftCardUp {
         switch (v.getId()) {
             case R.id.user_profile_icon:
                 //startActivity(new Intent(this,Profile.class));
-                replaceFragment(new Profile());
-                setTitle("PROFILE");
                 break;
             default:
-                  break;
+                break;
         }
     }
 
@@ -152,14 +144,54 @@ public class Main extends GiftCardUp {
             int id = item.getItemId();
 
             switch (id) {
+                case R.id.menu_item_my_listing:
 
+                    break;
+                case R.id.menu_item_bulk_listing:
+
+                    break;
+                case R.id.menu_item_speedy_sell:
+
+                    break;
+                case R.id.menu_item_shipping_center:
+
+                    break;
+                case R.id.menu_item_available_fund:
+
+                    break;
+                case R.id.menu_item_withdrawal_history:
+
+                    break;
+                case R.id.menu_item_recommend_brand:
+
+                    break;
+                case R.id.menu_item_referral_rewards:
+
+                    break;
+                case R.id.menu_item_my_account:
+                    replaceFragment(new Profile());
+                    setTitle("PROFILE");
+                    break;
+                case R.id.menu_item_my_orders:
+
+                    break;
+                case R.id.menu_item_my_cart:
+
+                    break;
+                case R.id.menu_item_logout:
+                    active.setLogOut();
+                    setNavigationMenu();
+                    break;
+                case R.id.menu_item_login:
+                    startActivity(new Intent(Main.this, Login.class));
+                    break;
             }
-
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
             return true;
         }
     }
+
     private void replaceFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.main_content, fragment);
@@ -170,6 +202,23 @@ public class Main extends GiftCardUp {
         drawer.closeDrawer(GravityCompat.START);
     }
 
+    private void setNavigationMenu() {
+        navigationView.removeHeaderView(headerView);
+        navigationView.addHeaderView(headerView);
+        setSellerMenu(false);
+        setLoginMenu(active.isLogin());
+    }
+
+    private void setSellerMenu(boolean bol) {
+        navigationView.getMenu().setGroupVisible(R.id.menu_1, bol);
+        navigationView.getMenu().setGroupVisible(R.id.menu_2, bol);
+        navigationView.getMenu().setGroupVisible(R.id.menu_3, bol);
+    }
+
+    private void setLoginMenu(boolean bol) {
+        navigationView.getMenu().setGroupVisible(R.id.menu_5, bol);
+        navigationView.getMenu().setGroupVisible(R.id.menu_6, !bol);
+    }
 }
 
 abstract class GiftCardUp extends AppCompatActivity implements View.OnClickListener, Profile.OnFragmentProfile, BankInformation.OnFragmentBankInformation, Identification.OnFragmentIdentification, SsnEin.OnFragmentSsnEin {
