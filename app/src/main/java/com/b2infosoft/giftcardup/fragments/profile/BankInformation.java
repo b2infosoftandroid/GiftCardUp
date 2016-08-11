@@ -1,5 +1,6 @@
 package com.b2infosoft.giftcardup.fragments.profile;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.b2infosoft.giftcardup.R;
 
@@ -23,7 +25,8 @@ public class BankInformation extends Fragment {
 
     private final String TAG = BankInformation.class.getName();
 
-    Button add_account;
+    Button add_account,save,cancel;
+    EditText name,routing_no,account_no;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -85,6 +88,27 @@ public class BankInformation extends Fragment {
 
     private void addNewAccount(){
 
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setTitle("ADD BANK DETAIL");
+        dialog.setContentView(R.layout.custom_dialog_add_account);
+
+        name = (EditText)dialog.findViewById(R.id.bank_name);
+        routing_no = (EditText)dialog.findViewById(R.id.bank_routing_no);
+        account_no = (EditText)dialog.findViewById(R.id.bank_account_no);
+        save = (Button)dialog.findViewById(R.id.bank_save_btn);
+        cancel = (Button)dialog.findViewById(R.id.bank_cancel_btn);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
     }
 
