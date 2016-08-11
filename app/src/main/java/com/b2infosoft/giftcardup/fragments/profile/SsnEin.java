@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.b2infosoft.giftcardup.R;
 
@@ -19,6 +20,10 @@ import com.b2infosoft.giftcardup.R;
  * create an instance of this fragment.
  */
 public class SsnEin extends Fragment {
+
+    private final String TAG = SsnEin.class.getName();
+
+    Button b1;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -65,7 +70,17 @@ public class SsnEin extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_ssn_ein, container, false);
+        View view = null;
+        view = inflater.inflate(R.layout.fragment_ssn_ein, container, false);
+
+        b1 = (Button)view.findViewById(R.id.ssn_ein_approved_for_sell);
+        b1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.b2infosoft.giftcardup.R;
 
@@ -19,6 +20,10 @@ import com.b2infosoft.giftcardup.R;
  * create an instance of this fragment.
  */
 public class BankInformation extends Fragment {
+
+    private final String TAG = BankInformation.class.getName();
+
+    Button add_account;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -65,7 +70,22 @@ public class BankInformation extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_bank_info, container, false);
+        View view = null;
+        view = inflater.inflate(R.layout.fragment_bank_info, container, false);
+
+        add_account = (Button)view.findViewById(R.id.bank_info_add_account);
+        add_account.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addNewAccount();
+            }
+        });
+        return view;
+    }
+
+    private void addNewAccount(){
+
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event

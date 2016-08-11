@@ -15,6 +15,7 @@
     <string name="menu_referral_rewards">REFERRAL REWARDS</string>
     <string name="menu_my_order">MY ORDERS</string>
     <string name="menu_my_cart">MY CART</string>
+    <string name="menu_my_account">MY ACCOUNT</string>
     <string name="menu_logout">LOGOUT</string>
     <string name="menu_login">LOGIN</string>
 
@@ -67,6 +68,18 @@
     <string name="identification_suite_no">SUITE NUMBER</string>
     <string name="identification_zip_code">ZIP CODE</string>
     <string name="identification_cmpny_name">COMPANY NAME</string>
+    
+    <!--       BANK DETAILS           -->
+    <string name="bank_detail_add_bank_account">ADD BANK ACCOUNT</string>
+
+    <string name="bank_info_name">BANK NAME</string>
+    <string name="bank_info_routing_no">ROUTING NUMBER</string>
+    <string name="bank_info_account_no">ACCOUNT NUMBER</string>
+    <string name="bank_info_save_btn">SAVE</string>
+    <string name="bank_info_cancel_btn">CANCEL</string>
+
+    <!--       SSN/EIN           -->
+    <string name="approved_for_sell">BECOME APPROVED FOR SELLING</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
