@@ -16,6 +16,7 @@
     <string name="menu_my_order">MY ORDERS</string>
     <string name="menu_my_cart">MY CART</string>
     <string name="menu_logout">LOGOUT</string>
+    <string name="menu_login">LOGIN</string>
 
     <!-- Sign Up -->
     <string name="sign_up_name_first">First Name</string>
