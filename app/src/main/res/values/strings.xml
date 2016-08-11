@@ -42,13 +42,30 @@
     <string name="login_forgot_password">FORGOT PASSWORD</string>
     <string name="login_sign_up">SIGN UP</string>
 
+    <!--         FORGOT PASSWORD          -->
+    <string name="forgot_old_password">OLD PASSWORD</string>
+    <string name="forgot_new_password">NEW PASSWORD</string>
+    <string name="forgot_confirm_new_password">CONFIRM NEW PASSWORD</string>
+    <string name="forgot_submit_btn">SUBMIT</string>
+
     <!--         PROFILE CONTENT         -->
     <string name="profile_user_name">USER NAME HERE</string>
     <string name="profile_member_since">MEMBER SINCE :</string>
-
-    <!--    PROFILE TABS   -->
     <string name="profile_total_sold">TOTAL SOLD</string>
     <string name="profile_total_saving">TOTAL SAVING</string>
+    
+    <!--         IDENTIFICATION        -->
+    <string name="identification_f_name">FIRST NAME</string>
+    <string name="identification_l_name">LAST NAME</string>
+    <string name="identification_email">EMAIL</string>
+    <string name="identification_city">CITY</string>
+    <string name="identification_paypal_id">PAYPAL ID</string>
+    <string name="identification_state">STATE</string>
+    <string name="identification_phone">PHONE</string>
+    <string name="identification_address">ADDRESS</string>
+    <string name="identification_suite_no">SUITE NUMBER</string>
+    <string name="identification_zip_code">ZIP CODE</string>
+    <string name="identification_cmpny_name">COMPANY NAME</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

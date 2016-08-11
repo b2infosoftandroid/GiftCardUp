@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.b2infosoft.giftcardup.R;
 
@@ -19,6 +20,10 @@ import com.b2infosoft.giftcardup.R;
  * create an instance of this fragment.
  */
 public class Identification extends Fragment {
+
+    private final String TAG = Identification.class.getName();
+
+    EditText f_name,l_name,email,mobile,city,state,zip_code,cmpny_name,paypal_id,address,suite_no;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -65,7 +70,21 @@ public class Identification extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_identification, container, false);
+        View view = null;
+        view = inflater.inflate(R.layout.fragment_identification, container, false);
+
+        f_name = (EditText)view.findViewById(R.id.identity_f_name);
+        l_name = (EditText)view.findViewById(R.id.identity_l_name);
+        email = (EditText)view.findViewById(R.id.identity_email);
+        city = (EditText)view.findViewById(R.id.identity_city);
+        state = (EditText)view.findViewById(R.id.identity_state);
+        paypal_id = (EditText)view.findViewById(R.id.identity_paypal_id);
+        suite_no = (EditText)view.findViewById(R.id.identity_suite_no);
+        address = (EditText)view.findViewById(R.id.identity_address);
+        mobile = (EditText)view.findViewById(R.id.identity_phone);
+        cmpny_name = (EditText)view.findViewById(R.id.identity_cmpny_name);
+        zip_code = (EditText)view.findViewById(R.id.identity_zip_code);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
