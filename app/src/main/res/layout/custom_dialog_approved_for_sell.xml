@@ -9,82 +9,186 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin">
 
-    <Button
-        android:id="@+id/ssn_ein_upload_identification_img"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:background="@drawable/button_fill_background"
-        android:padding="@dimen/button_margin_left"
-        android:text="@string/ssn_ein_identification_pic"
-        android:textAllCaps="true"
-        android:textColor="@color/button_foreground" />
+        android:scrollbars="none">
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:textColorHint="@color/edit_text_hint_text">
-
-        <EditText
-            android:id="@+id/ssn_ein_no"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/enter_ssn_ein"
-            android:inputType="text"
-            android:textAllCaps="true"
-            android:textColor="@color/edit_text_text" />
-    </android.support.design.widget.TextInputLayout>
+            android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/edit_text_margin_top"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/ssn_ein_id_type"
-            android:textAllCaps="true"
-            android:layout_marginLeft="10dp"/>
-
-            <RadioGroup
+            <Button
+                android:id="@+id/ssn_ein_upload_identification_img"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/activity_horizontal_margin">
-                <RadioButton
+                android:layout_alignParentRight="true"
+                android:background="@drawable/button_fill_background"
+                android:padding="@dimen/button_margin_left"
+                android:text="@string/ssn_ein_identification_pic"
+                android:textAllCaps="true"
+                android:textColor="@color/button_foreground" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:textColorHint="@color/edit_text_hint_text">
+
+                <EditText
+                    android:id="@+id/ssn_ein_no"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/enter_ssn_ein"
+                    android:inputType="text"
+                    android:textAllCaps="true"
+                    android:textColor="@color/edit_text_text" />
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/edit_text_margin_top"
+                android:orientation="vertical">
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/id_type_ssn"
-                    android:textColor="@color/edit_text_text"/>
-                <RadioButton
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/ssn_ein_id_type"
+                    android:textAllCaps="true" />
+
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/id_type_ssn"
+                        android:textColor="@color/edit_text_text" />
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/radio_button_margin_left"
+                        android:text="@string/id_type_ein"
+                        android:textColor="@color/edit_text_text" />
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/button_margin_top"
+                android:padding="@dimen/button_margin_left">
+
+                <Button
+                    android:id="@+id/ssn_ein_next_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/id_type_ein"
-                    android:layout_marginLeft="@dimen/radio_button_margin_left"
-                    android:textColor="@color/edit_text_text"/>
-            </RadioGroup>
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/button_fill_background"
+                    android:padding="@dimen/button_margin_left"
+                    android:text="@string/ssn_ein_next_btn"
+                    android:textAllCaps="true"
+                    android:textColor="@color/button_foreground" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
 
-    </LinearLayout>
-
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/button_margin_top"
-        android:padding="@dimen/button_margin_left">
+        android:scrollbars="none"
+        android:visibility="gone">
 
-        <Button
-            android:id="@+id/ssn_ein_next_button"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/button_fill_background"
-            android:padding="@dimen/button_margin_left"
-            android:text="@string/ssn_ein_next_btn"
-            android:textAllCaps="true"
-            android:textColor="@color/button_foreground" />
-    </RelativeLayout>
+            android:orientation="vertical">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/edit_text_hint_text">
+
+                <EditText
+                    android:id="@+id/bank_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/bank_info_name"
+                    android:inputType="text"
+                    android:textAllCaps="true"
+                    android:textColor="@color/edit_text_text" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/edit_text_margin_top"
+                android:textColorHint="@color/edit_text_hint_text">
+
+                <EditText
+                    android:id="@+id/bank_routing_no"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/bank_info_routing_no"
+                    android:inputType="text"
+                    android:textAllCaps="true"
+                    android:textColor="@color/edit_text_text" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/edit_text_margin_top"
+                android:textColorHint="@color/edit_text_hint_text">
+
+                <EditText
+                    android:id="@+id/bank_account_no"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/bank_info_account_no"
+                    android:inputType="number"
+                    android:textAllCaps="true"
+                    android:textColor="@color/edit_text_text" />
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/button_margin_top"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="@dimen/button_margin_left">
+
+                <Button
+                    android:id="@+id/bank_cancel_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_fill_background"
+                    android:padding="@dimen/button_margin_left"
+                    android:text="@string/bank_info_cancel_btn"
+                    android:textAllCaps="true"
+                    android:textColor="@color/button_foreground" />
+
+                <Button
+                    android:id="@+id/bank_save_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/button_margin_left"
+                    android:background="@drawable/button_fill_background"
+                    android:padding="@dimen/button_margin_left"
+                    android:text="@string/bank_info_save_btn"
+                    android:textAllCaps="true"
+                    android:textColor="@color/button_foreground" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
