@@ -1,0 +1,46 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="nav_header_vertical_spacing">16dp</dimen>
+    <dimen name="nav_header_height">160dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="input_text_layout_margin_top">10sp</dimen>
+
+    <dimen name="edit_text_padding_top">16dp</dimen>
+    <dimen name="edit_text_padding_bottom">16dp</dimen>
+    <dimen name="edit_text_padding_left">16dp</dimen>
+    <dimen name="edit_text_padding_right">16dp</dimen>
+    <dimen name="edit_text_margin_top">16dp</dimen>
+    <dimen name="edit_text_margin_bottom">16dp</dimen>
+    <dimen name="edit_text_margin_left">16dp</dimen>
+    <dimen name="edit_text_margin_right">16dp</dimen>
+
+    <dimen name="button_padding_top">16dp</dimen>
+    <dimen name="button_padding_bottom">16dp</dimen>
+    <dimen name="button_padding_left">100dp</dimen>
+    <dimen name="button_padding_right">100dp</dimen>
+    <dimen name="button_margin_top">50dp</dimen>
+    <dimen name="button_margin_bottom">50dp</dimen>
+    <dimen name="button_margin_left">16dp</dimen>
+    <dimen name="button_margin_right">16dp</dimen>
+    <dimen name="button_text_font_size">16dp</dimen>
+    <dimen name="button_stroke_width">1dp</dimen>
+    <dimen name="button_stroke_corner_radius">2dp</dimen>
+
+    <dimen name="text_view_margin_left">45dp</dimen>
+    <dimen name="text_view_margin_right">45dp</dimen>
+    <dimen name="text_view_margin_top">10dp</dimen>
+    <dimen name="text_view_margin_bottom">10dp</dimen>
+    <dimen name="text_view_padding_left">16dp</dimen>
+    <dimen name="text_view_padding_right">16dp</dimen>
+    <dimen name="text_view_padding_top">16dp</dimen>
+    <dimen name="text_view_padding_bottom">16dp</dimen>
+
+
+    <dimen name="custom_tab_height">70dp</dimen>
+    <dimen name="custom_tab_margin_top">40dp</dimen>
+    <dimen name="custom_tab_text_font_size">12sp</dimen>
+</resources>

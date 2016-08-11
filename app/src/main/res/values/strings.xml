@@ -1,0 +1,56 @@
+<resources>
+    <string name="app_name">GiftCardUp</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Settings</string>
+    <!-- Drawer menu items -->
+    <string name="menu_my_listing">MY LISTING</string>
+    <string name="menu_bulk_listing">BULK LISTING</string>
+    <string name="menu_speedy_sell">SPEEDY SELL</string>
+    <string name="menu_shipping_center">SHIPPING CENTER</string>
+    <string name="menu_available_fund">AVAILABLE FUND</string>
+    <string name="menu_withdraw_history">WITHDRAWAL HISTORY</string>
+    <string name="menu_recommend_brand">RECOMMEND BRAND</string>
+    <string name="menu_referral_rewards">REFERRAL REWARDS</string>
+    <string name="menu_my_order">MY ORDERS</string>
+    <string name="menu_my_cart">MY CART</string>
+    <string name="menu_logout">LOGOUT</string>
+
+    <!-- Sign Up -->
+    <string name="sign_up_name_first">First Name</string>
+    <string name="sign_up_name_last">Last Name</string>
+    <string name="sign_up_email">Email</string>
+    <string name="sign_up_mobile_number">Mobile Number</string>
+    <string name="sign_up_password">Password</string>
+    <string name="sign_up_password_confirm">Password Confirm</string>
+    <string name="sign_up_next">Next</string>
+    <string name="sign_up_address">Address</string>
+    <string name="sign_up_suite_number">Suite Number</string>
+    <string name="sign_up_city">City</string>
+    <string name="sign_up_state">State</string>
+    <string name="sign_up_zip_code">Zip Code</string>
+    <string name="sign_up_company_name">Company Name</string>
+    <string name="sign_up_representative_id">Representative ID</string>
+    <string name="sign_up_back">back</string>
+    <string name="sign_up_create_account">Create Account</string>
+
+    <!--   LOGIN   -->
+    <string name="login_username">USERNAME</string>
+    <string name="login_password">PASSWORD</string>
+    <string name="login_button">LOGIN</string>
+    <string name="login_forgot_password">FORGOT PASSWORD</string>
+    <string name="login_sign_up">SIGN UP</string>
+
+    <!--         PROFILE CONTENT         -->
+    <string name="profile_user_name">USER NAME HERE</string>
+    <string name="profile_member_since">MEMBER SINCE :</string>
+
+    <!--    PROFILE TABS   -->
+    <string name="profile_total_sold">TOTAL SOLD</string>
+    <string name="profile_total_saving">TOTAL SAVING</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>

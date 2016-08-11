@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#00aff0</color>
+    <color name="colorPrimaryDark">#0391c6</color>
+    <color name="colorAccent">#079cd3</color>
+    <color name="app_background">#00aff0</color>
+    <color name="colorBackground">#00aff0</color>
+
+    <!-- Slide menu colors -->
+    <color name="menu">#00aff0</color>
+    <color name="menu_item_icon">#fff</color>
+    <color name="menu_item_name">#fff</color>
+
+    <!-- Slide menu colors -->
+    <color name="border_user_picture">#e1e1e1</color>
+    <color name="border_shadow_user_picture">#e1e1e1</color>
+
+    <color name="button_foreground">#fff</color>
+    <color name="button_background">#00aff0</color>
+    <color name="button_stroke">#00aff0</color>
+
+    <!-- LOGINT     -->
+    <color name="login_edit_text_text">#b4ebff</color>
+    <color name="login_edit_text_hint">#ffffff</color>
+    <color name="login_forgot_password">#b4ebff </color>
+    <color name="login_sign_up">#b4ebff </color>
+
+    <!--      PROFILE       -->
+    <color name="profile_account_details_background">#079cd3</color>
+    <color name="profile_account_details_divider">#0981ad</color>
+    <color name="profile_text">#797979</color>
+    <color name="profile_text_view_text">#fff</color>
+
+    <color name="edit_text_hint_text">#b1b2b2</color>
+    <color name="edit_text_text">#7c7c7c</color>
+</resources>
