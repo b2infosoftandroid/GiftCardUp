@@ -81,6 +81,13 @@
     <!--       SSN/EIN           -->
     <string name="approved_for_sell">BECOME APPROVED FOR SELLING</string>
 
+    <string name="enter_ssn_ein">SSN/EIN</string>
+    <string name="ssn_ein_next_btn">NEXT</string>
+    <string name="ssn_ein_identification_pic">UPLOAD YOUR IDENTIFICATION IMAGE</string>
+    <string name="ssn_ein_id_type">ID TYPE</string>
+    <string name="id_type_ssn">SSN</string>
+    <string name="id_type_ein">EIN</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

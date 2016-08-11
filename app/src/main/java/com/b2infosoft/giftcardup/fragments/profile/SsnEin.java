@@ -1,5 +1,6 @@
 package com.b2infosoft.giftcardup.fragments.profile;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.b2infosoft.giftcardup.R;
 
@@ -23,7 +25,8 @@ public class SsnEin extends Fragment {
 
     private final String TAG = SsnEin.class.getName();
 
-    Button b1;
+    Button b1,upload_image,next_btn;
+    EditText ssn_ein;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -77,10 +80,28 @@ public class SsnEin extends Fragment {
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getApproved();
+            }
+        });
+
+        return view;
+    }
+
+    private void getApproved(){
+
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setTitle("GET APPROVED FOR SELLING");
+        dialog.setContentView(R.layout.custom_dialog_approved_for_sell);
+
+        ssn_ein = (EditText)dialog.findViewById(R.id.ssn_ein_no);
+        upload_image = (Button)dialog.findViewById(R.id.ssn_ein_upload_identification_img);
+        next_btn = (Button)dialog.findViewById(R.id.ssn_ein_next_button);
+        next_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
             }
         });
-        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
