@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 
 import com.b2infosoft.giftcardup.R;
 
@@ -27,6 +28,7 @@ public class SsnEin extends Fragment {
 
     Button b1,upload_image,next_btn;
     EditText ssn_ein;
+    ScrollView step_one,step_two;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -93,6 +95,8 @@ public class SsnEin extends Fragment {
         dialog.setTitle("GET APPROVED FOR SELLING");
         dialog.setContentView(R.layout.custom_dialog_approved_for_sell);
 
+        step_one = (ScrollView)dialog.findViewById(R.id.scroll_view_step_one);
+        step_two = (ScrollView)dialog.findViewById(R.id.scroll_view_bank_info);
         ssn_ein = (EditText)dialog.findViewById(R.id.ssn_ein_no);
         upload_image = (Button)dialog.findViewById(R.id.ssn_ein_upload_identification_img);
         next_btn = (Button)dialog.findViewById(R.id.ssn_ein_next_button);
