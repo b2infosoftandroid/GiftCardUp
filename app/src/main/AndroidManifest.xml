@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.b2infosoft.giftcardup">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -24,12 +26,13 @@
         <activity
             android:name=".activity.Login"
             android:theme="@style/AppFullScreenTheme"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.SignUp"
             android:theme="@style/AppFullScreenTheme"
-            android:windowSoftInputMode="adjustResize"></activity>
-        <activity android:name=".activity.ForgotPassword"></activity>
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".activity.ForgotPassword" />
+
     </application>
 
 </manifest>
