@@ -55,7 +55,7 @@
     <string name="profile_member_since">MEMBER SINCE :</string>
     <string name="profile_total_sold">TOTAL SOLD : $0.00</string>
     <string name="profile_total_saving">TOTAL SAVING : $0.00</string>
-    
+
     <!--         IDENTIFICATION        -->
     <string name="identification_f_name">FIRST NAME</string>
     <string name="identification_l_name">LAST NAME</string>
@@ -68,7 +68,7 @@
     <string name="identification_suite_no">SUITE NUMBER</string>
     <string name="identification_zip_code">ZIP CODE</string>
     <string name="identification_cmpny_name">COMPANY NAME</string>
-    
+
     <!--       BANK DETAILS           -->
     <string name="bank_detail_add_bank_account">ADD BANK ACCOUNT</string>
 

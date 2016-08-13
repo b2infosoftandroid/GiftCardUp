@@ -1,0 +1,14 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.b2infosoft.giftcardup.fragments.Dashboard1">
+
+   <com.b2infosoft.library.SwipeFlingAdapterView
+       android:id="@+id/frame"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       tools:context=".Dashboard1"/>
+
+</merge>
