@@ -25,6 +25,7 @@ import com.b2infosoft.giftcardup.fragments.Profile;
 import com.b2infosoft.giftcardup.fragments.profile.BankInformation;
 import com.b2infosoft.giftcardup.fragments.profile.Identification;
 import com.b2infosoft.giftcardup.fragments.profile.SsnEin;
+import com.b2infosoft.giftcardup.model.QuickActionItem;
 import com.b2infosoft.giftcardup.utils.Utils1;
 import com.b2infosoft.giftcardup.utils.Utils2;
 import com.mikhaellopez.circularimageview.CircularImageView;
@@ -88,6 +89,13 @@ public class Main extends GiftCardUp {
 
         MenuItem item1 = menu.findItem(R.id.action_cart_item);
         LayerDrawable icon1 = (LayerDrawable) item.getIcon();
+        item1.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                getList();
+                return false;
+            }
+        });
 
         // Update LayerDrawable's BadgeDrawable
         Utils1.setBadgeCount(this, icon1, 2);
@@ -228,6 +236,13 @@ public class Main extends GiftCardUp {
     private void setLoginMenu(boolean bol) {
         navigationView.getMenu().setGroupVisible(R.id.menu_5, bol);
         navigationView.getMenu().setGroupVisible(R.id.menu_6, !bol);
+    }
+
+    private void getList(){
+        QuickActionItem item = new QuickActionItem("physics");
+        QuickActionItem item1 = new QuickActionItem("chemistry");
+        QuickActionItem item2 = new QuickActionItem("science");
+        QuickActionItem item3 = new QuickActionItem("biology");
     }
 }
 
