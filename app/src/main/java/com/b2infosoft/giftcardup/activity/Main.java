@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.credential.Active;
+import com.b2infosoft.giftcardup.fragments.Dashboard1;
 import com.b2infosoft.giftcardup.fragments.Profile;
 import com.b2infosoft.giftcardup.fragments.profile.BankInformation;
 import com.b2infosoft.giftcardup.fragments.profile.Identification;
@@ -110,6 +111,7 @@ public class Main extends GiftCardUp {
         switch (v.getId()) {
             case R.id.user_profile_icon:
                 //startActivity(new Intent(this,Profile.class));
+                replaceFragment(new Dashboard1());
                 break;
             default:
                 break;
@@ -136,6 +138,10 @@ public class Main extends GiftCardUp {
 
     }
 
+    @Override
+    public void onDashboard1(Uri uri) {
+
+    }
 
     private class MenuSelect implements NavigationView.OnNavigationItemSelectedListener {
         @Override
@@ -225,6 +231,6 @@ public class Main extends GiftCardUp {
     }
 }
 
-abstract class GiftCardUp extends AppCompatActivity implements View.OnClickListener, Profile.OnFragmentProfile, BankInformation.OnFragmentBankInformation, Identification.OnFragmentIdentification, SsnEin.OnFragmentSsnEin {
+abstract class GiftCardUp extends AppCompatActivity implements View.OnClickListener, Profile.OnFragmentProfile, BankInformation.OnFragmentBankInformation, Identification.OnFragmentIdentification, SsnEin.OnFragmentSsnEin, Dashboard1.OnFragmentDashboard1 {
 
 }
