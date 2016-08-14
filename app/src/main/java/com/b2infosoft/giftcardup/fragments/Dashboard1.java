@@ -8,8 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.activity.QuickAction;
+import com.b2infosoft.giftcardup.model.QuickActionItem;
 import com.b2infosoft.library.SwipeFlingAdapterView;
 
 import java.util.ArrayList;

@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/GiftCardUp.iml" filepath="$PROJECT_DIR$/GiftCardUp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/tinderLibrary/library.iml" filepath="$PROJECT_DIR$/tinderLibrary/library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tinderLibrary/tinderLibrary.iml" filepath="$PROJECT_DIR$/tinderLibrary/tinderLibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/volley/volley.iml" filepath="$PROJECT_DIR$/volley/volley.iml" />
     </modules>
   </component>

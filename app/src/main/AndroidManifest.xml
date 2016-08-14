@@ -32,6 +32,7 @@
             android:theme="@style/AppFullScreenTheme"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".activity.ForgotPassword" />
+        <activity android:name=".activity.Testexample"/>
 
     </application>
 

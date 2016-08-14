@@ -7,11 +7,11 @@ import android.graphics.drawable.Drawable;
  */
 public class QuickActionItem {
     private String title;
-    private Drawable icon;
+    private Drawable iconImg;
 
-    public QuickActionItem(String title, Drawable icon) {
+    public QuickActionItem(String title, Drawable iconImg) {
         this.title = title;
-        this.icon = icon;
+        this.iconImg = iconImg;
     }
 
     public QuickActionItem(String title) {
@@ -27,11 +27,11 @@ public class QuickActionItem {
         this.title = title;
     }
 
-    public Drawable getIcon() {
-        return icon;
+    public Drawable geticonImg() {
+        return iconImg;
     }
 
-    public void setIcon(Drawable icon) {
-        this.icon = icon;
+    public void seticonImg(Drawable icon) {
+        this.iconImg = icon;
     }
 }
