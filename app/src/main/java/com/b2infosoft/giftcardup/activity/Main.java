@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.credential.Active;
+import com.b2infosoft.giftcardup.fragments.Dashboard;
 import com.b2infosoft.giftcardup.fragments.Dashboard1;
 import com.b2infosoft.giftcardup.fragments.Profile;
 import com.b2infosoft.giftcardup.fragments.profile.BankInformation;
@@ -63,10 +64,12 @@ public class Main extends GiftCardUp {
     }
     private void updateMenuItemLeft() {
         Menu menu = navigationViewLeft.getMenu();
-        String s[] = {"MENU 1","MENU 2","MENU 3"};
+        String s[] = {"Apparel","Arts and Crafts","Baby and Kids","Books and Magazines","Coffee Shops","Computer and Software","Department Stores",
+                      "Discount Stores","Electronics","Entertainment","Restaurants","Gas and Automotive","Grocery Stores","Health and Wellness",
+                      "Home and Garden","Jewelry and Watches","Office Supplies","Pets","Shoes","Sporting and Outdoors","Toys","Travel",
+                      "Tata"};
         for(final String s1 : s){
             MenuItem menuItem = menu.add(s1);
-            menuItem.setIcon(getResources().getDrawable(R.drawable.ic_check_icon));
             menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
@@ -81,8 +84,10 @@ public class Main extends GiftCardUp {
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer != null) {
-            if (drawer.isDrawerOpen(GravityCompat.START)) {
+            if(drawer.isDrawerOpen(GravityCompat.START)){
                 drawer.closeDrawer(GravityCompat.START);
+            }else if(drawer.isDrawerOpen(GravityCompat.END)){
+                drawer.closeDrawer(GravityCompat.END);
             } else {
                 super.onBackPressed();
             }
@@ -108,13 +113,6 @@ public class Main extends GiftCardUp {
 
         MenuItem item1 = menu.findItem(R.id.action_cart_item);
         LayerDrawable icon1 = (LayerDrawable) item.getIcon();
-        item1.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                getList();
-                return false;
-            }
-        });
 
         // Update LayerDrawable's BadgeDrawable
         Utils1.setBadgeCount(this, icon1, 2);
@@ -143,6 +141,10 @@ public class Main extends GiftCardUp {
             default:
                 break;
         }
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if(drawer.isDrawerOpen(GravityCompat.END)){
+            drawer.closeDrawer(GravityCompat.END);
+        }
     }
 
     @Override
@@ -170,6 +172,11 @@ public class Main extends GiftCardUp {
 
     }
 
+    @Override
+    public void onDashboard(Uri uri) {
+
+    }
+
     private class MenuSelect implements NavigationView.OnNavigationItemSelectedListener {
         @Override
         public boolean onNavigationItemSelected(MenuItem item) {
@@ -177,6 +184,9 @@ public class Main extends GiftCardUp {
             int id = item.getItemId();
 
             switch (id) {
+                case R.id.menu_item_dashboard_left:
+                     replaceFragment(new Dashboard());
+                    break;
                 case R.id.menu_item_my_listing:
 
                     break;
@@ -224,7 +234,11 @@ public class Main extends GiftCardUp {
                     break;
             }
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-            drawer.closeDrawer(GravityCompat.START);
+            if(drawer.isDrawerOpen(GravityCompat.START)){
+                drawer.closeDrawer(GravityCompat.START);
+            }else if(drawer.isDrawerOpen(GravityCompat.END)){
+                drawer.closeDrawer(GravityCompat.END);
+            }
             return true;
         }
     }
@@ -257,14 +271,8 @@ public class Main extends GiftCardUp {
         navigationViewRight.getMenu().setGroupVisible(R.id.menu_6, !bol);
     }
 
-    private void getList() {
-        QuickActionItem item = new QuickActionItem("physics");
-        QuickActionItem item1 = new QuickActionItem("chemistry");
-        QuickActionItem item2 = new QuickActionItem("science");
-        QuickActionItem item3 = new QuickActionItem("biology");
-    }
 }
 
-abstract class GiftCardUp extends AppCompatActivity implements View.OnClickListener, Profile.OnFragmentProfile, BankInformation.OnFragmentBankInformation, Identification.OnFragmentIdentification, SsnEin.OnFragmentSsnEin, Dashboard1.OnFragmentDashboard1 {
+abstract class GiftCardUp extends AppCompatActivity implements View.OnClickListener, Profile.OnFragmentProfile, BankInformation.OnFragmentBankInformation, Identification.OnFragmentIdentification, SsnEin.OnFragmentSsnEin, Dashboard1.OnFragmentDashboard1, Dashboard.OnFragmentDashboard {
 
 }

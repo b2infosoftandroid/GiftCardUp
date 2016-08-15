@@ -6,7 +6,7 @@
         android:id="@+id/menu_1"
         android:checkableBehavior="single">
         <item
-            android:id="@+id/menu_item_my_listing"
+            android:id="@+id/menu_item_dashboard_left"
             android:icon="@drawable/ic_home_24dp"
             android:title="@string/menu_dashboard"
             />
