@@ -44,6 +44,8 @@ public class Main extends GiftCardUp {
         active = Active.getInstance(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        //View view1 = getLayoutInflater().inflate(R.layout.fragment_dashboard,null);
+        //toolbar.addView(view1);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
