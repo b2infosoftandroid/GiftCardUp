@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.credential.Active;
@@ -24,13 +25,14 @@ import com.b2infosoft.giftcardup.fragments.Profile;
 import com.b2infosoft.giftcardup.fragments.profile.BankInformation;
 import com.b2infosoft.giftcardup.fragments.profile.Identification;
 import com.b2infosoft.giftcardup.fragments.profile.SsnEin;
+import com.b2infosoft.giftcardup.model.QuickActionItem;
 import com.b2infosoft.giftcardup.utils.Utils1;
 import com.b2infosoft.giftcardup.utils.Utils2;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 public class Main extends GiftCardUp {
     Active active;
-    NavigationView navigationView;
+    NavigationView navigationViewRight, navigationViewLeft;
     View headerView;
     CircularImageView user_profile_icon;
 
@@ -48,12 +50,31 @@ public class Main extends GiftCardUp {
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(new MenuSelect());
-        headerView = LayoutInflater.from(this).inflate(R.layout.nav_header_main, navigationView, false);
+        navigationViewRight = (NavigationView) findViewById(R.id.nav_view_right);
+        navigationViewRight.setNavigationItemSelectedListener(new MenuSelect());
+        navigationViewLeft = (NavigationView) findViewById(R.id.nav_view_left);
+        navigationViewLeft.setNavigationItemSelectedListener(new MenuSelect());
+
+        headerView = LayoutInflater.from(this).inflate(R.layout.nav_header_main, navigationViewRight, false);
         user_profile_icon = (CircularImageView) headerView.findViewById(R.id.user_profile_icon);
         user_profile_icon.setOnClickListener(this);
         setNavigationMenu();
+        updateMenuItemLeft();
+    }
+    private void updateMenuItemLeft() {
+        Menu menu = navigationViewLeft.getMenu();
+        String s[] = {"MENU 1","MENU 2","MENU 3"};
+        for(final String s1 : s){
+            MenuItem menuItem = menu.add(s1);
+            menuItem.setIcon(getResources().getDrawable(R.drawable.ic_check_icon));
+            menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    Toast.makeText(Main.this,s1,Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            });
+        }
     }
 
     @Override
@@ -87,6 +108,13 @@ public class Main extends GiftCardUp {
 
         MenuItem item1 = menu.findItem(R.id.action_cart_item);
         LayerDrawable icon1 = (LayerDrawable) item.getIcon();
+        item1.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                getList();
+                return false;
+            }
+        });
 
         // Update LayerDrawable's BadgeDrawable
         Utils1.setBadgeCount(this, icon1, 2);
@@ -212,21 +240,28 @@ public class Main extends GiftCardUp {
     }
 
     private void setNavigationMenu() {
-        navigationView.removeHeaderView(headerView);
-        navigationView.addHeaderView(headerView);
+        navigationViewRight.removeHeaderView(headerView);
+        navigationViewRight.addHeaderView(headerView);
         setSellerMenu(false);
         setLoginMenu(active.isLogin());
     }
 
     private void setSellerMenu(boolean bol) {
-        navigationView.getMenu().setGroupVisible(R.id.menu_1, bol);
-        navigationView.getMenu().setGroupVisible(R.id.menu_2, bol);
-        navigationView.getMenu().setGroupVisible(R.id.menu_3, bol);
+        navigationViewRight.getMenu().setGroupVisible(R.id.menu_1, bol);
+        navigationViewRight.getMenu().setGroupVisible(R.id.menu_2, bol);
+        navigationViewRight.getMenu().setGroupVisible(R.id.menu_3, bol);
     }
 
     private void setLoginMenu(boolean bol) {
-        navigationView.getMenu().setGroupVisible(R.id.menu_5, bol);
-        navigationView.getMenu().setGroupVisible(R.id.menu_6, !bol);
+        navigationViewRight.getMenu().setGroupVisible(R.id.menu_5, bol);
+        navigationViewRight.getMenu().setGroupVisible(R.id.menu_6, !bol);
+    }
+
+    private void getList() {
+        QuickActionItem item = new QuickActionItem("physics");
+        QuickActionItem item1 = new QuickActionItem("chemistry");
+        QuickActionItem item2 = new QuickActionItem("science");
+        QuickActionItem item3 = new QuickActionItem("biology");
     }
 }
 
