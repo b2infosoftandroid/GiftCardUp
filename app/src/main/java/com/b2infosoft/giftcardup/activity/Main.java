@@ -30,13 +30,12 @@ import com.b2infosoft.giftcardup.model.QuickActionItem;
 import com.b2infosoft.giftcardup.utils.Utils1;
 import com.b2infosoft.giftcardup.utils.Utils2;
 import com.mikhaellopez.circularimageview.CircularImageView;
-
 public class Main extends GiftCardUp {
     Active active;
     NavigationView navigationViewRight, navigationViewLeft;
     View headerView;
     CircularImageView user_profile_icon;
-
+    DrawerLayout drawer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,8 +45,7 @@ public class Main extends GiftCardUp {
         setSupportActionBar(toolbar);
         //View view1 = getLayoutInflater().inflate(R.layout.fragment_dashboard,null);
         //toolbar.addView(view1);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -63,6 +61,7 @@ public class Main extends GiftCardUp {
         user_profile_icon.setOnClickListener(this);
         setNavigationMenu();
         updateMenuItemLeft();
+        replaceFragment(new Dashboard());
     }
     private void updateMenuItemLeft() {
         Menu menu = navigationViewLeft.getMenu();
@@ -84,7 +83,6 @@ public class Main extends GiftCardUp {
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer != null) {
             if(drawer.isDrawerOpen(GravityCompat.START)){
                 drawer.closeDrawer(GravityCompat.START);
@@ -127,8 +125,25 @@ public class Main extends GiftCardUp {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        switch(id){
+            case R.id.action_cart_item:
+
+                return true;
+            case R.id.action_notifications:
+
+                return true;
+            case R.id.action_profile:
+                if(drawer!=null){
+                    if(drawer.isDrawerOpen(GravityCompat.END)){
+                        drawer.closeDrawer(GravityCompat.END);
+                    }else {
+                        drawer.openDrawer(GravityCompat.END);
+                    }
+                }
+                return true;
+            case R.id.action_settings:
+
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -143,9 +158,10 @@ public class Main extends GiftCardUp {
             default:
                 break;
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if(drawer.isDrawerOpen(GravityCompat.END)){
-            drawer.closeDrawer(GravityCompat.END);
+        if(drawer!=null) {
+            if (drawer.isDrawerOpen(GravityCompat.END)) {
+                drawer.closeDrawer(GravityCompat.END);
+            }
         }
     }
 

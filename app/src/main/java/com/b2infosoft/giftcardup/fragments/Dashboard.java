@@ -4,110 +4,185 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
+import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
-import com.b2infosoft.giftcardup.adapter.DashboardRecyclerViewAdapter;
+import com.b2infosoft.giftcardup.activity.CompanyCard;
+import com.b2infosoft.giftcardup.adapter.CardAdapter;
+import com.b2infosoft.giftcardup.app.Tags;
+import com.b2infosoft.giftcardup.app.Urls;
+import com.b2infosoft.giftcardup.credential.Active;
+import com.b2infosoft.giftcardup.listener.OnLoadMoreListener;
+import com.b2infosoft.giftcardup.model.CompanyBrand;
+import com.b2infosoft.giftcardup.volly.DMRRequest;
+import com.b2infosoft.giftcardup.volly.DMRResult;
+import com.paginate.Paginate;
+import com.paginate.recycler.LoadingListItemCreator;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link Dashboard.OnFragmentDashboard} interface
- * to handle interaction events.
- * Use the {@link Dashboard#newInstance} factory method to
- * create an instance of this fragment.
- */
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class Dashboard extends Fragment {
-
-    SearchView searchView;
+    private static final String TAG = Dashboard.class.getName();
+    private Urls urls;
+    private Tags tags;
+    private Active active;
+    DMRRequest dmrRequest;
     RecyclerView recyclerView;
-    DashboardRecyclerViewAdapter adapter;
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    CardAdapter adapter;
+    List<CompanyBrand> cardList;
+    boolean isLoading = false;
+    boolean isMore  = false;
+    int loadMore = 0;
     private OnFragmentDashboard mListener;
-
     public Dashboard() {
-        // Required empty public constructor
-    }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Dashboard.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static Dashboard newInstance(String param1, String param2) {
-        Dashboard fragment = new Dashboard();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = null;
-        view =  inflater.inflate(R.layout.fragment_dashboard, container, false);
-
-        recyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
-        adapter = new DashboardRecyclerViewAdapter();
+        dmrRequest = DMRRequest.getInstance(getActivity(), TAG);
+        urls = Urls.getInstance();
+        tags = Tags.getInstance();
+        active = Active.getInstance(getActivity());
+        cardList = new ArrayList<>();
+        View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new CardAdapter(getActivity(), cardList, recyclerView);
         recyclerView.setAdapter(adapter);
-
-        searchView = (SearchView)view.findViewById(R.id.search_view);
-        searchView.setQueryHint("SEARCH");
-        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+        adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-
+            public void onLoadMore() {
+                if(isMore) {
+                    cardList.add(null);
+                    adapter.notifyItemInserted(cardList.size() - 1);
+                    isLoading = true;
+                    loadCards();
+                }
             }
         });
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-        searchView.setOnSearchClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+        loadCards();
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+    private void setDataInRecycleView(final List<CompanyBrand> cards) {
+        if (isLoading) {
+            cardList.remove(cardList.size() - 1);
+            adapter.notifyItemRemoved(cardList.size());
+            isLoading = false;
+        }
+        cardList.addAll(cards);
+        adapter.notifyDataSetChanged();
+        adapter.setLoaded();
+        //setPaginate();
+    }
+
+    private void setPaginate() {
+        Paginate.Callbacks callbacks = new Paginate.Callbacks() {
+            @Override
+            public void onLoadMore() {
+
+            }
+
+            @Override
+            public boolean isLoading() {
+                return false;
+            }
+
+            @Override
+            public boolean hasLoadedAllItems() {
+                return false;
+            }
+        };
+        Paginate.with(recyclerView, callbacks)
+                .setLoadingTriggerThreshold(2)
+                .addLoadingListItem(true)
+                .setLoadingListItemCreator(new CustomLoadingListItemCreator())
+                .build();
+        //.setLoadingListItemSpanSizeLookup(new CustomLoadingListItemSpanLookup())
+    }
+
+    private class CustomLoadingListItemCreator implements LoadingListItemCreator {
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+            View view = inflater.inflate(R.layout.layout_loading_item, parent, false);
+            return new LoadingHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            if (holder instanceof LoadingHolder) {
+                LoadingHolder loadingHolder = (LoadingHolder) holder;
+                loadingHolder.progressBar.setIndeterminate(true);
+            }
+        }
+
+        public class LoadingHolder extends RecyclerView.ViewHolder {
+            public ProgressBar progressBar;
+
+            public LoadingHolder(View itemView) {
+                super(itemView);
+                progressBar = (ProgressBar) itemView.findViewById(R.id.onMoreLoadingProgressBar);
+            }
+        }
+    }
+
+    private void loadCards() {
+        Map<String, String> map = new HashMap<>();
+        map.put(tags.USER_ACTION,tags.COMPANY_ALL_BRAND);
+        map.put(tags.LOAD_MORE,String.valueOf(loadMore));
+        dmrRequest.doPost(urls.getUrlCardsAll(), map, new DMRResult() {
+            @Override
+            public void onSuccess(JSONObject jsonObject) {
+                try {
+                    if (jsonObject.has(tags.SUCCESS)) {
+                        if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                            List<CompanyBrand> cards = new ArrayList<CompanyBrand>();
+                            JSONArray jsonArray = jsonObject.getJSONArray(tags.GIFT_CARDS);
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                CompanyBrand brand = new CompanyBrand();
+                                cards.add(brand.fromJSON(jsonArray.getJSONObject(i)));
+                            }
+                            setDataInRecycleView(cards);
+                        } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
+
+                        } else {
+
+                        }
+                    }
+                    if(jsonObject.has(tags.IS_MORE)){
+                        isMore = jsonObject.getBoolean(tags.IS_MORE);
+                        if(isMore){
+                            loadMore+=tags.DEFAULT_LOADING_DATA;
+                        }
+                    }
+                } catch (JSONException e) {
+
+                }
+            }
+
+            @Override
+            public void onError(VolleyError volleyError) {
+
+            }
+        });
+    }
+
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onDashboard(uri);
@@ -131,18 +206,7 @@ public class Dashboard extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentDashboard {
-        // TODO: Update argument type and name
         void onDashboard(Uri uri);
     }
 }

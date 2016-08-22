@@ -1,7 +1,6 @@
 package com.b2infosoft.giftcardup.volly;
 
 import android.content.Context;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
@@ -10,6 +9,7 @@ import com.android.volley.toolbox.Volley;
 /**
  * Created by rajesh on 7/24/2016.
  */
+
 public class MySingleton {
     private static MySingleton mInstance;
     private RequestQueue mRequestQueue;
@@ -35,8 +35,8 @@ public class MySingleton {
                     }
                 });
         */
-        mImageLoader = new ImageLoader(mRequestQueue, new LruBitmapCache(
-                LruBitmapCache.getCacheSize(mCtx)));
+        mImageLoader = new ImageLoader(mRequestQueue, new LruBitmapCache(LruBitmapCache.getCacheSize(mCtx)));
+
     }
 
     public static synchronized MySingleton getInstance(Context context) {

@@ -27,10 +27,6 @@ public class Urls {
         return config.getServerAddress().concat("string_request.php");
     }
 
-    public String getPath(String path) {
-        return config.SERVER_PATH.concat(path);
-    }
-
     public String getUrl(String path, HashMap<String, String> map) {
         if (!map.isEmpty()) {
             StringBuilder builder = new StringBuilder(path);
@@ -57,8 +53,10 @@ public class Urls {
             return path;
         }
     }
-
     public String getUrlLogin(){
         return config.getServerAddress().concat("UserInfo.php");
+    }
+    public String getUrlCardsAll(){
+        return config.getServerAddress().concat("GiftCardInfo.php");
     }
 }

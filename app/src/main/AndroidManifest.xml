@@ -32,8 +32,12 @@
             android:theme="@style/AppFullScreenTheme"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".activity.ForgotPassword" />
-        <activity android:name=".activity.Testexample"/>
-
+        <activity android:name=".activity.Testexample" />
+        <activity android:name=".activity.CompanyCard">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.Main" />
+        </activity>
     </application>
 
 </manifest>
