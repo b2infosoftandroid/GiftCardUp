@@ -56,8 +56,8 @@
     <!--         PROFILE CONTENT         -->
     <string name="profile_user_name">USER NAME HERE</string>
     <string name="profile_member_since">MEMBER SINCE :</string>
-    <string name="profile_total_sold">TOTAL SOLD : $0.00</string>
-    <string name="profile_total_saving">TOTAL SAVING : $0.00</string>
+    <string name="profile_total_sold">TOTAL SOLD</string>
+    <string name="profile_total_saving">TOTAL SAVING</string>
 
     <!--         IDENTIFICATION        -->
     <string name="identification_f_name">FIRST NAME</string>

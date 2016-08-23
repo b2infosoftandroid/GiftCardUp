@@ -32,6 +32,7 @@
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/ic_user_icon"
                 app:civ_border="true"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
                 app:civ_border_color="@color/border_user_picture"
                 app:civ_border_width="4dp"
                 app:civ_shadow="true"
@@ -43,6 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/text_view_margin_top"
                 android:text="@string/profile_user_name"
+                android:layout_marginBottom="@dimen/button_margin_bottom"
                 android:textAllCaps="true"
                 android:textColor="@color/profile_text"
                 android:layout_gravity="center_horizontal" />
@@ -54,8 +56,9 @@
             >
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
+                android:gravity="center"
                 android:layout_toLeftOf="@+id/profile_divider"
                 >
                 <TextView
@@ -64,14 +67,12 @@
                     android:layout_height="wrap_content"
                     android:textAllCaps="true"
                     android:text="$5000"
-                    android:layout_gravity="center_horizontal"
                     android:textColor="@color/profile_text_view_text"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAllCaps="true"
                     android:text="@string/profile_total_saving"
-                    android:layout_gravity="center_horizontal"
                     android:textColor="@color/profile_text_view_text"/>
             </LinearLayout>
             <View
@@ -85,7 +86,8 @@
             <LinearLayout
                 android:layout_toRightOf="@+id/profile_divider"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:orientation="vertical"
                 >
                 <TextView

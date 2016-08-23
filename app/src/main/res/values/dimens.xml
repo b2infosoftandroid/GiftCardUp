@@ -48,7 +48,7 @@
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="text_margin">16dp</dimen>
 
-    <dimen name="profile_header_height">220dp</dimen>
+    <dimen name="profile_header_height">270dp</dimen>
     <dimen name="profile_tabs_height">60dp</dimen>
 
 </resources>
