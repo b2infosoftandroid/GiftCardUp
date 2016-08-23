@@ -111,7 +111,7 @@ public class BankInformation extends Fragment implements CanScrollVerticallyDele
 
             }
         });
-
+        dialog.show();
     }
 
     // TODO: Rename method, update argument and hook method into UI event

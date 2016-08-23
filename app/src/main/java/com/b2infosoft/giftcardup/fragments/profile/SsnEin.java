@@ -108,6 +108,7 @@ public class SsnEin extends Fragment implements CanScrollVerticallyDelegate {
 
             }
         });
+        dialog.show();
     }
 
     // TODO: Rename method, update argument and hook method into UI event

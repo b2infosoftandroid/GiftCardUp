@@ -15,7 +15,7 @@ public class Utils1 {
     public static void setBadgeCount(Context context, LayerDrawable icon, int count) {
         BadgeDrawable badge;
         // Reuse drawable if possible
-        Drawable reuse = icon.findDrawableByLayerId(R.id.ic_badge);
+        Drawable reuse = icon.findDrawableByLayerId(R.id.ic_badge1);
         if (reuse != null && reuse instanceof BadgeDrawable) {
             badge = (BadgeDrawable) reuse;
         } else {

@@ -2,6 +2,7 @@ package com.b2infosoft.giftcardup.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.app.Config;
+import com.b2infosoft.giftcardup.app.Notify;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.listener.OnLoadMoreListener;
 import com.b2infosoft.giftcardup.model.CompanyBrand;
@@ -32,6 +34,7 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
     private boolean isLoading;
+    private Notify notify;
     private int visibleThreshold = 5;
     private int lastVisibleItem, totalItemCount;
     private OnLoadMoreListener mOnLoadMoreListener;
@@ -39,6 +42,7 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private List<GiftCard> cardInfoList;
     private Config config;
     private Tags tags;
+    int count = 0;
     private CompanyBrand companyBrand;
 
     public CompanyCardAdapter(Context context, List<GiftCard> cardInfoList, RecyclerView recyclerView,CompanyBrand companyBrand) {
@@ -47,6 +51,7 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         config = Config.getInstance();
         this.companyBrand = companyBrand;
         tags = Tags.getInstance();
+        notify = Notify.getInstance();
         final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -130,7 +135,10 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             cardHolder.addToCart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context,"Item is added to card",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context,"Item is added to card",Toast.LENGTH_SHORT).show();
+                    count = count + 1;
+                    Toast.makeText(context,count+"",Toast.LENGTH_SHORT).show();
+                    notify.setValue(count);
                 }
             });
             final String url = config.getGiftCardImageAddress().concat(companyBrand.getImage());

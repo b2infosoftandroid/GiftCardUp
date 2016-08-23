@@ -20,6 +20,8 @@ import android.view.View;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.adapter.CompanyCardAdapter;
+import com.b2infosoft.giftcardup.app.Notify;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
@@ -52,6 +54,8 @@ public class Main extends GiftCardUp {
     Urls urls;
     Active active;
     Tags tags;
+    Notify notify;
+    int count;
     NavigationView navigationViewRight, navigationViewLeft;
     View headerView;
     CircularImageView user_profile_icon;
@@ -65,8 +69,11 @@ public class Main extends GiftCardUp {
         urls = Urls.getInstance();
         active = Active.getInstance(this);
         tags = Tags.getInstance();
+        notify = Notify.getInstance();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        count = notify.getCount();
         //View view1 = getLayoutInflater().inflate(R.layout.fragment_dashboard,null);
         //toolbar.addView(view1);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -167,10 +174,10 @@ public class Main extends GiftCardUp {
         Utils2.setBadgeCount(this, icon, 2);
 
         MenuItem item1 = menu.findItem(R.id.action_cart_item);
-        LayerDrawable icon1 = (LayerDrawable) item.getIcon();
+        LayerDrawable icon1 = (LayerDrawable) item1.getIcon();
 
         // Update LayerDrawable's BadgeDrawable
-        Utils1.setBadgeCount(this, icon1, 2);
+        Utils1.setBadgeCount(this, icon1, count);
         return true;
     }
 
