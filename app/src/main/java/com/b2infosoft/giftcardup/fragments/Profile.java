@@ -94,6 +94,7 @@ public class Profile extends Fragment {
         tabone.setText("identification");
         tabone.setGravity(Gravity.CENTER);
         tabone.setAllCaps(true);
+        tabone.setTextSize(12f);
         tabone.setTextColor(getResources().getColor(R.color.profile_text_view_text));
         tabone.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_check_icon,0,0);
         tabLayout.getTabAt(0).setCustomView(tabone);
@@ -101,6 +102,7 @@ public class Profile extends Fragment {
         tabone = new TextView(getActivity());
         tabone.setText("Bank details");
         tabone.setAllCaps(true);
+        tabone.setTextSize(12f);
         tabone.setTextColor(getResources().getColor(R.color.profile_text_view_text));
         tabone.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_check_icon,0,0);
         tabLayout.getTabAt(1).setCustomView(tabone);
@@ -109,6 +111,7 @@ public class Profile extends Fragment {
         tabone.setText("SSN/EIN");
         tabone.setGravity(Gravity.CENTER);
         tabone.setAllCaps(true);
+        tabone.setTextSize(12f);
         tabone.setTextColor(getResources().getColor(R.color.profile_text_view_text));
         tabone.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_check_icon,0,0);
         tabLayout.getTabAt(2).setCustomView(tabone);
