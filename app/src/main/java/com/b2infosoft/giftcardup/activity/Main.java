@@ -20,13 +20,12 @@ import android.view.View;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
-import com.b2infosoft.giftcardup.adapter.CompanyCardAdapter;
 import com.b2infosoft.giftcardup.app.Notify;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.fragments.Dashboard;
-import com.b2infosoft.giftcardup.fragments.Dashboard1;
+import com.b2infosoft.giftcardup.fragments.TinderWork;
 import com.b2infosoft.giftcardup.fragments.Profile;
 import com.b2infosoft.giftcardup.fragments.profile.BankInformation;
 import com.b2infosoft.giftcardup.fragments.profile.Identification;
@@ -215,7 +214,7 @@ public class Main extends GiftCardUp {
         switch (v.getId()) {
             case R.id.user_profile_icon:
                 //startActivity(new Intent(this,Profile.class));
-                replaceFragment(new Dashboard1());
+                replaceFragment(new TinderWork());
                 break;
             default:
                 break;
@@ -348,6 +347,6 @@ public class Main extends GiftCardUp {
 
 }
 
-abstract class GiftCardUp extends AppCompatActivity implements View.OnClickListener, BankInformation.OnFragmentBankInformation, Identification.OnFragmentIdentification, SsnEin.OnFragmentSsnEin, Dashboard1.OnFragmentDashboard1, Dashboard.OnFragmentDashboard {
+abstract class GiftCardUp extends AppCompatActivity implements View.OnClickListener, BankInformation.OnFragmentBankInformation, Identification.OnFragmentIdentification, SsnEin.OnFragmentSsnEin, TinderWork.OnFragmentDashboard1, Dashboard.OnFragmentDashboard {
 
 }

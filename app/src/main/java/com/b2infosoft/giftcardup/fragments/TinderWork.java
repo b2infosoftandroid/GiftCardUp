@@ -8,11 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 
 import com.b2infosoft.giftcardup.R;
-import com.b2infosoft.giftcardup.activity.QuickAction;
-import com.b2infosoft.giftcardup.model.QuickActionItem;
 import com.b2infosoft.library.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
@@ -20,12 +17,12 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link Dashboard1.OnFragmentDashboard1} interface
+ * {@link TinderWork.OnFragmentDashboard1} interface
  * to handle interaction events.
- * Use the {@link Dashboard1#newInstance} factory method to
+ * Use the {@link TinderWork#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Dashboard1 extends Fragment {
+public class TinderWork extends Fragment {
 
     private ArrayList<String> list;
     private static ArrayAdapter adapter;
@@ -41,7 +38,7 @@ public class Dashboard1 extends Fragment {
 
     private OnFragmentDashboard1 mListener;
 
-    public Dashboard1() {
+    public TinderWork() {
         // Required empty public constructor
     }
 
@@ -51,11 +48,11 @@ public class Dashboard1 extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment Dashboard1.
+     * @return A new instance of fragment TinderWork.
      */
     // TODO: Rename and change types and number of parameters
-    public static Dashboard1 newInstance(String param1, String param2) {
-        Dashboard1 fragment = new Dashboard1();
+    public static TinderWork newInstance(String param1, String param2) {
+        TinderWork fragment = new TinderWork();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -77,7 +74,7 @@ public class Dashboard1 extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = null;
-        view = inflater.inflate(R.layout.fragment_dashboard1, container, false);
+        view = inflater.inflate(R.layout.fragment_tinder_work, container, false);
 
         flingAdapterView = (SwipeFlingAdapterView)view.findViewById(R.id.frame);
         list = new ArrayList<>();
