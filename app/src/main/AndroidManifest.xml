@@ -33,9 +33,14 @@
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".activity.ForgotPassword" />
         <activity android:name=".activity.Testexample" />
-        <activity android:name=".activity.CompanyCard">
-        </activity>
+        <activity android:name=".activity.CompanyCard"></activity>
         <activity android:name=".activity.Categories">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.Main" />
+        </activity>
+        <activity android:name=".activity.ShoppingCart"
+            android:label="Shopping Cart">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.Main" />

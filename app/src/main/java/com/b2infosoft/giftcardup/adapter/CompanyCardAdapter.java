@@ -73,7 +73,7 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         TextView cardValue;
         TextView cardOff;
         TextView cardPrice;
-        Button buyNow;
+        Button buyNow,addToCart;
         public CardHolder(View view) {
             super(view);
             cardType = (TextView) view.findViewById(R.id.company_card_e_card);
@@ -82,6 +82,7 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             cardPrice = (TextView) view.findViewById(R.id.company_card_card_price);
             imageUrl = (ImageView) view.findViewById(R.id.company_card_image);
             buyNow = (Button)view.findViewById(R.id.company_card_card_buy_now);
+            addToCart = (Button)view.findViewById(R.id.company_card_add_to_cart);
         }
     }
 
@@ -124,6 +125,12 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(context, "LOGIN FIRST", Toast.LENGTH_SHORT).show();
+                }
+            });
+            cardHolder.addToCart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context,"Item is added to card",Toast.LENGTH_SHORT).show();
                 }
             });
             final String url = config.getGiftCardImageAddress().concat(companyBrand.getImage());

@@ -125,7 +125,7 @@ public class Main extends GiftCardUp {
     private void updateMenuItemLeft(List<CompanyCategory> categoryList) {
         Menu menu = navigationViewLeft.getMenu();
         for (final CompanyCategory category : categoryList) {
-            MenuItem menuItem = menu.add(category.getCategoryName().toUpperCase(Locale.getDefault()));
+            MenuItem menuItem = menu.add(R.id.menu_2,Menu.NONE,Menu.NONE,category.getCategoryName().toUpperCase(Locale.getDefault()));
             menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
@@ -184,7 +184,7 @@ public class Main extends GiftCardUp {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_cart_item:
-
+                 startActivity(new Intent(this,ShoppingCart.class));
                 return true;
             case R.id.action_notifications:
 
