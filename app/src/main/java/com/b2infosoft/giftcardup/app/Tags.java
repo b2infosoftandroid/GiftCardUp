@@ -29,9 +29,12 @@ public class Tags {
     public final String USER_ACTION = "user_action";
     public final String COMPANY_ALL_BRAND = "company_all_brand";
     public final String COMPANY_ID_BRAND = "company_id_brand";
-    public final String GIFT_CARDS = "gift_cards";
+    public final String COMPANY_CATEGORY_ALL = "company_category_all";
     public final String USER_REQUEST = "user_request";
 
+    /////////// ARRAYS  //////////
+    public final String GIFT_CARDS = "gift_cards";
+    public final String CATEGORIES = "categories";
 
     //////////////  ARRAYS   /////////////////////
 
@@ -124,5 +127,9 @@ public class Tags {
     public final String EMPLOYEE_ID = "employee_id";
     public final String COMPANY_ID = "company_id";
     public final String FB_ID = "fb_id";
+
+    ////////////  COMPANY CATEGORY /////////
+    public final String COMPANY_CATEGORY_ID = "cat_id";
+    public final String COMPANY_CATEGORY_NAME = "category_name";
 
 }

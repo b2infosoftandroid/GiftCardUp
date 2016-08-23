@@ -59,4 +59,7 @@ public class Urls {
     public String getUrlCardsAll(){
         return config.getServerAddress().concat("GiftCardInfo.php");
     }
+    public String getUrlAppActions(){
+        return config.getServerAddress().concat("AppAction.php");
+    }
 }

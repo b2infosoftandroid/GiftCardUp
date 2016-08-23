@@ -112,6 +112,7 @@ public class CompanyCard extends AppCompatActivity {
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     GiftCard card = new GiftCard();
                                     cards.add(card.fromJSON(jsonArray.getJSONObject(i)));
+                                    Log.d(TAG,jsonArray.getJSONObject(i).toString());
                                 }
                                 setDataInRecycleView(cards);
                             }

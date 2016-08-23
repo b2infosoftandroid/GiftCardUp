@@ -117,8 +117,9 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             final GiftCard card = cardInfoList.get(position);
             final CardHolder cardHolder = (CardHolder) holder;
             cardHolder.cardType.setText(companyBrand.getCardType()==2?"YES":"NO");
-            cardHolder.cardOff.setText(String.valueOf(card.getPercentageOff()));
-            cardHolder.cardValue.setText(String.valueOf(card.getCardValue()));
+            cardHolder.cardOff.setText(String.valueOf(card.getPercentageOff())+"%");
+            cardHolder.cardValue.setText("$"+String.valueOf(card.getCardPrice()));
+            cardHolder.cardPrice.setText("$"+String.valueOf(card.getCardValue()));
             cardHolder.buyNow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -12,7 +12,7 @@ import java.io.Serializable;
 /**
  * Created by rajesh on 8/21/2016.
  */
-public class GiftCard implements Serializable{
+public class GiftCard implements Serializable {
     private int giftCardID;
     private int readStatus;
     private int userID;
@@ -24,7 +24,7 @@ public class GiftCard implements Serializable{
     private double cardPrice;
     private double cardValue;
     private String sell;
-    private int sellingPercentage;
+    private String sellingPercentage;
     private String yourEarning;
     private String shippingAndCommissionCharge;
     private int percentageOff;
@@ -127,11 +127,11 @@ public class GiftCard implements Serializable{
         this.sell = sell;
     }
 
-    public int getSellingPercentage() {
+    public String getSellingPercentage() {
         return sellingPercentage;
     }
 
-    public void setSellingPercentage(int sellingPercentage) {
+    public void setSellingPercentage(String sellingPercentage) {
         this.sellingPercentage = sellingPercentage;
     }
 
@@ -272,11 +272,12 @@ public class GiftCard implements Serializable{
             }
             if (object.has(tags.GIFT_CARD_VALUE)) {
                 card.setCardValue(object.getDouble(tags.GIFT_CARD_VALUE));
-            }if (object.has(tags.GIFT_CARD_SELL)) {
+            }
+            if (object.has(tags.GIFT_CARD_SELL)) {
                 card.setSell(object.getString(tags.GIFT_CARD_SELL));
             }
             if (object.has(tags.GIFT_CARD_SELLING_PERCENTAGE)) {
-                card.setSellingPercentage(object.getInt(tags.GIFT_CARD_SELLING_PERCENTAGE));
+                card.setSellingPercentage(object.getString(tags.GIFT_CARD_SELLING_PERCENTAGE));
             }
             if (object.has(tags.GIFT_CARD_YOUR_EARNING)) {
                 card.setYourEarning(object.getString(tags.GIFT_CARD_YOUR_EARNING));
@@ -319,7 +320,7 @@ public class GiftCard implements Serializable{
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.e(GiftCard.class.getName(),e.getMessage());
+            Log.e(GiftCard.class.getName(), e.getMessage());
         }
         return card;
     }

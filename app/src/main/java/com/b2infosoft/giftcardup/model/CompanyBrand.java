@@ -199,7 +199,7 @@ public class CompanyBrand implements Serializable{
                 brand.setPhoneNumber(object.getString(tags.COMPANY_BRAND_PHONE_NUMBER));
             }
             if(object.has(tags.COMPANY_BRAND_CARD_TYPE)){
-                brand.setPhoneNumber(object.getString(tags.COMPANY_BRAND_CARD_TYPE));
+                brand.setCardType(object.getInt(tags.COMPANY_BRAND_CARD_TYPE));
             }
             if(object.has(tags.COMPANY_BRAND_COMMISSION_TYPE)){
                 brand.setCommissionType(object.getInt(tags.COMPANY_BRAND_COMMISSION_TYPE));

@@ -12,13 +12,17 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.app.Tags;
+import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.fragments.Dashboard;
 import com.b2infosoft.giftcardup.fragments.Dashboard1;
@@ -26,21 +30,43 @@ import com.b2infosoft.giftcardup.fragments.Profile;
 import com.b2infosoft.giftcardup.fragments.profile.BankInformation;
 import com.b2infosoft.giftcardup.fragments.profile.Identification;
 import com.b2infosoft.giftcardup.fragments.profile.SsnEin;
+import com.b2infosoft.giftcardup.model.CompanyCategory;
 import com.b2infosoft.giftcardup.model.QuickActionItem;
 import com.b2infosoft.giftcardup.utils.Utils1;
 import com.b2infosoft.giftcardup.utils.Utils2;
+import com.b2infosoft.giftcardup.volly.DMRRequest;
+import com.b2infosoft.giftcardup.volly.DMRResult;
 import com.mikhaellopez.circularimageview.CircularImageView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
 public class Main extends GiftCardUp {
+    private final static String TAG = Main.class.getName();
+    DMRRequest dmrRequest;
+    Urls urls;
     Active active;
+    Tags tags;
     NavigationView navigationViewRight, navigationViewLeft;
     View headerView;
     CircularImageView user_profile_icon;
     DrawerLayout drawer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        dmrRequest = DMRRequest.getInstance(this, TAG);
+        urls = Urls.getInstance();
         active = Active.getInstance(this);
+        tags = Tags.getInstance();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //View view1 = getLayoutInflater().inflate(R.layout.fragment_dashboard,null);
@@ -63,18 +89,47 @@ public class Main extends GiftCardUp {
         updateMenuItemLeft();
         replaceFragment(new Dashboard());
     }
+
     private void updateMenuItemLeft() {
+        Map<String, String> map = new HashMap<>();
+        map.put(tags.USER_ACTION, tags.COMPANY_CATEGORY_ALL);
+        dmrRequest.doPost(urls.getUrlAppActions(), map, new DMRResult() {
+            @Override
+            public void onSuccess(JSONObject jsonObject) {
+                Log.d(TAG, jsonObject.toString());
+                try {
+                    if (jsonObject.has(tags.CATEGORIES)) {
+                        List<CompanyCategory> categoryList = new ArrayList<>();
+                        JSONArray jsonArray = jsonObject.getJSONArray(tags.CATEGORIES);
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            CompanyCategory category = new CompanyCategory();
+                            categoryList.add(category.fromJSON(jsonArray.getJSONObject(i)));
+                        }
+                        updateMenuItemLeft(categoryList);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, e.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(VolleyError volleyError) {
+                volleyError.printStackTrace();
+                Log.e(TAG, volleyError.getMessage());
+            }
+        });
+
+    }
+
+    private void updateMenuItemLeft(List<CompanyCategory> categoryList) {
         Menu menu = navigationViewLeft.getMenu();
-        String s[] = {"Apparel","Arts and Crafts","Baby and Kids","Books and Magazines","Coffee Shops","Computer and Software","Department Stores",
-                      "Discount Stores","Electronics","Entertainment","Restaurants","Gas and Automotive","Grocery Stores","Health and Wellness",
-                      "Home and Garden","Jewelry and Watches","Office Supplies","Pets","Shoes","Sporting and Outdoors","Toys","Travel",
-                      "Tata"};
-        for(final String s1 : s){
-            MenuItem menuItem = menu.add(s1);
+        for (final CompanyCategory category : categoryList) {
+            MenuItem menuItem = menu.add(category.getCategoryName().toUpperCase(Locale.getDefault()));
             menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    Toast.makeText(Main.this,s1,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Main.this, category.getCategoryID() + "", Toast.LENGTH_SHORT).show();
                     return false;
                 }
             });
@@ -84,9 +139,9 @@ public class Main extends GiftCardUp {
     @Override
     public void onBackPressed() {
         if (drawer != null) {
-            if(drawer.isDrawerOpen(GravityCompat.START)){
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
                 drawer.closeDrawer(GravityCompat.START);
-            }else if(drawer.isDrawerOpen(GravityCompat.END)){
+            } else if (drawer.isDrawerOpen(GravityCompat.END)) {
                 drawer.closeDrawer(GravityCompat.END);
             } else {
                 super.onBackPressed();
@@ -125,7 +180,7 @@ public class Main extends GiftCardUp {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        switch(id){
+        switch (id) {
             case R.id.action_cart_item:
 
                 return true;
@@ -133,10 +188,10 @@ public class Main extends GiftCardUp {
 
                 return true;
             case R.id.action_profile:
-                if(drawer!=null){
-                    if(drawer.isDrawerOpen(GravityCompat.END)){
+                if (drawer != null) {
+                    if (drawer.isDrawerOpen(GravityCompat.END)) {
                         drawer.closeDrawer(GravityCompat.END);
-                    }else {
+                    } else {
                         drawer.openDrawer(GravityCompat.END);
                     }
                 }
@@ -158,7 +213,7 @@ public class Main extends GiftCardUp {
             default:
                 break;
         }
-        if(drawer!=null) {
+        if (drawer != null) {
             if (drawer.isDrawerOpen(GravityCompat.END)) {
                 drawer.closeDrawer(GravityCompat.END);
             }
@@ -203,7 +258,7 @@ public class Main extends GiftCardUp {
 
             switch (id) {
                 case R.id.menu_item_dashboard_left:
-                     replaceFragment(new Dashboard());
+                    replaceFragment(new Dashboard());
                     break;
                 case R.id.menu_item_my_listing:
 
@@ -252,9 +307,9 @@ public class Main extends GiftCardUp {
                     break;
             }
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-            if(drawer.isDrawerOpen(GravityCompat.START)){
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
                 drawer.closeDrawer(GravityCompat.START);
-            }else if(drawer.isDrawerOpen(GravityCompat.END)){
+            } else if (drawer.isDrawerOpen(GravityCompat.END)) {
                 drawer.closeDrawer(GravityCompat.END);
             }
             return true;
