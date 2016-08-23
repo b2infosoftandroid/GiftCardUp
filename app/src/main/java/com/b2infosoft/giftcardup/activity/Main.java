@@ -25,6 +25,7 @@ import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.fragments.Dashboard;
+import com.b2infosoft.giftcardup.fragments.SellCards;
 import com.b2infosoft.giftcardup.fragments.TinderWork;
 import com.b2infosoft.giftcardup.fragments.Profile;
 import com.b2infosoft.giftcardup.fragments.profile.BankInformation;
@@ -251,6 +252,11 @@ public class Main extends GiftCardUp {
 
     }
 
+    @Override
+    public void onSellCards(Uri uri) {
+
+    }
+
     private class MenuSelect implements NavigationView.OnNavigationItemSelectedListener {
         @Override
         public boolean onNavigationItemSelected(MenuItem item) {
@@ -260,6 +266,9 @@ public class Main extends GiftCardUp {
             switch (id) {
                 case R.id.menu_item_dashboard_left:
                     replaceFragment(new Dashboard());
+                    break;
+                case R.id.menu_item_sell_gift_cards:
+                    replaceFragment(new SellCards());
                     break;
                 case R.id.menu_item_my_listing:
 
@@ -347,6 +356,6 @@ public class Main extends GiftCardUp {
 
 }
 
-abstract class GiftCardUp extends AppCompatActivity implements View.OnClickListener, BankInformation.OnFragmentBankInformation, Identification.OnFragmentIdentification, SsnEin.OnFragmentSsnEin, TinderWork.OnFragmentDashboard1, Dashboard.OnFragmentDashboard {
+abstract class GiftCardUp extends AppCompatActivity implements View.OnClickListener, BankInformation.OnFragmentBankInformation, Identification.OnFragmentIdentification, SsnEin.OnFragmentSsnEin, TinderWork.OnFragmentDashboard1, Dashboard.OnFragmentDashboard, SellCards.OnFragmentSellCards {
 
 }

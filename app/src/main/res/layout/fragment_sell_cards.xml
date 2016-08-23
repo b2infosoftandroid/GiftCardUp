@@ -1,0 +1,52 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:paddingTop="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_horizontal_margin"
+    android:paddingLeft="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_vertical_margin"
+    tools:context="com.b2infosoft.giftcardup.fragments.SellCards">
+
+   <android.support.design.widget.TextInputLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+       <EditText
+           android:id="@+id/sell_gift_card_merchant"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:hint="@string/sell_card_merchant"/>
+   </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/edit_text_margin_top">
+        <EditText
+            android:id="@+id/sell_gift_card_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/sell_card_value"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/sell_gift_card_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sell_card_get_offer_btn"
+        android:textAllCaps="true"
+        android:layout_marginTop="@dimen/button_margin_top"
+        android:textColor="@color/button_foreground"
+        android:background="@drawable/button_fill_background"/>
+
+    <TableLayout
+        android:id="@+id/sell_gift_card_detail_table"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+    </TableLayout>
+</LinearLayout>
