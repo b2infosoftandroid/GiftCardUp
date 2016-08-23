@@ -1,17 +1,15 @@
 package com.b2infosoft.giftcardup.model;
 
 import android.util.Log;
-
 import com.b2infosoft.giftcardup.app.Tags;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.Serializable;
 
 /**
  * Created by rajesh on 8/21/2016.
  */
+
 public class GiftCard implements Serializable {
     private int giftCardID;
     private int readStatus;

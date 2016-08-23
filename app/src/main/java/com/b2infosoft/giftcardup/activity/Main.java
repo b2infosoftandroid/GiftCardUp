@@ -17,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
@@ -31,7 +30,6 @@ import com.b2infosoft.giftcardup.fragments.profile.BankInformation;
 import com.b2infosoft.giftcardup.fragments.profile.Identification;
 import com.b2infosoft.giftcardup.fragments.profile.SsnEin;
 import com.b2infosoft.giftcardup.model.CompanyCategory;
-import com.b2infosoft.giftcardup.model.QuickActionItem;
 import com.b2infosoft.giftcardup.utils.Utils1;
 import com.b2infosoft.giftcardup.utils.Utils2;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
@@ -223,11 +221,6 @@ public class Main extends GiftCardUp {
     }
 
     @Override
-    public void onProfile(Uri uri) {
-
-    }
-
-    @Override
     public void onBankInformation(Uri uri) {
 
     }
@@ -348,6 +341,6 @@ public class Main extends GiftCardUp {
 
 }
 
-abstract class GiftCardUp extends AppCompatActivity implements View.OnClickListener, Profile.OnFragmentProfile, BankInformation.OnFragmentBankInformation, Identification.OnFragmentIdentification, SsnEin.OnFragmentSsnEin, Dashboard1.OnFragmentDashboard1, Dashboard.OnFragmentDashboard {
+abstract class GiftCardUp extends AppCompatActivity implements View.OnClickListener, BankInformation.OnFragmentBankInformation, Identification.OnFragmentIdentification, SsnEin.OnFragmentSsnEin, Dashboard1.OnFragmentDashboard1, Dashboard.OnFragmentDashboard {
 
 }

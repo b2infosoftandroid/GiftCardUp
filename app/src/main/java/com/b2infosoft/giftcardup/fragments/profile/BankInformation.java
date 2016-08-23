@@ -13,6 +13,8 @@ import android.widget.EditText;
 
 import com.b2infosoft.giftcardup.R;
 
+import ru.noties.scrollable.CanScrollVerticallyDelegate;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -21,7 +23,7 @@ import com.b2infosoft.giftcardup.R;
  * Use the {@link BankInformation#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BankInformation extends Fragment {
+public class BankInformation extends Fragment implements CanScrollVerticallyDelegate{
 
     private final String TAG = BankInformation.class.getName();
 
@@ -134,6 +136,11 @@ public class BankInformation extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public boolean canScrollVertically(int direction) {
+        return false;
     }
 
     /**

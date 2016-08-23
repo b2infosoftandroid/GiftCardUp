@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.noties.scrollable.CanScrollVerticallyDelegate;
+
 /**
  * Created by Microsoft on 8/10/2016.
  */
@@ -32,5 +34,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         fragmentList.add(fragment);
         fragmentTitleList.add(title);
     }
-
+    public boolean canScrollVertically(int position, int direction) {
+        return ((CanScrollVerticallyDelegate)getItem(position)).canScrollVertically(direction);
+    }
 }

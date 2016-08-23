@@ -14,6 +14,8 @@ import android.widget.ScrollView;
 
 import com.b2infosoft.giftcardup.R;
 
+import ru.noties.scrollable.CanScrollVerticallyDelegate;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -22,10 +24,10 @@ import com.b2infosoft.giftcardup.R;
  * Use the {@link SsnEin#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SsnEin extends Fragment {
+public class SsnEin extends Fragment implements CanScrollVerticallyDelegate {
 
     private final String TAG = SsnEin.class.getName();
-
+    View mView;
     Button b1,upload_image,next_btn;
     EditText ssn_ein;
     ScrollView step_one,step_two;
@@ -75,10 +77,10 @@ public class SsnEin extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = null;
-        view = inflater.inflate(R.layout.fragment_ssn_ein, container, false);
 
-        b1 = (Button)view.findViewById(R.id.ssn_ein_approved_for_sell);
+        mView = inflater.inflate(R.layout.fragment_ssn_ein, container, false);
+
+        b1 = (Button) mView.findViewById(R.id.ssn_ein_approved_for_sell);
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,7 +88,7 @@ public class SsnEin extends Fragment {
             }
         });
 
-        return view;
+        return mView;
     }
 
     private void getApproved(){
@@ -130,6 +132,11 @@ public class SsnEin extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public boolean canScrollVertically(int direction) {
+        return mView != null && mView.canScrollVertically(direction);
     }
 
     /**

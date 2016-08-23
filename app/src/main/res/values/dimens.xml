@@ -47,4 +47,8 @@
     <dimen name="custom_tab_text_font_size">12sp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+
+    <dimen name="profile_header_height">220dp</dimen>
+    <dimen name="profile_tabs_height">60dp</dimen>
+
 </resources>
