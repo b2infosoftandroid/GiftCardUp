@@ -129,7 +129,9 @@ public class Main extends GiftCardUp {
             menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    Toast.makeText(Main.this, category.getCategoryID() + "", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(Main.this,Categories.class);
+                    intent.putExtra(tags.CATEGORIES,category);
+                    startActivity(intent);
                     return false;
                 }
             });
