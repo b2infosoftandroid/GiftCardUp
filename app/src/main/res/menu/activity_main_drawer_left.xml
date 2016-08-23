@@ -11,5 +11,8 @@
             android:title="@string/menu_dashboard"
             />
     </group>
+    <group
+        android:id="@+id/menu_2">
 
+    </group>
 </menu>
