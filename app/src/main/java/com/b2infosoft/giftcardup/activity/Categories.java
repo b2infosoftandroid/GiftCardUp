@@ -54,8 +54,7 @@ public class Categories extends AppCompatActivity {
 
             if (getIntent().hasExtra(tags.CATEGORIES)) {
                 category = (CompanyCategory) getIntent().getExtras().getSerializable(tags.CATEGORIES);
-                Log.d("category",category+"");
-                setTitle("");
+                setTitle(category.getCategoryName() +"");
             }
 
         dmrRequest = DMRRequest.getInstance(this, TAG);
@@ -108,6 +107,7 @@ public class Categories extends AppCompatActivity {
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION,tags.COMPANY_ALL_BRAND);
         map.put(tags.LOAD_MORE,String.valueOf(loadMore));
+        map.put(tags.CATEGORIES_ID,String.valueOf(category.getCategoryID()));
         dmrRequest.doPost(urls.getUrlCardsAll(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {

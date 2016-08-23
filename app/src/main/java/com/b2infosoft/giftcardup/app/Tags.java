@@ -19,6 +19,8 @@ public class Tags {
     public final String MESSAGE = "message";
     public final String IS_MORE = "is_more";
     public final String LOAD_MORE = "load_more";
+    public final String SORT_BY = "sort_by";
+    public final String CATEGORIES_ID = "categories_id";
 
     public final int SUSPEND = 2;
     public final int PASS = 1;
@@ -131,5 +133,7 @@ public class Tags {
     ////////////  COMPANY CATEGORY /////////
     public final String COMPANY_CATEGORY_ID = "cat_id";
     public final String COMPANY_CATEGORY_NAME = "category_name";
+
+
 
 }
