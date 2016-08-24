@@ -96,6 +96,12 @@
     <string name="sell_card_merchant">MERCHANT</string>
     <string name="sell_card_value">VALUE</string>
     <string name="sell_card_get_offer_btn">GET OFFER</string>
+    <string name="sell_card_accept_offer_btn">ACCEPT OFFER</string>
+    
+    <!--          SPEEDY CELL           -->
+    <string name="speedy_cell_text">SPEEDY CELL</string>
+    <string name="speedy_cell_cancel_btn">CANCEL</string>
+    <string name="speedy_cell_submit_btn">SUBMIT</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

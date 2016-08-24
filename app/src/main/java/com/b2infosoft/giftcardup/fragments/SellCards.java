@@ -1,15 +1,20 @@
 package com.b2infosoft.giftcardup.fragments;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.b2infosoft.giftcardup.R;
 
@@ -26,8 +31,11 @@ public class SellCards extends Fragment {
     private final String TAG = SellCards.class.getName();
 
     EditText merchant,value;
-    Button get_offer;
+    Button get_offer,accept_offer;
     TableLayout tableLayout;
+    LinearLayout linearLayout;
+    TextView name,payout,action;
+    int mrowcount = 0;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -80,19 +88,125 @@ public class SellCards extends Fragment {
         merchant = (EditText)view.findViewById(R.id.sell_gift_card_merchant);
         value = (EditText)view.findViewById(R.id.sell_gift_card_value);
         tableLayout = (TableLayout)view.findViewById(R.id.sell_gift_card_detail_table);
+        linearLayout = (LinearLayout) view.findViewById(R.id.sell_cards_relative_layout);
         get_offer = (Button)view.findViewById(R.id.sell_gift_card_btn);
+        accept_offer = (Button)view.findViewById(R.id.sell_gift_card_accept_btn);
+        addHeader();
         get_offer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addDetails();
+                checkBlank();
+            }
+        });
+
+        accept_offer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replaceFragment(new SpeedySell());
             }
         });
         return view;
     }
 
-    private static void addDetails(){
+    private void checkBlank(){
+           String sell_merchant = merchant.getText().toString();
+           String sell_value = value.getText().toString();
+        merchant.setError(null);
+        value.setError(null);
+        if(merchant.length() == 0){
+            merchant.setError("Please Enter Merchant Name");
+            merchant.requestFocus();
+            return;
+        }
+        if(value.length() == 0){
+            value.setError("Please Enter Value");
+            value.requestFocus();
+            return;
+        }
+        linearLayout.setVisibility(View.VISIBLE);
+        addDetails(sell_merchant,sell_value);
+        if(mrowcount == 0){
+            mrowcount++;
+            addLastRow();
+        }
+    }
 
+    private void addHeader(){
+        TableRow tr_head = new TableRow(getContext());
+        tr_head.setBackgroundColor(getResources().getColor(R.color.button_background));
+        name = new TextView(getContext());
+        name.setText("NAME");
+        name.setTextColor(getResources().getColor(R.color.button_foreground));
+        name.setPadding(15, 30, 0, 30);
+        name.setTypeface(null, Typeface.BOLD);
+        tr_head.addView(name);
 
+        payout = new TextView(getContext());
+        payout.setText("PAYOUT");
+        payout.setTextColor(getResources().getColor(R.color.button_foreground));
+        payout.setPadding(15, 30, 0, 30);
+        payout.setTypeface(null, Typeface.BOLD);
+        tr_head.addView(payout);
+
+        action = new TextView(getContext());
+        action.setText("ACTION");
+        action.setTextColor(getResources().getColor(R.color.button_foreground));
+        action.setPadding(15, 30, 0, 30);
+        action.setTypeface(null, Typeface.BOLD);
+        tr_head.addView(action);
+        tableLayout.addView(tr_head);
+
+    }
+
+    private void addDetails(String str1,String str2){
+        TableRow tr1 = new TableRow(getContext());
+        tr1.setBackgroundColor(getResources().getColor(R.color.profile_text));
+        name = new TextView(getContext());
+        name.setText(str1 +"(" + str2 + ")");
+        name.setTextColor(getResources().getColor(R.color.button_foreground));
+        name.setPadding(15, 30, 0, 30);
+        name.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
+                TableRow.LayoutParams.WRAP_CONTENT, 1f));
+        name.setTypeface(null, Typeface.BOLD);
+        tr1.addView(name);
+
+        payout = new TextView(getContext());
+        payout.setText("Up To $0");
+        payout.setTextColor(getResources().getColor(R.color.button_foreground));
+        payout.setPadding(15, 30, 0, 30);
+        payout.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
+                TableRow.LayoutParams.WRAP_CONTENT, 1f));
+        payout.setTypeface(null, Typeface.BOLD);
+        tr1.addView(payout);
+
+        action = new TextView(getContext());
+        action.setText("");
+        action.setTextColor(getResources().getColor(R.color.button_foreground));
+        action.setPadding(15, 30, 0, 30);
+        action.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
+                TableRow.LayoutParams.WRAP_CONTENT, 1f));
+        action.setTypeface(null, Typeface.BOLD);
+        tr1.addView(action);
+        tableLayout.addView(tr1);
+
+    }
+    private void addLastRow(){
+        TableRow trLast = new TableRow(getContext());
+        trLast.setBackgroundColor(getResources().getColor(R.color.button_background));
+        name = new TextView(getContext());
+        name.setText("TOTAL");
+        name.setTextColor(getResources().getColor(R.color.button_foreground));
+        name.setPadding(15, 30, 0, 30);
+        name.setTypeface(null, Typeface.BOLD);
+        trLast.addView(name);
+
+        payout = new TextView(getContext());
+        payout.setText("Up To $0");
+        payout.setTextColor(getResources().getColor(R.color.button_foreground));
+        payout.setPadding(15, 30, 0, 30);
+        payout.setTypeface(null, Typeface.BOLD);
+        trLast.addView(payout);
+        tableLayout.addView(trLast);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -117,6 +231,13 @@ public class SellCards extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.main_content, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     /**

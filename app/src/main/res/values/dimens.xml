@@ -38,8 +38,15 @@
     <dimen name="text_view_padding_right">16dp</dimen>
     <dimen name="text_view_padding_top">16dp</dimen>
     <dimen name="text_view_padding_bottom">16dp</dimen>
+    <dimen name="text_view_text_size">25dp</dimen>
 
     <dimen name="radio_button_margin_left">30dp</dimen>
+
+    <dimen name="table_layout_margin_top">60dp</dimen>
+    <dimen name="table_layout_margin_left">7dp</dimen>
+    <dimen name="table_layout_margin_right">7dp</dimen>
+    <dimen name="table_layout_btn_margin_left">200dp</dimen>
+    <dimen name="btn_left_margin">130dp</dimen>
 
 
     <dimen name="custom_tab_height">70dp</dimen>
