@@ -32,6 +32,7 @@ public class Tags {
     public final String COMPANY_ALL_BRAND = "company_all_brand";
     public final String COMPANY_ID_BRAND = "company_id_brand";
     public final String COMPANY_CATEGORY_ALL = "company_category_all";
+    public final String GET_OFFER = "get_offer";
     public final String USER_REQUEST = "user_request";
 
     /////////// ARRAYS  //////////
@@ -134,6 +135,15 @@ public class Tags {
     public final String COMPANY_CATEGORY_ID = "cat_id";
     public final String COMPANY_CATEGORY_NAME = "category_name";
 
-
+    ////////////  SELL GIFT CARD //////////////////
+    public final String SELL_GIFT_CARD_NAME = "sell_gift_card_name";
+    public final String SELL_GIFT_CARD_TYPE = "sell_gift_card_type";
+    public final String SELL_GIFT_CARD_OFFER = "sell_gift_card_offer";
+    public final String SELL_GIFT_CARD_BALANCE = "sell_gift_card_balance";
+    public final String SELL_GIFT_CARD_OWNER_BALANCE = "sell_gift_card_owner_balance";
+    public final String SELL_GIFT_CARD_IMAGE = "sell_gift_card_image";
+    public final String SELL_GIFT_CARD_COMPANY_ID = "sell_gift_card_company_id";
+    public final String SELL_GIFT_CARD_COMPANY_NAME = "sell_gift_card_company_name";
+    public final String SELL_GIFT_CARD_COMPANY_PERCENTAGE = "sell_gift_card_company_percentage";
 
 }
