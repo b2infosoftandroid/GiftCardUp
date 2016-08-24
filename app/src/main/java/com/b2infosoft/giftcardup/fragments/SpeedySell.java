@@ -30,6 +30,7 @@ public class SpeedySell extends Fragment {
     Button cancel,submit;
     TableLayout t1;
     TextView gift_cards,card_type,pin,serial_no,balance,earning,selling,action;
+    String name;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -140,8 +141,62 @@ public class SpeedySell extends Fragment {
         action.setTypeface(null, Typeface.BOLD);
         tr_head.addView(action);
         t1.addView(tr_head);
-
+         addRowData();
         return view;
+    }
+
+    private void addRowData(){
+        TableRow tr_head = new TableRow(getContext());
+        tr_head.setBackgroundColor(getResources().getColor(R.color.profile_text));
+        gift_cards = new TextView(getContext());
+        gift_cards.setText("");
+        gift_cards.setTextColor(getResources().getColor(R.color.button_foreground));
+        gift_cards.setPadding(15, 30, 15, 30);
+        tr_head.addView(gift_cards);
+
+        card_type = new TextView(getContext());
+        card_type.setText("");
+        card_type.setTextColor(getResources().getColor(R.color.button_foreground));
+        card_type.setPadding(15, 30, 15, 30);
+        tr_head.addView(card_type);
+
+        serial_no = new TextView(getContext());
+        serial_no.setText("");
+        serial_no.setTextColor(getResources().getColor(R.color.button_foreground));
+        serial_no.setPadding(15, 30, 15, 30);
+        tr_head.addView(serial_no);
+
+        pin = new TextView(getContext());
+        pin.setText("");
+        pin.setTextColor(getResources().getColor(R.color.button_foreground));
+        pin.setPadding(15, 30, 15, 30);
+        tr_head.addView(pin);
+
+        balance = new TextView(getContext());
+        balance.setText("");
+        balance.setTextColor(getResources().getColor(R.color.button_foreground));
+        balance.setPadding(15, 30, 15, 30);
+        tr_head.addView(balance);
+
+        earning = new TextView(getContext());
+        earning.setText("");
+        earning.setTextColor(getResources().getColor(R.color.button_foreground));
+        earning.setPadding(15, 30, 15, 30);
+        tr_head.addView(earning);
+
+        selling = new TextView(getContext());
+        selling.setText("");
+        selling.setTextColor(getResources().getColor(R.color.button_foreground));
+        selling.setPadding(15, 30, 15, 30);
+        tr_head.addView(selling);
+
+        action = new TextView(getContext());
+        action.setText("");
+        action.setTextColor(getResources().getColor(R.color.button_foreground));
+        action.setPadding(15, 30, 15, 30);
+        tr_head.addView(action);
+        t1.addView(tr_head);
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event

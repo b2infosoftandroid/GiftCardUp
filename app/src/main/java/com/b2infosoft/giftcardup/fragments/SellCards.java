@@ -167,7 +167,6 @@ public class SellCards extends Fragment {
         name.setPadding(15, 30, 0, 30);
         name.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT, 1f));
-        name.setTypeface(null, Typeface.BOLD);
         tr1.addView(name);
 
         payout = new TextView(getContext());
@@ -176,7 +175,6 @@ public class SellCards extends Fragment {
         payout.setPadding(15, 30, 0, 30);
         payout.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT, 1f));
-        payout.setTypeface(null, Typeface.BOLD);
         tr1.addView(payout);
 
         action = new TextView(getContext());
@@ -185,7 +183,6 @@ public class SellCards extends Fragment {
         action.setPadding(15, 30, 0, 30);
         action.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT, 1f));
-        action.setTypeface(null, Typeface.BOLD);
         tr1.addView(action);
         tableLayout.addView(tr1);
 
