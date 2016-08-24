@@ -191,22 +191,22 @@ public class SellCards extends Fragment {
 
     }
     private void addLastRow(){
-        TableRow trLast = new TableRow(getContext());
-        trLast.setBackgroundColor(getResources().getColor(R.color.button_background));
-        name = new TextView(getContext());
-        name.setText("TOTAL");
-        name.setTextColor(getResources().getColor(R.color.button_foreground));
-        name.setPadding(15, 30, 0, 30);
-        name.setTypeface(null, Typeface.BOLD);
-        trLast.addView(name);
+            TableRow trLast = new TableRow(getContext());
+            trLast.setBackgroundColor(getResources().getColor(R.color.button_background));
+            name = new TextView(getContext());
+            name.setText("TOTAL");
+            name.setTextColor(getResources().getColor(R.color.button_foreground));
+            name.setPadding(15, 30, 0, 30);
+            name.setTypeface(null, Typeface.BOLD);
+            trLast.addView(name);
 
-        payout = new TextView(getContext());
-        payout.setText("Up To $0");
-        payout.setTextColor(getResources().getColor(R.color.button_foreground));
-        payout.setPadding(15, 30, 0, 30);
-        payout.setTypeface(null, Typeface.BOLD);
-        trLast.addView(payout);
-        tableLayout.addView(trLast);
+            payout = new TextView(getContext());
+            payout.setText("Up To $0");
+            payout.setTextColor(getResources().getColor(R.color.button_foreground));
+            payout.setPadding(15, 30, 0, 30);
+            payout.setTypeface(null, Typeface.BOLD);
+            trLast.addView(payout);
+            tableLayout.addView(trLast);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
