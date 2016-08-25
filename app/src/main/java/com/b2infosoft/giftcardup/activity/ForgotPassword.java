@@ -2,6 +2,7 @@ package com.b2infosoft.giftcardup.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,7 +17,7 @@ public class ForgotPassword extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         old_pass = (EditText)findViewById(R.id.forgot_old_pass);
         new_pass = (EditText)findViewById(R.id.forgot_new_pass);
         confirm_new_pass = (EditText)findViewById(R.id.forgot_confirm_new_pass);
@@ -27,5 +28,16 @@ public class ForgotPassword extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                //NavUtils.navigateUpFromSameTask(this);
+                this.onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

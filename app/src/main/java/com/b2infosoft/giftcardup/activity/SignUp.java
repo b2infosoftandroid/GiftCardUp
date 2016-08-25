@@ -3,6 +3,7 @@ package com.b2infosoft.giftcardup.activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,7 +22,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         f_name = (EditText)findViewById(R.id.sign_up_name_first);
         l_name = (EditText)findViewById(R.id.sign_up_name_last);
         email = (EditText)findViewById(R.id.sign_up_email);
@@ -45,6 +46,18 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         create_acct.setOnClickListener(this);
 
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                //NavUtils.navigateUpFromSameTask(this);
+                this.onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {

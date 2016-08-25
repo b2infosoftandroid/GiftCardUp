@@ -26,13 +26,15 @@
             android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".activity.Login"
-            android:theme="@style/AppFullScreenTheme"
+            android:theme="@style/MyNoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.SignUp"
-            android:theme="@style/AppFullScreenTheme"
+            android:label="SignUp"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".activity.ForgotPassword" />
+        <activity android:name=".activity.ForgotPassword"
+            android:label="ForgotPassword"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".activity.Testexample" />
         <activity android:name=".activity.CompanyCard"></activity>
         <activity android:name=".activity.Categories">
