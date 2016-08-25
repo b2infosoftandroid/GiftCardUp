@@ -1,6 +1,7 @@
 package com.b2infosoft.giftcardup.activity;
 
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,7 @@ import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.app.Validation;
+import com.b2infosoft.giftcardup.custom.AlertBox;
 import com.b2infosoft.giftcardup.model.User;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
@@ -216,6 +218,12 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener,DM
 
                        }
                    } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
+
+                   } else if(jsonObject.getInt(tags.SUCCESS) == tags.EXISTING_USER){
+                       AlertBox alertBox = new AlertBox(this);
+                       alertBox.setTitle("Alert");
+                       alertBox.setMessage("User Already Exist");
+                       alertBox.show();
 
                    }
                }
