@@ -135,14 +135,24 @@ public class SellCards extends Fragment implements DMRResult {
     private void loadMerchants(){
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.GET_OFFER);
-        dmrRequest.doPost(urls.getGiftCardInfo(), map, new DMRResult() {
+        dmrRequest.doPost(urls.getAppAction(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
+                try{
+                    if(jsonObject.has(tags.SUCCESS)){
+                        if(jsonObject.getInt(tags.SUCCESS)==tags.PASS){
 
+                        }
+                    }
+                }catch (JSONException e){
+                    e.printStackTrace();
+                    Log.e(TAG,e.getMessage());
+                }
             }
             @Override
             public void onError(VolleyError volleyError) {
-
+                volleyError.printStackTrace();
+                Log.e(TAG,volleyError.getMessage());
             }
         });
         String[] array = getResources().getStringArray(R.array.merchant_array);
