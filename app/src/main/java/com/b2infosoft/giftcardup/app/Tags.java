@@ -25,6 +25,7 @@ public class Tags {
     public final int SUSPEND = 2;
     public final int PASS = 1;
     public final int FAIL = 0;
+    public final int EXISTING_USER = 3;
     public final int DEFAULT_LOADING_DATA = 10;
 
     //////////////  USER ACTIONS    //////////////
@@ -34,7 +35,7 @@ public class Tags {
     public final String COMPANY_CATEGORY_ALL = "company_category_all";
     public final String GET_OFFER = "get_offer";
     public final String USER_REQUEST = "user_request";
-    public final String USER_SIGNUP = "user_signup";
+    public final String USER_SIGNUP = "sign_up";
 
     /////////// ARRAYS  //////////
     public final String GIFT_CARDS = "gift_cards";

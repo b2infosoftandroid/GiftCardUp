@@ -205,8 +205,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener,DM
 
     @Override
     public void onSuccess(JSONObject jsonObject) {
+        Log.d("success",jsonObject.toString());
            try {
-
                if (jsonObject.has(tags.SUCCESS)) {
                    if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
                        if (jsonObject.has(tags.USER_SIGNUP)) {
