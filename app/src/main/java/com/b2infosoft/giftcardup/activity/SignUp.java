@@ -1,15 +1,17 @@
 package com.b2infosoft.giftcardup.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
@@ -18,27 +20,36 @@ import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.app.Validation;
 import com.b2infosoft.giftcardup.custom.AlertBox;
+import com.b2infosoft.giftcardup.model.State;
 import com.b2infosoft.giftcardup.model.User;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
-public class SignUp extends AppCompatActivity implements View.OnClickListener,DMRResult {
+public class SignUp extends AppCompatActivity implements View.OnClickListener, DMRResult {
 
     private final String TAG = SignUp.class.getName();
-    EditText f_name,l_name,email,mobile,password,password_confirm;
-    EditText address,suite_no,city,state,zip_code,company_name;
-    Button next,back,create_acct;
-    LinearLayout layout1,layout2;
+    EditText f_name, l_name, email, mobile, password, password_confirm;
+    EditText address, suite_no, city, state, zip_code, company_name;
+    Button next, back, create_acct;
+    Spinner s1;
+    LinearLayout layout1, layout2;
     Tags tags;
     DMRRequest dmrRequest;
     Urls urls;
     Validation validation;
+    List<State> statesList;
+    Map<String, String> stateMap = new HashMap<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,34 +58,39 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener,DM
 
         tags = Tags.getInstance();
         urls = Urls.getInstance();
-        dmrRequest = DMRRequest.getInstance(this,TAG);
-        f_name = (EditText)findViewById(R.id.sign_up_name_first);
-        l_name = (EditText)findViewById(R.id.sign_up_name_last);
-        email = (EditText)findViewById(R.id.sign_up_email);
-        mobile = (EditText)findViewById(R.id.sign_up_mobile_number);
-        password = (EditText)findViewById(R.id.sign_up_password);
-        password_confirm = (EditText)findViewById(R.id.sign_up_password_confirm);
-        next = (Button)findViewById(R.id.sign_up_action_next);
+        dmrRequest = DMRRequest.getInstance(this, TAG);
+        f_name = (EditText) findViewById(R.id.sign_up_name_first);
+        l_name = (EditText) findViewById(R.id.sign_up_name_last);
+        email = (EditText) findViewById(R.id.sign_up_email);
+        mobile = (EditText) findViewById(R.id.sign_up_mobile_number);
+        password = (EditText) findViewById(R.id.sign_up_password);
+        password_confirm = (EditText) findViewById(R.id.sign_up_password_confirm);
+        next = (Button) findViewById(R.id.sign_up_action_next);
         next.setOnClickListener(this);
-        layout2 = (LinearLayout)findViewById(R.id.sign_up_ViewSecond);
-        layout1 = (LinearLayout)findViewById(R.id.sign_up_ViewFirst);
+        layout2 = (LinearLayout) findViewById(R.id.sign_up_ViewSecond);
+        layout1 = (LinearLayout) findViewById(R.id.sign_up_ViewFirst);
 
-        address = (EditText)findViewById(R.id.sign_up_address);
-        suite_no = (EditText)findViewById(R.id.sign_up_suite_number);
-        city = (EditText)findViewById(R.id.sign_up_city);
-        state = (EditText)findViewById(R.id.sign_up_state);
-        zip_code = (EditText)findViewById(R.id.sign_up_zip_code);
-        company_name = (EditText)findViewById(R.id.sign_up_company_name);
-        back = (Button)findViewById(R.id.sign_up_action_back);
-        create_acct = (Button)findViewById(R.id.sign_up_action_create_account);
+        address = (EditText) findViewById(R.id.sign_up_address);
+        suite_no = (EditText) findViewById(R.id.sign_up_suite_number);
+        city = (EditText) findViewById(R.id.sign_up_city);
+        //state = (EditText)findViewById(R.id.sign_up_state);
+        s1 = (Spinner) findViewById(R.id.sign_up_state);
+        zip_code = (EditText) findViewById(R.id.sign_up_zip_code);
+        company_name = (EditText) findViewById(R.id.sign_up_company_name);
+        back = (Button) findViewById(R.id.sign_up_action_back);
+        create_acct = (Button) findViewById(R.id.sign_up_action_create_account);
         back.setOnClickListener(this);
         create_acct.setOnClickListener(this);
+
+        Map<String, String> map = new HashMap<>();
+        map.put(tags.USER_ACTION, tags.STATES_ALL);
+        dmrRequest.doPost(urls.getAppAction(), map, this);
 
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 //NavUtils.navigateUpFromSameTask(this);
                 this.onBackPressed();
@@ -101,7 +117,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener,DM
         }
     }
 
-    private void checkNext(){
+    private void checkNext() {
         validation = Validation.getInstance();
         String first_name = f_name.getText().toString();
         String last_name = l_name.getText().toString();
@@ -117,32 +133,32 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener,DM
         password.setError(null);
         password_confirm.setError(null);
 
-        if(f_name.length() == 0){
+        if (f_name.length() == 0) {
             f_name.setError("Please Enter Your Name");
             f_name.requestFocus();
             return;
         }
-        if(l_name.length() == 0){
+        if (l_name.length() == 0) {
             l_name.setError("Please Enter Last Name");
             l_name.requestFocus();
             return;
         }
-        if(!validation.isEmail(mail_id)){
+        if (!validation.isEmail(mail_id)) {
             email.setError("Enter Correct Email Id");
             email.requestFocus();
             return;
         }
-        if(!validation.isMobileNumber(phone)){
+        if (!validation.isMobileNumber(phone)) {
             mobile.setError("Enter Correct Mobile Number");
             mobile.requestFocus();
             return;
         }
-        if(!validation.isPassword(passwrd)){
+        if (!validation.isPassword(passwrd)) {
             password.setError("Password Should Be Greater Than 5 Digit");
             password.requestFocus();
             return;
         }
-        if(!validation.isPasswordConfirm(passwrd,passwrd_confrm)){
+        if (!validation.isPasswordConfirm(passwrd, passwrd_confrm)) {
             password_confirm.setError("Both Passwords are Different");
             password_confirm.requestFocus();
             return;
@@ -152,33 +168,35 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener,DM
 
     }
 
-    private void checkSignUp(){
-        String addrss = address.getText().toString();
+    private void checkSignUp() {
+        String address_1 = address.getText().toString();
         String city_name = city.getText().toString();
         String zip = zip_code.getText().toString();
-        String stat = state.getText().toString();
+
+        String stat = s1.getSelectedItem().toString();
 
         address.setError(null);
         city.setError(null);
         state.setError(null);
         zip_code.setError(null);
 
-        if(address.length() == 0){
+        if (address.length() == 0) {
             address.setError("Please Fill Address");
             address.requestFocus();
             return;
         }
-        if(city.length() == 0){
+        if (city.length() == 0) {
             city.setError("Please Fill City");
             city.requestFocus();
             return;
         }
-        if(state.length() == 0){
-            state.setError("Please Select State");
-            state.requestFocus();
+        if (s1.getSelectedItemPosition() == 0) {
+            TextView selectedTextView = (TextView) s1.getSelectedView();
+            selectedTextView.setError("Please Select State");
+            s1.requestFocus();
             return;
         }
-        if(zip_code.length() == 0){
+        if (zip_code.length() == 0) {
             zip_code.setError("Please Fill Zip Code");
             zip_code.requestFocus();
             return;
@@ -186,56 +204,79 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener,DM
 
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.USER_SIGNUP);
-        map.put(tags.EMPLOYEE_ID,"1");
-        map.put(tags.FIRST_NAME,f_name.getText().toString());
+        map.put(tags.EMPLOYEE_ID, "1");
+        map.put(tags.FIRST_NAME, f_name.getText().toString());
         map.put(tags.LAST_NAME, l_name.getText().toString());
-        map.put(tags.EMAIL,email.getText().toString());
+        map.put(tags.EMAIL, email.getText().toString());
         map.put(tags.PHONE_NUMBER, mobile.getText().toString());
-        map.put(tags.PASSWORD,password.getText().toString());
-        map.put(tags.ADDRESS, addrss);
+        map.put(tags.PASSWORD, password.getText().toString());
+        map.put(tags.ADDRESS, address_1);
         map.put(tags.SUITE_NUMBER, suite_no.getText().toString());
-        map.put(tags.CITY,city_name);
-        map.put(tags.STATE,stat);
+        map.put(tags.CITY, city_name);
+        map.put(tags.STATE, stateMap.get(stat));
         map.put(tags.ZIP_CODE, zip);
         map.put(tags.COMPANY_NAME, company_name.getText().toString());
         dmrRequest.doPost(urls.getUserInfo(), map, this);
     }
 
-    private void signUpSuccess(){
-       startActivity(new Intent(this,Main.class));
+    private void signUpSuccess() {
+        startActivity(new Intent(this, Main.class));
     }
 
     @Override
     public void onSuccess(JSONObject jsonObject) {
-        Log.d("success",jsonObject.toString());
-           try {
-               if (jsonObject.has(tags.SUCCESS)) {
-                   if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
-                       if (jsonObject.has(tags.USER_SIGNUP)) {
-                           User user = User.fromJSON(jsonObject.getJSONObject(tags.USER_SIGNUP));
-                           Toast.makeText(this,"success",Toast.LENGTH_SHORT).show();
-                           signUpSuccess();
+        Log.d("success", jsonObject.toString());
+        try {
+            if (jsonObject.has(tags.SUCCESS)) {
+                if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                    if (jsonObject.has(tags.USER_SIGNUP)) {
+                        User user = User.fromJSON(jsonObject.getJSONObject(tags.USER_SIGNUP));
+                        Toast.makeText(this, "success", Toast.LENGTH_SHORT).show();
+                        signUpSuccess();
 
-                       }
-                   } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
+                    }
+                    if (jsonObject.has(tags.STATES_ALL)) {
+                        if (stateMap.size() > 0) {
+                            stateMap.clear();
+                        }
+                        JSONArray jsonArray = jsonObject.getJSONArray(tags.STATES_ALL);
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            State stateAll = State.fromJSON(jsonArray.getJSONObject(i));
+                            stateMap.put(stateAll.getName(), stateAll.getAbbreviation());
+                        }
+                        refreshStates();
+                    }
+                } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
 
-                   } else if(jsonObject.getInt(tags.SUCCESS) == tags.EXISTING_USER){
-                       AlertBox alertBox = new AlertBox(this);
-                       alertBox.setTitle("Alert");
-                       alertBox.setMessage("User Already Exist");
-                       alertBox.show();
+                } else if (jsonObject.getInt(tags.SUCCESS) == tags.EXISTING_USER) {
+                    AlertBox alertBox = new AlertBox(this);
+                    alertBox.setTitle("Alert");
+                    alertBox.setMessage("User Already Exist");
+                    alertBox.show();
 
-                   }
-               }
-           }catch (JSONException e){
-               e.printStackTrace();
-               Log.d(TAG,e.getMessage());
-           }
+                }
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.d(TAG, e.getMessage());
+        }
     }
 
     @Override
     public void onError(VolleyError volleyError) {
-           volleyError.printStackTrace();
-           Log.d(TAG,volleyError.getMessage());
+        volleyError.printStackTrace();
+        Log.d(TAG, volleyError.getMessage());
     }
+
+    private void refreshStates() {
+        List<String> states = new ArrayList<>();
+        states.add("SELECT STATE");
+        for (String state : stateMap.keySet()) {
+            states.add(state.toUpperCase(Locale.getDefault()));
+        }
+        ArrayAdapter adapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, states);
+        s1.setAdapter(adapter);
+    }
+
 }

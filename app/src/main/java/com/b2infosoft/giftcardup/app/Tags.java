@@ -49,6 +49,7 @@ public class Tags {
     /////////// ARRAYS  //////////
     public final String GIFT_CARDS = "gift_cards";
     public final String CATEGORIES = "categories";
+    public final String STATE_ARR = "states_all";
 
     //////////////  ARRAYS   /////////////////////
     public final String ARR_CARD_TYPE[] = {"Physical", "eCard"};
@@ -153,6 +154,11 @@ public class Tags {
     public final String SELL_GIFT_CARD_COMPANY_ID = "sell_gift_card_company_id";
     public final String SELL_GIFT_CARD_COMPANY_NAME = "sell_gift_card_company_name";
     public final String SELL_GIFT_CARD_COMPANY_PERCENTAGE = "sell_gift_card_company_percentage";
+
+    ////////////////  STATE ALL ////////////////////
+    public final String STATE_ID = "state_id";
+    public final String STATE_NAME = "state";
+    public final String STATE_ABBRE = "abbreviation";
 
 
 
