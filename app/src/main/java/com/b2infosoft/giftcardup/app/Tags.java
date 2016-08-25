@@ -35,17 +35,23 @@ public class Tags {
     public final String COMPANY_CATEGORY_ALL = "company_category_all";
     public final String GET_OFFER = "get_offer";
     public final String USER_REQUEST = "user_request";
+    public final String STATES_ALL = "states_all";
+    public final String COMPANY_BRANDS = "company_brands";
+
+
+
+    /* USER LOGIN SIGNUP */
+    public final String USER_LOGIN = "login";
     public final String USER_SIGNUP = "sign_up";
+    public final String USER_UPDATE = "update";
+    public final String USER_PROFILE = "profile";
 
     /////////// ARRAYS  //////////
     public final String GIFT_CARDS = "gift_cards";
     public final String CATEGORIES = "categories";
 
     //////////////  ARRAYS   /////////////////////
-
-    public final String ARR_LOGIN_TYPE[] = {"login", "profile", "update", "logout"};
     public final String ARR_CARD_TYPE[] = {"Physical", "eCard"};
-
 
     /////////////  RESPONSE ARRAY  ////////////////
     public final String USER_INFO = "user_info";

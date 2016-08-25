@@ -94,7 +94,7 @@ public class Login extends AppCompatActivity implements DMRResult {
         }
 
         Map<String, String> map = new HashMap<>();
-        map.put(tags.USER_REQUEST, tags.ARR_LOGIN_TYPE[0]);
+        map.put(tags.USER_REQUEST, tags.USER_LOGIN);
         map.put(tags.USER_ID, uName);
         map.put(tags.PASSWORD, uPass);
 
