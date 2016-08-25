@@ -26,7 +26,13 @@
                 android:paddingTop="@dimen/activity_horizontal_margin"
                 android:orientation="vertical">
 
-                <android.support.design.widget.TextInputLayout
+                <AutoCompleteTextView
+                    android:id="@+id/sell_gift_card_merchant"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/sell_card_merchant"/>
+
+ <!--              <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -36,7 +42,7 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/sell_card_merchant" />
                 </android.support.design.widget.TextInputLayout>
-
+  -->
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

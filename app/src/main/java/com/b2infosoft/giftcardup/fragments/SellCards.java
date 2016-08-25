@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -50,7 +52,8 @@ public class SellCards extends Fragment implements DMRResult {
     Tags tags;
     Urls urls;
     DMRRequest dmrRequest;
-    EditText merchant, value;
+    AutoCompleteTextView merchant;
+    EditText value;
     Button get_offer, accept_offer;
     TableLayout tableLayout;
     LinearLayout linearLayout;
@@ -108,10 +111,15 @@ public class SellCards extends Fragment implements DMRResult {
         tags = Tags.getInstance();
         dmrRequest = DMRRequest.getInstance(getContext(), TAG);
         View view = inflater.inflate(R.layout.fragment_sell_cards, container, false);
-        merchant = (EditText) view.findViewById(R.id.sell_gift_card_merchant);
+        merchant = (AutoCompleteTextView) view.findViewById(R.id.sell_gift_card_merchant);
         value = (EditText) view.findViewById(R.id.sell_gift_card_value);
         tableLayout = (TableLayout) view.findViewById(R.id.sell_gift_card_detail_table);
         linearLayout = (LinearLayout) view.findViewById(R.id.sell_cards_relative_layout);
+
+        String[] array = getResources().getStringArray(R.array.merchant_array);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, array);
+        merchant.setAdapter(adapter);
+
         get_offer = (Button) view.findViewById(R.id.sell_gift_card_btn);
         accept_offer = (Button) view.findViewById(R.id.sell_gift_card_accept_btn);
         addHeader();
