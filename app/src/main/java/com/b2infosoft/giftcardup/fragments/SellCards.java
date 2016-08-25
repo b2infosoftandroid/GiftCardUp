@@ -56,7 +56,6 @@ public class SellCards extends Fragment implements DMRResult {
     LinearLayout linearLayout;
     TextView name, payout, action;
     ImageView imageAction;
-    int mrowcount = 0;
     Queue<GetOffer> offerQueue = new LinkedList<>();
 
     // TODO: Rename parameter arguments, choose names that match
@@ -151,14 +150,6 @@ public class SellCards extends Fragment implements DMRResult {
         map.put(tags.COMPANY_ID, sell_merchant);
         map.put(tags.SELL_GIFT_CARD_BALANCE, sell_value);
         dmrRequest.doPost(urls.getUrlCardsAll(), map, this);
-    /*
-        ;
-        addDetails(sell_merchant, sell_value);
-        if (mrowcount == 0) {
-            mrowcount++;
-            addLastRow();
-        }
-    */
 
     }
 

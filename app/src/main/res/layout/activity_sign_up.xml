@@ -108,6 +108,8 @@
                     android:id="@+id/sign_up_action_next"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/button_fill_background"
+                    android:textColor="@color/button_foreground"
                     android:layout_marginBottom="@dimen/button_margin_bottom"
                     android:layout_marginLeft="@dimen/button_margin_left"
                     android:layout_marginRight="@dimen/button_margin_right"
@@ -119,7 +121,8 @@
                 android:id="@+id/sign_up_ViewSecond"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="visible">
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
@@ -223,6 +226,8 @@
                         android:id="@+id/sign_up_action_back"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/button_fill_background"
+                        android:textColor="@color/button_foreground"
                         android:layout_marginBottom="@dimen/button_margin_bottom"
                         android:layout_marginLeft="@dimen/button_margin_left"
                         android:layout_marginRight="@dimen/button_margin_right"
@@ -231,8 +236,10 @@
                         android:text="@string/sign_up_back" />
                     <Button
                         android:id="@+id/sign_up_action_create_account"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/button_fill_background"
+                        android:textColor="@color/button_foreground"
                         android:layout_marginBottom="@dimen/button_margin_bottom"
                         android:layout_marginLeft="@dimen/button_margin_left"
                         android:layout_marginRight="@dimen/button_margin_right"
