@@ -34,6 +34,7 @@ public class Tags {
     public final String COMPANY_CATEGORY_ALL = "company_category_all";
     public final String GET_OFFER = "get_offer";
     public final String USER_REQUEST = "user_request";
+    public final String USER_SIGNUP = "user_signup";
 
     /////////// ARRAYS  //////////
     public final String GIFT_CARDS = "gift_cards";
@@ -145,5 +146,7 @@ public class Tags {
     public final String SELL_GIFT_CARD_COMPANY_ID = "sell_gift_card_company_id";
     public final String SELL_GIFT_CARD_COMPANY_NAME = "sell_gift_card_company_name";
     public final String SELL_GIFT_CARD_COMPANY_PERCENTAGE = "sell_gift_card_company_percentage";
+
+
 
 }

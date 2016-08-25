@@ -59,6 +59,7 @@ public class SellCards extends Fragment implements DMRResult {
     LinearLayout linearLayout;
     TextView name, payout, action;
     ImageView imageAction;
+    HashMap<String,String> merchantId;
     Queue<GetOffer> offerQueue = new LinkedList<>();
 
     // TODO: Rename parameter arguments, choose names that match
@@ -119,6 +120,7 @@ public class SellCards extends Fragment implements DMRResult {
         String[] array = getResources().getStringArray(R.array.merchant_array);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, array);
         merchant.setAdapter(adapter);
+        merchantId = new HashMap<>();
 
         get_offer = (Button) view.findViewById(R.id.sell_gift_card_btn);
         accept_offer = (Button) view.findViewById(R.id.sell_gift_card_accept_btn);
@@ -155,7 +157,7 @@ public class SellCards extends Fragment implements DMRResult {
         }
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.GET_OFFER);
-        map.put(tags.COMPANY_ID, sell_merchant);
+        map.put(tags.COMPANY_ID,sell_merchant);
         map.put(tags.SELL_GIFT_CARD_BALANCE, sell_value);
         dmrRequest.doPost(urls.getUrlCardsAll(), map, this);
 

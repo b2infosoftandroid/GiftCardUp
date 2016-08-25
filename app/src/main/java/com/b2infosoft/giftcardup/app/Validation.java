@@ -102,9 +102,13 @@ public class Validation {
             return true;
         return false;
     }
-    public boolean isScholarID(String str) {
-        if (str.length() != 0)
+    public boolean isEmail(String str) {
+        Pattern pattern = Pattern.compile(new String("^[_A-Za-z0-9-]+(.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+" +
+                "(.[A-Za-z0-9-]+)*(.[A-Za-z]{2,})$"));
+        Matcher matcher = pattern.matcher(str);
+        if (matcher.matches()) {
             return true;
+        }
         return false;
     }
 }
