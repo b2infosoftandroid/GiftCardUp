@@ -132,6 +132,7 @@ public class Tags {
     public final String VERIFY_IDENTITY = "verify_identity";
     public final String REFERRAL_AMOUNT = "referral_amount";
     public final String PAY_PAL_ID = "paypal_id";
+    public final String CARD_TYPE = "card_type";
 
 
     /////////////  ID  ////////////////

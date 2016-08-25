@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -25,9 +26,11 @@ import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.model.GetOffer;
+import com.b2infosoft.giftcardup.model.Merchant;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,14 +39,6 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link SellCards.OnFragmentSellCards} interface
- * to handle interaction events.
- * Use the {@link SellCards#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class SellCards extends Fragment implements DMRResult {
     private final String TAG = SellCards.class.getName();
     Tags tags;
@@ -57,13 +52,10 @@ public class SellCards extends Fragment implements DMRResult {
     TextView name, payout, action;
     ImageView imageAction;
     Queue<GetOffer> offerQueue = new LinkedList<>();
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    Map<String, String> hashMap = new HashMap<>();
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -73,15 +65,6 @@ public class SellCards extends Fragment implements DMRResult {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SellCards.
-     */
-    // TODO: Rename and change types and number of parameters
     public static SellCards newInstance(String param1, String param2) {
         SellCards fragment = new SellCards();
         Bundle args = new Bundle();
@@ -113,8 +96,6 @@ public class SellCards extends Fragment implements DMRResult {
         tableLayout = (TableLayout) view.findViewById(R.id.sell_gift_card_detail_table);
         linearLayout = (LinearLayout) view.findViewById(R.id.sell_cards_relative_layout);
 
-
-
         get_offer = (Button) view.findViewById(R.id.sell_gift_card_btn);
         accept_offer = (Button) view.findViewById(R.id.sell_gift_card_accept_btn);
         addHeader();
@@ -130,35 +111,66 @@ public class SellCards extends Fragment implements DMRResult {
                 replaceFragment(new SpeedySell());
             }
         });
+        loadMerchants();
         return view;
     }
-    private void loadMerchants(){
-        Map<String, String> map = new HashMap<>();
-        map.put(tags.USER_ACTION, tags.GET_OFFER);
+
+    private void loadMerchants() {
+        final Map<String, String> map = new HashMap<>();
+        map.put(tags.USER_ACTION, tags.COMPANY_BRANDS);
         dmrRequest.doPost(urls.getAppAction(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
-                try{
-                    if(jsonObject.has(tags.SUCCESS)){
-                        if(jsonObject.getInt(tags.SUCCESS)==tags.PASS){
-
+                // Log.d(TAG,jsonObject.toString());
+                try {
+                    if (jsonObject.has(tags.SUCCESS)) {
+                        if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                            if (jsonObject.has(tags.COMPANY_BRANDS)) {
+                                if (hashMap.size() > 0) {
+                                    hashMap.clear();
+                                }
+                                JSONArray jsonArray = jsonObject.getJSONArray(tags.COMPANY_BRANDS);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    Merchant merchant = Merchant.fromJSON(jsonArray.getJSONObject(i));
+                                    hashMap.put(merchant.getCompanyID(), merchant.getCompanyName());
+                                }
+                            }
+                            refreshMerchant();
                         }
                     }
-                }catch (JSONException e){
+                } catch (JSONException e) {
                     e.printStackTrace();
-                    Log.e(TAG,e.getMessage());
+                    Log.e(TAG, e.getMessage());
                 }
             }
+
             @Override
             public void onError(VolleyError volleyError) {
                 volleyError.printStackTrace();
-                Log.e(TAG,volleyError.getMessage());
+                Log.e(TAG, volleyError.getMessage());
             }
         });
-        String[] array = getResources().getStringArray(R.array.merchant_array);
+    }
+
+    private void refreshMerchant() {
+        String[] array = new String[hashMap.size()];
+        int i = 0;
+        for (String s : hashMap.keySet()) {
+            array[i++] = hashMap.get(s);
+        }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, array);
         merchant.setAdapter(adapter);
     }
+
+    private String getMerchantID(String merchantName) {
+        for (String s : hashMap.keySet()) {
+            if (hashMap.get(s).equalsIgnoreCase(merchantName)) {
+                return s;
+            }
+        }
+        return null;
+    }
+
     private void checkBlank() {
         String sell_merchant = merchant.getText().toString();
         String sell_value = value.getText().toString();
@@ -169,6 +181,11 @@ public class SellCards extends Fragment implements DMRResult {
             merchant.requestFocus();
             return;
         }
+        if (getMerchantID(sell_merchant) == null) {
+            merchant.setError("Invalid Merchant ");
+            merchant.requestFocus();
+            return;
+        }
         if (value.length() == 0) {
             value.setError("Please Enter Value");
             value.requestFocus();
@@ -176,14 +193,13 @@ public class SellCards extends Fragment implements DMRResult {
         }
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.GET_OFFER);
-        map.put(tags.COMPANY_ID, sell_merchant);
+        map.put(tags.COMPANY_ID, getMerchantID(sell_merchant));
         map.put(tags.SELL_GIFT_CARD_BALANCE, sell_value);
         dmrRequest.doPost(urls.getGiftCardInfo(), map, this);
-
     }
 
     private void addHeader() {
-        if(tableLayout.getChildCount()>0){
+        if (tableLayout.getChildCount() > 0) {
             tableLayout.removeAllViews();
         }
         TableRow tr_head = new TableRow(getContext());
@@ -210,20 +226,22 @@ public class SellCards extends Fragment implements DMRResult {
         tr_head.addView(action);
         tableLayout.addView(tr_head);
     }
+
     private void checkAllOffer() {
         if (offerQueue.size() > 0) {
             linearLayout.setVisibility(View.VISIBLE);
             addHeader();
-            int total=0;
-            for(GetOffer offer:offerQueue){
+            int total = 0;
+            for (GetOffer offer : offerQueue) {
                 addDetails(offer);
-                total+=offer.getCardOffer();
+                total += offer.getCardOffer();
             }
             addLastRow(total);
         } else {
             linearLayout.setVisibility(View.GONE);
         }
     }
+
     private void addDetails(final GetOffer offer) {
         TableRow tr1 = new TableRow(getContext());
         tr1.setBackgroundColor(getResources().getColor(R.color.profile_text));
@@ -273,7 +291,7 @@ public class SellCards extends Fragment implements DMRResult {
         trLast.addView(name);
 
         payout = new TextView(getContext());
-        payout.setText("Up To $"+total);
+        payout.setText("Up To $" + total);
         payout.setTextColor(getResources().getColor(R.color.button_foreground));
         payout.setPadding(15, 30, 0, 30);
         payout.setTypeface(null, Typeface.BOLD);
@@ -339,7 +357,6 @@ public class SellCards extends Fragment implements DMRResult {
         volleyError.printStackTrace();
         Log.e(TAG, volleyError.getMessage());
     }
-
 
 
     /**
