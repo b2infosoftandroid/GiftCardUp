@@ -336,7 +336,11 @@ public class Main extends GiftCardUp {
     private void replaceFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.main_content, fragment);
-        transaction.addToBackStack(null);
+        if (fragment instanceof Dashboard) {
+
+        } else {
+            transaction.addToBackStack(null);
+        }
         transaction.commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
