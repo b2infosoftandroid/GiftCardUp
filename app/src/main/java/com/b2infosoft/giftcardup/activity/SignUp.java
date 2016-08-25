@@ -1,7 +1,6 @@
 package com.b2infosoft.giftcardup.activity;
 
 import android.content.Intent;
-import android.os.UserHandle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
@@ -18,7 +16,6 @@ import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.app.Validation;
-import com.b2infosoft.giftcardup.custom.AlertBox;
 import com.b2infosoft.giftcardup.model.User;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
@@ -199,7 +196,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener,DM
         map.put(tags.STATE,stat);
         map.put(tags.ZIP_CODE, zip);
         map.put(tags.COMPANY_NAME, company_name.getText().toString());
-        dmrRequest.doPost(urls.getUrlLogin(), map, this);
+        dmrRequest.doPost(urls.getUserInfo(), map, this);
     }
 
     private void signUpSuccess(){

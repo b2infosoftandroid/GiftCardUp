@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
@@ -99,7 +98,7 @@ public class Login extends AppCompatActivity implements DMRResult {
         map.put(tags.USER_ID, uName);
         map.put(tags.PASSWORD, uPass);
 
-        dmrRequest.doPost(urls.getUrlLogin(), map, this);
+        dmrRequest.doPost(urls.getUserInfo(), map, this);
     }
 
     @Override

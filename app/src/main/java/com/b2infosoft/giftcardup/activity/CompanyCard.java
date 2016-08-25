@@ -1,13 +1,11 @@
 package com.b2infosoft.giftcardup.activity;
 
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
@@ -25,7 +23,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -101,7 +98,7 @@ public class CompanyCard extends AppCompatActivity {
         map.put(tags.USER_ACTION,tags.COMPANY_ID_BRAND);
         map.put(tags.COMPANY_ID,String.valueOf(companyBrand.getCompanyID()));
         map.put(tags.LOAD_MORE,String.valueOf(loadMore));
-        dmrRequest.doPost(urls.getUrlCardsAll(), map, new DMRResult() {
+        dmrRequest.doPost(urls.getGiftCardInfo(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
                 try {

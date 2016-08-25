@@ -1,15 +1,11 @@
 package com.b2infosoft.giftcardup.activity;
 
-import android.content.Intent;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
@@ -114,7 +110,7 @@ public class Categories extends AppCompatActivity {
         map.put(tags.USER_ACTION,tags.COMPANY_ALL_BRAND);
         map.put(tags.LOAD_MORE,String.valueOf(loadMore));
         map.put(tags.CATEGORIES_ID,String.valueOf(category.getCategoryID()));
-        dmrRequest.doPost(urls.getUrlCardsAll(), map, new DMRResult() {
+        dmrRequest.doPost(urls.getGiftCardInfo(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
                 try {

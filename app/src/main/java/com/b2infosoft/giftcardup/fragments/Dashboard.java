@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import android.widget.ProgressBar;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
-import com.b2infosoft.giftcardup.activity.CompanyCard;
 import com.b2infosoft.giftcardup.adapter.CardAdapter;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
@@ -146,7 +144,7 @@ public class Dashboard extends Fragment {
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION,tags.COMPANY_ALL_BRAND);
         map.put(tags.LOAD_MORE,String.valueOf(loadMore));
-        dmrRequest.doPost(urls.getUrlCardsAll(), map, new DMRResult() {
+        dmrRequest.doPost(urls.getGiftCardInfo(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
                 try {

@@ -99,7 +99,7 @@ public class Main extends GiftCardUp {
     private void updateMenuItemLeft() {
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.COMPANY_CATEGORY_ALL);
-        dmrRequest.doPost(urls.getUrlAppActions(), map, new DMRResult() {
+        dmrRequest.doPost(urls.getAppAction(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
                 Log.d(TAG, jsonObject.toString());

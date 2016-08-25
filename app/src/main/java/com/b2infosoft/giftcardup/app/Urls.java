@@ -53,13 +53,13 @@ public class Urls {
             return path;
         }
     }
-    public String getUrlLogin(){
+    public String getUserInfo(){
         return config.getServerAddress().concat("UserInfo.php");
     }
-    public String getUrlCardsAll(){
+    public String getGiftCardInfo(){
         return config.getServerAddress().concat("GiftCardInfo.php");
     }
-    public String getUrlAppActions(){
+    public String getAppAction(){
         return config.getServerAddress().concat("AppAction.php");
     }
 }

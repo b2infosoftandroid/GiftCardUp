@@ -28,14 +28,11 @@ import com.b2infosoft.giftcardup.model.GetOffer;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
@@ -59,7 +56,6 @@ public class SellCards extends Fragment implements DMRResult {
     LinearLayout linearLayout;
     TextView name, payout, action;
     ImageView imageAction;
-    HashMap<String,String> merchantId;
     Queue<GetOffer> offerQueue = new LinkedList<>();
 
     // TODO: Rename parameter arguments, choose names that match
@@ -117,10 +113,7 @@ public class SellCards extends Fragment implements DMRResult {
         tableLayout = (TableLayout) view.findViewById(R.id.sell_gift_card_detail_table);
         linearLayout = (LinearLayout) view.findViewById(R.id.sell_cards_relative_layout);
 
-        String[] array = getResources().getStringArray(R.array.merchant_array);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, array);
-        merchant.setAdapter(adapter);
-        merchantId = new HashMap<>();
+
 
         get_offer = (Button) view.findViewById(R.id.sell_gift_card_btn);
         accept_offer = (Button) view.findViewById(R.id.sell_gift_card_accept_btn);
@@ -139,7 +132,23 @@ public class SellCards extends Fragment implements DMRResult {
         });
         return view;
     }
+    private void loadMerchants(){
+        Map<String, String> map = new HashMap<>();
+        map.put(tags.USER_ACTION, tags.GET_OFFER);
+        dmrRequest.doPost(urls.getGiftCardInfo(), map, new DMRResult() {
+            @Override
+            public void onSuccess(JSONObject jsonObject) {
 
+            }
+            @Override
+            public void onError(VolleyError volleyError) {
+
+            }
+        });
+        String[] array = getResources().getStringArray(R.array.merchant_array);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, array);
+        merchant.setAdapter(adapter);
+    }
     private void checkBlank() {
         String sell_merchant = merchant.getText().toString();
         String sell_value = value.getText().toString();
@@ -157,9 +166,9 @@ public class SellCards extends Fragment implements DMRResult {
         }
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.GET_OFFER);
-        map.put(tags.COMPANY_ID,sell_merchant);
+        map.put(tags.COMPANY_ID, sell_merchant);
         map.put(tags.SELL_GIFT_CARD_BALANCE, sell_value);
-        dmrRequest.doPost(urls.getUrlCardsAll(), map, this);
+        dmrRequest.doPost(urls.getGiftCardInfo(), map, this);
 
     }
 
