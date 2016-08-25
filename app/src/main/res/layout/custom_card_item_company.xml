@@ -165,6 +165,8 @@
                 android:id="@+id/company_card_card_buy_now"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/button_fill_background"
+                android:textColor="@color/button_foreground"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:text="Buy Now" />
 
@@ -172,6 +174,10 @@
                 android:id="@+id/company_card_add_to_cart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/button_fill_background"
+                android:textColor="@color/button_foreground"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:text="Add To Cart" />
         </LinearLayout>
