@@ -177,9 +177,9 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
 
         address.setError(null);
         city.setError(null);
-        state.setError(null);
         zip_code.setError(null);
-
+        TextView selectedTextView = (TextView) s1.getSelectedView();
+        selectedTextView.setError(null);
         if (address.length() == 0) {
             address.setError("Please Fill Address");
             address.requestFocus();
@@ -191,7 +191,6 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
             return;
         }
         if (s1.getSelectedItemPosition() == 0) {
-            TextView selectedTextView = (TextView) s1.getSelectedView();
             selectedTextView.setError("Please Select State");
             s1.requestFocus();
             return;
