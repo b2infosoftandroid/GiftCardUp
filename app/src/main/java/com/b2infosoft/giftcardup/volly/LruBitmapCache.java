@@ -18,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader.ImageCache;
 import com.android.volley.toolbox.ImageRequest;
 import com.b2infosoft.giftcardup.R;
+import com.mikhaellopez.circularimageview.CircularImageView;
 
 public class LruBitmapCache extends LruCache<String, Bitmap>
         implements ImageCache {
@@ -61,7 +62,8 @@ public class LruBitmapCache extends LruCache<String, Bitmap>
     RequestQueue mRequestQueue; // assume this exists.
     ImageLoader mImageLoader = new ImageLoader(mRequestQueue, new LruBitmapCache(LruBitmapCache.getCacheSize()));
     */
-    public static void loadCacheImage(Context context,final ImageView imageView,String imageUrl,String tag){
+
+    public static void loadCacheImage(Context context, final ImageView imageView, String imageUrl, String tag) {
         Cache cache = MySingleton.getInstance(context).getRequestQueue().getCache();
         Cache.Entry entry = cache.get(imageUrl);
         if (entry != null) {
@@ -72,8 +74,40 @@ public class LruBitmapCache extends LruCache<String, Bitmap>
                 e.printStackTrace();
                 Log.e("ERROR", e.getMessage());
             }
-        }else{
-            cache.invalidate(imageUrl,true);
+        } else {
+            cache.invalidate(imageUrl, true);
+            ImageRequest request = new ImageRequest(imageUrl,
+                    new Response.Listener<Bitmap>() {
+                        @Override
+                        public void onResponse(Bitmap bitmap) {
+                            imageView.setImageBitmap(bitmap);
+                        }
+                    }, 0, 0, null,
+                    new Response.ErrorListener() {
+                        public void onErrorResponse(VolleyError error) {
+                            error.printStackTrace();
+                            Log.e("ERROR VOLLY 1", error.getMessage() + "");
+                            imageView.setImageResource(R.drawable.not_find);
+                        }
+                    });
+            request.setTag(tag);
+            MySingleton.getInstance(context).addToRequestQueue(request);
+        }
+    }
+
+    public static void loadCacheImage(Context context, final CircularImageView imageView, String imageUrl, String tag) {
+        Cache cache = MySingleton.getInstance(context).getRequestQueue().getCache();
+        Cache.Entry entry = cache.get(imageUrl);
+        if (entry != null) {
+            try {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(entry.data, 0, entry.data.length);
+                imageView.setImageBitmap(bitmap);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e("ERROR", e.getMessage());
+            }
+        } else {
+            cache.invalidate(imageUrl, true);
             ImageRequest request = new ImageRequest(imageUrl,
                     new Response.Listener<Bitmap>() {
                         @Override

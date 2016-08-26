@@ -58,6 +58,9 @@
                     android:textAllCaps="true"
                     android:inputType="text"
                     android:hint="@string/identification_email"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:enabled="false"
                     android:textColor="@color/edit_text_text"/>
             </android.support.design.widget.TextInputLayout>
 
@@ -120,22 +123,13 @@
                     android:hint="@string/identification_city"
                     android:textColor="@color/edit_text_text"/>
             </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
+            <android.support.v7.widget.AppCompatSpinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/edit_text_margin_top"
-                android:textColorHint="@color/edit_text_hint_text">
-                <EditText
-                    android:id="@+id/identity_state"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAllCaps="true"
-                    android:inputType="text"
-                    android:hint="@string/identification_state"
-                    android:textColor="@color/edit_text_text"/>
-            </android.support.design.widget.TextInputLayout>
+                android:id="@+id/identity_state_spinner"
+                >
 
+            </android.support.v7.widget.AppCompatSpinner>
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

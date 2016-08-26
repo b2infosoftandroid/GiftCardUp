@@ -17,9 +17,11 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.app.Config;
 import com.b2infosoft.giftcardup.app.Notify;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
@@ -33,10 +35,12 @@ import com.b2infosoft.giftcardup.fragments.profile.BankInformation;
 import com.b2infosoft.giftcardup.fragments.profile.Identification;
 import com.b2infosoft.giftcardup.fragments.profile.SsnEin;
 import com.b2infosoft.giftcardup.model.CompanyCategory;
+import com.b2infosoft.giftcardup.model.User;
 import com.b2infosoft.giftcardup.utils.Utils1;
 import com.b2infosoft.giftcardup.utils.Utils2;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
+import com.b2infosoft.giftcardup.volly.LruBitmapCache;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import org.json.JSONArray;
@@ -52,16 +56,17 @@ import java.util.Map;
 public class Main extends GiftCardUp {
     private final static String TAG = Main.class.getName();
     DMRRequest dmrRequest;
+    Config config;
     Urls urls;
     Active active;
     Tags tags;
     Notify notify;
     int count;
     NavigationView navigationViewRight, navigationViewLeft;
-    View headerView;
+    View headerView,isLoginLayout,isLogoutLayout;
     CircularImageView user_profile_icon;
+    TextView user_profile_name,user_total_sold,user_total_saving;
     DrawerLayout drawer;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +76,7 @@ public class Main extends GiftCardUp {
         active = Active.getInstance(this);
         tags = Tags.getInstance();
         notify = Notify.getInstance();
+        config = Config.getInstance();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -89,7 +95,12 @@ public class Main extends GiftCardUp {
         navigationViewLeft.setNavigationItemSelectedListener(new MenuSelect());
 
         headerView = LayoutInflater.from(this).inflate(R.layout.nav_header_main, navigationViewRight, false);
+        isLoginLayout = headerView.findViewById(R.id.layout_user_is_login);
+        isLogoutLayout = headerView.findViewById(R.id.layout_user_is_log_out);
         user_profile_icon = (CircularImageView) headerView.findViewById(R.id.user_profile_icon);
+        user_profile_name = (TextView) headerView.findViewById(R.id.user_profile_name);
+        user_total_sold = (TextView) headerView.findViewById(R.id.user_total_sold);
+        user_total_saving = (TextView) headerView.findViewById(R.id.user_total_saving);
         user_profile_icon.setOnClickListener(this);
         setNavigationMenu();
         updateMenuItemLeft();
@@ -131,12 +142,12 @@ public class Main extends GiftCardUp {
     private void updateMenuItemLeft(List<CompanyCategory> categoryList) {
         Menu menu = navigationViewLeft.getMenu();
         for (final CompanyCategory category : categoryList) {
-            MenuItem menuItem = menu.add(R.id.menu_2,Menu.NONE,Menu.NONE,category.getCategoryName().toUpperCase(Locale.getDefault()));
+            MenuItem menuItem = menu.add(R.id.menu_2, Menu.NONE, Menu.NONE, category.getCategoryName().toUpperCase(Locale.getDefault()));
             menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    Intent intent = new Intent(Main.this,Categories.class);
-                    intent.putExtra(tags.CATEGORIES,category);
+                    Intent intent = new Intent(Main.this, Categories.class);
+                    intent.putExtra(tags.CATEGORIES, category);
                     startActivity(intent);
                     return false;
                 }
@@ -190,7 +201,7 @@ public class Main extends GiftCardUp {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_cart_item:
-                 startActivity(new Intent(this,ShoppingCart.class));
+                startActivity(new Intent(this, ShoppingCart.class));
                 return true;
             case R.id.action_notifications:
 
@@ -348,23 +359,28 @@ public class Main extends GiftCardUp {
     }
 
     private void setNavigationMenu() {
+        boolean userIsLogin = active.isLogin();
         navigationViewRight.removeHeaderView(headerView);
+        if (userIsLogin) {
+            User user = active.getUser();
+            user_profile_name.setText(user.getFirstName()+" "+user.getLastName());
+            LruBitmapCache.loadCacheImage(this,user_profile_icon,config.getUserProfileImageAddress().concat(user.getImage()),TAG);
+            setMenuItems(user.getUserType());
+        }else{
+            setMenuItems(0);
+        }
         navigationViewRight.addHeaderView(headerView);
-        setSellerMenu(false);
-        setLoginMenu(active.isLogin());
     }
-
-    private void setSellerMenu(boolean bol) {
-        navigationViewRight.getMenu().setGroupVisible(R.id.menu_1, bol);
-        navigationViewRight.getMenu().setGroupVisible(R.id.menu_2, bol);
-        navigationViewRight.getMenu().setGroupVisible(R.id.menu_3, bol);
+    private void setMenuItems(int userType) {
+        navigationViewRight.getMenu().setGroupVisible(R.id.menu_1, userType==2?true:false);
+        navigationViewRight.getMenu().setGroupVisible(R.id.menu_2, userType==2?true:false);
+        navigationViewRight.getMenu().setGroupVisible(R.id.menu_3, userType==2?true:false);
+        navigationViewRight.getMenu().setGroupVisible(R.id.menu_4, userType==0?false:true);
+        navigationViewRight.getMenu().setGroupVisible(R.id.menu_5, userType!=0?true:false);
+        navigationViewRight.getMenu().setGroupVisible(R.id.menu_6, userType==0?true:false);
+        isLoginLayout.setVisibility(userType != 0 ? View.VISIBLE : View.GONE);
+        isLogoutLayout.setVisibility(userType==0?View.VISIBLE:View.GONE);
     }
-
-    private void setLoginMenu(boolean bol) {
-        navigationViewRight.getMenu().setGroupVisible(R.id.menu_5, bol);
-        navigationViewRight.getMenu().setGroupVisible(R.id.menu_6, !bol);
-    }
-
 }
 
 abstract class GiftCardUp extends AppCompatActivity implements View.OnClickListener, BankInformation.OnFragmentBankInformation, Identification.OnFragmentIdentification, SsnEin.OnFragmentSsnEin, TinderWork.OnFragmentDashboard1, Dashboard.OnFragmentDashboard, SellCards.OnFragmentSellCards, SpeedySell.OnFragmentSpeedyCell {

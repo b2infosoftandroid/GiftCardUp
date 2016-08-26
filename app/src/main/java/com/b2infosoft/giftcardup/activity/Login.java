@@ -18,6 +18,7 @@ import com.b2infosoft.giftcardup.custom.AlertBox;
 import com.b2infosoft.giftcardup.model.User;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -94,7 +95,7 @@ public class Login extends AppCompatActivity implements DMRResult {
         }
 
         Map<String, String> map = new HashMap<>();
-        map.put(tags.USER_REQUEST, tags.USER_LOGIN);
+        map.put(tags.USER_ACTION, tags.USER_LOGIN);
         map.put(tags.USER_ID, uName);
         map.put(tags.PASSWORD, uPass);
 
@@ -110,8 +111,7 @@ public class Login extends AppCompatActivity implements DMRResult {
                     if(jsonObject.has(tags.USER_INFO)){
                         JSONObject object = jsonObject.getJSONObject(tags.USER_INFO);
                         User user = User.fromJSON(object);
-                        active.setKey(tags.USER_ID,user.getUserId()+"");
-                        active.setKey(tags.USER_TYPE,user.getUserType()+"");
+                        active.setUser(user);
                         active.setLogin();
                         loginSuccess();
                     }

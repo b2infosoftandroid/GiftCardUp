@@ -37,7 +37,7 @@ public class Tags {
     public final String USER_REQUEST = "user_request";
     public final String STATES_ALL = "states_all";
     public final String COMPANY_BRANDS = "company_brands";
-
+    public final String USER_CONTACT_INFORMATION = "user_contact_information";
 
 
     /* USER LOGIN SIGNUP */
@@ -110,6 +110,7 @@ public class Tags {
 
     /////////////// USER PROFILE  ///////////////
 
+    public final String USER = "user";
     public final String USER_TYPE = "user_type";
     public final String FIRST_NAME = "first_name";
     public final String LAST_NAME = "last_name";
@@ -161,6 +162,17 @@ public class Tags {
     public final String STATE_NAME = "state";
     public final String STATE_ABBRE = "abbreviation";
 
+    ///////////////// CONTACT INFO TAGS  /////////////
 
+    public final String CONTACT_INFO_CONTACT_ID = "contact_id";
+    public final String CONTACT_INFO_USER_ID = "user_id";
+    public final String CONTACT_INFO_PHONE_NUMBER = "phone_number";
+    public final String CONTACT_INFO_ADDRESS = "adderss";
+    public final String CONTACT_INFO_SUITE_NUMBER = "suite_number";
+    public final String CONTACT_INFO_CITY = "city";
+    public final String CONTACT_INFO_ZIP_CODE = "zip_code";
+    public final String CONTACT_INFO_STATE = "state";
+    public final String CONTACT_INFO_COMPANY_NAME = "company_name";
+    public final String CONTACT_INFO_DATE = "date";
 
 }

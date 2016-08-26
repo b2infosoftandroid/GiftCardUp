@@ -18,9 +18,9 @@ public class Format {
     }
 
     public String getDate(String string) {
-        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-        if (string.contains("T")) {
-            String data[] = string.substring(0, string.indexOf("T")).split("-");
+        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+        if (string.contains(" ")) {
+            String data[] = string.substring(0, string.indexOf(" ")).split("-");
             Date date = new GregorianCalendar(Integer.parseInt(data[0]),Integer.parseInt(data[1])-1,Integer.parseInt(data[2])).getTime();
             return format.format(date);
         }
@@ -29,7 +29,7 @@ public class Format {
     public String getCurrentDate(){
         Calendar calendar = Calendar.getInstance();
         Date date = calendar.getTime();
-        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
         return format.format(date);
     }
 }

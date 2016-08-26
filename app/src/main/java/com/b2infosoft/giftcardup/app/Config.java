@@ -6,6 +6,7 @@ package com.b2infosoft.giftcardup.app;
 public class Config {
     private final String SERVER_IP = "192.168.0.55";
     public final String GIFT_CARD_IMAGE_FOLDER ="images/upload/";
+    public final String USER_PROFILE_IMAGE_FOLDER ="img/avatar/";
     private final Boolean LIVE_SERVER = false;
     private static Config ourInstance = new Config();
 
@@ -21,6 +22,13 @@ public class Config {
             return "";
         }else{
             return "http://".concat(SERVER_IP).concat("/giftcard2/").concat(GIFT_CARD_IMAGE_FOLDER);
+        }
+    }
+    public String getUserProfileImageAddress(){
+        if(LIVE_SERVER){
+            return "";
+        }else{
+            return "http://".concat(SERVER_IP).concat("/giftcard2/").concat(USER_PROFILE_IMAGE_FOLDER);
         }
     }
     public String getServerAddress(){

@@ -2,7 +2,11 @@ package com.b2infosoft.giftcardup.credential;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
 import com.b2infosoft.giftcardup.app.Tags;
+import com.b2infosoft.giftcardup.model.User;
+import com.b2infosoft.giftcardup.utils.ObjectSerializer;
+import com.google.gson.Gson;
 
 /**
  * Created by rajesh on 7/12/2016.
@@ -10,50 +14,65 @@ import com.b2infosoft.giftcardup.app.Tags;
 
 public class Active {
     private Context context;
+    private Gson gson;
+    private SharedPreferences setting;
 
     private Active(Context context) {
         this.context = context;
+        this.gson = new Gson();
+        this.setting = context.getSharedPreferences(USER_CREDENTIALS, PRIVATE_KEY);
     }
 
     public static Active getInstance(Context context) {
         return new Active(context);
     }
+
     private final String USER_CREDENTIALS = "dmr_rajesh";
     private final int PRIVATE_KEY = 0;
     private final String DEVICE_LOGIN = "device_login";
+    private final String DEVICE_LOGIN_USER_DETAILS = "device_login_user_details";
     private final boolean STATUS[] = {false, true};
 
     public void setKey(String key, String value) {
-        SharedPreferences setting = context.getSharedPreferences(USER_CREDENTIALS, PRIVATE_KEY);
+
         setting.edit()
                 .putString(key, value)
                 .commit();
     }
 
     public String getValue(String key) {
-        SharedPreferences setting = context.getSharedPreferences(USER_CREDENTIALS, 0);
         return setting.getString(key, "");
     }
 
     public void setLogin() {
-        SharedPreferences setting = context.getSharedPreferences(USER_CREDENTIALS, PRIVATE_KEY);
         setting.edit()
                 .putBoolean(DEVICE_LOGIN, STATUS[1])
                 .commit();
     }
 
     public void setLogOut() {
-        Tags tags = Tags.getInstance();
-        SharedPreferences setting = context.getSharedPreferences(USER_CREDENTIALS, PRIVATE_KEY);
         setting.edit()
                 .putBoolean(DEVICE_LOGIN, STATUS[0])
-                .putString(tags.USER_ID, "")
-                .putString(tags.USER_TYPE, "")
+                .putString(DEVICE_LOGIN_USER_DETAILS, null)
                 .commit();
     }
 
+    public void setUser(User user) {
+        setting.edit()
+                .putString(DEVICE_LOGIN_USER_DETAILS, gson.toJson(user))
+                .commit();
+    }
+
+    public User getUser() {
+        String user = setting.getString(DEVICE_LOGIN_USER_DETAILS, null);
+        if (user != null) {
+            return gson.fromJson(user, User.class);
+        } else {
+            return null;
+        }
+    }
+
     public boolean isLogin() {
-        SharedPreferences setting = context.getSharedPreferences(USER_CREDENTIALS, 0);
         return setting.getBoolean(DEVICE_LOGIN, STATUS[0]);
     }
 }
