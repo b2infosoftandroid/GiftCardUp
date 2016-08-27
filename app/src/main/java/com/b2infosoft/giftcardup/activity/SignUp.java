@@ -169,9 +169,17 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
     }
 
     private void checkSignUp() {
+        String first_name = f_name.getText().toString();
+        String last_name = l_name.getText().toString();
+        String mail_id = email.getText().toString();
+        String phone = mobile.getText().toString();
+        String passwrd = password.getText().toString();
+
         String address_1 = address.getText().toString();
         String city_name = city.getText().toString();
         String zip = zip_code.getText().toString();
+        String suite = suite_no.getText().toString();
+        String company = company_name.getText().toString();
 
         String stat = s1.getSelectedItem().toString();
 
@@ -204,17 +212,17 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.USER_SIGNUP);
         map.put(tags.EMPLOYEE_ID, "1");
-        map.put(tags.FIRST_NAME, f_name.getText().toString());
-        map.put(tags.LAST_NAME, l_name.getText().toString());
-        map.put(tags.EMAIL, email.getText().toString());
-        map.put(tags.PHONE_NUMBER, mobile.getText().toString());
-        map.put(tags.PASSWORD, password.getText().toString());
+        map.put(tags.FIRST_NAME, first_name);
+        map.put(tags.LAST_NAME, last_name);
+        map.put(tags.EMAIL, mail_id);
+        map.put(tags.PHONE_NUMBER,phone);
+        map.put(tags.PASSWORD,passwrd);
         map.put(tags.ADDRESS, address_1);
-        map.put(tags.SUITE_NUMBER, suite_no.getText().toString());
+        map.put(tags.SUITE_NUMBER,suite);
         map.put(tags.CITY, city_name);
         map.put(tags.STATE, stateMap.get(stat));
         map.put(tags.ZIP_CODE, zip);
-        map.put(tags.COMPANY_NAME, company_name.getText().toString());
+        map.put(tags.COMPANY_NAME,company);
         dmrRequest.doPost(urls.getUserInfo(), map, this);
     }
 

@@ -329,6 +329,7 @@ public class Main extends GiftCardUp {
                 case R.id.menu_item_logout:
                     active.setLogOut();
                     setNavigationMenu();
+                    replaceFragment(new Dashboard());
                     break;
                 case R.id.menu_item_login:
                     startActivity(new Intent(Main.this, Login.class));
@@ -368,6 +369,7 @@ public class Main extends GiftCardUp {
             setMenuItems(user.getUserType());
         }else{
             setMenuItems(0);
+            user_profile_icon.setImageDrawable(getResources().getDrawable(R.drawable.ic_user_icon));
         }
         navigationViewRight.addHeaderView(headerView);
     }

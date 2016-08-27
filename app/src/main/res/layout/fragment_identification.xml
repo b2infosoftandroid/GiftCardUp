@@ -175,6 +175,31 @@
                     android:textColor="@color/edit_text_text"/>
             </android.support.design.widget.TextInputLayout>
 
+            <Button
+                android:id="@+id/edit_save_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Edit"
+                android:layout_marginTop="@dimen/button_margin_top"
+                android:textColor="@color/button_foreground"
+                android:textAllCaps="true"
+                android:background="@drawable/button_fill_background"
+                android:visibility="visible"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <Button
+                    android:id="@+id/save_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Save"
+                    android:layout_marginTop="@dimen/button_margin_top"
+                    android:textColor="@color/button_foreground"
+                    android:textAllCaps="true"
+                    android:background="@drawable/button_fill_background"
+                    android:visibility="gone"/>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
