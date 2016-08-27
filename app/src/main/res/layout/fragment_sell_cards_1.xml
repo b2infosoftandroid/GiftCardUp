@@ -1,0 +1,102 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context="com.b2infosoft.giftcardup.fragments.SellCards">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingBottom="@dimen/activity_horizontal_margin"
+                android:paddingLeft="@dimen/activity_vertical_margin"
+                android:paddingRight="@dimen/activity_vertical_margin"
+                android:paddingTop="@dimen/activity_horizontal_margin"
+                android:orientation="vertical">
+
+                <AutoCompleteTextView
+                    android:id="@+id/sell_gift_card_merchant"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/sell_card_merchant"/>
+
+ <!--              <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/sell_gift_card_merchant"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/sell_card_merchant" />
+                </android.support.design.widget.TextInputLayout>
+  -->
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/edit_text_margin_top">
+
+                    <EditText
+                        android:id="@+id/sell_gift_card_value"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/sell_card_value" />
+                </android.support.design.widget.TextInputLayout>
+
+                <Button
+                    android:id="@+id/sell_gift_card_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/button_margin_top"
+                    android:background="@drawable/button_fill_background"
+                    android:text="@string/sell_card_get_offer_btn"
+                    android:textAllCaps="true"
+                    android:textColor="@color/button_foreground" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/sell_cards_relative_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/table_layout_margin_top"
+                android:visibility="gone">
+
+                <TableLayout
+                    android:id="@+id/sell_gift_card_detail_table"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:collapseColumns="*"
+                    android:shrinkColumns="0,1,2"
+                    android:stretchColumns="*">
+                </TableLayout>
+
+                <Button
+                    android:id="@+id/sell_gift_card_accept_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAllCaps="true"
+                    android:textColor="@color/button_foreground"
+                    android:text="@string/sell_card_accept_offer_btn"
+                    android:layout_marginLeft="@dimen/table_layout_btn_margin_left"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                    android:background="@drawable/button_fill_background"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

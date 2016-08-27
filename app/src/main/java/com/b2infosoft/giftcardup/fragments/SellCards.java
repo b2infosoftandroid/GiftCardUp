@@ -244,10 +244,11 @@ public class SellCards extends Fragment implements DMRResult {
 
     private void addDetails(final GetOffer offer) {
         TableRow tr1 = new TableRow(getContext());
-        tr1.setBackgroundColor(getResources().getColor(R.color.profile_text));
+
+        tr1.setBackgroundColor(getResources().getColor(R.color.table_strip_1));
         name = new TextView(getContext());
         name.setText(offer.getCardName());
-        name.setTextColor(getResources().getColor(R.color.button_foreground));
+        name.setTextColor(getResources().getColor(R.color.edit_text_text));
         name.setPadding(15, 30, 0, 30);
         name.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT, 1f));
@@ -255,7 +256,7 @@ public class SellCards extends Fragment implements DMRResult {
 
         payout = new TextView(getContext());
         payout.setText("Up To $" + offer.getCardOffer());
-        payout.setTextColor(getResources().getColor(R.color.button_foreground));
+        payout.setTextColor(getResources().getColor(R.color.edit_text_text));
         payout.setPadding(15, 30, 0, 30);
         payout.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT, 1f));
