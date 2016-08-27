@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SpinnerAdapter;
 
@@ -46,6 +47,7 @@ public class Identification extends Fragment implements CanScrollVerticallyDeleg
     private DBHelper dbHelper;
     private Urls urls;
     EditText f_name, l_name, email, mobile, city, state, zip_code, cmpny_name, paypal_id, address, suite_no;
+    Button b1,b2;
     private AppCompatSpinner appCompatSpinner;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -96,6 +98,37 @@ public class Identification extends Fragment implements CanScrollVerticallyDeleg
         zip_code = (EditText) view.findViewById(R.id.identity_zip_code);
         cmpny_name = (EditText) view.findViewById(R.id.identity_cmpny_name);
         paypal_id = (EditText) view.findViewById(R.id.identity_paypal_id);
+        b1 = (Button)view.findViewById(R.id.edit_save_btn);
+        b2 = (Button)view.findViewById(R.id.save_btn);
+        b1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                b2.setVisibility(View.VISIBLE);
+                b1.setVisibility(View.GONE);
+                f_name.setEnabled(true);
+                l_name.setEnabled(true);
+                mobile.setEnabled(true);
+                address.setEnabled(true);
+                suite_no.setEnabled(true);
+                city.setEnabled(true);
+                zip_code.setEnabled(true);
+                cmpny_name.setEnabled(true);
+                paypal_id.setEnabled(true);
+            }
+        });
+        b2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String paypal = paypal_id.getText().toString();
+                paypal_id.setError(null);
+                if(paypal_id.length() == 0){
+                    paypal_id.setError("PLEASE ENTER ID");
+                    paypal_id.setFocusable(true);
+                    return;
+                }
+
+            }
+        });
         appCompatSpinner = (AppCompatSpinner) view.findViewById(R.id.identity_state_spinner);
         enableProfile(false);
         setProfile();

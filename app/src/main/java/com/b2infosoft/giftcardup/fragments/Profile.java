@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -86,6 +87,7 @@ public class Profile extends Fragment {
         setInitialize(active.isLogin());
         return mView;
     }
+
     private void setInitialize(boolean isLogin){
         membership = (TextView) mView.findViewById(R.id.profile_member);
         name = (TextView) mView.findViewById(R.id.profile_user_name);
