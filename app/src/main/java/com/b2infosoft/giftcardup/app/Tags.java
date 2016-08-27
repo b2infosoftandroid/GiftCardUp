@@ -38,6 +38,7 @@ public class Tags {
     public final String STATES_ALL = "states_all";
     public final String COMPANY_BRANDS = "company_brands";
     public final String USER_CONTACT_INFORMATION = "user_contact_information";
+    public final String USER_PROFILE_UPDATE = "user_profile_update";
 
 
     /* USER LOGIN SIGNUP */
@@ -134,6 +135,8 @@ public class Tags {
     public final String REFERRAL_AMOUNT = "referral_amount";
     public final String PAY_PAL_ID = "paypal_id";
     public final String CARD_TYPE = "card_type";
+    public final String TOTAL_SAVE = "total_save";
+    public final String TOTAL_SOLD = "total_sold";
 
 
     /////////////  ID  ////////////////
