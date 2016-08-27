@@ -1,15 +1,18 @@
 package com.b2infosoft.giftcardup.model;
 
 import android.util.Log;
+
 import com.b2infosoft.giftcardup.app.Tags;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.Serializable;
 
 /**
  * Created by rajesh on 8/11/2016.
  */
-public class User implements Serializable{
+public class User implements Serializable {
     private int userId;
     private int employeeId;
     private int userType;
@@ -35,6 +38,8 @@ public class User implements Serializable{
     private int verifyIdentity;
     private int referralAmount;
     private String payPalId;
+    private String totalSold;
+    private String totalSave;
 
     public int getUserId() {
         return userId;
@@ -236,6 +241,22 @@ public class User implements Serializable{
         this.payPalId = payPalId;
     }
 
+    public String getTotalSold() {
+        return totalSold;
+    }
+
+    public void setTotalSold(String totalSold) {
+        this.totalSold = totalSold;
+    }
+
+    public String getTotalSave() {
+        return totalSave;
+    }
+
+    public void setTotalSave(String totalSave) {
+        this.totalSave = totalSave;
+    }
+
     public static User fromJSON(JSONObject object) {
         Tags tags = Tags.getInstance();
         User user = new User();
@@ -316,7 +337,12 @@ public class User implements Serializable{
             if (object.has(tags.PAY_PAL_ID)) {
                 user.setPayPalId(object.getString(tags.PAY_PAL_ID));
             }
-
+            if (object.has(tags.TOTAL_SAVE)) {
+                user.setTotalSave(object.getString(tags.TOTAL_SAVE));
+            }
+            if (object.has(tags.TOTAL_SOLD)) {
+                user.setTotalSold(object.getString(tags.TOTAL_SOLD));
+            }
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e("USER", e.getMessage());
