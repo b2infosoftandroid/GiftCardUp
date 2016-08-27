@@ -38,6 +38,7 @@ public class Tags {
     public final String STATES_ALL = "states_all";
     public final String COMPANY_BRANDS = "company_brands";
     public final String USER_CONTACT_INFORMATION = "user_contact_information";
+    public final String USER_PROFILE_UPDATE = "user_profile_update";
 
 
     /* USER LOGIN SIGNUP */
