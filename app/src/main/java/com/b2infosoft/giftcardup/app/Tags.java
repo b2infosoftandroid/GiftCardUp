@@ -135,6 +135,8 @@ public class Tags {
     public final String REFERRAL_AMOUNT = "referral_amount";
     public final String PAY_PAL_ID = "paypal_id";
     public final String CARD_TYPE = "card_type";
+    public final String TOTAL_SAVE = "total_save";
+    public final String TOTAL_SOLD = "total_sold";
 
 
     /////////////  ID  ////////////////
