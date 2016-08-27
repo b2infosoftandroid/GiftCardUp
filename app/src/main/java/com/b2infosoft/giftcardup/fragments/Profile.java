@@ -98,6 +98,8 @@ public class Profile extends Fragment {
             User user = active.getUser();
             name.setText(user.getFirstName()+" "+user.getLastName());
             membership.setText("Member Since: ".concat(format.getDate(user.getJoinDate())));
+            saving.setText(user.getTotalSave());
+            sold.setText(user.getTotalSold());
             LruBitmapCache.loadCacheImage(getActivity(), circularImageView, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
         }
     }

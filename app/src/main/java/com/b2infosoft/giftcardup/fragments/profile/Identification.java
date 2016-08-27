@@ -126,7 +126,7 @@ public class Identification extends Fragment implements CanScrollVerticallyDeleg
                     paypal_id.setFocusable(true);
                     return;
                 }
-
+                updateProfile();
             }
         });
         appCompatSpinner = (AppCompatSpinner) view.findViewById(R.id.identity_state_spinner);
@@ -134,6 +134,26 @@ public class Identification extends Fragment implements CanScrollVerticallyDeleg
         setProfile();
         fetchContactInfo();
         return view;
+    }
+
+    private void updateProfile(){
+        User user = active.getUser();
+
+        Map<String,String> map = new HashMap<>();
+        map.put(tags.USER_ACTION,tags.USER_PROFILE_UPDATE);
+        map.put(tags.FIRST_NAME,f_name.getText().toString());
+        map.put(tags.LAST_NAME,l_name.getText().toString());
+        map.put(tags.PHONE_NUMBER,mobile.getText().toString());
+        map.put(tags.ADDRESS,address.getText().toString());
+        map.put(tags.SUITE_NUMBER,suite_no.getText().toString());
+        map.put(tags.COMPANY_NAME,cmpny_name.getText().toString());
+        map.put(tags.ZIP_CODE,zip_code.getText().toString());
+        map.put(tags.PAY_PAL_ID,paypal_id.getText().toString());
+        map.put(tags.CITY,city.getText().toString());
+        map.put(tags.EMPLOYEE_ID,user.getEmployeeId() + "");
+        map.put(tags.USER_ID,user.getUserId() + "");
+        map.put(tags.STATE,"");
+        dmrRequest.doPost(urls.getUserInfo(),map,this);
     }
 
     private void fetchContactInfo() {
@@ -238,6 +258,9 @@ public class Identification extends Fragment implements CanScrollVerticallyDeleg
                     if (jsonObject.has(tags.USER_CONTACT_INFORMATION)) {
                         ContactInformation information = ContactInformation.fromJSON(jsonObject.getJSONObject(tags.USER_CONTACT_INFORMATION));
                         refreshContactInformation(information);
+                    }
+                    if(jsonObject.has(tags.USER_PROFILE_UPDATE)){
+
                     }
                 }
             }
