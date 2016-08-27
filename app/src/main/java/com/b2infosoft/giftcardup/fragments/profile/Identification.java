@@ -105,15 +105,7 @@ public class Identification extends Fragment implements CanScrollVerticallyDeleg
             public void onClick(View v) {
                 b2.setVisibility(View.VISIBLE);
                 b1.setVisibility(View.GONE);
-                f_name.setEnabled(true);
-                l_name.setEnabled(true);
-                mobile.setEnabled(true);
-                address.setEnabled(true);
-                suite_no.setEnabled(true);
-                city.setEnabled(true);
-                zip_code.setEnabled(true);
-                cmpny_name.setEnabled(true);
-                paypal_id.setEnabled(true);
+                enableProfile(true);
             }
         });
         b2.setOnClickListener(new View.OnClickListener() {
