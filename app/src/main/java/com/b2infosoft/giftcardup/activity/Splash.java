@@ -15,6 +15,7 @@ import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.database.DBHelper;
+import com.b2infosoft.giftcardup.model.CompanyCategory;
 import com.b2infosoft.giftcardup.model.ContactInformation;
 import com.b2infosoft.giftcardup.model.State;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
@@ -24,7 +25,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Splash extends AppCompatActivity implements DMRResult {
@@ -63,11 +66,21 @@ public class Splash extends AppCompatActivity implements DMRResult {
         dmrRequest = DMRRequest.getInstance(this, TAG);
         dbHelper = new DBHelper(this);
     }
-    private void loadDefaultData(){
-        Map<String,String> map = new HashMap<>();
-        map.put(tags.USER_ACTION,tags.STATES_ALL);
-        dmrRequest.doPost(urls.getAppAction(),map,this);
+
+    private void loadDefaultData() {
+        Map<String, String> map = new HashMap<>();
+
+        /* LOADING ALL STATES */
+        map.put(tags.USER_ACTION, tags.STATES_ALL);
+        dmrRequest.doPost(urls.getAppAction(), map, this);
+
+        /*LOADING ALL CATEGORIES*/
+        map.clear();
+        map.put(tags.USER_ACTION, tags.COMPANY_CATEGORY_ALL);
+        dmrRequest.doPost(urls.getAppAction(), map, this);
+
     }
+
     @Override
     public void onSuccess(JSONObject jsonObject) {
         try {
@@ -78,6 +91,12 @@ public class Splash extends AppCompatActivity implements DMRResult {
                         JSONArray jsonArray = jsonObject.getJSONArray(tags.STATES_ALL);
                         for (int i = 0; i < jsonArray.length(); i++) {
                             dbHelper.setState(State.fromJSON(jsonArray.getJSONObject(i)));
+                        }
+                    } else if (jsonObject.has(tags.CATEGORIES)) {
+                        List<CompanyCategory> categoryList = new ArrayList<>();
+                        JSONArray jsonArray = jsonObject.getJSONArray(tags.CATEGORIES);
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            dbHelper.setCategory(CompanyCategory.fromJSON(jsonArray.getJSONObject(i)));
                         }
                     }
                 }

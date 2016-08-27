@@ -5,9 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.b2infosoft.giftcardup.model.CompanyCategory;
 import com.b2infosoft.giftcardup.model.State;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,14 +30,16 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String T1 = "CREATE TABLE " + SC.STATE_TABLE + "(" + SC.STATE_ID_COLUMN + " int," + SC.STATE_NAME_COLUMN + " text," + SC.STATE_ABBREVIATION_COLUMN + " text)";
-        db.execSQL(T1);
-
+        String TABLE_STATE = "CREATE TABLE " + SC.STATE_TABLE + "(" + SC.STATE_ID_COLUMN + " int," + SC.STATE_NAME_COLUMN + " text," + SC.STATE_ABBREVIATION_COLUMN + " text)";
+        db.execSQL(TABLE_STATE);
+        String TABLE_CATEGORIES = "CREATE TABLE " + SC.CATEGORY_TABLE + "(" + SC.CATEGORY_ID_COLUMN + " int," + SC.CATEGORY_NAME_COLUMN + " text)";
+        db.execSQL(TABLE_CATEGORIES);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + SC.STATE_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + SC.CATEGORY_TABLE);
     }
 
     /* ----------------- STATE PART START --------------------- */
@@ -74,7 +80,7 @@ public class DBHelper extends SQLiteOpenHelper {
             state.setId(cursor.getString(cursor.getColumnIndex(SC.STATE_ID_COLUMN)));
             state.setName(cursor.getString(cursor.getColumnIndex(SC.STATE_NAME_COLUMN)));
             state.setAbbreviation(cursor.getString(cursor.getColumnIndex(SC.STATE_ABBREVIATION_COLUMN)));
-            stateMap.put(state.getName(),state);
+            stateMap.put(state.getName(), state);
         }
         if (!cursor.isClosed()) {
             cursor.close();
@@ -96,6 +102,30 @@ public class DBHelper extends SQLiteOpenHelper {
         return state;
     }
 
-    /* ----------------- SESSION PART END --------------------- */
+    /* ----------------- STATE PART END --------------------- */
+    /* ----------------- CATEGORIES PART START -------------- */
+    public void setCategory(CompanyCategory category) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(SC.CATEGORY_ID_COLUMN, category.getCategoryID());
+        values.put(SC.CATEGORY_NAME_COLUMN, category.getCategoryName());
+        db.insert(SC.CATEGORY_TABLE, null, values);
+    }
 
+    public List<CompanyCategory> getCategories() {
+        List<CompanyCategory> categories = new ArrayList<>();
+        SQLiteDatabase database = this.getReadableDatabase();
+        Cursor cursor = database.rawQuery("SELECT * FROM " + SC.CATEGORY_TABLE, null);
+        while (cursor.moveToNext()) {
+            CompanyCategory category = new CompanyCategory();
+            category.setCategoryID(cursor.getInt(cursor.getColumnIndex(SC.CATEGORY_ID_COLUMN)));
+            category.setCategoryName(cursor.getString(cursor.getColumnIndex(SC.CATEGORY_NAME_COLUMN)));
+            categories.add(category);
+        }
+        if (!cursor.isClosed()) {
+            cursor.close();
+        }
+        return categories;
+    }
+    /* ----------------- CATEGORIES PART END ---------------- */
 }

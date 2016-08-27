@@ -26,6 +26,7 @@ import com.b2infosoft.giftcardup.app.Notify;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
+import com.b2infosoft.giftcardup.database.DBHelper;
 import com.b2infosoft.giftcardup.fragments.Dashboard;
 import com.b2infosoft.giftcardup.fragments.SellCards;
 import com.b2infosoft.giftcardup.fragments.SpeedySell;
@@ -60,23 +61,30 @@ public class Main extends GiftCardUp {
     Urls urls;
     Active active;
     Tags tags;
+    DBHelper dbHelper;
     Notify notify;
     int count;
     NavigationView navigationViewRight, navigationViewLeft;
-    View headerView,isLoginLayout,isLogoutLayout;
+    View headerView, isLoginLayout, isLogoutLayout;
     CircularImageView user_profile_icon;
-    TextView user_profile_name,user_total_sold,user_total_saving;
+    TextView user_profile_name, user_total_sold, user_total_saving;
     DrawerLayout drawer;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+    private void init() {
         dmrRequest = DMRRequest.getInstance(this, TAG);
         urls = Urls.getInstance();
         active = Active.getInstance(this);
         tags = Tags.getInstance();
         notify = Notify.getInstance();
         config = Config.getInstance();
+        dbHelper = new DBHelper(this);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        init();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -103,40 +111,8 @@ public class Main extends GiftCardUp {
         user_total_saving = (TextView) headerView.findViewById(R.id.user_total_saving);
         user_profile_icon.setOnClickListener(this);
         setNavigationMenu();
-        updateMenuItemLeft();
+        updateMenuItemLeft(dbHelper.getCategories());
         replaceFragment(new Dashboard());
-    }
-
-    private void updateMenuItemLeft() {
-        Map<String, String> map = new HashMap<>();
-        map.put(tags.USER_ACTION, tags.COMPANY_CATEGORY_ALL);
-        dmrRequest.doPost(urls.getAppAction(), map, new DMRResult() {
-            @Override
-            public void onSuccess(JSONObject jsonObject) {
-                Log.d(TAG, jsonObject.toString());
-                try {
-                    if (jsonObject.has(tags.CATEGORIES)) {
-                        List<CompanyCategory> categoryList = new ArrayList<>();
-                        JSONArray jsonArray = jsonObject.getJSONArray(tags.CATEGORIES);
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            CompanyCategory category = new CompanyCategory();
-                            categoryList.add(category.fromJSON(jsonArray.getJSONObject(i)));
-                        }
-                        updateMenuItemLeft(categoryList);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Log.e(TAG, e.getMessage());
-                }
-            }
-
-            @Override
-            public void onError(VolleyError volleyError) {
-                volleyError.printStackTrace();
-                Log.e(TAG, volleyError.getMessage());
-            }
-        });
-
     }
 
     private void updateMenuItemLeft(List<CompanyCategory> categoryList) {
@@ -364,24 +340,25 @@ public class Main extends GiftCardUp {
         navigationViewRight.removeHeaderView(headerView);
         if (userIsLogin) {
             User user = active.getUser();
-            user_profile_name.setText(user.getFirstName()+" "+user.getLastName());
-            LruBitmapCache.loadCacheImage(this,user_profile_icon,config.getUserProfileImageAddress().concat(user.getImage()),TAG);
+            user_profile_name.setText(user.getFirstName() + " " + user.getLastName());
+            LruBitmapCache.loadCacheImage(this, user_profile_icon, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
             setMenuItems(user.getUserType());
-        }else{
+        } else {
             setMenuItems(0);
             user_profile_icon.setImageDrawable(getResources().getDrawable(R.drawable.ic_user_icon));
         }
         navigationViewRight.addHeaderView(headerView);
     }
+
     private void setMenuItems(int userType) {
-        navigationViewRight.getMenu().setGroupVisible(R.id.menu_1, userType==2?true:false);
-        navigationViewRight.getMenu().setGroupVisible(R.id.menu_2, userType==2?true:false);
-        navigationViewRight.getMenu().setGroupVisible(R.id.menu_3, userType==2?true:false);
-        navigationViewRight.getMenu().setGroupVisible(R.id.menu_4, userType==0?false:true);
-        navigationViewRight.getMenu().setGroupVisible(R.id.menu_5, userType!=0?true:false);
-        navigationViewRight.getMenu().setGroupVisible(R.id.menu_6, userType==0?true:false);
+        navigationViewRight.getMenu().setGroupVisible(R.id.menu_1, userType == 2 ? true : false);
+        navigationViewRight.getMenu().setGroupVisible(R.id.menu_2, userType == 2 ? true : false);
+        navigationViewRight.getMenu().setGroupVisible(R.id.menu_3, userType == 2 ? true : false);
+        navigationViewRight.getMenu().setGroupVisible(R.id.menu_4, userType == 0 ? false : true);
+        navigationViewRight.getMenu().setGroupVisible(R.id.menu_5, userType != 0 ? true : false);
+        navigationViewRight.getMenu().setGroupVisible(R.id.menu_6, userType == 0 ? true : false);
         isLoginLayout.setVisibility(userType != 0 ? View.VISIBLE : View.GONE);
-        isLogoutLayout.setVisibility(userType==0?View.VISIBLE:View.GONE);
+        isLogoutLayout.setVisibility(userType == 0 ? View.VISIBLE : View.GONE);
     }
 }
 

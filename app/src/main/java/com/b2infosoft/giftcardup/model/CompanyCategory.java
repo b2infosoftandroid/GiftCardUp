@@ -32,7 +32,7 @@ public class CompanyCategory implements Serializable {
         this.categoryName = categoryName;
     }
 
-    public CompanyCategory fromJSON(JSONObject object) {
+    public static CompanyCategory fromJSON(JSONObject object) {
         Tags tags = Tags.getInstance();
         CompanyCategory category = new CompanyCategory();
         try{
