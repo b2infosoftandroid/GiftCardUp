@@ -252,7 +252,7 @@ public class Identification extends Fragment implements CanScrollVerticallyDeleg
                         refreshContactInformation(information);
                     }
                     if(jsonObject.has(tags.USER_PROFILE_UPDATE)){
-
+                       User user = User.fromJSON(jsonObject.getJSONObject(tags.USER_PROFILE_UPDATE));
                     }
                 }
             }
