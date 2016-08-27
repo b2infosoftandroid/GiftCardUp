@@ -65,7 +65,25 @@
                     android:textAllCaps="true"
                     android:textColor="@color/edit_text_text" />
             </android.support.design.widget.TextInputLayout>
-
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/void_check_image"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/ic_logo"
+                    />
+                <Button
+                    android:id="@+id/choose_void_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="choose image"
+                    android:layout_gravity="center"
+                    />
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

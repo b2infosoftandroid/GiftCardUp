@@ -127,5 +127,9 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         return categories;
     }
+    public void deleteCategories() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + SC.CATEGORY_TABLE);
+    }
     /* ----------------- CATEGORIES PART END ---------------- */
 }

@@ -48,12 +48,16 @@ public class Profile extends Fragment {
 
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    private void init() {
         config = Config.getInstance();
         active = Active.getInstance(getActivity());
         format = Format.getInstance();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        init();
         mView = inflater.inflate(R.layout.fragment_profile, container, false);
         header = mView.findViewById(R.id.header);
         tabLayout = (TabLayout) mView.findViewById(R.id.tabs);
@@ -89,15 +93,15 @@ public class Profile extends Fragment {
         return mView;
     }
 
-    private void setInitialize(boolean isLogin){
+    private void setInitialize(boolean isLogin) {
         membership = (TextView) mView.findViewById(R.id.profile_member);
         name = (TextView) mView.findViewById(R.id.profile_user_name);
         saving = (TextView) mView.findViewById(R.id.total_saving);
         sold = (TextView) mView.findViewById(R.id.total_sold);
         circularImageView = (CircularImageView) mView.findViewById(R.id.profile_user_image);
-        if(isLogin){
+        if (isLogin) {
             User user = active.getUser();
-            name.setText(user.getFirstName()+" "+user.getLastName());
+            name.setText(user.getFirstName() + " " + user.getLastName());
             //name.setTypeface(Typeface.DEFAULT_BOLD);
             membership.setText("Member Since: ".concat(format.getDate(user.getJoinDate())));
             saving.setText(user.getTotalSave());
@@ -105,6 +109,7 @@ public class Profile extends Fragment {
             LruBitmapCache.loadCacheImage(getActivity(), circularImageView, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
         }
     }
+
     private void setUpViewPager(ViewPager pager) {
         adapter = new ViewPagerAdapter(getFragmentManager());
         adapter.addFragment(new Identification(), "Identification");

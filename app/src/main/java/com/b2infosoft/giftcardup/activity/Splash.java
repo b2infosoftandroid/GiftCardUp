@@ -93,6 +93,7 @@ public class Splash extends AppCompatActivity implements DMRResult {
                             dbHelper.setState(State.fromJSON(jsonArray.getJSONObject(i)));
                         }
                     } else if (jsonObject.has(tags.CATEGORIES)) {
+                        dbHelper.deleteCategories();
                         List<CompanyCategory> categoryList = new ArrayList<>();
                         JSONArray jsonArray = jsonObject.getJSONArray(tags.CATEGORIES);
                         for (int i = 0; i < jsonArray.length(); i++) {

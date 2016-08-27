@@ -33,4 +33,5 @@ dependencies {
     compile 'com.github.markomilos:paginate:0.5.1'
     compile 'ru.noties:scrollable:1.2.0'
     compile 'com.google.code.gson:gson:2.7'
+    compile 'net.gotev:uploadservice:3.0.3'
 }
