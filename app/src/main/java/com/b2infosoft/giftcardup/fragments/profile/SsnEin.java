@@ -28,8 +28,8 @@ public class SsnEin extends Fragment implements CanScrollVerticallyDelegate {
 
     private final String TAG = SsnEin.class.getName();
     View mView;
-    Button b1,upload_image,next_btn;
-    EditText ssn_ein;
+    Button b1,upload_image,next_btn,save,cancel;
+    EditText ssn_ein,name,routing_no,account_no;
     ScrollView step_one,step_two;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -80,11 +80,33 @@ public class SsnEin extends Fragment implements CanScrollVerticallyDelegate {
 
         mView = inflater.inflate(R.layout.fragment_ssn_ein, container, false);
 
+        step_one = (ScrollView)mView.findViewById(R.id.scroll_view_step_one);
+        ssn_ein = (EditText)mView.findViewById(R.id.ssn_ein_no);
+        upload_image = (Button)mView.findViewById(R.id.ssn_ein_upload_identification_img);
+        name = (EditText)mView.findViewById(R.id.bank_name);
+        routing_no = (EditText)mView.findViewById(R.id.bank_routing_no);
+        account_no = (EditText)mView.findViewById(R.id.bank_account_no);
+        save = (Button)mView.findViewById(R.id.bank_save_btn);
+        cancel = (Button)mView.findViewById(R.id.bank_cancel_btn);
         b1 = (Button) mView.findViewById(R.id.ssn_ein_approved_for_sell);
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getApproved();
+                step_one.setVisibility(View.VISIBLE);
+                b1.setVisibility(View.GONE);
+                //getApproved();
+            }
+        });
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 

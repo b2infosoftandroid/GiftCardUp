@@ -98,6 +98,7 @@ public class Identification extends Fragment implements CanScrollVerticallyDeleg
         zip_code = (EditText) view.findViewById(R.id.identity_zip_code);
         cmpny_name = (EditText) view.findViewById(R.id.identity_cmpny_name);
         paypal_id = (EditText) view.findViewById(R.id.identity_paypal_id);
+        appCompatSpinner = (AppCompatSpinner) view.findViewById(R.id.identity_state_spinner);
         b1 = (Button)view.findViewById(R.id.edit_save_btn);
         b2 = (Button)view.findViewById(R.id.save_btn);
         b1.setOnClickListener(new View.OnClickListener() {
@@ -113,15 +114,20 @@ public class Identification extends Fragment implements CanScrollVerticallyDeleg
             public void onClick(View v) {
                 String paypal = paypal_id.getText().toString();
                 paypal_id.setError(null);
+                if(appCompatSpinner.getSelectedItemPosition()==0){
+                    appCompatSpinner.requestFocus();
+                    return;
+                }
                 if(paypal_id.length() == 0){
                     paypal_id.setError("PLEASE ENTER ID");
                     paypal_id.setFocusable(true);
                     return;
                 }
+
                 updateProfile();
             }
         });
-        appCompatSpinner = (AppCompatSpinner) view.findViewById(R.id.identity_state_spinner);
+
         enableProfile(false);
         setProfile();
         fetchContactInfo();
@@ -129,8 +135,9 @@ public class Identification extends Fragment implements CanScrollVerticallyDeleg
     }
 
     private void updateProfile(){
-        User user = active.getUser();
 
+        State state =dbHelper.getStateByName(appCompatSpinner.getSelectedItem().toString());
+        User user = active.getUser();
         Map<String,String> map = new HashMap<>();
         map.put(tags.USER_ACTION,tags.USER_PROFILE_UPDATE);
         map.put(tags.FIRST_NAME,f_name.getText().toString());
@@ -144,7 +151,7 @@ public class Identification extends Fragment implements CanScrollVerticallyDeleg
         map.put(tags.CITY,city.getText().toString());
         map.put(tags.EMPLOYEE_ID,user.getEmployeeId() + "");
         map.put(tags.USER_ID,user.getUserId() + "");
-        map.put(tags.STATE,"");
+        map.put(tags.STATE,state.getAbbreviation());
         dmrRequest.doPost(urls.getUserInfo(),map,this);
     }
 

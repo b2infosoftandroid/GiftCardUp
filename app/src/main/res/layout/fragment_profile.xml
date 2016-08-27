@@ -28,8 +28,8 @@
                 android:layout_gravity="right" />
             <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/profile_user_image"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/ic_user_icon"
                 app:civ_border="true"
@@ -38,14 +38,15 @@
                 app:civ_border_width="4dp"
                 app:civ_shadow="true"
                 app:civ_shadow_color="@color/border_shadow_user_picture"
-                app:civ_shadow_radius="0"/>
+                app:civ_shadow_radius="0.5"/>
             <TextView
                 android:id="@+id/profile_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/text_view_margin_top"
                 android:text="@string/profile_user_name"
-                android:layout_marginBottom="@dimen/button_margin_bottom"
+                android:textSize="20dp"
+                android:layout_marginBottom="@dimen/custom_tab_margin_top"
                 android:textAllCaps="true"
                 android:textColor="@color/profile_text"
                 android:layout_gravity="center_horizontal" />

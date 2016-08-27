@@ -1,6 +1,7 @@
 package com.b2infosoft.giftcardup.fragments;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -97,6 +98,7 @@ public class Profile extends Fragment {
         if(isLogin){
             User user = active.getUser();
             name.setText(user.getFirstName()+" "+user.getLastName());
+            //name.setTypeface(Typeface.DEFAULT_BOLD);
             membership.setText("Member Since: ".concat(format.getDate(user.getJoinDate())));
             saving.setText(user.getTotalSave());
             sold.setText(user.getTotalSold());
@@ -123,6 +125,7 @@ public class Profile extends Fragment {
 
         tabOne = new TextView(getActivity());
         tabOne.setText("Bank details");
+        tabOne.setGravity(Gravity.CENTER);
         tabOne.setAllCaps(true);
         tabOne.setTextSize(10f);
         tabOne.setTextColor(getResources().getColor(R.color.profile_text_view_text));
