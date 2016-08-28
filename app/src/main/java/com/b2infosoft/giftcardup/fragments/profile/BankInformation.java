@@ -135,6 +135,7 @@ public class BankInformation extends Fragment implements CanScrollVerticallyDele
         routing_no.setEnabled(isUpdate);
         account_no.setEnabled(isUpdate);
         chooseImage.setEnabled(isUpdate);
+        status.setEnabled(isUpdate);
     }
 
     //method to show file chooser
