@@ -93,6 +93,8 @@ public class BankInformation extends Fragment implements CanScrollVerticallyDele
         less.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                enableInfo(false);
+                save.setVisibility(View.GONE);
                 count = count + 1;
                 if(count % 2 != 0) {
                     linearLayout.setVisibility(View.GONE);
@@ -101,6 +103,13 @@ public class BankInformation extends Fragment implements CanScrollVerticallyDele
                     linearLayout.setVisibility(View.VISIBLE);
                     less.setImageDrawable(getResources().getDrawable(R.drawable.ic_subtract_24dp));
                 }
+            }
+        });
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                enableInfo(true);
+                save.setVisibility(View.VISIBLE);
             }
         });
         imageView = (AppCompatImageView) view.findViewById(R.id.void_check_image);
@@ -119,6 +128,13 @@ public class BankInformation extends Fragment implements CanScrollVerticallyDele
             }
         });
         return view;
+    }
+
+    private void enableInfo(boolean isUpdate) {
+        name.setEnabled(isUpdate);
+        routing_no.setEnabled(isUpdate);
+        account_no.setEnabled(isUpdate);
+        chooseImage.setEnabled(isUpdate);
     }
 
     //method to show file chooser
