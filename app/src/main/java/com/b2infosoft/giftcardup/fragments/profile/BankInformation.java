@@ -183,7 +183,7 @@ public class BankInformation extends Fragment implements CanScrollVerticallyDele
             mListener = (OnFragmentBankInformation) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnFragmentBankInformation");
         }
     }
 
