@@ -15,8 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.b2infosoft.giftcardup.R;
@@ -28,8 +26,8 @@ import java.io.IOException;
 
 import ru.noties.scrollable.CanScrollVerticallyDelegate;
 
-public class BankInformation extends Fragment implements CanScrollVerticallyDelegate {
-    private final String TAG = BankInformation.class.getName();
+public class BankInformation1 extends Fragment implements CanScrollVerticallyDelegate {
+    private final String TAG = BankInformation1.class.getName();
     private Tags tags;
     private Active active;
 
@@ -39,12 +37,9 @@ public class BankInformation extends Fragment implements CanScrollVerticallyDele
     private Uri filePath;
     private Bitmap bitmap;
 
-    Button save, chooseImage;
-    EditText name, routing_no, account_no,status;
+    Button add_account, save, cancel, chooseImage;
+    EditText name, routing_no, account_no;
     AppCompatImageView imageView;
-    ImageView edit,less;
-    LinearLayout linearLayout;
-    int count = 0;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private String mParam1;
@@ -52,7 +47,7 @@ public class BankInformation extends Fragment implements CanScrollVerticallyDele
 
     private OnFragmentBankInformation mListener;
 
-    public BankInformation() {
+    public BankInformation1() {
         // Required empty public constructor
     }
 
@@ -61,8 +56,8 @@ public class BankInformation extends Fragment implements CanScrollVerticallyDele
         active = Active.getInstance(getContext());
     }
 
-    public static BankInformation newInstance(String param1, String param2) {
-        BankInformation fragment = new BankInformation();
+    public static BankInformation1 newInstance(String param1, String param2) {
+        BankInformation1 fragment = new BankInformation1();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -83,42 +78,46 @@ public class BankInformation extends Fragment implements CanScrollVerticallyDele
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_bank_info, container, false);
-        name = (EditText) view.findViewById(R.id.bank_name);
-        routing_no = (EditText) view.findViewById(R.id.bank_routing_no);
-        account_no = (EditText) view.findViewById(R.id.bank_account_no);
-        status = (EditText) view.findViewById(R.id.bank_status);
-        linearLayout = (LinearLayout)view.findViewById(R.id.layout_2);
-        edit = (ImageView)view.findViewById(R.id.bank_info_edit);
-        less = (ImageView)view.findViewById(R.id.bank_info_less);
-        less.setOnClickListener(new View.OnClickListener() {
+        add_account = (Button) view.findViewById(R.id.bank_info_add_account);
+        add_account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                count = count + 1;
-                if(count % 2 != 0) {
-                    linearLayout.setVisibility(View.GONE);
-                    less.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_24dp));
-                }else {
-                    linearLayout.setVisibility(View.VISIBLE);
-                    less.setImageDrawable(getResources().getDrawable(R.drawable.ic_subtract_24dp));
-                }
+                addNewAccount();
             }
         });
-        imageView = (AppCompatImageView) view.findViewById(R.id.void_check_image);
-        chooseImage = (Button) view.findViewById(R.id.choose_void_image);
+        return view;
+    }
+
+    private void addNewAccount() {
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setTitle("ADD BANK DETAIL");
+        dialog.setContentView(R.layout.custom_dialog_add_account);
+        name = (EditText) dialog.findViewById(R.id.bank_name);
+        routing_no = (EditText) dialog.findViewById(R.id.bank_routing_no);
+        account_no = (EditText) dialog.findViewById(R.id.bank_account_no);
+        imageView = (AppCompatImageView) dialog.findViewById(R.id.void_check_image);
+        chooseImage = (Button) dialog.findViewById(R.id.choose_void_image);
         chooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showFileChooser();
             }
         });
-        save = (Button) view.findViewById(R.id.bank_save_btn);
+        save = (Button) dialog.findViewById(R.id.bank_save_btn);
+        cancel = (Button) dialog.findViewById(R.id.bank_cancel_btn);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
             }
         });
-        return view;
+        dialog.show();
     }
 
     //method to show file chooser
