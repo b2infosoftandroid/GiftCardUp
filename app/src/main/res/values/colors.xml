@@ -36,4 +36,10 @@
 
     <color name="table_strip_1">#f0f0f0</color>
     <color name="table_strip_2">#f8f8f8</color>
+
+    <!--           BUY GIFT CARD             -->
+    <color name="buy_card_save_up_to">#f68e29</color>
+    <color name="buy_card_company">#00aff0</color>
+    <color name="buy_card_text">#8a8b8b</color>
+    <color name="divider">#b1b2b2</color>
 </resources>

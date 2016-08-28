@@ -1,0 +1,19 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context=".fragments.profile.BankInformation">
+
+    <Button
+        android:id="@+id/bank_info_add_account"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/button_margin_left"
+        android:background="@drawable/button_fill_background"
+        android:textAllCaps="true"
+        android:textColor="@color/button_foreground"
+        android:text="@string/bank_detail_add_bank_account"/>
+
+</LinearLayout>

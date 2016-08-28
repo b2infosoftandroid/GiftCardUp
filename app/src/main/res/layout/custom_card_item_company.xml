@@ -1,66 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    card_view:cardCornerRadius="5dp"
-    card_view:cardUseCompatPadding="true">
+    android:orientation="vertical">
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        card_view:cardCornerRadius="5dp"
+        card_view:cardUseCompatPadding="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <ImageView
+                android:id="@+id/company_card_image"
+                android:layout_width="120dp"
+                android:layout_height="80dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/not_find" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight=".01"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/company_card_image"
-                    android:layout_width="125dp"
-                    android:layout_height="80dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/not_find" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/layout_empty_background"
-                    android:clickable="true"
-                    android:descendantFocusability="blocksDescendants"
-                    android:orientation="horizontal"
-                    android:padding="10dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Off"
-                        android:textAllCaps="true"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/company_card_card_off"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:text="82.00%"
-                        android:textAllCaps="true"
-                        android:textStyle="bold" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -70,30 +38,27 @@
                     android:clickable="true"
                     android:descendantFocusability="blocksDescendants"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:paddingLeft="10dp">
 
                     <TextView
+                        android:id="@+id/card_item_company_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="E-Card"
+                        android:text="Tata"
                         android:textAllCaps="true"
+                        android:textColor="@color/buy_card_company"
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/company_card_e_card"
+                        android:id="@+id/card_item_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:text="NO"
+                        android:text="(0)"
                         android:textAllCaps="true"
+                        android:textColor="@color/buy_card_company"
                         android:textStyle="bold" />
                 </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:alpha="0.5"
-                    android:background="@color/colorPrimary" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -102,85 +67,269 @@
                     android:clickable="true"
                     android:descendantFocusability="blocksDescendants"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:paddingLeft="10dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Value"
+                        android:text="Save Up To"
                         android:textAllCaps="true"
-                        android:textStyle="bold" />
+                        android:textColor="@color/buy_card_save_up_to" />
 
                     <TextView
-                        android:id="@+id/company_card_card_value"
+                        android:id="@+id/card_item_saving"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:text="$200.00"
+                        android:text="80%"
                         android:textAllCaps="true"
-                        android:textStyle="bold" />
+                        android:textColor="@color/buy_card_save_up_to" />
                 </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:alpha="0.5"
-                    android:background="@color/colorPrimary" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/layout_empty_background"
-                    android:clickable="true"
-                    android:descendantFocusability="blocksDescendants"
-                    android:orientation="horizontal"
-                    android:padding="10dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Price"
-                        android:textAllCaps="true"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/company_card_card_price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:text="$36.00"
-                        android:textAllCaps="true"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Free Delivery"
+                    android:textAllCaps="true" />
             </LinearLayout>
         </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        card_view:cardCornerRadius="5dp"
+        card_view:cardUseCompatPadding="true">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginBottom="@dimen/activity_horizontal_margin"
-            android:orientation="horizontal">
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/layout_empty_background"
+                android:clickable="true"
+                android:descendantFocusability="blocksDescendants"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="E-Card"
+                    android:textAllCaps="true"
+                    android:textColor="@color/buy_card_text"
+                    android:textStyle="normal" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/ic_check_24dp" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha="0.5"
+                android:background="@color/divider" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/layout_empty_background"
+                android:clickable="true"
+                android:descendantFocusability="blocksDescendants"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="Value"
+                    android:textAllCaps="true"
+                    android:textColor="@color/buy_card_text"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/company_card_card_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="10dp"
+                    android:text="$200.00"
+                    android:textAllCaps="true"
+                    android:textColor="@color/buy_card_text"
+                    android:textStyle="normal" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha="0.5"
+                android:background="@color/divider" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/layout_empty_background"
+                android:clickable="true"
+                android:descendantFocusability="blocksDescendants"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="Price"
+                    android:textAllCaps="true"
+                    android:textColor="@color/buy_card_text"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/company_card_card_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="10dp"
+                    android:text="$36.00"
+                    android:textAllCaps="true"
+                    android:textColor="@color/buy_card_text"
+                    android:textStyle="normal" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha="0.5"
+                android:background="@color/divider" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/layout_empty_background"
+                android:clickable="true"
+                android:descendantFocusability="blocksDescendants"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="Off (%)"
+                    android:textAllCaps="true"
+                    android:textColor="@color/buy_card_text"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/company_card_card_off"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="10dp"
+                    android:text="82.00%"
+                    android:textAllCaps="true"
+                    android:textColor="@color/buy_card_text"
+                    android:textStyle="normal" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha="0.5"
+                android:background="@color/divider" />
+             <RelativeLayout
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_marginTop="@dimen/edit_text_margin_top"
+                 android:layout_marginRight="10dp">
+                <Button
+                    android:id="@+id/buy_card_info_btn"
+                    android:layout_width="60dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/layout_border"
+                    android:textAllCaps="true"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@color/app_background"
+                    android:text="+ info"/>
+             </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/buy_card_linear_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:layout_marginTop="10dp"
+                android:visibility="gone">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAllCaps="true"
+                    android:textColor="@color/app_background"
+                    android:text="@string/buy_card_check_balance"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAllCaps="true"
+                    android:textColor="@color/buy_card_text"
+                    android:text="@string/check_balance_by_phone"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAllCaps="true"
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/buy_card_text"
+                    android:text="@string/check_balance_online"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAllCaps="true"
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/buy_card_text"
+                    android:text="@string/check_balance_in_store"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:alpha="0.5"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/divider" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAllCaps="true"
+                    android:layout_marginTop="15dp"
+                    android:textColor="@color/app_background"
+                    android:textStyle="bold"
+                    android:text="@string/buy_card_about_this_brand"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAllCaps="true"
+                    android:textColor="@color/buy_card_text"
+                    android:text="@string/about_brand_text"/>
+            </LinearLayout>
 
             <Button
                 android:id="@+id/company_card_card_buy_now"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="@dimen/button_margin_left"
                 android:background="@drawable/button_fill_background"
-                android:textColor="@color/button_foreground"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:text="Buy Now" />
-
-            <Button
-                android:id="@+id/company_card_add_to_cart"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_fill_background"
-                android:textColor="@color/button_foreground"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:text="Add To Cart" />
+                android:text="Buy Now"
+                android:textColor="@color/button_foreground" />
         </LinearLayout>
-    </LinearLayout>
-</android.support.v7.widget.CardView>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

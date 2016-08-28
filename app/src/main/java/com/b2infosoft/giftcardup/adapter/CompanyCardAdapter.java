@@ -3,6 +3,7 @@ package com.b2infosoft.giftcardup.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,7 +36,6 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
     private boolean isLoading;
-    private Notify notify;
     private int visibleThreshold = 5;
     private int lastVisibleItem, totalItemCount;
     private OnLoadMoreListener mOnLoadMoreListener;
@@ -51,7 +52,6 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         config = Config.getInstance();
         this.companyBrand = companyBrand;
         tags = Tags.getInstance();
-        notify = Notify.getInstance();
         final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -78,16 +78,41 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         TextView cardValue;
         TextView cardOff;
         TextView cardPrice;
-        Button buyNow,addToCart;
+        Button buyNow,info;
+        CardView card1,card2;
+        LinearLayout linearLayout;
+        int count = 0;
         public CardHolder(View view) {
             super(view);
-            cardType = (TextView) view.findViewById(R.id.company_card_e_card);
+            //cardType = (TextView) view.findViewById(R.id.company_card_e_card);
             cardValue = (TextView) view.findViewById(R.id.company_card_card_value);
             cardOff = (TextView) view.findViewById(R.id.company_card_card_off);
             cardPrice = (TextView) view.findViewById(R.id.company_card_card_price);
             imageUrl = (ImageView) view.findViewById(R.id.company_card_image);
-            buyNow = (Button)view.findViewById(R.id.company_card_card_buy_now);
-            addToCart = (Button)view.findViewById(R.id.company_card_add_to_cart);
+            buyNow = (Button) view.findViewById(R.id.company_card_card_buy_now);
+            card1 = (CardView) view.findViewById(R.id.card_view1);
+            card2 = (CardView) view.findViewById(R.id.card_view2);
+            card1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    card2.setVisibility(View.VISIBLE);
+                }
+            });
+            linearLayout = (LinearLayout)view.findViewById(R.id.buy_card_linear_layout);
+            info = (Button) view.findViewById(R.id.buy_card_info_btn);
+            info.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    count = count + 1;
+                    if(count % 2 != 0) {
+                        info.setText("- info");
+                        linearLayout.setVisibility(View.VISIBLE);
+                    }else {
+                        info.setText("+ info");
+                        linearLayout.setVisibility(View.GONE);
+                    }
+                }
+            });
         }
     }
 
@@ -122,7 +147,7 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (holder instanceof CardHolder) {
             final GiftCard card = cardInfoList.get(position);
             final CardHolder cardHolder = (CardHolder) holder;
-            cardHolder.cardType.setText(companyBrand.getCardType()==2?"YES":"NO");
+           // cardHolder.cardType.setText(companyBrand.getCardType()==2?"YES":"NO");
             cardHolder.cardOff.setText(String.valueOf(card.getPercentageOff())+"%");
             cardHolder.cardValue.setText("$"+String.valueOf(card.getCardPrice()));
             cardHolder.cardPrice.setText("$"+String.valueOf(card.getCardValue()));
@@ -130,15 +155,6 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(context, "LOGIN FIRST", Toast.LENGTH_SHORT).show();
-                }
-            });
-            cardHolder.addToCart.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Toast.makeText(context,"Item is added to card",Toast.LENGTH_SHORT).show();
-                    count = count + 1;
-                    Toast.makeText(context,count+"",Toast.LENGTH_SHORT).show();
-                    notify.setValue(count);
                 }
             });
             final String url = config.getGiftCardImageAddress().concat(companyBrand.getImage());

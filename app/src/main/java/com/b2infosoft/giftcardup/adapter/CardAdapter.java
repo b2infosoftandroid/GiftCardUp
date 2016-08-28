@@ -113,8 +113,8 @@ public class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             final CompanyBrand card = cardList.get(position);
             final CardHolder cardHolder = (CardHolder) holder;
             cardHolder.name.setText(card.getCompanyName());
-            cardHolder.discount.setText(String.valueOf(card.getDiscount()));
-            cardHolder.count.setText(String.valueOf(card.getCount()));
+            cardHolder.discount.setText(String.valueOf(card.getDiscount()) + "%");
+            cardHolder.count.setText("(" + String.valueOf(card.getCount()) + ")");
             final String url = config.getGiftCardImageAddress().concat(card.getImage());
             cardHolder.imageUrl.setOnClickListener(new View.OnClickListener() {
                 @Override

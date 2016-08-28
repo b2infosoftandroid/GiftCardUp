@@ -1,14 +1,18 @@
 package com.b2infosoft.giftcardup.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.android.volley.VolleyError;
@@ -41,6 +45,7 @@ public class Dashboard extends Fragment {
     DMRRequest dmrRequest;
     RecyclerView recyclerView;
     CardAdapter adapter;
+    Button actionButton;
     List<CompanyBrand> cardList;
     boolean isLoading = false;
     boolean isMore  = false;
@@ -58,6 +63,22 @@ public class Dashboard extends Fragment {
         active = Active.getInstance(getActivity());
         cardList = new ArrayList<>();
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        actionButton = (Button) view.findViewById(R.id.floating_btn);
+        actionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String[] items = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T",
+                                         "U","V","W","X","Y","Z"};
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                         actionButton.setText(items[which]);
+                    }
+                });
+                builder.create().show();
+            }
+        });
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new CardAdapter(getActivity(), cardList, recyclerView);

@@ -4,12 +4,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
     tools:context="com.b2infosoft.giftcardup.fragments.Dashboard">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/colorPrimaryDark">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/button_foreground"
+            android:text="SHORT BY NAME"
+            android:textAllCaps="true"
+            android:padding="10dp"/>
+        <Button
+            android:id="@+id/floating_btn"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_margin="6dp"
+            android:gravity="center"
+            android:text="A"
+            android:textColor="@color/app_background"
+            android:textAllCaps="true"
+            android:background="@drawable/button_shape_round"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
+        android:padding="16dp">
     </android.support.v7.widget.RecyclerView>
 </LinearLayout>
