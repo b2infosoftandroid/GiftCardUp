@@ -34,6 +34,8 @@ public class SpeedySell extends Fragment {
     TableLayout t1;
     TextView gift_cards,card_type,pin,serial_no,balance,earning,selling,action;
     String name;
+    ImageView imageView, imageView1;
+    int count;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -137,12 +139,12 @@ public class SpeedySell extends Fragment {
         selling.setTypeface(null, Typeface.BOLD);
         tr_head.addView(selling);
 
-        action = new TextView(getContext());
-        action.setText("ACTION");
-        action.setTextColor(getResources().getColor(R.color.button_foreground));
-        action.setPadding(15, 30, 15, 30);
-        action.setTypeface(null, Typeface.BOLD);
-        tr_head.addView(action);
+       // action = new TextView(getContext());
+       // action.setText("ACTION");
+       // action.setTextColor(getResources().getColor(R.color.button_foreground));
+       // action.setPadding(15, 30, 15, 30);
+       // action.setTypeface(null, Typeface.BOLD);
+       // tr_head.addView(action);
         t1.addView(tr_head);
          addRowData();
         return view;
@@ -193,36 +195,41 @@ public class SpeedySell extends Fragment {
         selling.setPadding(15, 30, 15, 30);
         tr_head.addView(selling);
 
-        action = new TextView(getContext());
-        action.setText("");
-        action.setTextColor(getResources().getColor(R.color.button_foreground));
-        action.setPadding(15, 30, 15, 30);
-        tr_head.addView(action);
-
-        tr_head.setOnClickListener(new View.OnClickListener() {
+       // action = new TextView(getContext());
+        //action.setText("");
+        //action.setTextColor(getResources().getColor(R.color.button_foreground));
+        //action.setPadding(15, 30, 15, 30);
+        //tr_head.addView(action);
+        tr_head.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
-                ImageView imageView,imageView1;
-                TableRow tr = (TableRow)v;
-                imageView1 = new ImageView(getContext());
-                imageView1.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_delete_24dp));
-                imageView1.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,Gravity.CENTER));
-                imageView1.setPadding(15, 30, 15, 30);
-                imageView1.setBackgroundColor(getResources().getColor(R.color.buy_card_save_up_to));
-                tr.addView(imageView1);
+            public boolean onLongClick(View v) {
+                count = count + 1;
+                if(count % 2 != 0) {
+                    TableRow tr = (TableRow) v;
+                    imageView1 = new ImageView(getContext());
+                    imageView1.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_delete_24dp));
+                    imageView1.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER));
+                    imageView1.setPadding(15, 30, 15, 30);
+                    imageView1.setBackgroundColor(getResources().getColor(R.color.buy_card_save_up_to));
+                    tr.addView(imageView1);
 
-                imageView = new ImageView(getContext());
-                imageView.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_edit_icon));
-                imageView.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,Gravity.CENTER));
-                imageView.setPadding(15, 30, 15, 30);
-                imageView.setBackgroundColor(getResources().getColor(R.color.buy_card_save_up_to));
-                //ImageView imageView = (ImageView)tr.getChildAt(8);
-                tr.addView(imageView);
+                    imageView = new ImageView(getContext());
+                    imageView.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_edit_icon));
+                    imageView.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER));
+                    imageView.setPadding(15, 30, 15, 30);
+                    imageView.setBackgroundColor(getResources().getColor(R.color.buy_card_save_up_to));
+                    //ImageView imageView = (ImageView)tr.getChildAt(8);
+                    tr.addView(imageView);
+                }
+                else {
+                    imageView1.setVisibility(View.GONE);
+                    imageView.setVisibility(View.GONE);
+                }
+                return false;
             }
         });
 
         t1.addView(tr_head);
-
 
     }
 
