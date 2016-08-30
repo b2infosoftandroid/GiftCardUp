@@ -88,7 +88,8 @@ public class Main extends GiftCardUp {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        count = notify.getCount();
+        Intent intent = getIntent();
+        count = intent.getIntExtra("COUNT",0);
         //View view1 = getLayoutInflater().inflate(R.layout.fragment_dashboard,null);
         //toolbar.addView(view1);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

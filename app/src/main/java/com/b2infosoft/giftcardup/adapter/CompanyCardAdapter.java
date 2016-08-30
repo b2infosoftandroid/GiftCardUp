@@ -1,6 +1,7 @@
 package com.b2infosoft.giftcardup.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -20,6 +21,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.activity.Main;
 import com.b2infosoft.giftcardup.app.Config;
 import com.b2infosoft.giftcardup.app.Notify;
 import com.b2infosoft.giftcardup.app.Tags;
@@ -154,9 +156,14 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             cardHolder.buyNow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context, "LOGIN FIRST", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, "LOGIN FIRST", Toast.LENGTH_SHORT).show();
+                    count = count + 1;
+                    Intent intent = new Intent(context, Main.class);
+                    intent.putExtra("COUNT",count);
+                    context.startActivity(intent);
                 }
             });
+            //count++;
             final String url = config.getGiftCardImageAddress().concat(companyBrand.getImage());
             LruBitmapCache.loadCacheImage(context, cardHolder.imageUrl, url, CompanyCardAdapter.class.getName());
         } else if (holder instanceof LoadingHolder) {

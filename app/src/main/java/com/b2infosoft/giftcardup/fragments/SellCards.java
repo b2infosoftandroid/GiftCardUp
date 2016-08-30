@@ -265,7 +265,7 @@ public class SellCards extends Fragment implements DMRResult {
         imageAction = new ImageView(getContext());
         //imageAction.setText("");
         //imageAction.setTextColor(getResources().getColor(R.color.button_foreground));
-        imageAction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_delete_24dp));
+        imageAction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_remove_24dp));
         imageAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
