@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,8 @@ public class SellCards extends Fragment implements DMRResult {
     DMRRequest dmrRequest;
     AutoCompleteTextView merchant;
     EditText value;
+    ImageView imageView, imageView1;
+    int count;
     Button get_offer, accept_offer;
     TableLayout tableLayout;
     LinearLayout linearLayout;
@@ -218,12 +221,12 @@ public class SellCards extends Fragment implements DMRResult {
         payout.setTypeface(null, Typeface.BOLD);
         tr_head.addView(payout);
 
-        action = new TextView(getContext());
-        action.setText("ACTION");
-        action.setTextColor(getResources().getColor(R.color.button_foreground));
-        action.setPadding(15, 30, 0, 30);
-        action.setTypeface(null, Typeface.BOLD);
-        tr_head.addView(action);
+        //action = new TextView(getContext());
+        //action.setText("ACTION");
+        //action.setTextColor(getResources().getColor(R.color.button_foreground));
+        //action.setPadding(15, 30, 0, 30);
+       // action.setTypeface(null, Typeface.BOLD);
+       // tr_head.addView(action);
         tableLayout.addView(tr_head);
     }
 
@@ -262,21 +265,47 @@ public class SellCards extends Fragment implements DMRResult {
                 TableRow.LayoutParams.WRAP_CONTENT, 1f));
         tr1.addView(payout);
 
-        imageAction = new ImageView(getContext());
-        //imageAction.setText("");
-        //imageAction.setTextColor(getResources().getColor(R.color.button_foreground));
-        imageAction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_remove_24dp));
-        imageAction.setOnClickListener(new View.OnClickListener() {
+       // imageAction = new ImageView(getContext());
+       // imageAction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_remove_24dp));
+       // imageAction.setOnClickListener(new View.OnClickListener() {
+       //     @Override
+        //    public void onClick(View v) {
+       //         offerQueue.remove(offer);
+         //       checkAllOffer();
+       //     }
+       // });
+       // imageAction.setPadding(15, 30, 0, 30);
+       // imageAction.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
+        //        TableRow.LayoutParams.WRAP_CONTENT, 1f));
+       // tr1.addView(imageAction);
+        tr1.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
-                offerQueue.remove(offer);
-                checkAllOffer();
+            public boolean onLongClick(View v) {
+                count = count + 1;
+                if(count % 2 != 0) {
+                    TableRow tr = (TableRow) v;
+                    imageView1 = new ImageView(getContext());
+                    imageView1.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_delete_24dp));
+                    imageView1.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER));
+                    imageView1.setPadding(15, 30, 15, 30);
+                    imageView1.setBackgroundColor(getResources().getColor(R.color.edit_text_text));
+                    tr.addView(imageView1);
+
+                    imageView = new ImageView(getContext());
+                    imageView.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_edit_icon));
+                    imageView.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER));
+                    imageView.setPadding(15, 30, 15, 30);
+                    imageView.setBackgroundColor(getResources().getColor(R.color.edit_text_text));
+                    //ImageView imageView = (ImageView)tr.getChildAt(8);
+                    tr.addView(imageView);
+                }
+                else {
+                    imageView1.setVisibility(View.GONE);
+                    imageView.setVisibility(View.GONE);
+                }
+                return false;
             }
         });
-        imageAction.setPadding(15, 30, 0, 30);
-        imageAction.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
-                TableRow.LayoutParams.WRAP_CONTENT, 1f));
-        tr1.addView(imageAction);
 
         tableLayout.addView(tr1);
     }
