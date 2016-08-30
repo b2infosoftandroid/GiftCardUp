@@ -286,6 +286,13 @@ public class SellCards extends Fragment implements DMRResult {
                     TableRow tr = (TableRow) v;
                     imageView1 = new ImageView(getContext());
                     imageView1.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_delete_24dp));
+                    imageView1.setOnClickListener(new View.OnClickListener() {
+                             @Override
+                            public void onClick(View v) {
+                                 offerQueue.remove(offer);
+                               checkAllOffer();
+                             }
+                         });
                     imageView1.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER));
                     imageView1.setPadding(15, 30, 15, 30);
                     imageView1.setBackgroundColor(getResources().getColor(R.color.edit_text_text));
