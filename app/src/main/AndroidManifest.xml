@@ -23,7 +23,7 @@
             android:name=".activity.Main"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.Login"
             android:theme="@style/MyNoActionBar"
@@ -32,21 +32,28 @@
             android:name=".activity.SignUp"
             android:label="SignUp"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".activity.ForgotPassword"
+        <activity
+            android:name=".activity.ForgotPassword"
             android:label="ForgotPassword"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".activity.Testexample" />
-        <activity android:name=".activity.CompanyCard"></activity>
+        <activity android:name=".activity.CompanyCard" />
         <activity android:name=".activity.Categories">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.Main" />
         </activity>
-        <activity android:name=".activity.ShoppingCart"
+        <activity
+            android:name=".activity.ShoppingCart"
             android:label="Shopping Cart">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.Main" />
+        </activity>
+        <activity
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustResize"
+            android:name=".activity.MyProfile">
         </activity>
     </application>
 

@@ -12,14 +12,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.app.Config;
 import com.b2infosoft.giftcardup.app.Notify;
@@ -40,19 +38,11 @@ import com.b2infosoft.giftcardup.model.User;
 import com.b2infosoft.giftcardup.utils.Utils1;
 import com.b2infosoft.giftcardup.utils.Utils2;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
-import com.b2infosoft.giftcardup.volly.DMRResult;
 import com.b2infosoft.giftcardup.volly.LruBitmapCache;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 public class Main extends GiftCardUp {
     private final static String TAG = Main.class.getName();
@@ -251,6 +241,8 @@ public class Main extends GiftCardUp {
 
     }
 
+
+
     private class MenuSelect implements NavigationView.OnNavigationItemSelectedListener {
         @Override
         public boolean onNavigationItemSelected(MenuItem item) {
@@ -290,10 +282,11 @@ public class Main extends GiftCardUp {
 
                     break;
                 case R.id.menu_item_my_account:
-
-                    replaceFragment(new Profile());
-                    setTitle("PROFILE");
-
+                    /*
+                        replaceFragment(new Profile());
+                        setTitle("PROFILE");
+                    */
+                    startActivity(new Intent(Main.this, MyProfile.class));
                     //startActivity(new Intent(Main.this,MyAccount.class));
 
                     break;

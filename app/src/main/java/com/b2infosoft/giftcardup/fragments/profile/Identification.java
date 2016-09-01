@@ -245,7 +245,7 @@ public class Identification extends Fragment implements CanScrollVerticallyDeleg
 
     @Override
     public boolean canScrollVertically(int direction) {
-        return false;
+        return true;
     }
 
     @Override

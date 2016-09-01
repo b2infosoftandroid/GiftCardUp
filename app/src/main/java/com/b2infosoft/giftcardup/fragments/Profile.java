@@ -1,13 +1,16 @@
 package com.b2infosoft.giftcardup.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,8 +39,8 @@ public class Profile extends Fragment {
     private Active active;
     private Format format;
     View mView, header;
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
+    private static TabLayout tabLayout;
+    private static ViewPager viewPager;
     CircularImageView circularImageView;
     TextView name, membership, saving, sold;
     ViewPagerAdapter adapter;
@@ -61,12 +64,10 @@ public class Profile extends Fragment {
         mView = inflater.inflate(R.layout.fragment_profile, container, false);
         header = mView.findViewById(R.id.header);
         tabLayout = (TabLayout) mView.findViewById(R.id.tabs);
-
         viewPager = (ViewPager) mView.findViewById(R.id.view_pager);
         setUpViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
         setTabIcons();
-
         mScrollableLayout = (ScrollableLayout) mView.findViewById(R.id.scrollable_layout);
         mScrollableLayout.setDraggableView(tabLayout);
         mScrollableLayout.setCanScrollVerticallyDelegate(new CanScrollVerticallyDelegate() {
@@ -91,6 +92,32 @@ public class Profile extends Fragment {
         });
         setInitialize(active.isLogin());
         return mView;
+    }
+
+    public static void setSelectedTabIndex(final int tabIndex) {
+        //tabLayout.setScrollPosition(tabIndex,0f,true);
+        //viewPager.setCurrentItem(tabIndex);
+        //tabLayout.getTabAt(tabIndex).select();
+        Log.d("WORKING", tabIndex + "");
+        new Handler().postDelayed(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        tabLayout.getTabAt(tabIndex).select();
+                        viewPager.setCurrentItem(tabIndex);
+                    }
+                }, 100);
+        //tabLayout.getTabAt(tabIndex).getCustomView().setSelected(true);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     private void setInitialize(boolean isLogin) {

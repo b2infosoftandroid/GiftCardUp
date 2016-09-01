@@ -35,6 +35,7 @@ public class Config {
         if(LIVE_SERVER){
             return "";
         }else{
+            //return "http://".concat(SERVER_IP).concat("/giftcard2/giftcard_services/");
             return "http://".concat(SERVER_IP).concat("/rajesh/giftcard_services/");
         }
     }

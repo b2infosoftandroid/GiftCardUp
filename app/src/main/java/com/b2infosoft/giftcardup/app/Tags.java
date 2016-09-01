@@ -39,6 +39,7 @@ public class Tags {
     public final String COMPANY_BRANDS = "company_brands";
     public final String USER_CONTACT_INFORMATION = "user_contact_information";
     public final String USER_PROFILE_UPDATE = "user_profile_update";
+    public final String BANK_ACCOUNT_ADD = "bank_account_add";
 
 
     /* USER LOGIN SIGNUP */
@@ -177,5 +178,11 @@ public class Tags {
     public final String CONTACT_INFO_STATE = "state";
     public final String CONTACT_INFO_COMPANY_NAME = "company_name";
     public final String CONTACT_INFO_DATE = "date";
+
+    ////////////////  ADD BANK ACCOUNT   ///////////////
+    public final String BANK_VOID_IMAGE = "filedata3";
+    public final String BANK_NAME = "add_bank_name";
+    public final String BANK_ROUTING_NUMBER = "add_routing_number";
+    public final String BANK_ACCOUNT_NUMBER = "add_account_number";
 
 }

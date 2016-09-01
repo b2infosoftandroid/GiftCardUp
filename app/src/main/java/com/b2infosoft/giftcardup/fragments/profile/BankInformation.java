@@ -1,15 +1,17 @@
 package com.b2infosoft.giftcardup.fragments.profile;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.AppCompatImageView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,19 +22,25 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.activity.MyProfile;
 import com.b2infosoft.giftcardup.app.Tags;
+import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.fragments.Profile;
+import com.b2infosoft.giftcardup.urlconnection.MultipartUtility;
+
+import net.gotev.uploadservice.MultipartUploadRequest;
+import net.gotev.uploadservice.UploadNotificationConfig;
 
 import java.io.IOException;
-
+import java.util.UUID;
 import ru.noties.scrollable.CanScrollVerticallyDelegate;
 
 public class BankInformation extends Fragment implements CanScrollVerticallyDelegate {
     private final String TAG = BankInformation.class.getName();
     private Tags tags;
     private Active active;
-
+    private Urls urls;
     //Image request code
     private final int PICK_IMAGE_REQUEST = 1;
     //Uri to store the image uri
@@ -40,9 +48,9 @@ public class BankInformation extends Fragment implements CanScrollVerticallyDele
     private Bitmap bitmap;
 
     Button save, chooseImage;
-    EditText name, routing_no, account_no,status;
+    EditText name, routing_no, account_no, status;
     AppCompatImageView imageView;
-    ImageView edit,less;
+    ImageView edit, less;
     LinearLayout linearLayout;
     int count = 0;
     private static final String ARG_PARAM1 = "param1";
@@ -59,6 +67,7 @@ public class BankInformation extends Fragment implements CanScrollVerticallyDele
     private void init() {
         tags = Tags.getInstance();
         active = Active.getInstance(getContext());
+        urls = Urls.getInstance();
     }
 
     public static BankInformation newInstance(String param1, String param2) {
@@ -80,26 +89,32 @@ public class BankInformation extends Fragment implements CanScrollVerticallyDele
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        init();
         View view = inflater.inflate(R.layout.fragment_bank_info, container, false);
         name = (EditText) view.findViewById(R.id.bank_name);
         routing_no = (EditText) view.findViewById(R.id.bank_routing_no);
         account_no = (EditText) view.findViewById(R.id.bank_account_no);
         status = (EditText) view.findViewById(R.id.bank_status);
-        linearLayout = (LinearLayout)view.findViewById(R.id.layout_2);
-        edit = (ImageView)view.findViewById(R.id.bank_info_edit);
-        less = (ImageView)view.findViewById(R.id.bank_info_less);
+        linearLayout = (LinearLayout) view.findViewById(R.id.layout_2);
+        edit = (ImageView) view.findViewById(R.id.bank_info_edit);
+        less = (ImageView) view.findViewById(R.id.bank_info_less);
         less.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 enableInfo(false);
                 save.setVisibility(View.GONE);
                 count = count + 1;
-                if(count % 2 != 0) {
+                if (count % 2 != 0) {
                     linearLayout.setVisibility(View.GONE);
                     less.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_24dp));
-                }else {
+                } else {
                     linearLayout.setVisibility(View.VISIBLE);
                     less.setImageDrawable(getResources().getDrawable(R.drawable.ic_subtract_24dp));
                 }
@@ -124,7 +139,7 @@ public class BankInformation extends Fragment implements CanScrollVerticallyDele
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                new AddBankAccount().execute();
             }
         });
         return view;
@@ -138,6 +153,62 @@ public class BankInformation extends Fragment implements CanScrollVerticallyDele
         status.setEnabled(isUpdate);
     }
 
+    private void uploadMultipart(Bitmap bitmap) {
+        String uploadId = UUID.randomUUID().toString();
+        String path = getPath(filePath);
+        String url = urls.getUserInfo();
+        try {
+
+            MultipartUtility multipart = new MultipartUtility(url);
+            multipart.addHeaderField("User-Agent", "CodeJava");
+            multipart.addHeaderField("Test-Header", "Header-Value");
+
+            multipart.addFormField(tags.USER_ACTION, tags.BANK_ACCOUNT_ADD);
+            multipart.addFormField(tags.BANK_NAME, "RAJESH");
+            multipart.addFormField(tags.USER_ID, active.getUser().getUserId() + "");
+            multipart.addFormField(tags.BANK_ACCOUNT_NUMBER, "123456");
+            multipart.addFormField(tags.BANK_ROUTING_NUMBER, "654321");
+            multipart.addFilePartBitmap(tags.BANK_VOID_IMAGE, "bank_void_image.png", bitmap);
+            Log.d("OUTPUT", "" + multipart.finishString());
+
+            MultipartUploadRequest uploadRequest = new MultipartUploadRequest(getActivity(), uploadId, url)
+                    .addFileToUpload(path, tags.BANK_VOID_IMAGE)
+                    .addParameter(tags.USER_ACTION, tags.BANK_ACCOUNT_ADD)
+                    .addParameter(tags.BANK_NAME, "RAJESH")
+                    .addParameter(tags.USER_ID, active.getUser().getUserId() + "")
+                    .addParameter(tags.BANK_ACCOUNT_NUMBER, "123456")
+                    .addParameter(tags.BANK_ROUTING_NUMBER, "654321")
+                    .setNotificationConfig(new UploadNotificationConfig())
+                    .setMaxRetries(2)
+                    .setMethod("POST");
+            String str = uploadRequest.startUpload();
+            Log.d(TAG, str);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, e.getMessage() + "");
+        }
+
+    }
+
+    //method to get the file path from uri
+    public String getPath(Uri uri) {
+        Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        String document_id = cursor.getString(0);
+        document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
+        cursor.close();
+
+        cursor = getActivity().getContentResolver().query(
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
+        cursor.moveToFirst();
+        String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+        cursor.close();
+
+        return path;
+    }
+
     //method to show file chooser
     private void showFileChooser() {
         Intent intent = new Intent();
@@ -149,27 +220,30 @@ public class BankInformation extends Fragment implements CanScrollVerticallyDele
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        MyProfile.setSelectedTabIndex(1);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == getActivity().RESULT_OK && data != null && data.getData() != null) {
             filePath = data.getData();
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
                 if (imageView != null)
                     imageView.setImageBitmap(bitmap);
-                else{
-                    Toast.makeText(getContext(),"IMAGE NULL",Toast.LENGTH_SHORT).show();
+                else {
+                    Toast.makeText(getContext(), "IMAGE NULL", Toast.LENGTH_SHORT).show();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        replaceFragment();
+        //replaceFragment();
     }
-    private void replaceFragment(){
+
+    private void replaceFragment() {
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.main_content, new Profile());
         transaction.addToBackStack(null);
         transaction.commit();
     }
+
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onBankInformation(uri);
@@ -195,10 +269,19 @@ public class BankInformation extends Fragment implements CanScrollVerticallyDele
 
     @Override
     public boolean canScrollVertically(int direction) {
-        return false;
+        return true;
     }
 
     public interface OnFragmentBankInformation {
         void onBankInformation(Uri uri);
+    }
+
+    private class AddBankAccount extends AsyncTask<String,String,String>{
+
+        @Override
+        protected String doInBackground(String... params) {
+            uploadMultipart(bitmap);
+            return null;
+        }
     }
 }

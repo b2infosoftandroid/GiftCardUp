@@ -92,7 +92,7 @@
     <string name="ssn_ein_id_type">ID TYPE</string>
     <string name="id_type_ssn">SSN</string>
     <string name="id_type_ein">EIN</string>
-    
+
     <!--           BUY GIFT CARDS       -->
     <string name="buy_card_check_balance">CHECK BALANCE</string>
     <string name="check_balance_by_phone">BY PHONE :</string>
@@ -106,7 +106,7 @@
     <string name="sell_card_value">VALUE</string>
     <string name="sell_card_get_offer_btn">GET OFFER</string>
     <string name="sell_card_accept_offer_btn">ACCEPT OFFER</string>
-    
+
     <!--          SPEEDY CELL           -->
     <string name="speedy_cell_text">SPEEDY CELL</string>
     <string name="speedy_cell_cancel_btn">CANCEL</string>
