@@ -12,6 +12,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,19 +23,33 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.activity.AddAccountInfo;
 import com.b2infosoft.giftcardup.activity.MyProfile;
+import com.b2infosoft.giftcardup.adapter.BankDetailRecyclerViewAdapter;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.fragments.Profile;
+import com.b2infosoft.giftcardup.model.BankInfo;
+import com.b2infosoft.giftcardup.model.Merchant;
 import com.b2infosoft.giftcardup.urlconnection.MultipartUtility;
+import com.b2infosoft.giftcardup.volly.DMRRequest;
+import com.b2infosoft.giftcardup.volly.DMRResult;
 
 import net.gotev.uploadservice.MultipartUploadRequest;
 import net.gotev.uploadservice.UploadNotificationConfig;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import ru.noties.scrollable.CanScrollVerticallyDelegate;
 
@@ -43,19 +58,12 @@ public class BankInformation extends Fragment implements CanScrollVerticallyDele
     private Tags tags;
     private Active active;
     private Urls urls;
-    //Image request code
-    private final int PICK_IMAGE_REQUEST = 1;
-    //Uri to store the image uri
-    private Uri filePath;
-    private Bitmap bitmap;
+    DMRRequest dmrRequest;
+    List<BankInfo> bankInfos;
 
-    Button save, chooseImage;
-    EditText name, routing_no, account_no, status;
-    AppCompatImageView imageView;
-    ImageView edit, less;
-    LinearLayout linearLayout;
+    RecyclerView recyclerView;
     FloatingActionButton add_account;
-    int count = 0;
+    BankDetailRecyclerViewAdapter adapter;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private String mParam1;
@@ -67,11 +75,7 @@ public class BankInformation extends Fragment implements CanScrollVerticallyDele
         // Required empty public constructor
     }
 
-    private void init() {
-        tags = Tags.getInstance();
-        active = Active.getInstance(getContext());
-        urls = Urls.getInstance();
-    }
+
 
     public static BankInformation newInstance(String param1, String param2) {
         BankInformation fragment = new BankInformation();
@@ -99,13 +103,12 @@ public class BankInformation extends Fragment implements CanScrollVerticallyDele
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        init();
+        urls = Urls.getInstance();
+        tags = Tags.getInstance();
+        active = Active.getInstance(getContext());
+        dmrRequest = DMRRequest.getInstance(getContext(), TAG);
         View view = inflater.inflate(R.layout.fragment_bank_info, container, false);
-        name = (EditText) view.findViewById(R.id.bank_name);
-        routing_no = (EditText) view.findViewById(R.id.bank_routing_no);
-        account_no = (EditText) view.findViewById(R.id.bank_account_no);
-        status = (EditText) view.findViewById(R.id.bank_status);
-        linearLayout = (LinearLayout) view.findViewById(R.id.layout_2);
+        recyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
         add_account = (FloatingActionButton)view.findViewById(R.id.floating_add_account_btn);
         add_account.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,139 +116,49 @@ public class BankInformation extends Fragment implements CanScrollVerticallyDele
                 startActivity(new Intent(getActivity(), AddAccountInfo.class));
             }
         });
-        edit = (ImageView) view.findViewById(R.id.bank_info_edit);
-        less = (ImageView) view.findViewById(R.id.bank_info_less);
-        less.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                enableInfo(false);
-                save.setVisibility(View.GONE);
-                count = count + 1;
-                if (count % 2 != 0) {
-                    linearLayout.setVisibility(View.GONE);
-                    less.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_24dp));
-                } else {
-                    linearLayout.setVisibility(View.VISIBLE);
-                    less.setImageDrawable(getResources().getDrawable(R.drawable.ic_subtract_24dp));
-                }
-            }
-        });
-        edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                enableInfo(true);
-                save.setVisibility(View.VISIBLE);
-            }
-        });
-        imageView = (AppCompatImageView) view.findViewById(R.id.void_check_image);
-        chooseImage = (Button) view.findViewById(R.id.choose_void_image);
-        chooseImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFileChooser();
-            }
-        });
-        save = (Button) view.findViewById(R.id.bank_save_btn);
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AddBankAccount().execute();
-            }
-        });
+        getBankDetails();
         return view;
     }
 
-    private void enableInfo(boolean isUpdate) {
-        name.setEnabled(isUpdate);
-        routing_no.setEnabled(isUpdate);
-        account_no.setEnabled(isUpdate);
-        chooseImage.setEnabled(isUpdate);
-        status.setEnabled(isUpdate);
-    }
-
-    private void uploadMultipart(Bitmap bitmap) {
-        String uploadId = UUID.randomUUID().toString();
-        String path = getPath(filePath);
-        String url = urls.getUserInfo();
-        try {
-
-            MultipartUtility multipart = new MultipartUtility(url);
-            multipart.addHeaderField("User-Agent", "CodeJava");
-            multipart.addHeaderField("Test-Header", "Header-Value");
-
-            multipart.addFormField(tags.USER_ACTION, tags.BANK_ACCOUNT_ADD);
-            multipart.addFormField(tags.BANK_NAME, "RAJESH");
-            multipart.addFormField(tags.USER_ID, active.getUser().getUserId() + "");
-            multipart.addFormField(tags.BANK_ACCOUNT_NUMBER, "123456");
-            multipart.addFormField(tags.BANK_ROUTING_NUMBER, "654321");
-            multipart.addFilePartBitmap(tags.BANK_VOID_IMAGE, "bank_void_image.png", bitmap);
-            Log.d("OUTPUT", "" + multipart.finishString());
-
-            MultipartUploadRequest uploadRequest = new MultipartUploadRequest(getActivity(), uploadId, url)
-                    .addFileToUpload(path, tags.BANK_VOID_IMAGE)
-                    .addParameter(tags.USER_ACTION, tags.BANK_ACCOUNT_ADD)
-                    .addParameter(tags.BANK_NAME, "RAJESH")
-                    .addParameter(tags.USER_ID, active.getUser().getUserId() + "")
-                    .addParameter(tags.BANK_ACCOUNT_NUMBER, "123456")
-                    .addParameter(tags.BANK_ROUTING_NUMBER, "654321")
-                    .setNotificationConfig(new UploadNotificationConfig())
-                    .setMaxRetries(2)
-                    .setMethod("POST");
-            String str = uploadRequest.startUpload();
-            Log.d(TAG, str);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e(TAG, e.getMessage() + "");
-        }
-
-    }
-
-    //method to get the file path from uri
-    public String getPath(Uri uri) {
-        Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
-        cursor.moveToFirst();
-        String document_id = cursor.getString(0);
-        document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
-        cursor.close();
-
-        cursor = getActivity().getContentResolver().query(
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
-        cursor.moveToFirst();
-        String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-        cursor.close();
-
-        return path;
-    }
-
-    //method to show file chooser
-    private void showFileChooser() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        MyProfile.setSelectedTabIndex(1);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == getActivity().RESULT_OK && data != null && data.getData() != null) {
-            filePath = data.getData();
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
-                if (imageView != null)
-                    imageView.setImageBitmap(bitmap);
-                else {
-                    Toast.makeText(getContext(), "IMAGE NULL", Toast.LENGTH_SHORT).show();
+    private void getBankDetails(){
+        final Map<String, String> map = new HashMap<>();
+        map.put(tags.USER_ACTION, tags.BANK_ACCOUNT_INFO);
+        map.put(tags.USER_ID, active.getUser().getUserId()+ "");
+        dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
+            @Override
+            public void onSuccess(JSONObject jsonObject) {
+                //Log.d("watch",jsonObject.toString());
+                try {
+                    if (jsonObject.has(tags.SUCCESS)) {
+                        if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                            if (jsonObject.has(tags.BANK_ACCOUNT_INFO)) {
+                                if(bankInfos == null){
+                                    bankInfos = new ArrayList<>();
+                                }
+                                JSONArray jsonArray =  jsonObject.getJSONArray(tags.BANK_ACCOUNT_INFO);
+                                for(int i = 0;i< jsonArray.length();i++) {
+                                    BankInfo info = BankInfo.fromJSON(jsonArray.getJSONObject(i));
+                                    bankInfos.add(info);
+                                }
+                                adapter = new BankDetailRecyclerViewAdapter(getContext(),bankInfos);
+                                recyclerView.setAdapter(adapter);
+                            }
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, e.getMessage());
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-        }
-        //replaceFragment();
+
+            @Override
+            public void onError(VolleyError volleyError) {
+                volleyError.printStackTrace();
+                Log.e(TAG, volleyError.getMessage());
+            }
+        });
     }
+
 
     private void replaceFragment() {
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -286,12 +199,4 @@ public class BankInformation extends Fragment implements CanScrollVerticallyDele
         void onBankInformation(Uri uri);
     }
 
-    private class AddBankAccount extends AsyncTask<String,String,String>{
-
-        @Override
-        protected String doInBackground(String... params) {
-            uploadMultipart(bitmap);
-            return null;
-        }
-    }
 }
