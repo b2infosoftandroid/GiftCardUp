@@ -40,6 +40,7 @@ public class Tags {
     public final String USER_CONTACT_INFORMATION = "user_contact_information";
     public final String USER_PROFILE_UPDATE = "user_profile_update";
     public final String BANK_ACCOUNT_ADD = "bank_account_add";
+    public final String BANK_ACCOUNT_INFO = "bank_account_info";
 
 
     /* USER LOGIN SIGNUP */
@@ -184,5 +185,23 @@ public class Tags {
     public final String BANK_NAME = "add_bank_name";
     public final String BANK_ROUTING_NUMBER = "add_routing_number";
     public final String BANK_ACCOUNT_NUMBER = "add_account_number";
+
+
+    /////////////////  BANK INFO TAGS  //////////////////
+    public final String BANK_INFO_ID = "bank_detail_id";
+    public final String BANK_INFO_USER_ID = "user_id";
+    public final String BANK_INFO_ID_NUMBER = "id_number";
+    public final String BANK_INFO_VOID_CHECK_IMAGE_1 = "void_check_image_1";
+    public final String BANK_INFO_VOID_CHECK_IMAGE_2 = "void_check_image_2";
+    public final String BANK_INFO_NAME = "bank_name";
+    public final String BANK_INFO_ROUTING_NUMBER = "routing_number";
+    public final String BANK_INFO_CITY = "bank_city";
+    public final String BANK_INFO_COUNTRY = "country";
+    public final String BANK_INFO_ACCOUNT_TYPE = "account_type";
+    public final String BANK_INFO_ACCOUNT_NAME = "account_name";
+    public final String BANK_INFO_ACCOUNT_NUMBER = "account_number";
+    public final String BANK_INFO_ADDRESS = "address_line";
+    public final String BANK_INFO_DATE = "date";
+    public final String BANK_INFO_STATUS = "status";
 
 }
