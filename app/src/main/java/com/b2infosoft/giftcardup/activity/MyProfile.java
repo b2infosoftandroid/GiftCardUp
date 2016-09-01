@@ -30,7 +30,8 @@ public class MyProfile extends AppCompatActivity implements Identification.OnFra
         Toolbar toolbar = (Toolbar) findViewById(R.id.htab_toolbar);
         setSupportActionBar(toolbar);
 */
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().hide();
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         viewPager = (ViewPager) findViewById(R.id.htab_viewpager);
         setUpViewPager(viewPager);
