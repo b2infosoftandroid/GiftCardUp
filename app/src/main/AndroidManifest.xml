@@ -51,10 +51,12 @@
                 android:value=".activity.Main" />
         </activity>
         <activity
+            android:name=".activity.MyProfile"
             android:label="@string/app_name"
+            android:windowSoftInputMode="adjustResize"></activity>
+        <activity android:name=".activity.AddAccountInfo"
             android:windowSoftInputMode="adjustResize"
-            android:name=".activity.MyProfile">
-        </activity>
+            android:label="AddAccount"></activity>
     </application>
 
 </manifest>

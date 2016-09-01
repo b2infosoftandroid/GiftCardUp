@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.AppCompatImageView;
@@ -22,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.activity.AddAccountInfo;
 import com.b2infosoft.giftcardup.activity.MyProfile;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
@@ -52,6 +54,7 @@ public class BankInformation extends Fragment implements CanScrollVerticallyDele
     AppCompatImageView imageView;
     ImageView edit, less;
     LinearLayout linearLayout;
+    FloatingActionButton add_account;
     int count = 0;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -103,6 +106,13 @@ public class BankInformation extends Fragment implements CanScrollVerticallyDele
         account_no = (EditText) view.findViewById(R.id.bank_account_no);
         status = (EditText) view.findViewById(R.id.bank_status);
         linearLayout = (LinearLayout) view.findViewById(R.id.layout_2);
+        add_account = (FloatingActionButton)view.findViewById(R.id.floating_add_account_btn);
+        add_account.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), AddAccountInfo.class));
+            }
+        });
         edit = (ImageView) view.findViewById(R.id.bank_info_edit);
         less = (ImageView) view.findViewById(R.id.bank_info_less);
         less.setOnClickListener(new View.OnClickListener() {
