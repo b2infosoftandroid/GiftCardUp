@@ -41,6 +41,8 @@ public class Tags {
     public final String USER_PROFILE_UPDATE = "user_profile_update";
     public final String BANK_ACCOUNT_ADD = "bank_account_add";
     public final String BANK_ACCOUNT_INFO = "bank_account_info";
+    public final String BANK_ACCOUNT_UPDATE = "bank_account_update";
+    public final String CHECK_APPROVE_FOR_SELLING = "check_approve_for_selling";
 
 
     /* USER LOGIN SIGNUP */
