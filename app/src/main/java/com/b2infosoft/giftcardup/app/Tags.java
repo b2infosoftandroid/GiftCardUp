@@ -21,6 +21,7 @@ public class Tags {
     public final String LOAD_MORE = "load_more";
     public final String SORT_BY = "sort_by";
     public final String CATEGORIES_ID = "categories_id";
+    public final String SELECTED_TAB = "selected_tab";
 
     public final int SUSPEND = 2;
     public final int PASS = 1;
@@ -43,6 +44,10 @@ public class Tags {
     public final String BANK_ACCOUNT_INFO = "bank_account_info";
     public final String BANK_ACCOUNT_UPDATE = "bank_account_update";
     public final String CHECK_APPROVE_FOR_SELLING = "check_approve_for_selling";
+    public final String ADD_IDENTIFICATION_INFO = "add_identification_info";
+    public final String USER_ALL_APPROVE_INFO = "user_all_approve_info";
+    public final String ADD_IDENTIFICATION = "add_identification";
+    public final String ADD_IDENTIFICATION_SSN = "add_identification_ssn";
 
 
     /* USER LOGIN SIGNUP */
@@ -188,6 +193,9 @@ public class Tags {
     public final String BANK_ROUTING_NUMBER = "add_routing_number";
     public final String BANK_ACCOUNT_NUMBER = "add_account_number";
 
+    ///////////////  ADD IDENTIFICATION INFORMATION  /////////
+    public final String SSN_EIN = "ssn_ein";
+    public final String ID_TYPE = "id_type";
 
     /////////////////  BANK INFO TAGS  //////////////////
     public final String BANK_INFO_ID = "bank_detail_id";
@@ -205,5 +213,12 @@ public class Tags {
     public final String BANK_INFO_ADDRESS = "address_line";
     public final String BANK_INFO_DATE = "date";
     public final String BANK_INFO_STATUS = "status";
+
+
+    ///////////////  APPROVE INFORMATION  //////////
+    public final String USER_IDENTIFICATION = "user_identification";
+    public final String USER_BANK = "user_bank";
+    public final String USER_SSN = "user_ssn";
+
 
 }

@@ -31,12 +31,9 @@ public class SsnEin extends Fragment implements CanScrollVerticallyDelegate {
     Button b1,upload_image,next_btn,save,cancel;
     EditText ssn_ein,name,routing_no,account_no;
     ScrollView step_one,step_two;
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -54,7 +51,6 @@ public class SsnEin extends Fragment implements CanScrollVerticallyDelegate {
      * @param param2 Parameter 2.
      * @return A new instance of fragment SsnEin.
      */
-    // TODO: Rename and change types and number of parameters
     public static SsnEin newInstance(String param1, String param2) {
         SsnEin fragment = new SsnEin();
         Bundle args = new Bundle();
@@ -79,7 +75,6 @@ public class SsnEin extends Fragment implements CanScrollVerticallyDelegate {
         // Inflate the layout for this fragment
 
         mView = inflater.inflate(R.layout.fragment_ssn_ein, container, false);
-
         step_one = (ScrollView)mView.findViewById(R.id.scroll_view_step_one);
         ssn_ein = (EditText)mView.findViewById(R.id.ssn_ein_no);
         upload_image = (Button)mView.findViewById(R.id.ssn_ein_upload_identification_img);
@@ -133,7 +128,6 @@ public class SsnEin extends Fragment implements CanScrollVerticallyDelegate {
         dialog.show();
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onSsnEin(uri);
@@ -173,7 +167,6 @@ public class SsnEin extends Fragment implements CanScrollVerticallyDelegate {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentSsnEin {
-        // TODO: Update argument type and name
         void onSsnEin(Uri uri);
     }
 }

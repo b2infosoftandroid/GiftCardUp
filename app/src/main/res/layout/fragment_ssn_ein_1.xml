@@ -1,0 +1,235 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.b2infosoft.giftcardup.fragments.profile.SsnEin">
+
+    <ScrollView
+        android:id="@+id/scroll_view_step_one"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/ssn_ein_approved_for_sell"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_fill_background"
+                android:padding="@dimen/button_margin_left"
+                android:text="@string/approved_for_sell"
+                android:textAllCaps="true"
+                android:textColor="@color/button_foreground"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/approve_for_selling_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/ssn_ein_identification_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_user_icon" />
+
+                <Button
+                    android:id="@+id/ssn_ein_identification_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/button_fill_background"
+                    android:padding="@dimen/button_margin_left"
+                    android:text="@string/ssn_ein_identification_pic"
+                    android:textAllCaps="true"
+                    android:textColor="@color/button_foreground" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:textColorHint="@color/edit_text_hint_text">
+
+                    <EditText
+                        android:id="@+id/ssn_ein_no"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/enter_ssn_ein"
+                        android:inputType="text"
+                        android:textAllCaps="true"
+                        android:textColor="@color/edit_text_text" />
+                </android.support.design.widget.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/edit_text_margin_top"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="@string/ssn_ein_id_type"
+                        android:textAllCaps="true" />
+
+                    <RadioGroup
+                        android:id="@+id/radio_group"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/activity_horizontal_margin"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/id_type_ssn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/id_type_ssn"
+                            android:textColor="@color/edit_text_text" />
+
+                        <RadioButton
+                            android:id="@+id/id_type_ein"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/radio_button_margin_left"
+                            android:text="@string/id_type_ein"
+                            android:textColor="@color/edit_text_text" />
+                    </RadioGroup>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/button_margin_top"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/button_margin_left">
+
+                    <Button
+                        android:id="@+id/bank_cancel_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button_fill_background"
+                        android:padding="@dimen/button_margin_left"
+                        android:text="@string/bank_info_cancel_btn"
+                        android:textAllCaps="true"
+                        android:textColor="@color/button_foreground" />
+
+                    <Button
+                        android:id="@+id/bank_save_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/button_margin_left"
+                        android:background="@drawable/button_fill_background"
+                        android:padding="@dimen/button_margin_left"
+                        android:text="@string/bank_info_save_btn"
+                        android:textAllCaps="true"
+                        android:textColor="@color/button_foreground" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/approve_status_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
+                    <Button
+                        android:id="@+id/verified_email"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button_fill_background"
+                        android:padding="@dimen/button_margin_left"
+                        android:text="EMAIL"
+                        android:textAllCaps="true"
+                        android:clickable="false"
+                        android:textColor="@color/button_foreground" />
+                    <TextView
+                        android:id="@+id/verified_email_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/verification_font"
+                        android:padding="5dp"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/verified_identity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button_fill_background"
+                        android:padding="@dimen/button_margin_left"
+                        android:text="IDENTITY"
+                        android:textAllCaps="true"
+                        android:clickable="false"
+                        android:textColor="@color/button_foreground" />
+
+                    <TextView
+                        android:id="@+id/verified_identity_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:padding="5dp"
+                        />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
+                    <Button
+                        android:id="@+id/verified_ssn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button_fill_background"
+                        android:padding="@dimen/button_margin_left"
+                        android:text="SSN/ID"
+                        android:textAllCaps="true"
+                        android:clickable="false"
+                        android:textColor="@color/button_foreground" />
+
+                    <TextView
+                        android:id="@+id/verified_ssn_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        />
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

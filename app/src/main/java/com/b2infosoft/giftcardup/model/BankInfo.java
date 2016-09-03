@@ -205,6 +205,7 @@ public class BankInfo implements Serializable {
             if (object.has(tags.BANK_INFO_STATUS)) {
                 bankInfo.setStatus(object.getInt(tags.BANK_INFO_STATUS));
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e(BankInfo.class.getName(), e.getMessage());

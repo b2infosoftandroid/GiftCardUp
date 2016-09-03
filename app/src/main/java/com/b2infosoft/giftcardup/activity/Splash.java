@@ -18,6 +18,7 @@ import com.b2infosoft.giftcardup.database.DBHelper;
 import com.b2infosoft.giftcardup.model.CompanyCategory;
 import com.b2infosoft.giftcardup.model.ContactInformation;
 import com.b2infosoft.giftcardup.model.State;
+import com.b2infosoft.giftcardup.model.User;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 
@@ -79,6 +80,13 @@ public class Splash extends AppCompatActivity implements DMRResult {
         map.put(tags.USER_ACTION, tags.COMPANY_CATEGORY_ALL);
         dmrRequest.doPost(urls.getAppAction(), map, this);
 
+        /*LOADING USER PROFILE*/
+        if(active.isLogin()) {
+            map.clear();
+            map.put(tags.USER_ACTION, tags.USER_INFO);
+            map.put(tags.USER_ID, active.getUser().getUserId()+"");
+            dmrRequest.doPost(urls.getUserInfo(), map, this);
+        }
     }
 
     @Override
@@ -99,6 +107,10 @@ public class Splash extends AppCompatActivity implements DMRResult {
                         for (int i = 0; i < jsonArray.length(); i++) {
                             dbHelper.setCategory(CompanyCategory.fromJSON(jsonArray.getJSONObject(i)));
                         }
+                    }else if(jsonObject.has(tags.USER_INFO)){
+                        JSONObject object = jsonObject.getJSONObject(tags.USER_INFO);
+                        User user = User.fromJSON(object);
+                        active.setUser(user);
                     }
                 }
             }

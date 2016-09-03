@@ -47,15 +47,22 @@ public class AddAccountInfo extends AppCompatActivity {
     EditText name, routing_no, account_no;
     AppCompatImageView imageView;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_account_info);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    Intent intent;
 
+    private void init() {
         tags = Tags.getInstance();
         active = Active.getInstance(getApplicationContext());
         urls = Urls.getInstance();
+        intent = new Intent(this, MyProfile.class);
+        intent.putExtra(tags.SELECTED_TAB, 1);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        init();
+        setContentView(R.layout.activity_add_account_info);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         name = (EditText) findViewById(R.id.bank_name);
         routing_no = (EditText) findViewById(R.id.bank_routing_no);
@@ -80,7 +87,7 @@ public class AddAccountInfo extends AppCompatActivity {
                 account.setBankName(bank_name);
                 account.setBankAccountNo(bank_account);
                 account.setBankRountingNo(bank_routing);
-                    account.setVoidImage(bitmap);
+                account.setVoidImage(bitmap);
                 new AddBankAccount(account).execute();
             }
         });
@@ -91,10 +98,19 @@ public class AddAccountInfo extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 //NavUtils.navigateUpFromSameTask(this);
-                this.onBackPressed();
+                //this.onBackPressed();
+                startActivity(intent);
+                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(intent);
+        finish();
+        //super.onBackPressed();
     }
 
     //method to get the file path from uri
@@ -192,9 +208,9 @@ public class AddAccountInfo extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            Log.d("putdata", s);
+            startActivity(intent);
+            finish();
             super.onPostExecute(s);
-
         }
     }
 }
