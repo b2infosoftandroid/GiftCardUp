@@ -19,12 +19,14 @@ import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.activity.AddAccountInfo;
 import com.b2infosoft.giftcardup.activity.UpdateAccountInfo;
+import com.b2infosoft.giftcardup.app.Config;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.model.BankInfo;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
+import com.b2infosoft.giftcardup.volly.LruBitmapCache;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,6 +44,7 @@ public class BankDetailRecyclerViewAdapter extends RecyclerView.Adapter<BankDeta
     Drawable add, subtruct;
     Tags tags = Tags.getInstance();
     Urls urls = Urls.getInstance();
+    Config config = Config.getInstance();
     Active active;
     DMRRequest dmrRequest;
 
@@ -70,11 +73,14 @@ public class BankDetailRecyclerViewAdapter extends RecyclerView.Adapter<BankDeta
         EditText name = holder.name;
         EditText routing_no = holder.routing_no;
         EditText account_no = holder.account_no;
+        AppCompatImageView imageView = holder.imageView;
         //EditText status = holder.status;
+        LruBitmapCache.loadCacheImage(context, imageView, config.getGiftCardImageAddress().concat(info.getVoidCheckImage1()), "");
 
          name.setText(info.getName());
         routing_no.setText(info.getRoutingNumber());
         account_no.setText(info.getAccountNumber());
+        //imageView.setImageBitmap(info.getVoidCheckImage1());
         //status.setText(info.getStatus());
 
         holder.less.setOnClickListener(new View.OnClickListener() {

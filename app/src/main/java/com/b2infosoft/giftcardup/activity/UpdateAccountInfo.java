@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.app.Config;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
@@ -25,6 +26,7 @@ import com.b2infosoft.giftcardup.model.AddNewAccount;
 import com.b2infosoft.giftcardup.model.BankInfo;
 import com.b2infosoft.giftcardup.urlconnection.MultipartUtility;
 import com.b2infosoft.giftcardup.volly.DMRResult;
+import com.b2infosoft.giftcardup.volly.LruBitmapCache;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,6 +40,7 @@ public class UpdateAccountInfo extends AppCompatActivity {
     private Tags tags;
     private Active active;
     private Urls urls;
+    private Config config;
     //Image request code
     private final int PICK_IMAGE_REQUEST = 1;
     //Uri to store the image uri
@@ -56,6 +59,7 @@ public class UpdateAccountInfo extends AppCompatActivity {
         tags = Tags.getInstance();
         active = Active.getInstance(getApplicationContext());
         urls = Urls.getInstance();
+        config = Config.getInstance();
         intent = new Intent(this, MyProfile.class);
         intent.putExtra(tags.SELECTED_TAB, 1);
     }
@@ -66,9 +70,12 @@ public class UpdateAccountInfo extends AppCompatActivity {
         init();
         setContentView(R.layout.activity_update_account_info);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        imageView = (AppCompatImageView) findViewById(R.id.void_check_image);
         if(getIntent().hasExtra(tags.BANK_INFO)){
             info = (BankInfo) getIntent().getSerializableExtra(tags.BANK_INFO);
+            String url = config.getGiftCardImageAddress().concat(info.getVoidCheckImage1());
+            Log.d("IMAGE",url);
+            LruBitmapCache.loadCacheImage(this, imageView, config.getGiftCardImageAddress().concat(info.getVoidCheckImage1()), TAG);
         }
         name = (EditText) findViewById(R.id.bank_name);
         routing_no = (EditText) findViewById(R.id.bank_routing_no);
@@ -77,7 +84,7 @@ public class UpdateAccountInfo extends AppCompatActivity {
         name.setText(info.getName());
         routing_no.setText(info.getRoutingNumber());
         account_no.setText(info.getAccountNumber());
-        imageView = (AppCompatImageView) findViewById(R.id.void_check_image);
+
         chooseImage = (Button) findViewById(R.id.choose_void_image);
         chooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,7 +104,7 @@ public class UpdateAccountInfo extends AppCompatActivity {
                 bankInfo.setName(bank_name);
                 bankInfo.setAccountNumber(bank_account);
                 bankInfo.setRoutingNumber(bank_routing);
-                //bankInfo.setVoidCheckImage1(bitmap);
+               // bankInfo.setVoidCheckImage1(bitmap);
                 new UpdateBankAccount(bankInfo).execute();
             }
         });
@@ -199,9 +206,9 @@ public class UpdateAccountInfo extends AppCompatActivity {
                 multipart.addFormField(tags.BANK_INFO_NAME, bankInfo.getName());
                 multipart.addFormField(tags.BANK_INFO_ACCOUNT_NUMBER,bankInfo.getAccountNumber());
                 multipart.addFormField(tags.BANK_INFO_ROUTING_NUMBER, bankInfo.getRoutingNumber());
-                //if (info.getVoidImage() != null) {
-                //    multipart.addFilePartBitmap(tags.BANK_VOID_IMAGE, "bank_void_image.png", info.getVoidImage());
-                //}
+                if (bitmap != null) {
+                    multipart.addFilePartBitmap(tags.BANK_VOID_IMAGE, "bank_void_image.png", bitmap);
+                }
                 return multipart.finishString();
             } catch (Exception e) {
                 e.printStackTrace();
