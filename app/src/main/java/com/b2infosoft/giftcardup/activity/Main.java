@@ -295,7 +295,7 @@ public class Main extends GiftCardUp {
 
                     break;
                 case R.id.menu_item_my_cart:
-
+                       startActivity(new Intent(Main.this, ShoppingCart.class));
                     break;
                 case R.id.menu_item_logout:
                     active.setLogOut();
