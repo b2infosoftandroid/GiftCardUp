@@ -17,6 +17,8 @@ import android.widget.ScrollView;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.activity.AddAccountInfo;
+import com.b2infosoft.giftcardup.activity.UpdateAccountInfo;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
@@ -68,9 +70,9 @@ public class BankDetailRecyclerViewAdapter extends RecyclerView.Adapter<BankDeta
         EditText name = holder.name;
         EditText routing_no = holder.routing_no;
         EditText account_no = holder.account_no;
-       // EditText status = holder.status;
+        //EditText status = holder.status;
 
-        name.setText(info.getName());
+         name.setText(info.getName());
         routing_no.setText(info.getRoutingNumber());
         account_no.setText(info.getAccountNumber());
         //status.setText(info.getStatus());
@@ -91,8 +93,11 @@ public class BankDetailRecyclerViewAdapter extends RecyclerView.Adapter<BankDeta
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                enableInfo(holder, true);
-                holder.save.setVisibility(View.VISIBLE);
+               // enableInfo(holder, true);
+               // holder.save.setVisibility(View.VISIBLE);
+                Intent i = new Intent(context, UpdateAccountInfo.class);
+                i.putExtra(tags.BANK_INFO, info);
+                context.startActivity(i);
             }
         });
         holder.chooseImage.setOnClickListener(new View.OnClickListener() {
@@ -101,13 +106,13 @@ public class BankDetailRecyclerViewAdapter extends RecyclerView.Adapter<BankDeta
                 //showFileChooser();
             }
         });
-        holder.save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    //    holder.save.setOnClickListener(new View.OnClickListener() {
+     //       @Override
+     //       public void onClick(View v) {
                 //new AddBankAccount().execute();
-                getUpdate(holder,info);
-            }
-        });
+      //          getUpdate(holder,info);
+     //       }
+    //    });
 
     }
 
@@ -146,38 +151,6 @@ public class BankDetailRecyclerViewAdapter extends RecyclerView.Adapter<BankDeta
             this.chooseImage = (Button) view.findViewById(R.id.choose_void_image);
         }
 
-    }
-
-    private void getUpdate(ViewHolder holder,BankInfo info){
-        final Map<String, String> map = new HashMap<>();
-        map.put(tags.USER_ACTION, tags.BANK_ACCOUNT_UPDATE);
-        map.put(tags.BANK_INFO_ID, String.valueOf(info.getId()));
-        map.put(tags.BANK_INFO_NAME,String.valueOf(holder.name));
-        map.put(tags.BANK_INFO_ACCOUNT_NUMBER, String.valueOf(holder.account_no));
-        map.put(tags.BANK_INFO_ROUTING_NUMBER, String.valueOf(holder.routing_no));
-        dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
-            @Override
-            public void onSuccess(JSONObject jsonObject) {
-                try {
-                    if (jsonObject.has(tags.SUCCESS)) {
-                        if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
-                            if (jsonObject.has(tags.BANK_ACCOUNT_UPDATE)) {
-
-                            }
-                        }
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Log.e("", e.getMessage());
-                }
-            }
-
-            @Override
-            public void onError(VolleyError volleyError) {
-                volleyError.printStackTrace();
-                Log.e("", volleyError.getMessage());
-            }
-        });
     }
 
 }

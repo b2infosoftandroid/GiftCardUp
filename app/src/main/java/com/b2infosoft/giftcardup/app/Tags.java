@@ -198,6 +198,7 @@ public class Tags {
     public final String ID_TYPE = "id_type";
 
     /////////////////  BANK INFO TAGS  //////////////////
+    public final String BANK_INFO = "bank_info";
     public final String BANK_INFO_ID = "bank_detail_id";
     public final String BANK_INFO_USER_ID = "user_id";
     public final String BANK_INFO_ID_NUMBER = "id_number";

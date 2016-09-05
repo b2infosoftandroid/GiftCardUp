@@ -66,6 +66,10 @@
             android:windowSoftInputMode="adjustResize">
 
         </activity>
+        <activity android:name=".activity.UpdateAccountInfo"
+            android:label="UpdateAccount"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
     </application>
 
 </manifest>
