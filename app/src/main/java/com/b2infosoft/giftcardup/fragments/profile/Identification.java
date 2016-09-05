@@ -125,6 +125,9 @@ public class Identification extends Fragment implements CanScrollVerticallyDeleg
                 }
 
                 updateProfile();
+                b1.setVisibility(View.VISIBLE);
+                b2.setVisibility(View.GONE);
+                //enableProfile(false);
             }
         });
 
