@@ -1,12 +1,16 @@
 package com.b2infosoft.giftcardup.activity;
 
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
@@ -14,9 +18,12 @@ import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
+import com.b2infosoft.giftcardup.custom.AlertBox;
+import com.b2infosoft.giftcardup.model.User;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -32,6 +39,7 @@ public class AddSSN extends AppCompatActivity  implements DMRResult{
 
     private EditText ssn_ein_no;
     private RadioButton id_type_ssn,id_type_ein;
+    private RadioGroup radioGroup;
     private Button cancel,save;
     private void init() {
         tags = Tags.getInstance();
@@ -44,16 +52,18 @@ public class AddSSN extends AppCompatActivity  implements DMRResult{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         init();
         setContentView(R.layout.activity_add_ssn);
         ssn_ein_no = (EditText)findViewById(R.id.ssn_ein_no);
+        radioGroup = (RadioGroup)findViewById(R.id.radio_group);
         id_type_ssn = (RadioButton)findViewById(R.id.id_type_ssn);
         id_type_ein = (RadioButton)findViewById(R.id.id_type_ein);
         cancel = (Button)findViewById(R.id.bank_cancel_btn);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                   finish();
             }
         });
         save = (Button)findViewById(R.id.bank_save_btn);
@@ -67,6 +77,7 @@ public class AddSSN extends AppCompatActivity  implements DMRResult{
                 } else {
                     idType = "EIN";
                 }
+
                 Map<String,String> map = new HashMap<String, String>();
                 map.put(tags.USER_ACTION,tags.ADD_IDENTIFICATION_SSN);
                 map.put(tags.USER_ID, active.getUser().getUserId() + "");
@@ -74,16 +85,58 @@ public class AddSSN extends AppCompatActivity  implements DMRResult{
                 map.put(tags.ID_TYPE, idType);
 
                 dmrRequest.doPost(urls.getUserInfo(),map,AddSSN.this);
+
             }
         });
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                //NavUtils.navigateUpFromSameTask(this);
+                this.onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     public void onSuccess(JSONObject jsonObject) {
-        Toast.makeText(this,jsonObject.toString(),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this,jsonObject.toString(),Toast.LENGTH_SHORT).show();
+        try {
+            if (jsonObject.has(tags.SUCCESS)) {
+                int success = jsonObject.getInt(tags.SUCCESS);
+                if (success == tags.PASS) {
+                    AlertBox box = new AlertBox(this);
+                    box.setMessage("Your Request is Processing");
+                    box.show();
+                    viewBlank();
+
+                } else if (success == tags.FAIL) {
+                    String message = "" ;
+                    if(jsonObject.has(tags.MESSAGE)){
+                        message = jsonObject.getString(tags.MESSAGE);
+                    }
+                    AlertBox box = new AlertBox(this);
+                    box.setTitle("Alert");
+                    box.setMessage(message);
+                    box.show();
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(TAG, e.getMessage());
+        }
     }
 
     @Override
     public void onError(VolleyError volleyError) {
 
+    }
+
+    private void viewBlank(){
+        ssn_ein_no.setText("");
+        radioGroup.clearCheck();
     }
 }

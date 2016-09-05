@@ -58,8 +58,14 @@
             android:name=".activity.AddAccountInfo"
             android:label="AddAccount"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".activity.AddIdentity" />
-        <activity android:name=".activity.AddSSN"></activity>
+        <activity android:name=".activity.AddIdentity"
+            android:label="Identity"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".activity.AddSSN"
+            android:label="SSN"
+            android:windowSoftInputMode="adjustResize">
+
+        </activity>
     </application>
 
 </manifest>

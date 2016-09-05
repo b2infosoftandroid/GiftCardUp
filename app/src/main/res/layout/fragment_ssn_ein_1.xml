@@ -28,6 +28,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_fill_background"
                 android:padding="@dimen/button_margin_left"
+                android:layout_gravity="center_horizontal"
                 android:text="@string/approved_for_sell"
                 android:textAllCaps="true"
                 android:textColor="@color/button_foreground"

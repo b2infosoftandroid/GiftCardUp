@@ -8,38 +8,50 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.b2infosoft.giftcardup.activity.AddIdentity">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"
-        >
+        android:scrollbars="none">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
-            <ImageView
-                android:id="@+id/identity_image"
-                android:layout_width="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                />
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/identity_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+
             <Button
                 android:id="@+id/choose_identity"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAllCaps="true"
-                android:text="choose identity"
                 android:layout_gravity="center"
-                />
+                android:background="@drawable/button_fill_background"
+                android:text="choose identity"
+                android:textAllCaps="true"
+                android:textColor="@color/button_foreground" />
+
             <Button
                 android:id="@+id/upload_identity"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAllCaps="true"
-                android:text="upload identity"
                 android:layout_gravity="center"
-            />
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:background="@drawable/button_fill_background"
+                android:text="upload identity"
+                android:textAllCaps="true"
+                android:textColor="@color/button_foreground" />
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

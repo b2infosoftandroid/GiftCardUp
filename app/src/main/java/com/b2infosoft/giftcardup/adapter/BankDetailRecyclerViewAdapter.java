@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,22 +15,41 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
+import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.app.Tags;
+import com.b2infosoft.giftcardup.app.Urls;
+import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.model.BankInfo;
+import com.b2infosoft.giftcardup.volly.DMRRequest;
+import com.b2infosoft.giftcardup.volly.DMRResult;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class BankDetailRecyclerViewAdapter extends RecyclerView.Adapter<BankDetailRecyclerViewAdapter.ViewHolder> {
     Context context;
     private final List<BankInfo> bankInfoList;
     Drawable add, subtruct;
+    Tags tags = Tags.getInstance();
+    Urls urls = Urls.getInstance();
+    Active active;
+    DMRRequest dmrRequest;
 
     public BankDetailRecyclerViewAdapter(Context context, List<BankInfo> bankInfoList) {
         this.context = context;
         this.bankInfoList = bankInfoList;
         add = context.getResources().getDrawable(R.drawable.ic_add_24dp);
         subtruct = context.getResources().getDrawable(R.drawable.ic_subtract_24dp);
+        active = Active.getInstance(context);
+        dmrRequest = DMRRequest.getInstance(context,"");
     }
 
     @Override
@@ -43,7 +63,7 @@ public class BankDetailRecyclerViewAdapter extends RecyclerView.Adapter<BankDeta
     public void onBindViewHolder(final ViewHolder holder, int position) {
         LinearLayout linearLayout = holder.linearLayout;
         ScrollView scrollView = holder.scrollView;
-        BankInfo info = bankInfoList.get(position);
+        final BankInfo info = bankInfoList.get(position);
 
         EditText name = holder.name;
         EditText routing_no = holder.routing_no;
@@ -85,6 +105,7 @@ public class BankDetailRecyclerViewAdapter extends RecyclerView.Adapter<BankDeta
             @Override
             public void onClick(View v) {
                 //new AddBankAccount().execute();
+                getUpdate(holder,info);
             }
         });
 
@@ -126,4 +147,37 @@ public class BankDetailRecyclerViewAdapter extends RecyclerView.Adapter<BankDeta
         }
 
     }
+
+    private void getUpdate(ViewHolder holder,BankInfo info){
+        final Map<String, String> map = new HashMap<>();
+        map.put(tags.USER_ACTION, tags.BANK_ACCOUNT_UPDATE);
+        map.put(tags.BANK_INFO_ID, String.valueOf(info.getId()));
+        map.put(tags.BANK_INFO_NAME,String.valueOf(holder.name));
+        map.put(tags.BANK_INFO_ACCOUNT_NUMBER, String.valueOf(holder.account_no));
+        map.put(tags.BANK_INFO_ROUTING_NUMBER, String.valueOf(holder.routing_no));
+        dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
+            @Override
+            public void onSuccess(JSONObject jsonObject) {
+                try {
+                    if (jsonObject.has(tags.SUCCESS)) {
+                        if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                            if (jsonObject.has(tags.BANK_ACCOUNT_UPDATE)) {
+
+                            }
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e("", e.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(VolleyError volleyError) {
+                volleyError.printStackTrace();
+                Log.e("", volleyError.getMessage());
+            }
+        });
+    }
+
 }

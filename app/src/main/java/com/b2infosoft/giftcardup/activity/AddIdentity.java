@@ -9,6 +9,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,6 +20,7 @@ import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
+import com.b2infosoft.giftcardup.custom.AlertBox;
 import com.b2infosoft.giftcardup.urlconnection.MultipartUtility;
 import java.io.IOException;
 
@@ -49,6 +51,7 @@ public class AddIdentity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_identity);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         init();
         imageView = (ImageView) findViewById(R.id.identity_image);
         choose = (Button) findViewById(R.id.choose_identity);
@@ -69,6 +72,17 @@ public class AddIdentity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                //NavUtils.navigateUpFromSameTask(this);
+                this.onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     //method to show file chooser
@@ -162,6 +176,9 @@ public class AddIdentity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             Log.d(TAG,s);
             super.onPostExecute(s);
+            AlertBox alertBox = new AlertBox(getApplicationContext());
+            alertBox.setMessage("Your Identity is Updated Successfully");
+            alertBox.show();
         }
     }
 }
