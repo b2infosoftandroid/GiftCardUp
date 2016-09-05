@@ -93,35 +93,12 @@ public class BankDetailRecyclerViewAdapter extends RecyclerView.Adapter<BankDeta
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // enableInfo(holder, true);
-               // holder.save.setVisibility(View.VISIBLE);
                 Intent i = new Intent(context, UpdateAccountInfo.class);
                 i.putExtra(tags.BANK_INFO, info);
                 context.startActivity(i);
             }
         });
-        holder.chooseImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //showFileChooser();
-            }
-        });
-    //    holder.save.setOnClickListener(new View.OnClickListener() {
-     //       @Override
-     //       public void onClick(View v) {
-                //new AddBankAccount().execute();
-      //          getUpdate(holder,info);
-     //       }
-    //    });
 
-    }
-
-    private void enableInfo(ViewHolder holder, boolean isUpdate) {
-        holder.name.setEnabled(isUpdate);
-        holder.routing_no.setEnabled(isUpdate);
-        holder.account_no.setEnabled(isUpdate);
-        holder.chooseImage.setEnabled(isUpdate);
-        //status.setEnabled(isUpdate);
     }
 
     @Override
