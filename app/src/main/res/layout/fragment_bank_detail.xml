@@ -41,14 +41,16 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="16dp"
                     android:layout_toLeftOf="@+id/bank_info_less"
-                    android:src="@drawable/ic_edit_icon" />
+                    android:src="@drawable/ic_edit_icon"
+                    android:background="@drawable/image_background"/>
 
                 <ImageView
                     android:id="@+id/bank_info_less"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:src="@drawable/ic_add_24dp" />
+                    android:src="@drawable/ic_add_24dp"
+                    android:background="@drawable/image_background"/>
 
             </RelativeLayout>
 
