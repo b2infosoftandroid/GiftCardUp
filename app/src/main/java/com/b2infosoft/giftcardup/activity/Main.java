@@ -26,6 +26,7 @@ import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.database.DBHelper;
+import com.b2infosoft.giftcardup.fragments.BulkListing;
 import com.b2infosoft.giftcardup.fragments.Dashboard;
 import com.b2infosoft.giftcardup.fragments.SellCards;
 import com.b2infosoft.giftcardup.fragments.SpeedySell;
@@ -262,7 +263,8 @@ public class Main extends GiftCardUp {
 
                     break;
                 case R.id.menu_item_bulk_listing:
-
+                    replaceFragment(new BulkListing());
+                    setTitle("Bulk Listing");
                     break;
                 case R.id.menu_item_speedy_sell:
 

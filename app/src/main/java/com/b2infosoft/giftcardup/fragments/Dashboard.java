@@ -54,14 +54,19 @@ public class Dashboard extends Fragment {
     public Dashboard() {
 
     }
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+
+    private void init(){
         dmrRequest = DMRRequest.getInstance(getActivity(), TAG);
         urls = Urls.getInstance();
         tags = Tags.getInstance();
         active = Active.getInstance(getActivity());
         cardList = new ArrayList<>();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        init();
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
         actionButton = (Button) view.findViewById(R.id.floating_btn);
         actionButton.setOnClickListener(new View.OnClickListener() {

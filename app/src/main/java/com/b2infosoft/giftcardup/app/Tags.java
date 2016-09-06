@@ -48,6 +48,7 @@ public class Tags {
     public final String USER_ALL_APPROVE_INFO = "user_all_approve_info";
     public final String ADD_IDENTIFICATION = "add_identification";
     public final String ADD_IDENTIFICATION_SSN = "add_identification_ssn";
+    public final String ADD_GIFT_CARD = "add_gift_card";
 
 
     /* USER LOGIN SIGNUP */
@@ -100,6 +101,7 @@ public class Tags {
     public final String GIFT_CARD_SERIAL_NUMBER = "serial_number";
     public final String GIFT_CARD_CARD_PIN = "card_pin";
     public final String GIFT_CARD_CARD_PRICE = "card_price";
+    public final String GIFT_CARD_CARD_VALUE = "card_value";
     public final String GIFT_CARD_VALUE = "value";
     public final String GIFT_CARD_SELL = "sell";
     public final String GIFT_CARD_SELLING_PERCENTAGE = "selling_percentage";
@@ -109,6 +111,7 @@ public class Tags {
     public final String GIFT_CARD_SOLD_ON = "sold_on";
     public final String GIFT_CARD_CARD_DESCRIPTION = "card_description";
     public final String GIFT_CARD_CARD_IMG = "card_img";
+    public final String GIFT_CARD_CARD_DISCOUNT = "card_discount";
     public final String GIFT_CARD_APPROVE_DATE = "approve_date";
     public final String GIFT_CARD_APPROVE_STATUS = "approve_status";
     public final String GIFT_CARD_STATUS_TYPE = "status_type";
