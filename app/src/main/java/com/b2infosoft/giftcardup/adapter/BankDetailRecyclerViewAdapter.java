@@ -74,13 +74,20 @@ public class BankDetailRecyclerViewAdapter extends RecyclerView.Adapter<BankDeta
         EditText routing_no = holder.routing_no;
         EditText account_no = holder.account_no;
         AppCompatImageView imageView = holder.imageView;
-        //EditText status = holder.status;
+        EditText status = holder.status;
         LruBitmapCache.loadCacheImage(context, imageView, config.getGiftCardImageAddress().concat(info.getVoidCheckImage1()), "");
 
          name.setText(info.getName());
         routing_no.setText(info.getRoutingNumber());
         account_no.setText(info.getAccountNumber());
         //imageView.setImageBitmap(info.getVoidCheckImage1());
+        if(info.getStatus() == 1){
+            status.setText("Approved");
+        } else if(info.getStatus() == 2){
+            status.setText("Rejected");
+        }else {
+            status.setText("Pending");
+        }
         //status.setText(info.getStatus());
 
         holder.less.setOnClickListener(new View.OnClickListener() {
