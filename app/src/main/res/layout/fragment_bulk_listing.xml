@@ -67,12 +67,13 @@
                         android:layout_height="wrap_content"
                         android:text="E-Card" />
 
-                    <TextView
-                        android:id="@+id/cardType"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="NO" />
+                        <ImageView
+                            android:id="@+id/cardType"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:src="@null"
+                            />
                 </TableRow>
 
                 <TableRow
@@ -92,10 +93,10 @@
                         android:layout_width="fill_parent"
                         android:layout_height="45dp"
                         android:background="@drawable/layout_border"
-
+                        android:enabled="false"
                         android:gravity="center"
                         android:inputType="numberDecimal"
-                        android:hint="Serial Number" />
+                        android:hint="########" />
                 </TableRow>
 
                 <TableRow
@@ -115,11 +116,11 @@
                         android:layout_width="fill_parent"
                         android:layout_height="45dp"
                         android:background="@drawable/layout_border"
-
+                        android:enabled="false"
                         android:gravity="center"
                         android:inputType="numberDecimal"
 
-                        android:hint="PIN" />
+                        android:hint="######" />
                 </TableRow>
 
                 <TableRow
@@ -139,12 +140,12 @@
                         android:layout_width="fill_parent"
                         android:layout_height="45dp"
                         android:background="@drawable/layout_border"
-
+                        android:enabled="false"
                         android:drawableLeft="@drawable/ic_attach_money_24dp"
                         android:gravity="center"
                         android:inputType="numberDecimal"
 
-                        android:hint="Balance" />
+                        android:hint="00.00" />
                 </TableRow>
 
                 <TableRow
@@ -164,11 +165,10 @@
                         android:layout_width="fill_parent"
                         android:layout_height="45dp"
                         android:background="@drawable/layout_border"
-
+                        android:enabled="false"
                         android:gravity="center"
-                        android:hint="Selling"
+                        android:hint="00.00"
                         android:inputType="numberDecimal"
-                        android:text=""
                         android:drawableRight="@drawable/ic_percentage"
                         />
                 </TableRow>
@@ -192,8 +192,8 @@
                         android:drawableLeft="@drawable/ic_attach_money_24dp"
                         android:gravity="center"
                         android:inputType="numberDecimal"
-
-                        android:hint="Asking Price" />
+                        android:enabled="false"
+                        android:hint="00.00" />
                 </TableRow>
 
                 <TableRow
@@ -217,8 +217,7 @@
                         android:drawableLeft="@drawable/ic_attach_money_24dp"
                         android:gravity="center"
                         android:inputType="numberDecimal"
-
-                        android:hint="Your Earning" />
+                        android:hint="00.00" />
                 </TableRow>
 
                 <TableRow

@@ -19,8 +19,8 @@ public class GiftCard implements Serializable {
     private String cardName;
     private String serialNumber;
     private String cardPin;
-    private double cardPrice;
-    private double cardValue;
+    private String cardPrice;
+    private String cardValue;
     private String sell;
     private String sellingPercentage;
     private String yourEarning;
@@ -36,7 +36,7 @@ public class GiftCard implements Serializable {
     private String barCodeImage;
     private String denyReason;
     private String needReview;
-
+    private int cardType;
     public int getGiftCardID() {
         return giftCardID;
     }
@@ -101,19 +101,19 @@ public class GiftCard implements Serializable {
         this.cardPin = cardPin;
     }
 
-    public double getCardPrice() {
+    public String getCardPrice() {
         return cardPrice;
     }
 
-    public void setCardPrice(double cardPrice) {
+    public void setCardPrice(String cardPrice) {
         this.cardPrice = cardPrice;
     }
 
-    public double getCardValue() {
+    public String getCardValue() {
         return cardValue;
     }
 
-    public void setCardValue(double cardValue) {
+    public void setCardValue(String cardValue) {
         this.cardValue = cardValue;
     }
 
@@ -188,14 +188,36 @@ public class GiftCard implements Serializable {
     public void setApproveDate(String approveDate) {
         this.approveDate = approveDate;
     }
-
+    /**
+     * 0=> Processing,
+     * 1=> Listed,
+     * 2,3 => Sold,
+     * 4 => Denied,
+     * 5 => Deleted,
+     * 6 => Pending Shipment,
+     * 7 => Under Investigation,
+     * 8 => Investigated,
+     * 9 => Needs Review,
+     *
+     *
+     * */
     public int getApproveStatus() {
         return approveStatus;
     }
-
+    public String getApproveStatusName(int status){
+        String statusType[] = {"Processing","Listed","Sold","Sold","Denied",
+                "Deleted","Pending Shipment","Under Investigation","Investigated","Needs Review"};
+        return statusType[status];
+    }
     public void setApproveStatus(int approveStatus) {
         this.approveStatus = approveStatus;
     }
+
+    /**
+     * 2 = > Speedy Shell Status
+     *
+     * @return int
+     */
 
     public int getStatusType() {
         return statusType;
@@ -237,6 +259,20 @@ public class GiftCard implements Serializable {
         this.needReview = needReview;
     }
 
+    /**
+     *  2 => E-Card
+     *  1 => Physical Card
+     *  0 => Physical Card
+     * @return int
+     */
+    public int getCardType() {
+        return cardType;
+    }
+
+    public void setCardType(int cardType) {
+        this.cardType = cardType;
+    }
+
     public GiftCard fromJSON(JSONObject object) {
         Tags tags = Tags.getInstance();
         GiftCard card = new GiftCard();
@@ -266,10 +302,10 @@ public class GiftCard implements Serializable {
                 card.setCardPin(object.getString(tags.GIFT_CARD_CARD_PIN));
             }
             if (object.has(tags.GIFT_CARD_CARD_PRICE)) {
-                card.setCardPrice(object.getDouble(tags.GIFT_CARD_CARD_PRICE));
+                card.setCardPrice(object.getString(tags.GIFT_CARD_CARD_PRICE));
             }
             if (object.has(tags.GIFT_CARD_VALUE)) {
-                card.setCardValue(object.getDouble(tags.GIFT_CARD_VALUE));
+                card.setCardValue(object.getString(tags.GIFT_CARD_VALUE));
             }
             if (object.has(tags.GIFT_CARD_SELL)) {
                 card.setSell(object.getString(tags.GIFT_CARD_SELL));
@@ -315,6 +351,9 @@ public class GiftCard implements Serializable {
             }
             if (object.has(tags.GIFT_CARD_NEED_REVIEW)) {
                 card.setNeedReview(object.getString(tags.GIFT_CARD_NEED_REVIEW));
+            }
+            if (object.has(tags.CARD_TYPE)) {
+                card.setCardType(object.getInt(tags.CARD_TYPE));
             }
         } catch (JSONException e) {
             e.printStackTrace();

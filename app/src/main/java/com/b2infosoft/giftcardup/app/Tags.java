@@ -50,6 +50,7 @@ public class Tags {
     public final String ADD_IDENTIFICATION_SSN = "add_identification_ssn";
     public final String ADD_GIFT_CARD = "add_gift_card";
     public final String GET_EARNING_PRICE = "get_earning_price";
+    public final String GET_GIFT_CARD_BY_USER_ID = "get_gift_card_by_user_id";
 
 
     /* USER LOGIN SIGNUP */

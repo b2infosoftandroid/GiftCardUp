@@ -13,7 +13,7 @@ import org.json.JSONObject;
 public class Merchant {
     private String companyID;
     private String companyName;
-    private String cardType;
+    private int cardType;
     private String sellingPercentage;
 
     public String getCompanyID() {
@@ -32,11 +32,17 @@ public class Merchant {
         this.companyName = companyName;
     }
 
-    public String getCardType() {
+    /**
+     * 1=> physical card
+     * 2=> e-card
+     * @return int 1,2
+     */
+
+    public int getCardType() {
         return cardType;
     }
 
-    public void setCardType(String cardType) {
+    public void setCardType(int cardType) {
         this.cardType = cardType;
     }
 
@@ -59,7 +65,7 @@ public class Merchant {
                 merchant.setCompanyName(object.getString(tags.COMPANY_NAME));
             }
             if (object.has(tags.CARD_TYPE)) {
-                merchant.setCardType(object.getString(tags.CARD_TYPE));
+                merchant.setCardType(object.getInt(tags.CARD_TYPE));
             }
             if (object.has(tags.GIFT_CARD_SELLING_PERCENTAGE)) {
                 merchant.setSellingPercentage(object.getString(tags.GIFT_CARD_SELLING_PERCENTAGE));
