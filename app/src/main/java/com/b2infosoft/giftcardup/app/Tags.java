@@ -49,6 +49,7 @@ public class Tags {
     public final String ADD_IDENTIFICATION = "add_identification";
     public final String ADD_IDENTIFICATION_SSN = "add_identification_ssn";
     public final String ADD_GIFT_CARD = "add_gift_card";
+    public final String GET_EARNING_PRICE = "get_earning_price";
 
 
     /* USER LOGIN SIGNUP */
@@ -223,6 +224,11 @@ public class Tags {
     public final String USER_IDENTIFICATION = "user_identification";
     public final String USER_BANK = "user_bank";
     public final String USER_SSN = "user_ssn";
+
+
+
+    public final String EARNING_PRICE = "earning_price";
+    public final String SHIPPING_COMMISSION_CHARGE = "shipping_commission_charge";
 
 
 }

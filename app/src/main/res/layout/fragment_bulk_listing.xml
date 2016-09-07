@@ -168,7 +168,7 @@
                         android:gravity="center"
                         android:hint="Selling"
                         android:inputType="numberDecimal"
-
+                        android:text=""
                         android:drawableRight="@drawable/ic_percentage"
                         />
                 </TableRow>
@@ -189,7 +189,6 @@
                         android:layout_width="fill_parent"
                         android:layout_height="45dp"
                         android:background="@drawable/layout_border"
-
                         android:drawableLeft="@drawable/ic_attach_money_24dp"
                         android:gravity="center"
                         android:inputType="numberDecimal"
