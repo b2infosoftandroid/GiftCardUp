@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.app.Format;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
@@ -57,6 +58,7 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
     private Urls urls;
     private Tags tags;
     private Active active;
+    private Format format;
     DMRRequest dmrRequest;
     Map<String, Merchant> hashMap;
     private Progress progress;
@@ -73,6 +75,7 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
     private final String ERROR_MESSAGE_SELLING_PERCENTAGE = "Must be 0.0 < 100.00 %";
     private Merchant merchant;
     private String shipping_charge;
+
     public BulkListing() {
         // Required empty public constructor
     }
@@ -82,6 +85,7 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
         urls = Urls.getInstance();
         tags = Tags.getInstance();
         active = Active.getInstance(getActivity());
+        format = Format.getInstance();
         hashMap = new HashMap<>();
         progress = new Progress(getActivity());
     }
@@ -98,7 +102,7 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
         brand_name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus && itemSelected){
+                if (hasFocus && itemSelected) {
                     brand_name.setText("");
                     itemSelected = false;
                     enableCardForm(itemSelected);
@@ -112,7 +116,7 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
         card_balance.addTextChangedListener(this);
         selling_percentage = (EditText) mView.findViewById(R.id.selling_percentage);
         selling_percentage.addTextChangedListener(this);
-        selling_percentage.setFilters(new InputFilter[]{new EditTextMaxFloat(selling_percentage,100f,ERROR_MESSAGE_SELLING_PERCENTAGE)});
+        selling_percentage.setFilters(new InputFilter[]{new EditTextMaxFloat(selling_percentage, 100f, ERROR_MESSAGE_SELLING_PERCENTAGE)});
         //selling_percentage.setOnFocusChangeListener(this);
         asking_price = (EditText) mView.findViewById(R.id.asking_price);
         asking_price.addTextChangedListener(this);
@@ -129,23 +133,26 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
 
     @Override
     public void afterTextChanged(Editable editable) {
-        if(editable == card_balance.getEditableText()){
+        if (editable == card_balance.getEditableText()) {
             float bal = 0.0f;
             float sell = 0.0f;
             String bb = card_balance.getText().toString();
             String ss = selling_percentage.getText().toString();
-            if(!TextUtils.isEmpty(bb)){
-                asking_price.setFilters(new InputFilter[]{new EditTextMaxFloat(asking_price,bb,ERROR_MESSAGE_ASKING_PRICE)});
-            }else{
-                asking_price.setFilters(new InputFilter[]{new EditTextMaxFloat(asking_price,0,ERROR_MESSAGE_ASKING_PRICE)});
+            if (!TextUtils.isEmpty(bb)) {
+                asking_price.setFilters(new InputFilter[]{new EditTextMaxFloat(asking_price, bb, ERROR_MESSAGE_ASKING_PRICE)});
+            } else {
+                asking_price.setFilters(new InputFilter[]{new EditTextMaxFloat(asking_price, 0, ERROR_MESSAGE_ASKING_PRICE)});
             }
             if (!TextUtils.isEmpty(bb)) {
                 bal = Float.parseFloat(bb);
                 if (!TextUtils.isEmpty(ss)) {
+                    if (ss.contains("%")) {
+                        ss = ss.replaceAll("%", "");
+                    }
                     sell = Float.parseFloat(ss);
                     final float price = bal * sell / 100;
                     asking_price.removeTextChangedListener(this);
-                    asking_price.setText(String.valueOf(price));
+                    asking_price.setText(format.getStringFloat(price));
                     getEarning();
                     asking_price.addTextChangedListener(this);
                 }
@@ -157,10 +164,14 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
             if (!TextUtils.isEmpty(bb)) {
                 bal = Float.parseFloat(bb);
                 if (!TextUtils.isEmpty(editable)) {
-                    sell = Float.parseFloat(editable.toString());
+                    String str = editable.toString();
+                    if (str.contains("%")) {
+                        str = str.replaceAll("%", "");
+                    }
+                    price = Float.parseFloat(str);
                     final float price = bal * sell / 100;
                     asking_price.removeTextChangedListener(this);
-                    asking_price.setText(String.valueOf(price));
+                    asking_price.setText(format.getStringFloat(price));
                     getEarning();
                     asking_price.addTextChangedListener(this);
                 }
@@ -172,10 +183,14 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
             if (!TextUtils.isEmpty(bb)) {
                 bal = Float.parseFloat(bb);
                 if (!TextUtils.isEmpty(editable)) {
-                    price = Float.parseFloat(editable.toString());
+                    String str = editable.toString();
+                    if (str.contains("%")) {
+                        str = str.replaceAll("%", "");
+                    }
+                    price = Float.parseFloat(str);
                     final float selling = 100 * price / bal;
                     selling_percentage.removeTextChangedListener(this);
-                    selling_percentage.setText(String.valueOf(selling));
+                    selling_percentage.setText(format.getStringFloat(selling));
                     getEarning();
                     selling_percentage.addTextChangedListener(this);
                 }
@@ -197,7 +212,7 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
                 if (!TextUtils.isEmpty(data)) {
                     sell = Float.parseFloat(data);
                     final float price = bal * sell / 100;
-                    asking_price.setText(String.valueOf(price));
+                    asking_price.setText(format.getStringFloat(price));
 
                 }
             }
@@ -213,7 +228,7 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
                 if (!TextUtils.isEmpty(data)) {
                     price = Float.parseFloat(data);
                     final float selling = 100 * price / bal;
-                    selling_percentage.setText(String.valueOf(selling));
+                    selling_percentage.setText(format.getStringFloat(selling));
                 }
             }
         }
@@ -275,10 +290,10 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
                             if (jsonObject.has(tags.GET_EARNING_PRICE)) {
                                 JSONObject object = jsonObject.getJSONObject(tags.GET_EARNING_PRICE);
                                 if (object.has(tags.EARNING_PRICE)) {
-                                    your_earning.setText(object.getString(tags.EARNING_PRICE));
+                                    your_earning.setText(format.getStringFloat(object.getString(tags.EARNING_PRICE)));
                                 }
                                 if (object.has(tags.SHIPPING_COMMISSION_CHARGE)) {
-                                    shipping_charge = object.getString(tags.SHIPPING_COMMISSION_CHARGE);
+                                    shipping_charge = format.getStringFloat(object.getString(tags.SHIPPING_COMMISSION_CHARGE));
                                 }
                             }
                         }
@@ -303,7 +318,7 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
         for (String s : hashMap.keySet()) {
             array[i++] = hashMap.get(s).getCompanyName();
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, array);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, array);
         brand_name.setAdapter(adapter);
         brand_name.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -321,12 +336,13 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
                     cardType.setImageDrawable(null);
                 }
                 serial_number.requestFocus();
-                selling_percentage.setText(merchant.getSellingPercentage());
+                selling_percentage.setText(format.getStringFloat(merchant.getSellingPercentage()));
             }
         });
         // chipLayout.setAdapter(adapter);
     }
-    private void enableCardForm(boolean isMerchant){
+
+    private void enableCardForm(boolean isMerchant) {
         cardType.setImageDrawable(null);
         serial_number.setEnabled(isMerchant);
         card_pin.setEnabled(isMerchant);
@@ -340,6 +356,7 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
         asking_price.setText(null);
         your_earning.setText(null);
     }
+
     private String getCompanyID(String companyName) {
         for (String s : hashMap.keySet()) {
             if (hashMap.get(s).getCompanyName().equalsIgnoreCase(companyName)) {
@@ -348,6 +365,7 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
         }
         return null;
     }
+
     private void addGiftCard() {
         String company_id = merchant.getCompanyID();
         String card_name = merchant.getCompanyName();
@@ -366,33 +384,36 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
         selling_percentage.setError(null);
         asking_price.setError(null);
         your_earning.setError(null);
-        if(TextUtils.isEmpty(serial_no)){
+        if (TextUtils.isEmpty(serial_no)) {
             serial_number.setError("Please Fill Card Serial Number");
             serial_number.requestFocus();
             return;
-        }if(TextUtils.isEmpty(pin)){
+        }
+        if (TextUtils.isEmpty(pin)) {
             card_pin.setError("Please Fill Card Pin Number");
             card_pin.requestFocus();
             return;
-        }if(TextUtils.isEmpty(selling_per)){
+        }
+        if (TextUtils.isEmpty(selling_per)) {
             selling_percentage.setError("Please Fill Card Selling %");
             selling_percentage.requestFocus();
             return;
-        }if(TextUtils.isEmpty(ask_price)){
+        }
+        if (TextUtils.isEmpty(ask_price)) {
             asking_price.setError("Please Fill Card Asking Price");
             asking_price.requestFocus();
             return;
         }
-        if(TextUtils.isEmpty(earning)){
+        if (TextUtils.isEmpty(earning)) {
             your_earning.setError("Please Fill Card Your Earning");
             your_earning.requestFocus();
             return;
         }
-        if(shipping_charge==null){
+        if (shipping_charge == null) {
             showToast("Shipping Charge is Null. Try Again");
             return;
         }
-        if(TextUtils.isEmpty(shipping_charge)){
+        if (TextUtils.isEmpty(shipping_charge)) {
             showToast("Shipping Charge is Null. Try Again");
             return;
         }
@@ -450,8 +471,9 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
     public void onTextChanged(CharSequence s, int start, int before, int count) {
 
     }
-    private void showToast(String message){
-        Toast.makeText(getActivity(),message,Toast.LENGTH_SHORT).show();
+
+    private void showToast(String message) {
+        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
 }

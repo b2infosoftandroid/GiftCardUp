@@ -2,31 +2,40 @@ package com.b2infosoft.giftcardup.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
-import com.b2infosoft.giftcardup.activity.Main;
+import com.b2infosoft.giftcardup.activity.EditGiftCard;
 import com.b2infosoft.giftcardup.app.Config;
 import com.b2infosoft.giftcardup.app.Tags;
+import com.b2infosoft.giftcardup.app.Urls;
+import com.b2infosoft.giftcardup.credential.Active;
+import com.b2infosoft.giftcardup.custom.AlertBox;
 import com.b2infosoft.giftcardup.listener.OnLoadMoreListener;
-import com.b2infosoft.giftcardup.model.CompanyBrand;
 import com.b2infosoft.giftcardup.model.GiftCard;
-import com.b2infosoft.giftcardup.volly.LruBitmapCache;
+import com.b2infosoft.giftcardup.volly.DMRRequest;
+import com.b2infosoft.giftcardup.volly.DMRResult;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
+    private final String TAG = MyListingAdapter.class.getName();
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
     private boolean isLoading;
@@ -37,13 +46,18 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private List<GiftCard> cardInfoList;
     private Config config;
     private Tags tags;
-    int count = 0;
+    private DMRRequest dmrRequest;
+    private Urls urls;
+    private Active active;
 
     public MyListingAdapter(Context context, List<GiftCard> cardInfoList, RecyclerView recyclerView) {
         this.context = context;
         this.cardInfoList = cardInfoList;
         config = Config.getInstance();
         tags = Tags.getInstance();
+        dmrRequest = DMRRequest.getInstance(context, TAG);
+        urls = Urls.getInstance();
+        active = Active.getInstance(context);
         final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -76,6 +90,9 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         TextView fund;
         ImageView quickSell;
         TextView status;
+        Button action_edit, action_delete, action_deny, action_need_review, action_investigate;
+        View action_divider;
+
         public CardHolder(View view) {
             super(view);
             giftCard = (TextView) view.findViewById(R.id.company_card_gift_card);
@@ -88,7 +105,12 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             fund = (TextView) view.findViewById(R.id.company_card_fund);
             quickSell = (ImageView) view.findViewById(R.id.company_card_quick_sell);
             status = (TextView) view.findViewById(R.id.company_card_status);
-
+            action_edit = (Button) view.findViewById(R.id.action_edit);
+            action_delete = (Button) view.findViewById(R.id.action_delete);
+            action_deny = (Button) view.findViewById(R.id.action_deny);
+            action_need_review = (Button) view.findViewById(R.id.action_need_review);
+            action_investigate = (Button) view.findViewById(R.id.action_investigate);
+            action_divider = view.findViewById(R.id.action_divider);
         }
     }
 
@@ -137,16 +159,143 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 cardHolder.quickSell.setImageDrawable(null);
             }
             cardHolder.giftCard.setText(card.getCardName() + "(" + card.getSerialNumber() + ")");
-            cardHolder.cardSell.setText(String.valueOf(card.getPercentageOff()) + "%");
+            //cardHolder.cardSell.setText(String.valueOf(card.getPercentageOff()) + "%");
             cardHolder.cardValue.setText("$" + String.valueOf(card.getCardPrice()));
             cardHolder.cardPrice.setText("$" + String.valueOf(card.getCardValue()));
-            cardHolder.cardSell.setText(card.getStatusType()==2?card.getSellingPercentage():card.getSell()+"%");
-            cardHolder.listedOn.setText(card.getApproveDate().equalsIgnoreCase("00-00-0000")?"":card.getApproveDate());
-            cardHolder.soldOn.setText(card.getSoldOn().equalsIgnoreCase("00-00-0000")?"":card.getSoldOn());
+            cardHolder.cardSell.setText(card.getStatusType() == 2 ? card.getSellingPercentage() : card.getSell() + "%");
+            cardHolder.listedOn.setText(card.getApproveDate().equalsIgnoreCase("00-00-0000") ? "" : card.getApproveDate());
+            cardHolder.soldOn.setText(card.getSoldOn().equalsIgnoreCase("00-00-0000") ? "" : card.getSoldOn());
+            cardHolder.fund.setText(card.getYourEarning());
             cardHolder.status.setText(card.getApproveStatusName(card.getApproveStatus()));
+            setActions(cardHolder, card.getApproveStatus());
+            cardHolder.action_edit.setOnClickListener(new OnClick(card));
+            cardHolder.action_delete.setOnClickListener(new OnClick(card));
+            cardHolder.action_deny.setOnClickListener(new OnClick(card));
+            cardHolder.action_investigate.setOnClickListener(new OnClick(card));
+            cardHolder.action_need_review.setOnClickListener(new OnClick(card));
         } else if (holder instanceof LoadingHolder) {
             LoadingHolder loadingHolder = (LoadingHolder) holder;
             loadingHolder.progressBar.setIndeterminate(true);
+        }
+    }
+
+    private class OnClick implements View.OnClickListener {
+        private GiftCard giftCard;
+
+        public OnClick(GiftCard giftCard) {
+            this.giftCard = giftCard;
+        }
+
+        @Override
+        public void onClick(View v) {
+            AlertBox box = new AlertBox(context);
+            switch (v.getId()) {
+                case R.id.action_edit:
+                    Intent intent = new Intent(context, EditGiftCard.class);
+                    intent.putExtra(tags.GIFT_CARDS,giftCard);
+                    context.startActivity(intent);
+                    break;
+                case R.id.action_delete:
+                    Map<String, String> map = new HashMap<>();
+                    map.put(tags.USER_ACTION, tags.DELETE_GIFT_CARD);
+                    map.put(tags.USER_ID, active.getUser().getUserId() + "");
+                    map.put(tags.CARD_ID, giftCard.getGiftCardID() + "");
+                    dmrRequest.doPost(urls.getGiftCardInfo(), map, new DMRResult() {
+                        @Override
+                        public void onSuccess(JSONObject jsonObject) {
+                            try {
+                                if (jsonObject.has(tags.SUCCESS)) {
+                                    if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                                        int index = cardInfoList.indexOf(giftCard);
+                                        giftCard.setApproveStatus(5);
+                                        cardInfoList.set(index, giftCard);
+                                        MyListingAdapter.super.notifyDataSetChanged();
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Log.e(TAG, e.getMessage());
+                            }
+                        }
+
+                        @Override
+                        public void onError(VolleyError volleyError) {
+                            volleyError.printStackTrace();
+                            Log.e(TAG, volleyError.getMessage());
+                        }
+                    });
+                    break;
+                case R.id.action_deny:
+                    box.setTitle("Reason for card deny");
+                    box.setMessage(giftCard.getDenyReason());
+                    box.show();
+                    break;
+                case R.id.action_investigate:
+                    box.setTitle("Admin Comment");
+                    box.setMessage(giftCard.getDisputeResult());
+                    box.show();
+                    break;
+                case R.id.action_need_review:
+                    box.setTitle("Reason for needs review");
+                    box.setMessage(giftCard.getNeedReview());
+                    box.show();
+                    break;
+            }
+        }
+    }
+
+    private void setActions(CardHolder cardHolder, int status) {
+        cardHolder.action_edit.setVisibility(View.GONE);
+        cardHolder.action_delete.setVisibility(View.GONE);
+        cardHolder.action_deny.setVisibility(View.GONE);
+        cardHolder.action_investigate.setVisibility(View.GONE);
+        cardHolder.action_need_review.setVisibility(View.GONE);
+        cardHolder.action_divider.setVisibility(View.GONE);
+        switch (status) {
+            case 0:
+                    /* PROCESSING */
+                cardHolder.action_divider.setVisibility(View.VISIBLE);
+                cardHolder.action_edit.setVisibility(View.VISIBLE);
+                cardHolder.action_delete.setVisibility(View.VISIBLE);
+                break;
+            case 1:
+                    /* LISTED */
+                cardHolder.action_divider.setVisibility(View.VISIBLE);
+                cardHolder.action_edit.setVisibility(View.VISIBLE);
+                cardHolder.action_delete.setVisibility(View.VISIBLE);
+                break;
+            case 2:
+                    /* SOLD */
+                break;
+            case 3:
+                    /* SOLD  */
+                break;
+            case 4:
+                    /*  DENIED  */
+                cardHolder.action_divider.setVisibility(View.VISIBLE);
+                cardHolder.action_deny.setVisibility(View.VISIBLE);
+                break;
+            case 5:
+                    /*  DELETED */
+                break;
+            case 6:
+                    /*  Pending Shipment*/
+                break;
+            case 7:
+                    /*  Under Investigation*/
+                break;
+            case 8:
+                    /*  Investigate */
+                cardHolder.action_divider.setVisibility(View.VISIBLE);
+                cardHolder.action_investigate.setVisibility(View.VISIBLE);
+                break;
+            case 9:
+                    /*  Need Review */
+                cardHolder.action_divider.setVisibility(View.VISIBLE);
+                cardHolder.action_edit.setVisibility(View.VISIBLE);
+                cardHolder.action_delete.setVisibility(View.VISIBLE);
+                cardHolder.action_need_review.setVisibility(View.VISIBLE);
+                break;
         }
     }
 
@@ -157,5 +306,13 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public void setLoaded() {
         isLoading = false;
+    }
+
+    public void showToast(String message) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
+    public void removeAllItem(){
+        cardInfoList.clear();
+        notifyDataSetChanged();
     }
 }

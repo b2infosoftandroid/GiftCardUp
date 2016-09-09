@@ -5,10 +5,15 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
@@ -35,7 +40,7 @@ import java.util.Map;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MyListing extends Fragment {
+public class MyListing extends Fragment implements View.OnClickListener {
     private final static String TAG = MyListing.class.getName();
     private Urls urls;
     private Tags tags;
@@ -49,6 +54,10 @@ public class MyListing extends Fragment {
     boolean isLoading = false;
     boolean isMore = false;
     int loadMore = 0;
+    boolean isFilter = false;
+    EditText search;
+    Spinner type;
+    ImageButton action_search;
 
     public MyListing() {
 
@@ -84,7 +93,40 @@ public class MyListing extends Fragment {
             }
         });
         loadCards();
+        search = (EditText) mView.findViewById(R.id.search);
+        type = (Spinner) mView.findViewById(R.id.type);
+        action_search = (ImageButton) mView.findViewById(R.id.action_search);
+        action_search.setOnClickListener(this);
         return mView;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (R.id.action_search == v.getId()) {
+            filter_search();
+        }
+    }
+
+    private void filter_search() {
+        isFilter = false;
+        String search_keyword = search.getText().toString();
+        int position = type.getSelectedItemPosition();
+        search.setError(null);
+        if (TextUtils.isEmpty(search_keyword)) {
+            search.setError("Enter Keyword");
+            search.requestFocus();
+            return;
+        }
+        if (position == 0) {
+            return;
+        }
+        isFilter = true;
+        if (cardList.size() > 0) {
+            cardList.clear();
+            adapter.removeAllItem();
+        }
+        loadMore = 0;
+        loadCards();
     }
 
     private void loadCards() {
@@ -92,14 +134,19 @@ public class MyListing extends Fragment {
         map.put(tags.USER_ACTION, tags.GET_GIFT_CARD_BY_USER_ID);
         map.put(tags.USER_ID, active.getUser().getUserId() + "");
         map.put(tags.LOAD_MORE, String.valueOf(loadMore));
+        if (isFilter) {
+            map.put(tags.KEYWORD_TYPE, type.getSelectedItem().toString());
+            map.put(tags.KEYWORD_SEARCH, search.getText().toString());
+        }
         dmrRequest.doPost(urls.getGiftCardInfo(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
+                //Log.d(TAG, jsonObject.toString());
                 try {
                     if (jsonObject.has(tags.SUCCESS)) {
                         if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
                             if (jsonObject.has(tags.GIFT_CARDS)) {
-                                List<GiftCard> cards = new ArrayList<GiftCard>();
+                                List<GiftCard> cards = new ArrayList<>();
                                 JSONArray jsonArray = jsonObject.getJSONArray(tags.GIFT_CARDS);
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     GiftCard card = new GiftCard();

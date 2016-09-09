@@ -51,6 +51,8 @@ public class Tags {
     public final String ADD_GIFT_CARD = "add_gift_card";
     public final String GET_EARNING_PRICE = "get_earning_price";
     public final String GET_GIFT_CARD_BY_USER_ID = "get_gift_card_by_user_id";
+    public final String DELETE_GIFT_CARD = "delete_gift_card";
+    public final String EDIT_GIFT_CARD = "edit_gift_card";
 
 
     /* USER LOGIN SIGNUP */
@@ -121,6 +123,7 @@ public class Tags {
     public final String GIFT_CARD_BARCODE_IMG = "barcode_img";
     public final String GIFT_CARD_DENY_REASON = "deny_reason";
     public final String GIFT_CARD_NEED_REVIEW = "need_review";
+    public final String GIFT_CARD_DISPUTE_RESULT = "dispute_result";
 
 
     /////////////// USER PROFILE  ///////////////
@@ -151,6 +154,7 @@ public class Tags {
     public final String CARD_TYPE = "card_type";
     public final String TOTAL_SAVE = "total_save";
     public final String TOTAL_SOLD = "total_sold";
+    public final String CARD_ID = "card_id";
 
 
     /////////////  ID  ////////////////
@@ -225,6 +229,8 @@ public class Tags {
     public final String USER_IDENTIFICATION = "user_identification";
     public final String USER_BANK = "user_bank";
     public final String USER_SSN = "user_ssn";
+    public final String KEYWORD_TYPE = "keyword_type";
+    public final String KEYWORD_SEARCH = "keyword_search";
 
 
 

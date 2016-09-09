@@ -36,6 +36,19 @@ public class EditTextMaxFloat implements InputFilter{
             if(TextUtils.isEmpty(newVal)){
                 return null;
             }
+            if(newVal.indexOf('.')!=newVal.lastIndexOf('.')){
+                return null;
+            }
+            if(newVal.contains(".")){
+                int length = newVal.length();
+                int dot = newVal.indexOf(".");
+                if(length-dot>3){
+                    return "";
+                }
+            }
+            if(newVal.contains("%")){
+                newVal = newVal.replaceAll("%","");
+            }
             float input = Float.parseFloat(newVal);
             if (input<maxValue) {
                 return null;
@@ -44,7 +57,6 @@ public class EditTextMaxFloat implements InputFilter{
                 editText.setError(errorMessage);
                 editText.requestFocus();
             }
-            Log.d("MIN : ",input+" ,MAX"+maxValue);
         }catch (NumberFormatException e){
             e.printStackTrace();
             Log.d(EditTextMaxFloat.class.getName(),e.getMessage());

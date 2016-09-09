@@ -238,7 +238,6 @@ public class ImageRequest extends Request<Bitmap> {
         while ((n * 2) <= ratio) {
             n *= 2;
         }
-
         return (int) n;
     }
 }

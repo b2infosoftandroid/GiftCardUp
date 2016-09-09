@@ -37,6 +37,7 @@ public class GiftCard implements Serializable {
     private String denyReason;
     private String needReview;
     private int cardType;
+    private String disputeResult;
     public int getGiftCardID() {
         return giftCardID;
     }
@@ -273,6 +274,14 @@ public class GiftCard implements Serializable {
         this.cardType = cardType;
     }
 
+    public String getDisputeResult() {
+        return disputeResult;
+    }
+
+    public void setDisputeResult(String disputeResult) {
+        this.disputeResult = disputeResult;
+    }
+
     public GiftCard fromJSON(JSONObject object) {
         Tags tags = Tags.getInstance();
         GiftCard card = new GiftCard();
@@ -354,6 +363,9 @@ public class GiftCard implements Serializable {
             }
             if (object.has(tags.CARD_TYPE)) {
                 card.setCardType(object.getInt(tags.CARD_TYPE));
+            }
+            if (object.has(tags.GIFT_CARD_DISPUTE_RESULT)) {
+                card.setDisputeResult(object.getString(tags.GIFT_CARD_DISPUTE_RESULT));
             }
         } catch (JSONException e) {
             e.printStackTrace();
