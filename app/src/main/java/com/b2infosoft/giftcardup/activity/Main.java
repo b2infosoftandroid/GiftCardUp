@@ -30,6 +30,7 @@ import com.b2infosoft.giftcardup.fragments.BulkListing;
 import com.b2infosoft.giftcardup.fragments.Dashboard;
 import com.b2infosoft.giftcardup.fragments.MyListing;
 import com.b2infosoft.giftcardup.fragments.SellCards;
+import com.b2infosoft.giftcardup.fragments.ShippingCenter;
 import com.b2infosoft.giftcardup.fragments.SpeedySell;
 import com.b2infosoft.giftcardup.fragments.TinderWork;
 import com.b2infosoft.giftcardup.fragments.Profile;
@@ -255,6 +256,7 @@ public class Main extends GiftCardUp {
             switch (id) {
                 case R.id.menu_item_dashboard_left:
                     replaceFragment(new Dashboard());
+                    setTitle("Dashboard");
                     break;
                 case R.id.menu_item_sell_gift_cards:
                     replaceFragment(new SellCards());
@@ -269,10 +271,12 @@ public class Main extends GiftCardUp {
                     setTitle("Bulk Listing");
                     break;
                 case R.id.menu_item_speedy_sell:
-
+                    replaceFragment(new SpeedySell());
+                    setTitle("Speedy Sell");
                     break;
                 case R.id.menu_item_shipping_center:
-
+                    replaceFragment(new ShippingCenter());
+                    setTitle("Shipping Center");
                     break;
                 case R.id.menu_item_available_fund:
 

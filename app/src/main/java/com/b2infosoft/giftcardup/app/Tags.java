@@ -53,6 +53,7 @@ public class Tags {
     public final String GET_GIFT_CARD_BY_USER_ID = "get_gift_card_by_user_id";
     public final String DELETE_GIFT_CARD = "delete_gift_card";
     public final String EDIT_GIFT_CARD = "edit_gift_card";
+    public final String ADD_SPEEDY_GIFT_CARD = "add_speedy_gift_card";
 
 
     /* USER LOGIN SIGNUP */

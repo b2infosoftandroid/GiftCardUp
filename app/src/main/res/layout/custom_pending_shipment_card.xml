@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="5dp"
+        card_view:cardUseCompatPadding="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/layout_empty_background"
+            android:clickable="true"
+            android:descendantFocusability="blocksDescendants"
+            android:orientation="vertical"
+            android:paddingLeft="10dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/layout_empty_background"
+                android:clickable="true"
+                android:descendantFocusability="blocksDescendants"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="Gift Card"
+                    android:textAllCaps="true"
+                    android:textColor="@color/buy_card_text"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/company_card_gift_card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="10dp"
+                    android:text="Tata(3652)"
+                    android:textAllCaps="true"
+                    android:textColor="@color/buy_card_text"
+                    android:textStyle="normal" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha="0.5"
+                android:background="@color/divider" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/layout_empty_background"
+                android:clickable="true"
+                android:descendantFocusability="blocksDescendants"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="Sold On"
+                    android:textAllCaps="true"
+                    android:textColor="@color/buy_card_text"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/company_card_sold_on"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="10dp"
+                    android:text="07/09/2016"
+                    android:textAllCaps="true"
+                    android:textColor="@color/buy_card_text"
+                    android:textStyle="normal" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha="0.5"
+                android:background="@color/divider" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/layout_empty_background"
+                android:clickable="true"
+                android:descendantFocusability="blocksDescendants"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="Status"
+                    android:textAllCaps="true"
+                    android:textColor="@color/buy_card_text"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/company_card_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="10dp"
+                    android:text="Pending Shipment"
+                    android:textAllCaps="true"
+                    android:textColor="@color/buy_card_text"
+                    android:textStyle="normal" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha="0.5"
+                android:background="@color/divider" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_gravity="end"
+                android:text="+INFO"
+                android:textColor="@color/button_foreground"
+                android:background="@drawable/button_fill_background"
+                android:layout_margin="5dp"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/layout_empty_background"
+                    android:clickable="true"
+                    android:descendantFocusability="blocksDescendants"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="Owner"
+                        android:textAllCaps="true"
+                        android:textColor="@color/buy_card_text"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:id="@+id/company_card_owner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="10dp"
+                        android:text="Payal Kaushik"
+                        android:textAllCaps="true"
+                        android:textColor="@color/buy_card_text"
+                        android:textStyle="normal" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:alpha="0.5"
+                    android:background="@color/divider" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/layout_empty_background"
+                    android:clickable="true"
+                    android:descendantFocusability="blocksDescendants"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="Serial Number"
+                        android:textAllCaps="true"
+                        android:textColor="@color/buy_card_text"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:id="@+id/company_card_serial_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="10dp"
+                        android:text="56234782"
+                        android:textAllCaps="true"
+                        android:textColor="@color/buy_card_text"
+                        android:textStyle="normal" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:alpha="0.5"
+                    android:background="@color/divider" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/layout_empty_background"
+                    android:clickable="true"
+                    android:descendantFocusability="blocksDescendants"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="PIN"
+                        android:textAllCaps="true"
+                        android:textColor="@color/buy_card_text"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:id="@+id/company_card_pin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="10dp"
+                        android:text="2222"
+                        android:textAllCaps="true"
+                        android:textColor="@color/buy_card_text"
+                        android:textStyle="normal" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:alpha="0.5"
+                    android:background="@color/divider" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/layout_empty_background"
+                    android:clickable="true"
+                    android:descendantFocusability="blocksDescendants"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="Balance"
+                        android:textAllCaps="true"
+                        android:textColor="@color/buy_card_text"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:id="@+id/company_card_balance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="10dp"
+                        android:text="$2222"
+                        android:textAllCaps="true"
+                        android:textColor="@color/buy_card_text"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:alpha="0.5"
+                    android:background="@color/divider" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/layout_empty_background"
+                    android:clickable="true"
+                    android:descendantFocusability="blocksDescendants"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="Value"
+                        android:textAllCaps="true"
+                        android:textColor="@color/buy_card_text"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:id="@+id/company_card_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="10dp"
+                        android:text="$2222"
+                        android:textAllCaps="true"
+                        android:textColor="@color/buy_card_text"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:alpha="0.5"
+                    android:background="@color/divider" />
+<RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/layout_empty_background"
+                    android:clickable="true"
+                    android:descendantFocusability="blocksDescendants"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="Selling Percentage %"
+                        android:textAllCaps="true"
+                        android:textColor="@color/buy_card_text"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:id="@+id/company_card_selling_percentage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="10dp"
+                        android:text="5%"
+                        android:textAllCaps="true"
+                        android:textColor="@color/buy_card_text"
+                        android:textStyle="normal" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:alpha="0.5"
+                    android:background="@color/divider" />
+<RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/layout_empty_background"
+                    android:clickable="true"
+                    android:descendantFocusability="blocksDescendants"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="Type"
+                        android:textAllCaps="true"
+                        android:textColor="@color/buy_card_text"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:id="@+id/company_card_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="10dp"
+                        android:text="Speedy Sell"
+                        android:textAllCaps="true"
+                        android:textColor="@color/buy_card_text"
+                        android:textStyle="normal" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:alpha="0.5"
+                    android:background="@color/divider" />
+
+            </LinearLayout>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Request Shipping Label"
+                android:textColor="@color/button_foreground"
+                android:background="@drawable/button_fill_background"
+                android:layout_margin="20dp"
+                />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

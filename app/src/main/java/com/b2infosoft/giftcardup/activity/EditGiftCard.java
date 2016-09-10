@@ -202,6 +202,8 @@ public class EditGiftCard extends AppCompatActivity implements TextWatcher, View
                     float percentage = Float.parseFloat(per);
                     float earning = percentage * sell / 100;
                     your_earning.setText(format.getStringFloat(earning));
+                }else{
+                    your_earning.setText(null);
                 }
             } else {
                 if (!TextUtils.isEmpty(bb)) {
@@ -250,6 +252,8 @@ public class EditGiftCard extends AppCompatActivity implements TextWatcher, View
                         asking_price.addTextChangedListener(this);
                     }
                 }
+            }else{
+                your_earning.setText(null);
             }
         } else if (editable == asking_price.getEditableText()) {
             float bal = 0.0f;
@@ -272,6 +276,8 @@ public class EditGiftCard extends AppCompatActivity implements TextWatcher, View
                         selling_percentage.addTextChangedListener(this);
                     }
                 }
+            }else{
+                your_earning.setText(null);
             }
         }
     }

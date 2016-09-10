@@ -156,6 +156,8 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
                     getEarning();
                     asking_price.addTextChangedListener(this);
                 }
+            }else{
+                your_earning.setText(null);
             }
         } else if (editable == selling_percentage.getEditableText()) {
             float bal = 0.0f;
@@ -175,6 +177,8 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
                     getEarning();
                     asking_price.addTextChangedListener(this);
                 }
+            }else{
+                your_earning.setText(null);
             }
         } else if (editable == asking_price.getEditableText()) {
             float bal = 0.0f;
@@ -194,6 +198,8 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
                     getEarning();
                     selling_percentage.addTextChangedListener(this);
                 }
+            }else{
+                your_earning.setText(null);
             }
         }
     }
