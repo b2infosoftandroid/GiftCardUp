@@ -23,9 +23,12 @@
                     android:id="@+id/referral_url"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLines="3"
+                    android:maxLines="5"
                     android:singleLine="false"
                     android:hint="Referral URL?"
+                    android:background="@drawable/layout_border"
+                    android:lines="3"
+                    android:padding="5dp"
                     android:editable="false"
                     android:enabled="false"
                     android:textColor="@color/colorPrimaryDark"
@@ -36,6 +39,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="REFER A FRIEND"
+                android:background="@drawable/button_fill_background"
+                android:textColor="@color/button_foreground"
                 android:layout_margin="30dp"
                 />
         </LinearLayout>

@@ -16,6 +16,7 @@ import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.app.Format;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
+import com.b2infosoft.giftcardup.app.Validation;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
@@ -36,6 +37,7 @@ public class RecommendBrands extends Fragment implements View.OnClickListener,DM
     private Tags tags;
     private Active active;
     private Format format;
+    private Validation validation;
     DMRRequest dmrRequest;
     private Progress progress;
 
@@ -54,6 +56,7 @@ public class RecommendBrands extends Fragment implements View.OnClickListener,DM
         tags = Tags.getInstance();
         active = Active.getInstance(getActivity());
         format = Format.getInstance();
+        validation = Validation.getInstance();
         progress = new Progress(getActivity());
     }
 
@@ -97,6 +100,10 @@ public class RecommendBrands extends Fragment implements View.OnClickListener,DM
         if (TextUtils.isEmpty(phone)) {
             phone_number.setError("Please Fill Phone Number");
             phone_number.requestFocus();
+            if(validation.isMobileNumber(phone)){
+                phone_number.setError("Please Enter Correct Phone Number");
+                phone_number.requestFocus();
+            }
             return;
         }
 

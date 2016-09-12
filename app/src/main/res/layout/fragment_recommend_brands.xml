@@ -1,55 +1,79 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.b2infosoft.giftcardup.fragments.RecommendBrands">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="none"
-        >
+        android:scrollbars="none">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
+
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/edit_text_hint_text">
+
                 <EditText
                     android:id="@+id/company_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Company Name*"
-                    />
+                    android:inputType="text"
+                    android:textColor="@color/edit_text_text"/>
             </android.support.design.widget.TextInputLayout>
+
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/edit_text_hint_text"
+                android:layout_marginTop="@dimen/activity_horizontal_margin">
+
                 <EditText
                     android:id="@+id/website_link"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Website Link*"
-                    />
+                    android:inputType="text"
+                    android:textColor="@color/edit_text_text"/>
             </android.support.design.widget.TextInputLayout>
+
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/edit_text_hint_text"
+                android:layout_marginTop="@dimen/activity_horizontal_margin">
+
                 <EditText
                     android:id="@+id/phone_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Phone Number*"
-                    />
+                    android:inputType="number"
+                    android:textColor="@color/edit_text_text"/>
             </android.support.design.widget.TextInputLayout>
+
             <Button
                 android:id="@+id/brand_submit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
                 android:text="Submit"
-                />
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="@dimen/button_margin_top"
+                android:background="@drawable/button_fill_background"
+                android:textColor="@color/button_foreground"/>
         </LinearLayout>
     </ScrollView>
-</FrameLayout>
+</LinearLayout>
