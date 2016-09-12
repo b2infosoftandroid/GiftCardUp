@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.b2infosoft.giftcardup.fragments.BulkListing">
 
     <ScrollView
@@ -15,232 +19,170 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TableLayout
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:stretchColumns="0,1">
+                android:textColorHint="@color/edit_text_hint_text">
 
-                <TableRow
-                    android:layout_width="match_parent"
+                <AutoCompleteTextView
+                    android:id="@+id/brand_name"
+                    android:layout_width="fill_parent"
+                    android:layout_height="45dp"
+                    android:background="@drawable/layout_border"
+                    android:hint="Enter Brand Name" />
+            </android.support.design.widget.TextInputLayout>
+            <!--
+            <com.libaml.android.view.chip.ChipLayout
+                android:id="@+id/chip_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                custom:chipDrawable_="@drawable/round_corner_drawable"
+                custom:chipLayoutDrawable_="@drawable/edittext_theme_landing_page"
+                custom:chipPadding_="4dp"
+                custom:chipTextPadding_="2dp"
+                custom:deleteIcon_="@android:drawable/presence_offline"
+                custom:labelPosition_="left"
+                custom:textColor_="@android:color/black"
+                custom:textSize_="10dp"></com.libaml.android.view.chip.ChipLayout>
+                -->
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="E-Card" />
+
+            <ImageView
+                android:id="@+id/cardType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:src="@null" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/edit_text_hint_text"
+                android:layout_marginTop="@dimen/activity_horizontal_margin">
+
+                <EditText
+                    android:id="@+id/serial_number"
+                    android:layout_width="fill_parent"
+                    android:layout_height="45dp"
+                    android:background="@drawable/layout_border"
+                    android:enabled="false"
+                    android:hint="Serial Number"
+                    android:inputType="numberDecimal" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/edit_text_hint_text"
+                android:layout_marginTop="@dimen/activity_horizontal_margin">
+
+                <EditText
+                    android:id="@+id/card_pin"
+                    android:layout_width="fill_parent"
+                    android:layout_height="45dp"
+                    android:background="@drawable/layout_border"
+                    android:enabled="false"
+                    android:hint="PIN"
+                    android:inputType="numberDecimal" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/edit_text_hint_text"
+                android:layout_marginTop="@dimen/activity_horizontal_margin">
+
+                <EditText
+                    android:id="@+id/card_balance"
+                    android:layout_width="fill_parent"
+                    android:layout_height="45dp"
+                    android:background="@drawable/layout_border"
+                    android:drawableLeft="@drawable/ic_attach_money_24dp"
+                    android:enabled="false"
+                    android:hint="Balance"
+                    android:inputType="numberDecimal" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/edit_text_hint_text"
+                android:layout_marginTop="@dimen/activity_horizontal_margin">
+
+                <EditText
+                    android:id="@+id/selling_percentage"
+                    android:layout_width="fill_parent"
+                    android:layout_height="45dp"
+                    android:background="@drawable/layout_border"
+                    android:drawableRight="@drawable/ic_percentage"
+                    android:enabled="false"
+                    android:hint="Selling %"
+                    android:inputType="numberDecimal" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/edit_text_hint_text"
+                android:layout_marginTop="@dimen/activity_horizontal_margin">
+
+                <EditText
+                    android:id="@+id/asking_price"
+                    android:layout_width="fill_parent"
+                    android:layout_height="45dp"
+                    android:background="@drawable/layout_border"
+                    android:drawableLeft="@drawable/ic_attach_money_24dp"
+                    android:enabled="false"
+                    android:hint="Asking Price"
+                    android:inputType="numberDecimal" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/edit_text_hint_text"
+                android:layout_marginTop="@dimen/activity_horizontal_margin">
+
+                <EditText
+                    android:id="@+id/your_earning"
+                    android:layout_width="fill_parent"
+                    android:layout_height="45dp"
+                    android:background="@drawable/layout_border"
+                    android:drawableLeft="@drawable/ic_attach_money_24dp"
+                    android:hint="Your Earning"
+                    android:inputType="numberDecimal" />
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/button_margin_top"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/cancel"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
+                    android:background="@drawable/button_fill_background"
+                    android:text="Cancel"
+                    android:textColor="@color/button_foreground" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Gift Card's" />
-                    <AutoCompleteTextView
-                        android:id="@+id/brand_name"
-                        android:layout_width="fill_parent"
-                        android:layout_height="45dp"
-                        android:background="@drawable/layout_border"
-                        android:hint="Enter Brand Name"
-                        android:gravity="center" />
-                    <!--
-                    <com.libaml.android.view.chip.ChipLayout
-                        android:id="@+id/chip_layout"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        custom:chipDrawable_="@drawable/round_corner_drawable"
-                        custom:chipLayoutDrawable_="@drawable/edittext_theme_landing_page"
-                        custom:chipPadding_="4dp"
-                        custom:chipTextPadding_="2dp"
-                        custom:deleteIcon_="@android:drawable/presence_offline"
-                        custom:labelPosition_="left"
-                        custom:textColor_="@android:color/black"
-                        custom:textSize_="10dp"></com.libaml.android.view.chip.ChipLayout>
-                        -->
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
+                <Button
+                    android:id="@+id/save"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:background="@drawable/button_fill_background"
                     android:gravity="center"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="E-Card" />
-
-                        <ImageView
-                            android:id="@+id/cardType"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:src="@null"
-                            />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Serial Number" />
-
-                    <EditText
-                        android:id="@+id/serial_number"
-                        android:layout_width="fill_parent"
-                        android:layout_height="45dp"
-                        android:background="@drawable/layout_border"
-                        android:enabled="false"
-                        android:gravity="center"
-                        android:inputType="numberDecimal"
-                        android:hint="########" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="PIN" />
-
-                    <EditText
-                        android:id="@+id/card_pin"
-                        android:layout_width="fill_parent"
-                        android:layout_height="45dp"
-                        android:background="@drawable/layout_border"
-                        android:enabled="false"
-                        android:gravity="center"
-                        android:inputType="numberDecimal"
-
-                        android:hint="######" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Balance" />
-
-                    <EditText
-                        android:id="@+id/card_balance"
-                        android:layout_width="fill_parent"
-                        android:layout_height="45dp"
-                        android:background="@drawable/layout_border"
-                        android:enabled="false"
-                        android:drawableLeft="@drawable/ic_attach_money_24dp"
-                        android:gravity="center"
-                        android:inputType="numberDecimal"
-
-                        android:hint="00.00" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Selling %" />
-
-                    <EditText
-                        android:id="@+id/selling_percentage"
-                        android:layout_width="fill_parent"
-                        android:layout_height="45dp"
-                        android:background="@drawable/layout_border"
-                        android:enabled="false"
-                        android:gravity="center"
-                        android:hint="00.00"
-                        android:inputType="numberDecimal"
-                        android:drawableRight="@drawable/ic_percentage"
-                        />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Asking Price" />
-                    <EditText
-                        android:id="@+id/asking_price"
-                        android:layout_width="fill_parent"
-                        android:layout_height="45dp"
-                        android:background="@drawable/layout_border"
-                        android:drawableLeft="@drawable/ic_attach_money_24dp"
-                        android:gravity="center"
-                        android:inputType="numberDecimal"
-                        android:enabled="false"
-                        android:hint="00.00" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Your Earning" />
-
-                    <EditText
-                        android:id="@+id/your_earning"
-                        android:layout_width="fill_parent"
-                        android:layout_height="45dp"
-                        android:background="@drawable/layout_border"
-
-                        android:drawableLeft="@drawable/ic_attach_money_24dp"
-                        android:gravity="center"
-                        android:inputType="numberDecimal"
-                        android:hint="00.00" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
-
-                    <Button
-                        android:id="@+id/cancel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Cancel" />
-
-                    <Button
-                        android:id="@+id/save"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Save" />
-                </TableRow>
-            </TableLayout>
+                    android:text="Save"
+                    android:textColor="@color/button_foreground" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

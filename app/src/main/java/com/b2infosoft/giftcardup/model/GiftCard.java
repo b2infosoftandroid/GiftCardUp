@@ -14,6 +14,8 @@ public class GiftCard implements Serializable {
     private int giftCardID;
     private int readStatus;
     private int userID;
+    private int buyerId;
+    private String cardOwner;
     private int companyID;
     private int parentGiftCardID;
     private String cardName;
@@ -76,6 +78,22 @@ public class GiftCard implements Serializable {
 
     public void setParentGiftCardID(int parentGiftCardID) {
         this.parentGiftCardID = parentGiftCardID;
+    }
+
+    public int getBuyerId() {
+        return buyerId;
+    }
+
+    public void setBuyerId(int buyerId) {
+        this.buyerId = buyerId;
+    }
+
+    public String getCardOwner() {
+        return cardOwner;
+    }
+
+    public void setCardOwner(String cardOwner) {
+        this.cardOwner = cardOwner;
     }
 
     public String getCardName() {
@@ -366,6 +384,12 @@ public class GiftCard implements Serializable {
             }
             if (object.has(tags.GIFT_CARD_DISPUTE_RESULT)) {
                 card.setDisputeResult(object.getString(tags.GIFT_CARD_DISPUTE_RESULT));
+            }
+            if (object.has(tags.GIFT_CARD_CARD_OWNER)) {
+                card.setCardOwner(object.getString(tags.GIFT_CARD_CARD_OWNER));
+            }
+            if (object.has(tags.GIFT_CARD_BUYER_ID)) {
+                card.setBuyerId(object.getInt(tags.GIFT_CARD_BUYER_ID));
             }
         } catch (JSONException e) {
             e.printStackTrace();

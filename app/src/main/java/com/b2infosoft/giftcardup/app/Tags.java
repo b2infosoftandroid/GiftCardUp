@@ -54,6 +54,7 @@ public class Tags {
     public final String DELETE_GIFT_CARD = "delete_gift_card";
     public final String EDIT_GIFT_CARD = "edit_gift_card";
     public final String ADD_SPEEDY_GIFT_CARD = "add_speedy_gift_card";
+    public final String GET_PENDING_SHIPMENT_CARDS = "get_pending_shipment_cards";
 
 
     /* USER LOGIN SIGNUP */
@@ -100,6 +101,7 @@ public class Tags {
     public final String GIFT_CARD_GIFT_CARD_ID = "gift_card_id";
     public final String GIFT_CARD_READ_STATUS = "read_status";
     public final String GIFT_CARD_USER_ID = "user_id";
+    public final String GIFT_CARD_BUYER_ID = "buyer_id";
     public final String GIFT_CARD_COMPANY_ID = "company_id";
     public final String GIFT_CARD_PARENT_GIFT_CARD_ID = "parent_gift_card_id";
     public final String GIFT_CARD_CARD_NAME = "card_name";
@@ -116,6 +118,7 @@ public class Tags {
     public final String GIFT_CARD_SOLD_ON = "sold_on";
     public final String GIFT_CARD_CARD_DESCRIPTION = "card_description";
     public final String GIFT_CARD_CARD_IMG = "card_img";
+    public final String GIFT_CARD_CARD_OWNER = "card_owner";
     public final String GIFT_CARD_CARD_DISCOUNT = "card_discount";
     public final String GIFT_CARD_APPROVE_DATE = "approve_date";
     public final String GIFT_CARD_APPROVE_STATUS = "approve_status";
