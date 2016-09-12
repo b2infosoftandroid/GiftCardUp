@@ -55,6 +55,7 @@ public class Tags {
     public final String EDIT_GIFT_CARD = "edit_gift_card";
     public final String ADD_SPEEDY_GIFT_CARD = "add_speedy_gift_card";
     public final String GET_PENDING_SHIPMENT_CARDS = "get_pending_shipment_cards";
+    public final String ADD_COMPANY_BRANDS = "add_company_brands";
 
 
     /* USER LOGIN SIGNUP */

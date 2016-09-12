@@ -62,4 +62,7 @@ public class Urls {
     public String getAppAction(){
         return config.getServerAddress().concat("AppAction.php");
     }
+    public String getCompany(){
+        return config.getServerAddress().concat("Company.php");
+    }
 }
