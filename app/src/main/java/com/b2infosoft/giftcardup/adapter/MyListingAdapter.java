@@ -2,6 +2,7 @@ package com.b2infosoft.giftcardup.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -26,6 +27,7 @@ import com.b2infosoft.giftcardup.listener.OnLoadMoreListener;
 import com.b2infosoft.giftcardup.model.GiftCard;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
+import com.b2infosoft.giftcardup.volly.LruBitmapCache;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -81,20 +83,24 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public class CardHolder extends RecyclerView.ViewHolder {
         TextView giftCard;
-        ImageView cardType;
+        ImageView cardType,cardImage;
         TextView cardValue;
         TextView cardPrice;
         TextView cardSell;
         TextView listedOn;
         TextView soldOn;
         TextView fund;
+        CardView card1,card2;
         ImageView quickSell;
         TextView status;
         Button action_edit, action_delete, action_deny, action_need_review, action_investigate;
-        View action_divider;
+        //View action_divider;
 
         public CardHolder(View view) {
             super(view);
+            card1 = (CardView)view.findViewById(R.id.card_view1);
+            card2 = (CardView)view.findViewById(R.id.card_view2);
+            cardImage = (ImageView) view.findViewById(R.id.my_listing_card_image);
             giftCard = (TextView) view.findViewById(R.id.company_card_gift_card);
             cardType = (ImageView) view.findViewById(R.id.company_card_e_card);
             cardValue = (TextView) view.findViewById(R.id.company_card_card_value);
@@ -110,7 +116,7 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             action_deny = (Button) view.findViewById(R.id.action_deny);
             action_need_review = (Button) view.findViewById(R.id.action_need_review);
             action_investigate = (Button) view.findViewById(R.id.action_investigate);
-            action_divider = view.findViewById(R.id.action_divider);
+            //action_divider = view.findViewById(R.id.action_divider);
         }
     }
 
@@ -146,6 +152,8 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             final GiftCard card = cardInfoList.get(position);
             final CardHolder cardHolder = (CardHolder) holder;
 
+            final String url = config.getGiftCardImageAddress().concat(card.getCardImage());
+            LruBitmapCache.loadCacheImage(context,cardHolder.cardImage,url,TAG);
             /* E-Card */
             if (card.getCardType() == 2) {
                 cardHolder.cardType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_check_24dp));
@@ -168,6 +176,12 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             cardHolder.fund.setText(card.getYourEarning());
             cardHolder.status.setText(card.getApproveStatusName(card.getApproveStatus()));
             setActions(cardHolder, card.getApproveStatus());
+            cardHolder.card1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    cardHolder.card2.setVisibility(View.VISIBLE);
+                }
+            });
             cardHolder.action_edit.setOnClickListener(new OnClick(card));
             cardHolder.action_delete.setOnClickListener(new OnClick(card));
             cardHolder.action_deny.setOnClickListener(new OnClick(card));
@@ -250,17 +264,17 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         cardHolder.action_deny.setVisibility(View.GONE);
         cardHolder.action_investigate.setVisibility(View.GONE);
         cardHolder.action_need_review.setVisibility(View.GONE);
-        cardHolder.action_divider.setVisibility(View.GONE);
+        //cardHolder.action_divider.setVisibility(View.GONE);
         switch (status) {
             case 0:
                     /* PROCESSING */
-                cardHolder.action_divider.setVisibility(View.VISIBLE);
+                //cardHolder.action_divider.setVisibility(View.VISIBLE);
                 cardHolder.action_edit.setVisibility(View.VISIBLE);
                 cardHolder.action_delete.setVisibility(View.VISIBLE);
                 break;
             case 1:
                     /* LISTED */
-                cardHolder.action_divider.setVisibility(View.VISIBLE);
+                //cardHolder.action_divider.setVisibility(View.VISIBLE);
                 cardHolder.action_edit.setVisibility(View.VISIBLE);
                 cardHolder.action_delete.setVisibility(View.VISIBLE);
                 break;
@@ -272,7 +286,7 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 break;
             case 4:
                     /*  DENIED  */
-                cardHolder.action_divider.setVisibility(View.VISIBLE);
+                //cardHolder.action_divider.setVisibility(View.VISIBLE);
                 cardHolder.action_deny.setVisibility(View.VISIBLE);
                 break;
             case 5:
@@ -286,12 +300,12 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 break;
             case 8:
                     /*  Investigate */
-                cardHolder.action_divider.setVisibility(View.VISIBLE);
+                //cardHolder.action_divider.setVisibility(View.VISIBLE);
                 cardHolder.action_investigate.setVisibility(View.VISIBLE);
                 break;
             case 9:
                     /*  Need Review */
-                cardHolder.action_divider.setVisibility(View.VISIBLE);
+                //cardHolder.action_divider.setVisibility(View.VISIBLE);
                 cardHolder.action_edit.setVisibility(View.VISIBLE);
                 cardHolder.action_delete.setVisibility(View.VISIBLE);
                 cardHolder.action_need_review.setVisibility(View.VISIBLE);
