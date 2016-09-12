@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -90,7 +91,9 @@ public class ShipmentCardRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
         TextView sellingPercent;
         TextView type;
         TextView status;
-        Button shipmentLabel;
+        int count = 0;
+        LinearLayout layout;
+        Button shipmentLabel,info;
         View action_divider;
 
         public CardHolder(View view) {
@@ -105,7 +108,22 @@ public class ShipmentCardRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
             value = (TextView) view.findViewById(R.id.company_card_value);
             sellingPercent = (TextView) view.findViewById(R.id.company_card_selling_percentage);
             type = (TextView) view.findViewById(R.id.company_card_type);
+            layout = (LinearLayout)view.findViewById(R.id.layout_2);
 
+            info = (Button) view.findViewById(R.id.info_btn);
+            info.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    count = count + 1;
+                    if(count % 2 != 0) {
+                        info.setText("- INFO");
+                        layout.setVisibility(View.VISIBLE);
+                    }else {
+                        info.setText("+ INFO");
+                        layout.setVisibility(View.GONE);
+                    }
+                }
+            });
             shipmentLabel = (Button) view.findViewById(R.id.shipment_label_btn);
         }
     }
