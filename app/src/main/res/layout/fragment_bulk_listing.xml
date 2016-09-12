@@ -26,10 +26,11 @@
 
                 <AutoCompleteTextView
                     android:id="@+id/brand_name"
-                    android:layout_width="fill_parent"
-                    android:layout_height="45dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/layout_border"
-                    android:hint="Enter Brand Name" />
+                    android:hint="Enter Brand Name"
+                    android:padding="10dp" />
             </android.support.design.widget.TextInputLayout>
             <!--
             <com.libaml.android.view.chip.ChipLayout
@@ -46,116 +47,132 @@
                 custom:textSize_="10dp"></com.libaml.android.view.chip.ChipLayout>
                 -->
 
-
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="E-Card" />
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:background="@drawable/layout_border"
+                android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/cardType"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:src="@null" />
+                <TextView
+                    android:id="@+id/e_card_img_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="E-Card"
+                    android:padding="10dp" />
+
+                <ImageView
+                    android:id="@+id/cardType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:src="@null" />
+            </LinearLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="@color/edit_text_hint_text"
-                android:layout_marginTop="@dimen/activity_horizontal_margin">
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:textColorHint="@color/edit_text_hint_text">
 
                 <EditText
                     android:id="@+id/serial_number"
-                    android:layout_width="fill_parent"
-                    android:layout_height="45dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/layout_border"
                     android:enabled="false"
                     android:hint="Serial Number"
-                    android:inputType="numberDecimal" />
+                    android:inputType="numberDecimal"
+                    android:padding="10dp" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="@color/edit_text_hint_text"
-                android:layout_marginTop="@dimen/activity_horizontal_margin">
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:textColorHint="@color/edit_text_hint_text">
 
                 <EditText
                     android:id="@+id/card_pin"
-                    android:layout_width="fill_parent"
-                    android:layout_height="45dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/layout_border"
                     android:enabled="false"
                     android:hint="PIN"
-                    android:inputType="numberDecimal" />
+                    android:inputType="numberDecimal"
+                    android:padding="10dp" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="@color/edit_text_hint_text"
-                android:layout_marginTop="@dimen/activity_horizontal_margin">
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:textColorHint="@color/edit_text_hint_text">
 
                 <EditText
                     android:id="@+id/card_balance"
-                    android:layout_width="fill_parent"
-                    android:layout_height="45dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/layout_border"
                     android:drawableLeft="@drawable/ic_attach_money_24dp"
                     android:enabled="false"
                     android:hint="Balance"
-                    android:inputType="numberDecimal" />
+                    android:inputType="numberDecimal"
+                    android:padding="10dp" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="@color/edit_text_hint_text"
-                android:layout_marginTop="@dimen/activity_horizontal_margin">
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:textColorHint="@color/edit_text_hint_text">
 
                 <EditText
                     android:id="@+id/selling_percentage"
-                    android:layout_width="fill_parent"
-                    android:layout_height="45dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/layout_border"
                     android:drawableRight="@drawable/ic_percentage"
                     android:enabled="false"
                     android:hint="Selling %"
-                    android:inputType="numberDecimal" />
+                    android:inputType="numberDecimal"
+                    android:padding="10dp" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="@color/edit_text_hint_text"
-                android:layout_marginTop="@dimen/activity_horizontal_margin">
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:textColorHint="@color/edit_text_hint_text">
 
                 <EditText
                     android:id="@+id/asking_price"
-                    android:layout_width="fill_parent"
-                    android:layout_height="45dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/layout_border"
                     android:drawableLeft="@drawable/ic_attach_money_24dp"
                     android:enabled="false"
                     android:hint="Asking Price"
-                    android:inputType="numberDecimal" />
+                    android:inputType="numberDecimal"
+                    android:padding="10dp" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="@color/edit_text_hint_text"
-                android:layout_marginTop="@dimen/activity_horizontal_margin">
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:textColorHint="@color/edit_text_hint_text">
 
                 <EditText
                     android:id="@+id/your_earning"
-                    android:layout_width="fill_parent"
-                    android:layout_height="45dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/layout_border"
                     android:drawableLeft="@drawable/ic_attach_money_24dp"
                     android:hint="Your Earning"
-                    android:inputType="numberDecimal" />
+                    android:inputType="numberDecimal"
+                    android:padding="10dp" />
             </android.support.design.widget.TextInputLayout>
 
             <LinearLayout

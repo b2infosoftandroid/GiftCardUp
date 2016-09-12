@@ -68,6 +68,7 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
     ChipLayout chipLayout;
     AutoCompleteTextView brand_name;
     ImageView cardType;
+    TextView textView;
     EditText serial_number, card_pin, card_balance, selling_percentage, asking_price, your_earning;
     Button cancel, save;
     boolean itemSelected = false;
@@ -110,6 +111,7 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
             }
         });
         cardType = (ImageView) mView.findViewById(R.id.cardType);
+        textView = (TextView)mView.findViewById(R.id.e_card_img_text);
         serial_number = (EditText) mView.findViewById(R.id.serial_number);
         card_pin = (EditText) mView.findViewById(R.id.card_pin);
         card_balance = (EditText) mView.findViewById(R.id.card_balance);
@@ -336,6 +338,7 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
 //                Toast.makeText(getContext(),merchant.getCardType(),Toast.LENGTH_SHORT).show();
                 if (merchant.getCardType() == 2) {
                     ///  E-CARD
+                    textView.setVisibility(View.GONE);
                     cardType.setImageDrawable(getResources().getDrawable(R.drawable.ic_check_24dp));
                 } else if (merchant.getCardType() == 1) {
                     /// PHYSICAL CARD
