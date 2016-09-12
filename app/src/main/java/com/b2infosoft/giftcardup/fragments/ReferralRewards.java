@@ -58,6 +58,12 @@ public class ReferralRewards extends Fragment implements View.OnClickListener,DM
         mView= inflater.inflate(R.layout.fragment_referral_rewards, container, false);
         referral_url = (EditText) mView.findViewById(R.id.referral_url);
         referral_url.setText(urls.getReferralURL(active.getUser().getReferralCode()));
+        referral_url.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return false;
+            }
+        });
         action_referral = (Button) mView.findViewById(R.id.action_refer);
         action_referral.setOnClickListener(this);
         return mView;

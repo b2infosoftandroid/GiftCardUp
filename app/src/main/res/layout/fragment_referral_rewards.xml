@@ -31,7 +31,7 @@
                     android:padding="5dp"
                     android:editable="false"
                     android:enabled="false"
-                    android:textColor="@color/colorPrimaryDark"
+                    android:textColor="@color/edit_text_text"
                     />
             </android.support.design.widget.TextInputLayout>
             <Button
