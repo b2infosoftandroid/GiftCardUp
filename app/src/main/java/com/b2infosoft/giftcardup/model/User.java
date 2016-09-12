@@ -13,7 +13,7 @@ import java.io.Serializable;
  * Created by rajesh on 8/11/2016.
  */
 public class User implements Serializable {
-    private int userId;
+    private String userId;
     private int employeeId;
     private int userType;
     private String firstName;
@@ -40,12 +40,13 @@ public class User implements Serializable {
     private String payPalId;
     private String totalSold;
     private String totalSave;
+    private String referralCode;
 
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
@@ -257,12 +258,20 @@ public class User implements Serializable {
         this.totalSave = totalSave;
     }
 
+    public String getReferralCode() {
+        return referralCode;
+    }
+
+    public void setReferralCode(String referralCode) {
+        this.referralCode = referralCode;
+    }
+
     public static User fromJSON(JSONObject object) {
         Tags tags = Tags.getInstance();
         User user = new User();
         try {
             if (object.has(tags.USER_ID)) {
-                user.setUserId(object.getInt(tags.USER_ID));
+                user.setUserId(object.getString(tags.USER_ID));
             }
             if (object.has(tags.EMPLOYEE_ID)) {
                 user.setEmployeeId(object.getInt(tags.EMPLOYEE_ID));
@@ -342,6 +351,9 @@ public class User implements Serializable {
             }
             if (object.has(tags.TOTAL_SOLD)) {
                 user.setTotalSold(object.getString(tags.TOTAL_SOLD));
+            }
+            if (object.has(tags.REFERRAL_CODE)) {
+                user.setReferralCode(object.getString(tags.REFERRAL_CODE));
             }
         } catch (JSONException e) {
             e.printStackTrace();

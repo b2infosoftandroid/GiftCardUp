@@ -1,7 +1,10 @@
 package com.b2infosoft.giftcardup.app;
 
+import android.util.Base64;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
@@ -53,16 +56,24 @@ public class Urls {
             return path;
         }
     }
-    public String getUserInfo(){
+
+    public String getUserInfo() {
         return config.getServerAddress().concat("UserInfo.php");
     }
-    public String getGiftCardInfo(){
+
+    public String getReferralURL(String code) {
+        return config.getReferralAddress().concat(code);
+    }
+
+    public String getGiftCardInfo() {
         return config.getServerAddress().concat("GiftCardInfo.php");
     }
-    public String getAppAction(){
+
+    public String getAppAction() {
         return config.getServerAddress().concat("AppAction.php");
     }
-    public String getCompany(){
+
+    public String getCompany() {
         return config.getServerAddress().concat("Company.php");
     }
 }

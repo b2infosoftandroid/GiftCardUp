@@ -22,6 +22,7 @@ public class Tags {
     public final String SORT_BY = "sort_by";
     public final String CATEGORIES_ID = "categories_id";
     public final String SELECTED_TAB = "selected_tab";
+    public final String REFERRAL_CODE = "referral_code";
 
     public final int SUSPEND = 2;
     public final int PASS = 1;
@@ -236,7 +237,6 @@ public class Tags {
     public final String USER_SSN = "user_ssn";
     public final String KEYWORD_TYPE = "keyword_type";
     public final String KEYWORD_SEARCH = "keyword_search";
-
 
 
     public final String EARNING_PRICE = "earning_price";

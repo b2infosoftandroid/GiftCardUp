@@ -30,6 +30,7 @@ import com.b2infosoft.giftcardup.fragments.BulkListing;
 import com.b2infosoft.giftcardup.fragments.Dashboard;
 import com.b2infosoft.giftcardup.fragments.MyListing;
 import com.b2infosoft.giftcardup.fragments.RecommendBrands;
+import com.b2infosoft.giftcardup.fragments.ReferralRewards;
 import com.b2infosoft.giftcardup.fragments.SellCards;
 import com.b2infosoft.giftcardup.fragments.ShippingCenter;
 import com.b2infosoft.giftcardup.fragments.SpeedySell;
@@ -290,7 +291,8 @@ public class Main extends GiftCardUp {
                     setTitle("Recommend Brands");
                     break;
                 case R.id.menu_item_referral_rewards:
-
+                    replaceFragment(new ReferralRewards());
+                    setTitle("Referral Rewards");
                     break;
                 case R.id.menu_item_my_account:
                     /*
