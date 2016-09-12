@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
@@ -19,7 +19,8 @@
             android:clickable="true"
             android:descendantFocusability="blocksDescendants"
             android:orientation="vertical"
-            android:paddingLeft="10dp">
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -130,20 +131,23 @@
                 android:background="@color/divider" />
 
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:id="@+id/info_btn"
+                android:layout_width="60dp"
+                android:layout_height="25dp"
                 android:layout_gravity="end"
+                android:textAllCaps="true"
                 android:text="+INFO"
-                android:textColor="@color/button_foreground"
-                android:background="@drawable/button_fill_background"
+                android:background="@drawable/layout_border"
+                android:textColor="@color/app_background"
                 android:layout_margin="5dp"
                 />
 
             <LinearLayout
+                android:id="@+id/layout_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
