@@ -18,44 +18,34 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TableLayout
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:stretchColumns="0,1">
+                android:textColorHint="@color/edit_text_hint_text">
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Gift Card's" />
                     <AutoCompleteTextView
                         android:id="@+id/brand_name"
-                        android:layout_width="fill_parent"
-                        android:layout_height="45dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/layout_border"
                         android:hint="Enter Brand Name"
                         android:editable="false"
-                        android:enabled="false"
-                        android:gravity="center" />
-                </TableRow>
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
+                        android:padding="10dp"
+                        android:enabled="false" />
+                </android.support.design.widget.TextInputLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:background="@drawable/layout_border"
+                android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="E-Card" />
+                <TextView
+                    android:id="@+id/e_card_img_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="E-Card"
+                    android:padding="10dp" />
 
                     <ImageView
                         android:id="@+id/cardType"
@@ -63,201 +53,157 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:src="@null"
-                        />
-                </TableRow>
+                        android:padding="10dp"/>
+                </LinearLayout>
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Serial Number" />
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:textColorHint="@color/edit_text_hint_text">
 
                     <EditText
                         android:id="@+id/serial_number"
-                        android:layout_width="fill_parent"
-                        android:layout_height="45dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/layout_border"
                         android:enabled="true"
-                        android:gravity="center"
+                        android:padding="10dp"
                         android:inputType="numberDecimal"
-                        android:hint="########" />
-                </TableRow>
+                        android:hint="Serial Number" />
+                </android.support.design.widget.TextInputLayout>
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="PIN" />
-
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:textColorHint="@color/edit_text_hint_text">
                     <EditText
                         android:id="@+id/card_pin"
-                        android:layout_width="fill_parent"
-                        android:layout_height="45dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/layout_border"
                         android:enabled="true"
-                        android:gravity="center"
+                        android:padding="10dp"
                         android:inputType="numberDecimal"
-
-                        android:hint="######" />
-                </TableRow>
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Discription" />
-
+                        android:hint="PIN" />
+               </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:textColorHint="@color/edit_text_hint_text">
                     <EditText
                         android:id="@+id/card_description"
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/layout_border"
                         android:enabled="true"
                         android:gravity="start"
-                        android:padding="5dp"
+                        android:padding="10dp"
                         android:inputType="textMultiLine"
                         android:minLines="3"
                         android:maxLines="5"
                         android:hint="Discription..." />
-                </TableRow>
+              </android.support.design.widget.TextInputLayout>
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Balance" />
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:textColorHint="@color/edit_text_hint_text">
 
                     <EditText
                         android:id="@+id/card_balance"
-                        android:layout_width="fill_parent"
-                        android:layout_height="45dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/layout_border"
                         android:enabled="true"
                         android:drawableLeft="@drawable/ic_attach_money_24dp"
-                        android:gravity="center"
+                        android:padding="10dp"
                         android:inputType="numberDecimal"
+                        android:hint="Balance" />
+                </android.support.design.widget.TextInputLayout>
 
-                        android:hint="00.00" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Selling %" />
-
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:textColorHint="@color/edit_text_hint_text">
                     <EditText
                         android:id="@+id/selling_percentage"
-                        android:layout_width="fill_parent"
-                        android:layout_height="45dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/layout_border"
                         android:enabled="true"
-                        android:gravity="center"
-                        android:hint="00.00"
+                        android:padding="10dp"
+                        android:hint="Selling %"
                         android:inputType="numberDecimal"
                         android:drawableRight="@drawable/ic_percentage"
                         />
-                </TableRow>
+               </android.support.design.widget.TextInputLayout>
 
-                <TableRow
-                    android:id="@+id/view_asking_price"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Asking Price" />
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:textColorHint="@color/edit_text_hint_text">
                     <EditText
                         android:id="@+id/asking_price"
-                        android:layout_width="fill_parent"
-                        android:layout_height="45dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/layout_border"
                         android:drawableLeft="@drawable/ic_attach_money_24dp"
-                        android:gravity="center"
+                        android:padding="10dp"
                         android:inputType="numberDecimal"
                         android:enabled="true"
-                        android:hint="00.00" />
-                </TableRow>
+                        android:hint="Asking Price" />
+                </android.support.design.widget.TextInputLayout>
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Your Earning" />
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:textColorHint="@color/edit_text_hint_text">
 
                     <EditText
                         android:id="@+id/your_earning"
-                        android:layout_width="fill_parent"
-                        android:layout_height="45dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/layout_border"
                         android:drawableLeft="@drawable/ic_attach_money_24dp"
-                        android:gravity="center"
+                        android:padding="10dp"
                         android:editable="false"
                         android:enabled="false"
                         android:inputType="numberDecimal"
-                        android:hint="00.00" />
-                </TableRow>
+                        android:hint="Your Earning" />
+               </android.support.design.widget.TextInputLayout>
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/button_margin_top"
+                android:gravity="center"
+                android:orientation="horizontal">
 
                     <Button
                         android:id="@+id/cancel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Cancel" />
+                        android:text="Cancel"
+                        android:background="@drawable/button_fill_background"
+                        android:textColor="@color/button_foreground"/>
 
                     <Button
                         android:id="@+id/save"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="Save" />
-                </TableRow>
-            </TableLayout>
+                        android:text="Save"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:background="@drawable/button_fill_background"
+                        android:textColor="@color/button_foreground"/>
+                </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

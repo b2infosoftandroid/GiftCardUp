@@ -49,7 +49,7 @@ public class EditGiftCard extends AppCompatActivity implements TextWatcher, View
     ImageView cardType;
     EditText serial_number, card_pin, card_balance, selling_percentage, asking_price, your_earning, card_description;
     Button cancel, save;
-    View mAskingPrice;
+    //View mAskingPrice;
     boolean itemSelected = false;
     private String shipping_charge;
     private final String ERROR_MESSAGE_ASKING_PRICE = "Must be less than Balance";
@@ -101,7 +101,7 @@ public class EditGiftCard extends AppCompatActivity implements TextWatcher, View
         save = (Button) findViewById(R.id.save);
         save.setOnClickListener(this);
 
-        mAskingPrice = findViewById(R.id.view_asking_price);
+       // mAskingPrice = findViewById(R.id.view_asking_price);
     }
 
     private void setOldData(GiftCard oldData) {
@@ -129,10 +129,10 @@ public class EditGiftCard extends AppCompatActivity implements TextWatcher, View
         }
         if (oldData.getStatusType() == 2) {
             selling_percentage.setEnabled(false);
-            mAskingPrice.setVisibility(View.GONE);
+           // mAskingPrice.setVisibility(View.GONE);
         } else {
             selling_percentage.setEnabled(true);
-            mAskingPrice.setVisibility(View.VISIBLE);
+            //mAskingPrice.setVisibility(View.VISIBLE);
         }
 
         Gson gson = new Gson();

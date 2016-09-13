@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -93,7 +94,7 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         CardView card1,card2;
         ImageView quickSell;
         TextView status;
-        Button action_edit, action_delete, action_deny, action_need_review, action_investigate;
+        ImageView action_edit, action_delete, action_deny, action_need_review, action_investigate;
         //View action_divider;
 
         public CardHolder(View view) {
@@ -111,11 +112,11 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             fund = (TextView) view.findViewById(R.id.company_card_fund);
             quickSell = (ImageView) view.findViewById(R.id.company_card_quick_sell);
             status = (TextView) view.findViewById(R.id.company_card_status);
-            action_edit = (Button) view.findViewById(R.id.action_edit);
-            action_delete = (Button) view.findViewById(R.id.action_delete);
-            action_deny = (Button) view.findViewById(R.id.action_deny);
-            action_need_review = (Button) view.findViewById(R.id.action_need_review);
-            action_investigate = (Button) view.findViewById(R.id.action_investigate);
+            action_edit = (ImageView) view.findViewById(R.id.action_edit);
+            action_delete = (ImageView) view.findViewById(R.id.action_delete);
+            action_deny = (ImageView) view.findViewById(R.id.action_deny);
+            action_need_review = (ImageView) view.findViewById(R.id.action_need_review);
+            action_investigate = (ImageView) view.findViewById(R.id.action_investigate);
             //action_divider = view.findViewById(R.id.action_divider);
         }
     }

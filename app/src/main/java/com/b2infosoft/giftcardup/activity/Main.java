@@ -36,6 +36,7 @@ import com.b2infosoft.giftcardup.fragments.ShippingCenter;
 import com.b2infosoft.giftcardup.fragments.SpeedySell;
 import com.b2infosoft.giftcardup.fragments.TinderWork;
 import com.b2infosoft.giftcardup.fragments.Profile;
+import com.b2infosoft.giftcardup.fragments.WithdrawalHistory;
 import com.b2infosoft.giftcardup.fragments.profile.BankInformation;
 import com.b2infosoft.giftcardup.fragments.profile.Identification;
 import com.b2infosoft.giftcardup.fragments.profile.SsnEin;
@@ -284,7 +285,8 @@ public class Main extends GiftCardUp {
 
                     break;
                 case R.id.menu_item_withdrawal_history:
-
+                     replaceFragment(new WithdrawalHistory());
+                    setTitle("Withdrawal History");
                     break;
                 case R.id.menu_item_recommend_brand:
                     replaceFragment(new RecommendBrands());

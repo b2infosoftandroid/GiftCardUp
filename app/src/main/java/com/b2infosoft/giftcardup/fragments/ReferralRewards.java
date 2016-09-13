@@ -1,6 +1,9 @@
 package com.b2infosoft.giftcardup.fragments;
 
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
@@ -37,6 +41,7 @@ public class ReferralRewards extends Fragment implements View.OnClickListener,DM
     private Progress progress;
     /* UI Controls View */
     private View mView;
+    private Context context;
     private EditText referral_url;
     private Button action_referral;
     public ReferralRewards() {
@@ -56,11 +61,16 @@ public class ReferralRewards extends Fragment implements View.OnClickListener,DM
         // Inflate the layout for this fragment
         init();
         mView= inflater.inflate(R.layout.fragment_referral_rewards, container, false);
-        referral_url = (EditText) mView.findViewById(R.id.referral_url);
+        referral_url = (EditText) mView.findViewById(R.id.refer_url);
         referral_url.setText(urls.getReferralURL(active.getUser().getReferralCode()));
         referral_url.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+                Toast.makeText(getContext(),"hello",Toast.LENGTH_SHORT).show();
+                ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                String getstring = referral_url.getText().toString();
+                ClipData clip = ClipData.newPlainText("Copy to clipboard", getstring);
+                clipboard.setPrimaryClip(clip);
                 return false;
             }
         });
