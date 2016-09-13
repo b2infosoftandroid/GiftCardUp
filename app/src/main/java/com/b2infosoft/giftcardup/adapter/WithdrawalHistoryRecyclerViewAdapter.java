@@ -167,7 +167,7 @@ public class WithdrawalHistoryRecyclerViewAdapter extends RecyclerView.Adapter<R
                     dialog.setTitle("Available Funds");
                     dialog.setContentView(R.layout.custom_dialog_history);
                    final RecyclerView  recyclerView = (RecyclerView) dialog.findViewById(R.id.recycler_view);
-
+                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     Map<String, String> map = new HashMap<>();
                     map.put(tags.USER_ACTION, tags.WITHDRAWAL_HISTORY_VIEW);
                     map.put(tags.WITHDRAWAL_PAYMENT_ID, card.getPaymentIds() + "");
@@ -185,7 +185,7 @@ public class WithdrawalHistoryRecyclerViewAdapter extends RecyclerView.Adapter<R
                                                 GetWithdrawHistory card = new GetWithdrawHistory();
                                                 cards.add(card.fromJSON(jsonArray.getJSONObject(i)));
                                             }
-                                            adapter = new HistoryDialogBoxAdapter(context, cards, recyclerView);
+                                            adapter = new HistoryDialogBoxAdapter(context, cards);
                                             recyclerView.setAdapter(adapter);
 
                                         }
