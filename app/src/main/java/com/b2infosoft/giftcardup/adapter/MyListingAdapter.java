@@ -180,7 +180,7 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             cardHolder.card1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    cardHolder.card2.setVisibility(View.VISIBLE);
+                    cardHolder.card2.setVisibility(cardHolder.card2.getVisibility()==View.VISIBLE?View.GONE:View.VISIBLE);
                 }
             });
             cardHolder.action_edit.setOnClickListener(new OnClick(card));
