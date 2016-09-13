@@ -1,8 +1,10 @@
 package com.b2infosoft.giftcardup.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.app.Config;
 import com.b2infosoft.giftcardup.app.Tags;
@@ -20,8 +23,16 @@ import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.listener.OnLoadMoreListener;
 import com.b2infosoft.giftcardup.model.GetWithdrawHistory;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
+import com.b2infosoft.giftcardup.volly.DMRResult;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class WithdrawalHistoryRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final String TAG = WithdrawalHistoryRecyclerViewAdapter.class.getName();
@@ -34,6 +45,7 @@ public class WithdrawalHistoryRecyclerViewAdapter extends RecyclerView.Adapter<R
     private Context context;
     private List<GetWithdrawHistory> cardInfoList;
     private Config config;
+    HistoryDialogBoxAdapter adapter;
     private Tags tags;
     private DMRRequest dmrRequest;
     private Urls urls;
@@ -151,6 +163,48 @@ public class WithdrawalHistoryRecyclerViewAdapter extends RecyclerView.Adapter<R
                 @Override
                 public void onClick(View v) {
 
+                    final Dialog dialog = new Dialog(context);
+                    dialog.setTitle("Available Funds");
+                    dialog.setContentView(R.layout.custom_dialog_history);
+                   final RecyclerView  recyclerView = (RecyclerView) dialog.findViewById(R.id.recycler_view);
+
+                    Map<String, String> map = new HashMap<>();
+                    map.put(tags.USER_ACTION, tags.WITHDRAWAL_HISTORY_VIEW);
+                    map.put(tags.WITHDRAWAL_PAYMENT_ID, card.getPaymentIds() + "");
+                    dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
+                        @Override
+                        public void onSuccess(JSONObject jsonObject) {
+                            Log.d("history", jsonObject.toString());
+                            try {
+                                if (jsonObject.has(tags.SUCCESS)) {
+                                    if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                                        if (jsonObject.has(tags.WITHDRAWAL_HISTORY)) {
+                                            List<GetWithdrawHistory> cards = new ArrayList<>();
+                                            JSONArray jsonArray = jsonObject.getJSONArray(tags.WITHDRAWAL_HISTORY);
+                                            for (int i = 0; i < jsonArray.length(); i++) {
+                                                GetWithdrawHistory card = new GetWithdrawHistory();
+                                                cards.add(card.fromJSON(jsonArray.getJSONObject(i)));
+                                            }
+                                            adapter = new HistoryDialogBoxAdapter(context, cards, recyclerView);
+                                            recyclerView.setAdapter(adapter);
+
+                                        }
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Log.e(TAG, e.getMessage());
+                            }
+                        }
+
+                        @Override
+                        public void onError(VolleyError volleyError) {
+                            volleyError.printStackTrace();
+                            Log.e(TAG, volleyError.getMessage());
+                        }
+
+                    });
+                    dialog.show();
                 }
             });
         } else if (holder instanceof LoadingHolder) {

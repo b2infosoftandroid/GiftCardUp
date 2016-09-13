@@ -58,6 +58,7 @@ public class Tags {
     public final String GET_PENDING_SHIPMENT_CARDS = "get_pending_shipment_cards";
     public final String ADD_COMPANY_BRANDS = "add_company_brands";
     public final String WITHDRAWAL_HISTORY = "withdrawal_history";
+    public final String WITHDRAWAL_HISTORY_VIEW = "withdrawal_history_view";
 
 
     /* USER LOGIN SIGNUP */
@@ -251,6 +252,13 @@ public class Tags {
     public final String WITHDRAWAL_PAYMENT_STATUS = "payment_status";
     public final String WITHDRAWAL_AMOUNT = "amount";
     public final String WITHDRAWAL_BANK_ID = "bank_id";
+    public final String WITHDRAWAL_USER_PAYMENT_ID = "user_payment_id";
+    public final String WITHDRAWAL_CREDIT_AMOUNT = "credit_amount";
+    public final String WITHDRAWAL_DEBIT_AMOUNT = "debit_amount";
+    public final String WITHDRAWAL_COMMISSION_CHARGE = "commission_charge";
+    public final String WITHDRAWAL_SUMMARY = "summary";
+    public final String WITHDRAWAL_REQUEST_STATUS = "withdrawal_request_status";
+    public final String WITHDRAWAL_REQUEST_DATE = "request_date";
 
 
 }

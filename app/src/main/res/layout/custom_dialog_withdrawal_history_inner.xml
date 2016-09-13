@@ -2,25 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
-        android:id="@+id/card_view1"
+        android:id="@+id/card_view2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         card_view:cardCornerRadius="5dp"
-        card_view:cardUseCompatPadding="true">
+        card_view:cardUseCompatPadding="true"
+        android:padding="10dp"
+        android:visibility="visible">
 
         <LinearLayout
+            android:id="@+id/layout_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/layout_empty_background"
-            android:clickable="true"
-            android:descendantFocusability="blocksDescendants"
-            android:orientation="vertical"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
+            android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -35,18 +33,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:text="Request Date"
+                    android:text="Gift Card"
                     android:textAllCaps="true"
                     android:textColor="@color/buy_card_text"
                     android:textStyle="normal" />
 
                 <TextView
-                    android:id="@+id/withdrawal_history_req_date"
+                    android:id="@+id/withdrawal_history_card_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_marginLeft="10dp"
-                    android:text="07/09/2016"
+                    android:text="Tata(6443)"
                     android:textAllCaps="true"
                     android:textColor="@color/buy_card_text"
                     android:textStyle="normal" />
@@ -71,85 +69,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:text="Payment Method"
+                    android:text="Date"
                     android:textAllCaps="true"
                     android:textColor="@color/buy_card_text"
                     android:textStyle="normal" />
 
                 <TextView
-                    android:id="@+id/withdrawal_history_pay_method"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginLeft="10dp"
-                    android:text="Check"
-                    android:textAllCaps="true"
-                    android:textColor="@color/buy_card_text"
-                    android:textStyle="normal" />
-            </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:alpha="0.5"
-                android:background="@color/divider" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/layout_empty_background"
-                android:clickable="true"
-                android:descendantFocusability="blocksDescendants"
-                android:orientation="horizontal"
-                android:padding="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:text="Amount"
-                    android:textAllCaps="true"
-                    android:textColor="@color/buy_card_text"
-                    android:textStyle="normal" />
-
-                <TextView
-                    android:id="@+id/withdrawal_history_amount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginLeft="10dp"
-                    android:text="$120.00"
-                    android:textAllCaps="true"
-                    android:textColor="@color/buy_card_text"
-                    android:textStyle="normal" />
-            </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:alpha="0.5"
-                android:background="@color/divider" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/layout_empty_background"
-                android:clickable="true"
-                android:descendantFocusability="blocksDescendants"
-                android:orientation="horizontal"
-                android:padding="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:text="Approve Date"
-                    android:textAllCaps="true"
-                    android:textColor="@color/buy_card_text"
-                    android:textStyle="normal" />
-
-                <TextView
-                    android:id="@+id/withdrawal_history_approve_date"
+                    android:id="@+id/withdrawal_history_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -185,12 +111,12 @@
                     android:textStyle="normal" />
 
                 <TextView
-                    android:id="@+id/withdrawal_history_status"
+                    android:id="@+id/withdrawal_history_status2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_marginLeft="10dp"
-                    android:text="Process"
+                    android:text="process"
                     android:textAllCaps="true"
                     android:textColor="@color/buy_card_text"
                     android:textStyle="normal" />
@@ -215,21 +141,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:text="Request Id"
+                    android:text="Funds"
                     android:textAllCaps="true"
                     android:textColor="@color/buy_card_text"
                     android:textStyle="normal" />
 
-                <Button
-                    android:id="@+id/withdrawal_history_req_id_btn"
-                    android:layout_width="60dp"
-                    android:layout_height="20dp"
+                <TextView
+                    android:id="@+id/withdrawal_history_fund"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_marginLeft="10dp"
-                    android:background="@drawable/layout_border"
-                    android:text="1"
+                    android:text="$2222"
                     android:textAllCaps="true"
-                    android:textColor="@color/app_background" />
+                    android:textColor="@color/buy_card_text"
+                    android:textStyle="bold" />
             </RelativeLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>

@@ -14,15 +14,105 @@ import java.io.Serializable;
  */
 public class GetWithdrawHistory implements Serializable {
     private String requestDate;
+    private String withdrawalRequestDate;
     private String paymentMethod;
+    private String debitAmount;
+    private String creditAmount;
+    private String commissionCharge;
+    private String summary;
+    private String requestStatus;
+    private String date;
+    private String cardName;
     private String amount;
     private String approveDate;
     private String status;
     private int requestId;
     private int userId;
+    private int giftCardId;
+    private int userPaymentId;
     private int bankId;
-    private int paymentIds;
+    private String paymentIds;
     private int paymentStatus;
+
+    public String getWithdrawalRequestDate() {
+        return withdrawalRequestDate;
+    }
+
+    public void setWithdrawalRequestDate(String withdrawalRequestDate) {
+        this.withdrawalRequestDate = withdrawalRequestDate;
+    }
+
+    public String getDebitAmount() {
+        return debitAmount;
+    }
+
+    public void setDebitAmount(String debitAmount) {
+        this.debitAmount = debitAmount;
+    }
+
+    public String getCreditAmount() {
+        return creditAmount;
+    }
+
+    public void setCreditAmount(String creditAmount) {
+        this.creditAmount = creditAmount;
+    }
+
+    public String getCommissionCharge() {
+        return commissionCharge;
+    }
+
+    public void setCommissionCharge(String commissionCharge) {
+        this.commissionCharge = commissionCharge;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    public String getRequestStatus() {
+        return requestStatus;
+    }
+
+    public void setRequestStatus(String requestStatus) {
+        this.requestStatus = requestStatus;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getCardName() {
+        return cardName;
+    }
+
+    public void setCardName(String cardName) {
+        this.cardName = cardName;
+    }
+
+    public int getGiftCardId() {
+        return giftCardId;
+    }
+
+    public void setGiftCardId(int giftCardId) {
+        this.giftCardId = giftCardId;
+    }
+
+    public int getUserPaymentId() {
+        return userPaymentId;
+    }
+
+    public void setUserPaymentId(int userPaymentId) {
+        this.userPaymentId = userPaymentId;
+    }
 
     public int getUserId() {
         return userId;
@@ -40,11 +130,11 @@ public class GetWithdrawHistory implements Serializable {
         this.bankId = bankId;
     }
 
-    public int getPaymentIds() {
+    public String getPaymentIds() {
         return paymentIds;
     }
 
-    public void setPaymentIds(int paymentIds) {
+    public void setPaymentIds(String paymentIds) {
         this.paymentIds = paymentIds;
     }
 
@@ -130,13 +220,40 @@ public class GetWithdrawHistory implements Serializable {
                 card.setRequestId(object.getInt(tags.WITHDRAWAL_REQUEST_ID));
             }
             if (object.has(tags.WITHDRAWAL_PAYMENT_ID)) {
-                card.setPaymentIds(object.getInt(tags.WITHDRAWAL_PAYMENT_ID));
+                card.setPaymentIds(object.getString(tags.WITHDRAWAL_PAYMENT_ID));
             }
             if (object.has(tags.WITHDRAWAL_BANK_ID)) {
                 card.setBankId(object.getInt(tags.WITHDRAWAL_BANK_ID));
             }
-            if (object.has(tags.WITHDRAWAL_PAYMENT_STATUS)) {
-                card.setPaymentStatus(object.getInt(tags.WITHDRAWAL_PAYMENT_STATUS));
+            if (object.has(tags.WITHDRAWAL_USER_PAYMENT_ID)) {
+                card.setUserPaymentId(object.getInt(tags.WITHDRAWAL_USER_PAYMENT_ID));
+            }
+            if (object.has(tags.GIFT_CARD_GIFT_CARD_ID)) {
+                card.setGiftCardId(object.getInt(tags.GIFT_CARD_GIFT_CARD_ID));
+            }
+            if (object.has(tags.WITHDRAWAL_CREDIT_AMOUNT)) {
+                card.setCreditAmount(object.getString(tags.WITHDRAWAL_CREDIT_AMOUNT));
+            }
+            if (object.has(tags.WITHDRAWAL_DEBIT_AMOUNT)) {
+                card.setDebitAmount(object.getString(tags.WITHDRAWAL_DEBIT_AMOUNT));
+            }
+            if (object.has(tags.WITHDRAWAL_COMMISSION_CHARGE)) {
+                card.setCommissionCharge(object.getString(tags.WITHDRAWAL_COMMISSION_CHARGE));
+            }
+            if (object.has(tags.WITHDRAWAL_SUMMARY)) {
+                card.setSummary(object.getString(tags.WITHDRAWAL_SUMMARY));
+            }
+            if (object.has(tags.WITHDRAWAL_REQUEST_STATUS)) {
+                card.setRequestStatus(object.getString(tags.WITHDRAWAL_REQUEST_STATUS));
+            }
+            if (object.has(tags.WITHDRAWAL_REQUEST_DATE)) {
+                card.setWithdrawalRequestDate(object.getString(tags.WITHDRAWAL_REQUEST_DATE));
+            }
+            if (object.has(tags.GIFT_CARD_CARD_NAME)) {
+                card.setCardName(object.getString(tags.GIFT_CARD_CARD_NAME));
+            }
+            if (object.has(tags.GIFT_CARD_CARD_NAME)) {
+                card.setCardName(object.getString(tags.GIFT_CARD_CARD_NAME));
             }
         } catch (JSONException e) {
             e.printStackTrace();
