@@ -166,6 +166,7 @@ public class WithdrawalHistoryRecyclerViewAdapter extends RecyclerView.Adapter<R
                     final Dialog dialog = new Dialog(context);
                     dialog.setTitle("Available Funds");
                     dialog.setContentView(R.layout.custom_dialog_history);
+
                    final RecyclerView  recyclerView = (RecyclerView) dialog.findViewById(R.id.recycler_view);
                     recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     Map<String, String> map = new HashMap<>();

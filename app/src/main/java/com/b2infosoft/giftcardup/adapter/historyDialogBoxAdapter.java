@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.app.Config;
+import com.b2infosoft.giftcardup.app.Format;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
@@ -23,11 +24,13 @@ import java.util.List;
 
 public class HistoryDialogBoxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
+    private Format format;
     private List<GetWithdrawHistory> cardInfoList;
 
     public HistoryDialogBoxAdapter(Context context, List<GetWithdrawHistory> cardInfoList) {
         this.context = context;
         this.cardInfoList = cardInfoList;
+        format = Format.getInstance();
     }
 
     public class CardHolder extends RecyclerView.ViewHolder {
@@ -58,8 +61,8 @@ public class HistoryDialogBoxAdapter extends RecyclerView.Adapter<RecyclerView.V
             final GetWithdrawHistory card = cardInfoList.get(position);
             final CardHolder cardHolder = (CardHolder) holder;
             cardHolder.giftCard.setText(card.getCardName());
-            cardHolder.cardDate.setText(card.getRequestDate().equalsIgnoreCase("00/00/0000") ? "" : card.getRequestDate());
-            cardHolder.status.setText(card.getPaymentStatus());
+            cardHolder.cardDate.setText(card.getRequestDate().equalsIgnoreCase("00/00/0000") ? "" : format.getDate(card.getRequestDate()));
+            cardHolder.status.setText(card.getPaymentStatus() == 0 ? "Processing" : "Completed");
             cardHolder.fund.setText("$" + String.valueOf(card.getCreditAmount()));
         }
     }
