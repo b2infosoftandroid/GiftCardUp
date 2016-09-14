@@ -62,6 +62,8 @@ public class Tags {
     public final String AVAILABLE_FUND = "available_fund";
     public final String WITHDRAWAL_REQUEST = "withdrawal_request";
     public final String SEND_WITHDRAWAL_REQUEST = "send_withdrawal_request";
+    public final String ADD_CART_ITEM_GIFT_CARD = "add_card_item_gift_card";
+
 
 
     /* USER LOGIN SIGNUP */
