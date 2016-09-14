@@ -76,4 +76,8 @@ public class Urls {
     public String getCompany() {
         return config.getServerAddress().concat("Company.php");
     }
+    public String getCartInfo() {
+        return config.getServerAddress().concat("CartInfo.php");
+    }
+
 }

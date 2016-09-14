@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,18 +23,36 @@ import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.activity.Main;
 import com.b2infosoft.giftcardup.app.Cart;
 import com.b2infosoft.giftcardup.app.Config;
+import com.b2infosoft.giftcardup.app.Format;
 import com.b2infosoft.giftcardup.app.Notify;
 import com.b2infosoft.giftcardup.app.Tags;
+import com.b2infosoft.giftcardup.app.Urls;
+import com.b2infosoft.giftcardup.credential.Active;
+import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.listener.OnLoadMoreListener;
 import com.b2infosoft.giftcardup.model.CompanyBrand;
 import com.b2infosoft.giftcardup.model.GiftCard;
+import com.b2infosoft.giftcardup.volly.DMRRequest;
+import com.b2infosoft.giftcardup.volly.DMRResult;
 import com.b2infosoft.giftcardup.volly.LruBitmapCache;
 import com.b2infosoft.giftcardup.volly.MySingleton;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
+    private final String TAG = CompanyCardAdapter.class.getName();
+    private Urls urls;
+    private Tags tags;
+    private Active active;
+    private Format format;
+    DMRRequest dmrRequest;
+    private Progress progress;
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
     private boolean isLoading;
@@ -43,11 +62,9 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private Context context;
     private List<GiftCard> cardInfoList;
     private Config config;
-    private Tags tags;
-    int count = 0;
     private CompanyBrand companyBrand;
 
-    public CompanyCardAdapter(Context context, List<GiftCard> cardInfoList, RecyclerView recyclerView,CompanyBrand companyBrand) {
+    public CompanyCardAdapter(Context context, List<GiftCard> cardInfoList, RecyclerView recyclerView, CompanyBrand companyBrand) {
         this.context = context;
         this.cardInfoList = cardInfoList;
         config = Config.getInstance();
@@ -69,20 +86,29 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 }
             }
         });
+        dmrRequest = DMRRequest.getInstance(context, TAG);
+        urls = Urls.getInstance();
+        tags = Tags.getInstance();
+        active = Active.getInstance(context);
+        format = Format.getInstance();
+        progress = new Progress(context);
     }
+
     public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
         this.mOnLoadMoreListener = mOnLoadMoreListener;
     }
+
     public class CardHolder extends RecyclerView.ViewHolder {
         TextView cardType;
         ImageView imageUrl;
         TextView cardValue;
         TextView cardOff;
         TextView cardPrice;
-        Button buyNow,info;
-        CardView card1,card2;
+        Button buyNow, info;
+        CardView card1, card2;
         LinearLayout linearLayout;
         int count = 0;
+
         public CardHolder(View view) {
             super(view);
             //cardType = (TextView) view.findViewById(R.id.company_card_e_card);
@@ -96,15 +122,15 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             card1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    card2.setVisibility(card2.getVisibility()==View.VISIBLE?View.GONE:View.VISIBLE);
+                    card2.setVisibility(card2.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 }
             });
-            linearLayout = (LinearLayout)view.findViewById(R.id.buy_card_linear_layout);
+            linearLayout = (LinearLayout) view.findViewById(R.id.buy_card_linear_layout);
             info = (Button) view.findViewById(R.id.buy_card_info_btn);
             info.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    linearLayout.setVisibility(linearLayout.getVisibility()==View.VISIBLE?View.GONE:View.VISIBLE);
+                    linearLayout.setVisibility(linearLayout.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 }
             });
         }
@@ -141,22 +167,48 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (holder instanceof CardHolder) {
             final GiftCard card = cardInfoList.get(position);
             final CardHolder cardHolder = (CardHolder) holder;
-           // cardHolder.cardType.setText(companyBrand.getCardType()==2?"YES":"NO");
-            cardHolder.cardOff.setText(String.valueOf(card.getPercentageOff())+"%");
-            cardHolder.cardValue.setText("$"+String.valueOf(card.getCardPrice()));
-            cardHolder.cardPrice.setText("$"+String.valueOf(card.getCardValue()));
+            // cardHolder.cardType.setText(companyBrand.getCardType()==2?"YES":"NO");
+            cardHolder.cardOff.setText(String.valueOf(card.getPercentageOff()) + "%");
+            cardHolder.cardValue.setText("$" + String.valueOf(card.getCardPrice()));
+            cardHolder.cardPrice.setText("$" + String.valueOf(card.getCardValue()));
             cardHolder.buyNow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Cart cart = (Cart)context.getApplicationContext();
+                    final Cart cart = (Cart) context.getApplicationContext();
                     cart.addCartItem(card);
-                    Toast.makeText(context,"Successfully Add Item to Cart",Toast.LENGTH_SHORT).show();
-                    /*
-                    count = count + 1;
-                    Intent intent = new Intent(context, Main.class);
-                    intent.putExtra("COUNT",count);
-                    context.startActivity(intent);
-                    */
+                    final Map<String, String> map = new HashMap<>();
+                    map.put(tags.USER_ACTION, tags.ADD_CART_ITEM_GIFT_CARD);
+                    map.put(tags.USER_ID, active.getUser().getUserId());
+                    map.put(tags.GIFT_CARD_GIFT_CARD_ID, card.getGiftCardID() + "");
+                    dmrRequest.doPost(urls.getCartInfo(), map, new DMRResult() {
+                        @Override
+                        public void onSuccess(JSONObject jsonObject) {
+                            try {
+                                if (jsonObject.has(tags.SUCCESS)) {
+                                    if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                                        JSONArray array = jsonObject.getJSONArray(tags.GIFT_CARDS);
+                                        cart.removeAll();
+                                        for (int i = 0; i < array.length(); i++) {
+                                            cart.addCartItem(GiftCard.fromJSON(array.getJSONObject(i)));
+                                        }
+                                    } else if (jsonObject.getInt(tags.SUCCESS) == tags.SUSPEND) {
+
+                                    } else {
+
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Log.e(TAG, e.getMessage());
+                            }
+                        }
+
+                        @Override
+                        public void onError(VolleyError volleyError) {
+                            volleyError.printStackTrace();
+                            Log.e(TAG, volleyError.getMessage());
+                        }
+                    });
                 }
             });
             //count++;
@@ -172,6 +224,7 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public int getItemCount() {
         return cardInfoList == null ? 0 : cardInfoList.size();
     }
+
     public void setLoaded() {
         isLoading = false;
     }

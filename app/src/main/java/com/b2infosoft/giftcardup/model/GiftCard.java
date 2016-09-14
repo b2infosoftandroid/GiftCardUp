@@ -300,7 +300,7 @@ public class GiftCard implements Serializable {
         this.disputeResult = disputeResult;
     }
 
-    public GiftCard fromJSON(JSONObject object) {
+    public static GiftCard fromJSON(JSONObject object) {
         Tags tags = Tags.getInstance();
         GiftCard card = new GiftCard();
         try {

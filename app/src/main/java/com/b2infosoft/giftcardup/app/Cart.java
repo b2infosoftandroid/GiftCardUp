@@ -28,4 +28,8 @@ public class Cart extends Application {
     public List<GiftCard> getCartItemList() {
         return giftCardList;
     }
+
+    public void removeAll(){
+        giftCardList.clear();
+    }
 }

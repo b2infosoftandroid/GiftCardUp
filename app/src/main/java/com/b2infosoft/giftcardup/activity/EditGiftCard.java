@@ -134,9 +134,6 @@ public class EditGiftCard extends AppCompatActivity implements TextWatcher, View
             selling_percentage.setEnabled(true);
             //mAskingPrice.setVisibility(View.VISIBLE);
         }
-
-        Gson gson = new Gson();
-        Log.d("DATA",gson.toJson(oldData));
     }
 
     @Override
