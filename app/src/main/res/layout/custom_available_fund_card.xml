@@ -231,6 +231,25 @@
                     android:textColor="@color/buy_card_text"
                     android:textStyle="normal" />
             </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/layout_empty_background"
+                android:clickable="true"
+                android:descendantFocusability="blocksDescendants"
+                android:orientation="horizontal"
+                android:padding="10dp">
+                <Button
+                    android:id="@+id/available_fund_withdrawal_request"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:padding="10dp"
+                    android:background="@drawable/button_fill_background"
+                    android:text="Withdrawal Request"
+                    android:textAllCaps="true"
+                    android:textColor="@color/button_foreground" />
+            </RelativeLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

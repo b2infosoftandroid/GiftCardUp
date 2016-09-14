@@ -60,6 +60,8 @@ public class Tags {
     public final String WITHDRAWAL_HISTORY = "withdrawal_history";
     public final String WITHDRAWAL_HISTORY_VIEW = "withdrawal_history_view";
     public final String AVAILABLE_FUND = "available_fund";
+    public final String WITHDRAWAL_REQUEST = "withdrawal_request";
+    public final String SEND_WITHDRAWAL_REQUEST = "send_withdrawal_request";
 
 
     /* USER LOGIN SIGNUP */
@@ -72,6 +74,7 @@ public class Tags {
     public final String GIFT_CARDS = "gift_cards";
     public final String CATEGORIES = "categories";
     public final String STATE_ARR = "states_all";
+    public final String ARR_BANK_DETAILS = "bank_details";
 
     //////////////  ARRAYS   /////////////////////
     public final String ARR_CARD_TYPE[] = {"Physical", "eCard"};

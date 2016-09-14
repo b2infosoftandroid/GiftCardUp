@@ -8,9 +8,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +24,7 @@ import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.listener.OnLoadMoreListener;
+import com.b2infosoft.giftcardup.model.BankInfo;
 import com.b2infosoft.giftcardup.model.GetWithdrawHistory;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
@@ -61,6 +65,9 @@ public class AvailableFundRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         TextView fund;
         TextView withdrawal;
         TextView status;
+        Spinner spinner;
+        RadioButton ach,cheque,paypal;
+        Button withdrawReq, sendReq;
 
         public CardHolder(View view) {
             super(view);
@@ -70,6 +77,107 @@ public class AvailableFundRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             status = (TextView) view.findViewById(R.id.available_fund_status);
             fund = (TextView) view.findViewById(R.id.available_fund_funds);
             withdrawal = (TextView) view.findViewById(R.id.available_fund_withdrawal);
+            withdrawReq = (Button) view.findViewById(R.id.available_fund_withdrawal_request);
+            withdrawReq.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final Dialog dialog = new Dialog(context);
+                    dialog.setTitle("Payment Withdrawal Request");
+                    dialog.setContentView(R.layout.custom_dialog_available_fund_withdraw_req);
+
+                    sendReq = (Button)dialog.findViewById(R.id.send_req_btn);
+                    spinner = (Spinner)dialog.findViewById(R.id.withdraw_req_spinner_total_fund);
+                    ach = (RadioButton)dialog.findViewById(R.id.withdraw_req_ach);
+                    cheque = (RadioButton)dialog.findViewById(R.id.withdraw_req_cheque);
+                    paypal = (RadioButton)dialog.findViewById(R.id.withdraw_req_paypal);
+
+                    Map<String, String> map = new HashMap<>();
+                    map.put(tags.USER_ACTION, tags.WITHDRAWAL_REQUEST);
+                    map.put(tags.USER_ID, active.getUser().getUserId() + "");
+                    dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
+                        @Override
+                        public void onSuccess(JSONObject jsonObject) {
+                            try {
+                                if (jsonObject.has(tags.SUCCESS)) {
+                                    if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                                        if (jsonObject.has(tags.ARR_BANK_DETAILS)) {
+                                            List<BankInfo> infos = new ArrayList<>();
+                                            JSONArray jsonArray = jsonObject.getJSONArray(tags.ARR_BANK_DETAILS);
+                                            for (int i = 0; i < jsonArray.length(); i++) {
+                                                BankInfo info = new BankInfo();
+                                                infos.add(info.fromJSON(jsonArray.getJSONObject(i)));
+
+                                                if(ach.isSelected()){
+                                                    Spinner spinner1 = new Spinner(context);
+                                                    //ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,"");
+                                                    //spinner1.setAdapter(spinnerArrayAdapter);
+                                                }
+                                            }
+                                        }
+                                        if(jsonObject.has(tags.WITHDRAWAL_AMOUNT)){
+                                            GetWithdrawHistory info = new GetWithdrawHistory();
+                                           // ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, info);
+                                           // spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                           // spinner.setAdapter(spinnerAdapter);
+                                           // spinnerAdapter.add(info.getAmount());
+                                           // spinnerAdapter.notifyDataSetChanged();
+                                        }
+                                        if(jsonObject.has(tags.WITHDRAWAL_PAYMENT_ID)){
+
+                                        }
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Log.e(TAG, e.getMessage());
+                            }
+                        }
+
+                        @Override
+                        public void onError(VolleyError volleyError) {
+                            volleyError.printStackTrace();
+                            Log.e(TAG, volleyError.getMessage());
+                        }
+
+                    });
+                    dialog.show();
+
+                    sendReq.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Map<String, String> map = new HashMap<>();
+                            map.put(tags.USER_ACTION, tags.SEND_WITHDRAWAL_REQUEST);
+                            map.put(tags.USER_ID, active.getUser().getUserId() + "");
+                            map.put(tags.WITHDRAWAL_PAYMENT_METHOD, "");
+                            map.put(tags.WITHDRAWAL_PAYMENT_ID, "");
+                            map.put(tags.WITHDRAWAL_BANK_ID, "");
+                            map.put(tags.WITHDRAWAL_AMOUNT, "");
+                            dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
+                                @Override
+                                public void onSuccess(JSONObject jsonObject) {
+                                    try {
+                                        if (jsonObject.has(tags.SUCCESS)) {
+                                            if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+
+                                            }
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                        Log.e(TAG, e.getMessage());
+                                    }
+                                }
+
+                                @Override
+                                public void onError(VolleyError volleyError) {
+                                    volleyError.printStackTrace();
+                                    Log.e(TAG, volleyError.getMessage());
+                                }
+
+                            });
+                        }
+                    });
+                }
+            });
         }
     }
 
