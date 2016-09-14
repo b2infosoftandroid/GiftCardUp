@@ -2,7 +2,6 @@ package com.b2infosoft.giftcardup.activity;
 
 import android.content.Intent;
 import android.graphics.drawable.LayerDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -10,17 +9,17 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.app.Cart;
 import com.b2infosoft.giftcardup.app.Config;
+import com.b2infosoft.giftcardup.app.GiftCardUp;
 import com.b2infosoft.giftcardup.app.Notify;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
@@ -36,11 +35,7 @@ import com.b2infosoft.giftcardup.fragments.SellCards;
 import com.b2infosoft.giftcardup.fragments.ShippingCenter;
 import com.b2infosoft.giftcardup.fragments.SpeedySell;
 import com.b2infosoft.giftcardup.fragments.TinderWork;
-import com.b2infosoft.giftcardup.fragments.Profile;
 import com.b2infosoft.giftcardup.fragments.WithdrawalHistory;
-import com.b2infosoft.giftcardup.fragments.profile.BankInformation;
-import com.b2infosoft.giftcardup.fragments.profile.Identification;
-import com.b2infosoft.giftcardup.fragments.profile.SsnEin;
 import com.b2infosoft.giftcardup.model.CompanyCategory;
 import com.b2infosoft.giftcardup.model.User;
 import com.b2infosoft.giftcardup.utils.Utils1;
@@ -54,6 +49,7 @@ import java.util.Locale;
 
 public class Main extends GiftCardUp {
     private final static String TAG = Main.class.getName();
+    private Cart cart;
     DMRRequest dmrRequest;
     Config config;
     Urls urls;
@@ -82,12 +78,13 @@ public class Main extends GiftCardUp {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        cart = (Cart)getApplicationContext();
         init();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
-        count = intent.getIntExtra("COUNT",0);
+        count = intent.getIntExtra("COUNT", 0);
         //View view1 = getLayoutInflater().inflate(R.layout.fragment_dashboard,null);
         //toolbar.addView(view1);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -131,6 +128,18 @@ public class Main extends GiftCardUp {
     }
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        invalidateOptionsMenu();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        invalidateOptionsMenu();
+    }
+
+    @Override
     public void onBackPressed() {
         if (drawer != null) {
             if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -164,9 +173,12 @@ public class Main extends GiftCardUp {
         LayerDrawable icon1 = (LayerDrawable) item1.getIcon();
 
         // Update LayerDrawable's BadgeDrawable
-        Utils1.setBadgeCount(this, icon1, count);
+        Utils1.setBadgeCount(this, icon1, cart.getCartItemCount());
+
         return true;
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -214,42 +226,6 @@ public class Main extends GiftCardUp {
         }
     }
 
-    @Override
-    public void onBankInformation(Uri uri) {
-
-    }
-
-    @Override
-    public void onIdentification(Uri uri) {
-
-    }
-
-    @Override
-    public void onSsnEin(Uri uri) {
-
-    }
-
-    @Override
-    public void onDashboard1(Uri uri) {
-
-    }
-
-    @Override
-    public void onDashboard(Uri uri) {
-
-    }
-
-    @Override
-    public void onSellCards(Uri uri) {
-
-    }
-
-    @Override
-    public void onSpeedyCell(Uri uri) {
-
-    }
-
-
 
     private class MenuSelect implements NavigationView.OnNavigationItemSelectedListener {
         @Override
@@ -287,7 +263,7 @@ public class Main extends GiftCardUp {
                     setTitle("Available Fund");
                     break;
                 case R.id.menu_item_withdrawal_history:
-                     replaceFragment(new WithdrawalHistory());
+                    replaceFragment(new WithdrawalHistory());
                     setTitle("Withdrawal History");
                     break;
                 case R.id.menu_item_recommend_brand:
@@ -311,7 +287,7 @@ public class Main extends GiftCardUp {
 
                     break;
                 case R.id.menu_item_my_cart:
-                       startActivity(new Intent(Main.this, ShoppingCart.class));
+                    startActivity(new Intent(Main.this, ShoppingCart.class));
                     break;
                 case R.id.menu_item_logout:
                     active.setLogOut();
@@ -371,8 +347,4 @@ public class Main extends GiftCardUp {
         isLoginLayout.setVisibility(userType != 0 ? View.VISIBLE : View.GONE);
         isLogoutLayout.setVisibility(userType == 0 ? View.VISIBLE : View.GONE);
     }
-}
-
-abstract class GiftCardUp extends AppCompatActivity implements View.OnClickListener, BankInformation.OnFragmentBankInformation, Identification.OnFragmentIdentification, SsnEin.OnFragmentSsnEin, TinderWork.OnFragmentDashboard1, Dashboard.OnFragmentDashboard, SellCards.OnFragmentSellCards, SpeedySell.OnFragmentSpeedyCell {
-
 }

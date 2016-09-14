@@ -1,9 +1,7 @@
 package com.b2infosoft.giftcardup.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.os.Bundle;
+
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.activity.Main;
+import com.b2infosoft.giftcardup.app.Cart;
 import com.b2infosoft.giftcardup.app.Config;
 import com.b2infosoft.giftcardup.app.Notify;
 import com.b2infosoft.giftcardup.app.Tags;
@@ -97,7 +96,7 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             card1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    card2.setVisibility(View.VISIBLE);
+                    card2.setVisibility(card2.getVisibility()==View.VISIBLE?View.GONE:View.VISIBLE);
                 }
             });
             linearLayout = (LinearLayout)view.findViewById(R.id.buy_card_linear_layout);
@@ -105,14 +104,7 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             info.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    count = count + 1;
-                    if(count % 2 != 0) {
-                        info.setText("- info");
-                        linearLayout.setVisibility(View.VISIBLE);
-                    }else {
-                        info.setText("+ info");
-                        linearLayout.setVisibility(View.GONE);
-                    }
+                    linearLayout.setVisibility(linearLayout.getVisibility()==View.VISIBLE?View.GONE:View.VISIBLE);
                 }
             });
         }
@@ -156,11 +148,15 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             cardHolder.buyNow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //Toast.makeText(context, "LOGIN FIRST", Toast.LENGTH_SHORT).show();
+                    Cart cart = (Cart)context.getApplicationContext();
+                    cart.addCartItem(card);
+                    Toast.makeText(context,"Successfully Add Item to Cart",Toast.LENGTH_SHORT).show();
+                    /*
                     count = count + 1;
                     Intent intent = new Intent(context, Main.class);
                     intent.putExtra("COUNT",count);
                     context.startActivity(intent);
+                    */
                 }
             });
             //count++;
