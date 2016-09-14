@@ -59,6 +59,7 @@ public class Tags {
     public final String ADD_COMPANY_BRANDS = "add_company_brands";
     public final String WITHDRAWAL_HISTORY = "withdrawal_history";
     public final String WITHDRAWAL_HISTORY_VIEW = "withdrawal_history_view";
+    public final String AVAILABLE_FUND = "available_fund";
 
 
     /* USER LOGIN SIGNUP */

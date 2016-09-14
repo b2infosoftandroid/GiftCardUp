@@ -33,6 +33,15 @@ public class GetWithdrawHistory implements Serializable {
     private int bankId;
     private String paymentIds;
     private int paymentStatus;
+    private String payStatus;
+
+    public String getPayStatus() {
+        return payStatus;
+    }
+
+    public void setPayStatus(String payStatus) {
+        this.payStatus = payStatus;
+    }
 
     public String getWithdrawalRequestDate() {
         return withdrawalRequestDate;
@@ -252,8 +261,8 @@ public class GetWithdrawHistory implements Serializable {
             if (object.has(tags.GIFT_CARD_CARD_NAME)) {
                 card.setCardName(object.getString(tags.GIFT_CARD_CARD_NAME));
             }
-            if (object.has(tags.GIFT_CARD_CARD_NAME)) {
-                card.setCardName(object.getString(tags.GIFT_CARD_CARD_NAME));
+            if (object.has(tags.WITHDRAWAL_PAYMENT_STATUS)) {
+                card.setPayStatus(object.getString(tags.WITHDRAWAL_PAYMENT_STATUS));
             }
         } catch (JSONException e) {
             e.printStackTrace();

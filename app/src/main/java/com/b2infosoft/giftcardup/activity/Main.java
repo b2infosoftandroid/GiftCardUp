@@ -26,6 +26,7 @@ import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.database.DBHelper;
+import com.b2infosoft.giftcardup.fragments.AvailableFund;
 import com.b2infosoft.giftcardup.fragments.BulkListing;
 import com.b2infosoft.giftcardup.fragments.Dashboard;
 import com.b2infosoft.giftcardup.fragments.MyListing;
@@ -282,7 +283,8 @@ public class Main extends GiftCardUp {
                     setTitle("Shipping Center");
                     break;
                 case R.id.menu_item_available_fund:
-
+                    replaceFragment(new AvailableFund());
+                    setTitle("Available Fund");
                     break;
                 case R.id.menu_item_withdrawal_history:
                      replaceFragment(new WithdrawalHistory());
