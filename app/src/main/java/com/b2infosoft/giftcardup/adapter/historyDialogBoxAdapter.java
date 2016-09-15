@@ -34,6 +34,7 @@ public class HistoryDialogBoxAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     public class CardHolder extends RecyclerView.ViewHolder {
+
         TextView giftCard;
         TextView cardDate;
         TextView status;

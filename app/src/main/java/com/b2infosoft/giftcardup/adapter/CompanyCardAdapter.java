@@ -36,6 +36,7 @@ import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 import com.b2infosoft.giftcardup.volly.LruBitmapCache;
 import com.b2infosoft.giftcardup.volly.MySingleton;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -99,24 +100,27 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public class CardHolder extends RecyclerView.ViewHolder {
-        TextView cardType;
+        ImageView cardType;
         ImageView imageUrl;
         TextView cardValue;
         TextView cardOff;
         TextView cardPrice;
         Button buyNow, info;
+        Button add_to_cart, card_buy_now;
         CardView card1, card2;
         LinearLayout linearLayout;
         int count = 0;
 
         public CardHolder(View view) {
             super(view);
-            //cardType = (TextView) view.findViewById(R.id.company_card_e_card);
+            cardType = (ImageView) view.findViewById(R.id.card_type);
             cardValue = (TextView) view.findViewById(R.id.company_card_card_value);
             cardOff = (TextView) view.findViewById(R.id.company_card_card_off);
             cardPrice = (TextView) view.findViewById(R.id.company_card_card_price);
             imageUrl = (ImageView) view.findViewById(R.id.company_card_image);
             buyNow = (Button) view.findViewById(R.id.company_card_card_buy_now);
+            add_to_cart = (Button) view.findViewById(R.id.add_to_cart);
+            card_buy_now = (Button) view.findViewById(R.id.card_buy_now);
             card1 = (CardView) view.findViewById(R.id.card_view1);
             card2 = (CardView) view.findViewById(R.id.card_view2);
             card1.setOnClickListener(new View.OnClickListener() {
@@ -167,10 +171,15 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (holder instanceof CardHolder) {
             final GiftCard card = cardInfoList.get(position);
             final CardHolder cardHolder = (CardHolder) holder;
-            // cardHolder.cardType.setText(companyBrand.getCardType()==2?"YES":"NO");
+            if (companyBrand.getCardType() == 2) {
+                cardHolder.cardType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_check_24dp));
+            }else{
+                cardHolder.cardType.setImageDrawable(null);
+            }
             cardHolder.cardOff.setText(String.valueOf(card.getPercentageOff()) + "%");
             cardHolder.cardValue.setText("$" + String.valueOf(card.getCardPrice()));
             cardHolder.cardPrice.setText("$" + String.valueOf(card.getCardValue()));
+
             cardHolder.buyNow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -189,8 +198,12 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                         JSONArray array = jsonObject.getJSONArray(tags.GIFT_CARDS);
                                         cart.removeAll();
                                         for (int i = 0; i < array.length(); i++) {
-                                            cart.addCartItem(GiftCard.fromJSON(array.getJSONObject(i)));
+                                            GiftCard giftCard=GiftCard.fromJSON(array.getJSONObject(i));
+                                            cart.addCartItem(giftCard);
+                                            Gson gson = new Gson();
+                                            Log.d("DATA", gson.toJson(giftCard));
                                         }
+                                        CompanyCardAdapter.super.notifyDataSetChanged();
                                     } else if (jsonObject.getInt(tags.SUCCESS) == tags.SUSPEND) {
 
                                     } else {
@@ -211,6 +224,86 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     });
                 }
             });
+            cardHolder.add_to_cart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final Cart cart = (Cart) context.getApplicationContext();
+                    String cardAction = cardHolder.add_to_cart.getText().toString();
+                    if (cardAction.equalsIgnoreCase("Add to cart")) {
+                        final Map<String, String> map = new HashMap<>();
+                        map.put(tags.USER_ACTION, tags.ADD_CART_ITEM_GIFT_CARD);
+                        map.put(tags.USER_ID, active.getUser().getUserId());
+                        map.put(tags.GIFT_CARD_GIFT_CARD_ID, card.getGiftCardID() + "");
+                        dmrRequest.doPost(urls.getCartInfo(), map, new DMRResult() {
+                            @Override
+                            public void onSuccess(JSONObject jsonObject) {
+                                try {
+                                    if (jsonObject.has(tags.SUCCESS)) {
+                                        if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                                            JSONArray array = jsonObject.getJSONArray(tags.GIFT_CARDS);
+                                            cart.removeAll();
+                                            for (int i = 0; i < array.length(); i++) {
+                                                cart.addCartItem(GiftCard.fromJSON(array.getJSONObject(i)));
+                                            }
+                                            cardHolder.add_to_cart.setText("Remove to cart");
+                                            showMessage("Successfully Add to Cart");
+                                        } else if (jsonObject.getInt(tags.SUCCESS) == tags.SUSPEND) {
+                                            showMessage("You have to attempt more three times. So you can add item in cart after three hours.");
+                                        } else {
+
+                                        }
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                    Log.e(TAG, e.getMessage());
+                                }
+                            }
+
+                            @Override
+                            public void onError(VolleyError volleyError) {
+                                volleyError.printStackTrace();
+                                Log.e(TAG, volleyError.getMessage());
+                            }
+                        });
+                    } else if (cardAction.equalsIgnoreCase("remove to cart")) {
+                        final Map<String, String> map = new HashMap<>();
+                        map.put(tags.USER_ACTION, tags.REMOVE_CART_ITEM_GIFT_CARD);
+                        map.put(tags.USER_ID, active.getUser().getUserId());
+                        map.put(tags.GIFT_CARD_GIFT_CARD_ID, card.getGiftCardID() + "");
+                        dmrRequest.doPost(urls.getCartInfo(), map, new DMRResult() {
+                            @Override
+                            public void onSuccess(JSONObject jsonObject) {
+                                try {
+                                    if (jsonObject.has(tags.SUCCESS)) {
+                                        if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                                            JSONArray array = jsonObject.getJSONArray(tags.GIFT_CARDS);
+                                            cart.removeAll();
+                                            for (int i = 0; i < array.length(); i++) {
+                                                cart.addCartItem(GiftCard.fromJSON(array.getJSONObject(i)));
+                                            }
+                                            cardHolder.add_to_cart.setText("Add to cart");
+                                            showMessage("Successfully remove to Cart ");
+                                        } else if (jsonObject.getInt(tags.SUCCESS) == tags.SUSPEND) {
+
+                                        } else {
+
+                                        }
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                    Log.e(TAG, e.getMessage());
+                                }
+                            }
+
+                            @Override
+                            public void onError(VolleyError volleyError) {
+                                volleyError.printStackTrace();
+                                Log.e(TAG, volleyError.getMessage());
+                            }
+                        });
+                    }
+                }
+            });
             //count++;
             final String url = config.getGiftCardImageAddress().concat(companyBrand.getImage());
             LruBitmapCache.loadCacheImage(context, cardHolder.imageUrl, url, CompanyCardAdapter.class.getName());
@@ -227,5 +320,9 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public void setLoaded() {
         isLoading = false;
+    }
+
+    private void showMessage(String message) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 }
