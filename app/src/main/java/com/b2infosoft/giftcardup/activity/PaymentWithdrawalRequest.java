@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -38,11 +39,11 @@ public class PaymentWithdrawalRequest extends AppCompatActivity {
     private Tags tags;
     private Active active;
     DMRRequest dmrRequest;
-    List<GetWithdrawHistory> withdrawHistoryList;
-
-    Spinner spinner,spinner2;
-    RadioButton ach,cheque,paypal;
+    private Withdrawal withdrawal;
+    Spinner spinner, spinner2;
+    RadioButton ach, cheque, paypal;
     Button sendReq;
+    RadioGroup radioGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,34 +56,53 @@ public class PaymentWithdrawalRequest extends AppCompatActivity {
         tags = Tags.getInstance();
         active = Active.getInstance(getApplicationContext());
 
-        sendReq = (Button)findViewById(R.id.send_req_btn);
-        spinner = (Spinner)findViewById(R.id.withdraw_req_spinner_total_fund);
-        spinner2 = (Spinner)findViewById(R.id.withdraw_req_spinner_ach);
-        ach = (RadioButton)findViewById(R.id.withdraw_req_ach);
-        cheque = (RadioButton)findViewById(R.id.withdraw_req_cheque);
-        paypal = (RadioButton)findViewById(R.id.withdraw_req_paypal);
+        sendReq = (Button) findViewById(R.id.send_req_btn);
+        spinner = (Spinner) findViewById(R.id.withdraw_req_spinner_total_fund);
+        spinner2 = (Spinner) findViewById(R.id.withdraw_req_spinner_ach);
 
-        if(ach.isSelected()){
-            spinner2.setVisibility(View.VISIBLE);
-        }
+        radioGroup = (RadioGroup) findViewById(R.id.radio_group);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.withdraw_req_ach:
+                        spinner2.setVisibility(View.VISIBLE);
+                        break;
+                    case R.id.withdraw_req_cheque:
+                        spinner2.setVisibility(View.GONE);
+                        break;
+                    case R.id.withdraw_req_paypal:
+                        spinner2.setVisibility(View.GONE);
+                        break;
+                }
+            }
+        });
+        ach = (RadioButton) findViewById(R.id.withdraw_req_ach);
+        cheque = (RadioButton) findViewById(R.id.withdraw_req_cheque);
+        paypal = (RadioButton) findViewById(R.id.withdraw_req_paypal);
 
         sendReq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                String ids = withdrawal.getPaymentIDs();
+                String amount = withdrawal.getTotalAmount();
+                String method = spinner2.getSelectedItem().toString();
+
                 Map<String, String> map = new HashMap<>();
                 map.put(tags.USER_ACTION, tags.SEND_WITHDRAWAL_REQUEST);
                 map.put(tags.USER_ID, active.getUser().getUserId() + "");
-                map.put(tags.WITHDRAWAL_PAYMENT_METHOD, "");
-                map.put(tags.WITHDRAWAL_PAYMENT_ID, "");
+                map.put(tags.WITHDRAWAL_PAYMENT_METHOD, method);
+                map.put(tags.WITHDRAWAL_PAYMENT_ID, ids);
                 map.put(tags.WITHDRAWAL_BANK_ID, "");
-                map.put(tags.WITHDRAWAL_AMOUNT, "");
+                map.put(tags.WITHDRAWAL_AMOUNT, amount);
                 dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
                     @Override
                     public void onSuccess(JSONObject jsonObject) {
                         try {
                             if (jsonObject.has(tags.SUCCESS)) {
                                 if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
-
+                                     finish();
                                 }
                             }
                         } catch (JSONException e) {
@@ -105,7 +125,7 @@ public class PaymentWithdrawalRequest extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 //NavUtils.navigateUpFromSameTask(this);
                 this.onBackPressed();
@@ -114,42 +134,37 @@ public class PaymentWithdrawalRequest extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void fetchData(){
-        showMessage("FetchdATA cALLING");
+    public void fetchData() {
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.WITHDRAWAL_REQUEST);
         map.put(tags.USER_ID, active.getUser().getUserId() + "");
         dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
-                showMessage("success");
-                Log.d("information",jsonObject.toString());
+                Log.d("information", jsonObject.toString());
                 try {
                     if (jsonObject.has(tags.SUCCESS)) {
                         if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
-                            Withdrawal withdrawal = Withdrawal.getOurInstance();
 
+                            withdrawal = Withdrawal.fromJSON(jsonObject);
 
-/*                            if (jsonObject.has(tags.ARR_BANK_DETAILS)) {
-                                ArrayList<BankInfo> infos = new ArrayList<>();
-                                JSONArray jsonArray = jsonObject.getJSONArray(tags.ARR_BANK_DETAILS);
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    BankInfo info = new BankInfo();
-                                    infos.add(info.fromJSON(jsonArray.getJSONObject(i)));
-                                    setData(infos);
-                                }
+                            String amount = withdrawal.getTotalAmount();
+                            if (amount == null) {
+                                amount = "0.00";
                             }
-                            if(jsonObject.has(tags.WITHDRAWAL_AMOUNT)){
-                                GetWithdrawHistory info = new GetWithdrawHistory();
-                                withdrawHistoryList.add(info.fromJSON(jsonObject.getJSONObject(tags.WITHDRAWAL_AMOUNT)));
-                                updateAmount(withdrawHistoryList);
+                            String[] arr = {"Total Available Funds($" + amount + ")"};
+                            spinner.setAdapter(new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_dropdown_item, arr));
 
+                            List<BankInfo> info = withdrawal.getBankInfoList();
+                            if (info == null) {
+                                info = new ArrayList<BankInfo>();
                             }
-                            if(jsonObject.has(tags.WITHDRAWAL_PAYMENT_ID)){
-                                GetWithdrawHistory info = new GetWithdrawHistory();
-                                info.fromJSON(jsonObject.getJSONObject(tags.WITHDRAWAL_PAYMENT_ID));
+                            for (int i = 0; i < info.size(); i++) {
+                                final BankInfo bankInfo = info.get(i);
+                                String name = bankInfo.getName();
+                                String[] arr1 = {"Select your Bank", name};
+                                spinner2.setAdapter(new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_dropdown_item, arr1));
                             }
-                            */
                         }
                     }
                 } catch (JSONException e) {
@@ -162,30 +177,9 @@ public class PaymentWithdrawalRequest extends AppCompatActivity {
             public void onError(VolleyError volleyError) {
                 volleyError.printStackTrace();
                 Log.e(TAG, volleyError.getMessage());
-                showMessage("error");
             }
 
         });
     }
 
-    private void setData(List<BankInfo> infolist){
-        for (int i = 0; i < infolist.size(); i++) {
-            BankInfo info = infolist.get(i);
-            String name = info.getName();
-            String[] arr = {"Select your Bank",name};
-            spinner2.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, arr));
-        }
- }
-
-    private void updateAmount(List<GetWithdrawHistory> list) {
-        for (int i = 0; i < list.size(); i++) {
-            GetWithdrawHistory info = list.get(i);
-            String amount = info.getAmount();
-            String[] arr = {"Total Available Funds($" + amount + ")"};
-            spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, arr));
-        }
-    }
-    private void showMessage(String message){
-        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
-    }
 }
