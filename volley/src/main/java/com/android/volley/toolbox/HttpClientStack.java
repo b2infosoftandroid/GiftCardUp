@@ -180,6 +180,7 @@ public class HttpClientStack implements HttpStack {
         /**
          * @throws IllegalArgumentException if the uri is invalid.
          */
+
         public HttpPatch(final String uri) {
             super();
             setURI(URI.create(uri));
