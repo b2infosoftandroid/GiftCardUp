@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
@@ -126,7 +127,7 @@ public class PaymentWithdrawalRequest extends AppCompatActivity {
                             spinner.setAdapter(new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_dropdown_item, arr));
 
                             List<BankInfo> info = withdrawal.getBankInfoList();
-                            String banks[] = new String[info.size()+1];
+                            String banks[] = new String[info.size() + 1];
                             for (int i = 0; i < banks.length; i++) {
                                 if(i==0){
                                     banks[i] = "Select Your Bank";
@@ -158,7 +159,7 @@ public class PaymentWithdrawalRequest extends AppCompatActivity {
         String bankId = "";
         if(ach.isSelected()) {
             if (spinner2.getSelectedItemPosition() == 0) {
-
+               // ((TextView)spinner2.getSelectedView()).setError("");
                 return;
             }
             String bankName = spinner2.getSelectedItem().toString();
