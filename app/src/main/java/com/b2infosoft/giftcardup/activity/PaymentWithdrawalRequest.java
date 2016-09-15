@@ -43,6 +43,7 @@ public class PaymentWithdrawalRequest extends AppCompatActivity {
     Spinner spinner, spinner2;
     RadioButton ach, cheque, paypal;
     Button sendReq;
+    int id;
     RadioGroup radioGroup;
 
     @Override
@@ -80,47 +81,15 @@ public class PaymentWithdrawalRequest extends AppCompatActivity {
         ach = (RadioButton) findViewById(R.id.withdraw_req_ach);
         cheque = (RadioButton) findViewById(R.id.withdraw_req_cheque);
         paypal = (RadioButton) findViewById(R.id.withdraw_req_paypal);
-
+        fetchData();
         sendReq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                String ids = withdrawal.getPaymentIDs();
-                String amount = withdrawal.getTotalAmount();
-                String method = spinner2.getSelectedItem().toString();
-
-                Map<String, String> map = new HashMap<>();
-                map.put(tags.USER_ACTION, tags.SEND_WITHDRAWAL_REQUEST);
-                map.put(tags.USER_ID, active.getUser().getUserId() + "");
-                map.put(tags.WITHDRAWAL_PAYMENT_METHOD, method);
-                map.put(tags.WITHDRAWAL_PAYMENT_ID, ids);
-                map.put(tags.WITHDRAWAL_BANK_ID, "");
-                map.put(tags.WITHDRAWAL_AMOUNT, amount);
-                dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
-                    @Override
-                    public void onSuccess(JSONObject jsonObject) {
-                        try {
-                            if (jsonObject.has(tags.SUCCESS)) {
-                                if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
-                                     finish();
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.e(TAG, e.getMessage());
-                        }
-                    }
-
-                    @Override
-                    public void onError(VolleyError volleyError) {
-                        volleyError.printStackTrace();
-                        Log.e(TAG, volleyError.getMessage());
-                    }
-
-                });
+                List<BankInfo> info  = withdrawal.getBankInfoList();
+                sendData(info);
             }
         });
-        fetchData();
+
     }
 
     @Override
@@ -165,6 +134,52 @@ public class PaymentWithdrawalRequest extends AppCompatActivity {
                                 String[] arr1 = {"Select your Bank", name};
                                 spinner2.setAdapter(new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_dropdown_item, arr1));
                             }
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, e.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(VolleyError volleyError) {
+                volleyError.printStackTrace();
+                Log.e(TAG, volleyError.getMessage());
+            }
+
+        });
+    }
+
+    private void sendData(List<BankInfo> info){
+        for (int i = 0; i < info.size(); i++) {
+            final BankInfo bankInfo = info.get(i);
+           int btnId =  radioGroup.getCheckedRadioButtonId();
+            if(btnId == R.id.withdraw_req_ach) {
+                id = bankInfo.getId();
+            }else {
+                id = 0;
+            }
+        }
+        String ids = withdrawal.getPaymentIDs();
+        String amount = withdrawal.getTotalAmount();
+        String method = spinner2.getSelectedItem().toString();
+
+
+        Map<String, String> map = new HashMap<>();
+        map.put(tags.USER_ACTION, tags.SEND_WITHDRAWAL_REQUEST);
+        map.put(tags.USER_ID, active.getUser().getUserId() + "");
+        map.put(tags.WITHDRAWAL_PAYMENT_METHOD, method);
+        map.put(tags.WITHDRAWAL_PAYMENT_ID, ids);
+        map.put(tags.WITHDRAWAL_BANK_ID, id + "");
+        map.put(tags.WITHDRAWAL_AMOUNT, amount);
+        dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
+            @Override
+            public void onSuccess(JSONObject jsonObject) {
+                try {
+                    if (jsonObject.has(tags.SUCCESS)) {
+                        if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                            finish();
                         }
                     }
                 } catch (JSONException e) {
