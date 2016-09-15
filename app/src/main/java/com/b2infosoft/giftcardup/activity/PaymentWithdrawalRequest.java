@@ -44,6 +44,7 @@ public class PaymentWithdrawalRequest extends AppCompatActivity {
     RadioButton ach, cheque, paypal;
     Button sendReq;
     int id;
+    String method;
     RadioGroup radioGroup;
 
     @Override
@@ -85,7 +86,7 @@ public class PaymentWithdrawalRequest extends AppCompatActivity {
         sendReq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<BankInfo> info  = withdrawal.getBankInfoList();
+                List<BankInfo> info = withdrawal.getBankInfoList();
                 sendData(info);
             }
         });
@@ -125,15 +126,15 @@ public class PaymentWithdrawalRequest extends AppCompatActivity {
                             spinner.setAdapter(new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_dropdown_item, arr));
 
                             List<BankInfo> info = withdrawal.getBankInfoList();
-                            if (info == null) {
-                                info = new ArrayList<BankInfo>();
+                            String banks[] = new String[info.size()+1];
+                            for (int i = 0; i < banks.length; i++) {
+                                if(i==0){
+                                    banks[i] = "Select Your Bank";
+                                    continue;
+                                }
+                                banks[i] = info.get(i).getName();
                             }
-                            for (int i = 0; i < info.size(); i++) {
-                                final BankInfo bankInfo = info.get(i);
-                                String name = bankInfo.getName();
-                                String[] arr1 = {"Select your Bank", name};
-                                spinner2.setAdapter(new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_dropdown_item, arr1));
-                            }
+                            spinner2.setAdapter(new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_dropdown_item, banks));
                         }
                     }
                 } catch (JSONException e) {
@@ -151,27 +152,40 @@ public class PaymentWithdrawalRequest extends AppCompatActivity {
         });
     }
 
-    private void sendData(List<BankInfo> info){
-        for (int i = 0; i < info.size(); i++) {
-            final BankInfo bankInfo = info.get(i);
-           int btnId =  radioGroup.getCheckedRadioButtonId();
-            if(btnId == R.id.withdraw_req_ach) {
-                id = bankInfo.getId();
-            }else {
-                id = 0;
-            }
-        }
+    private void sendData(List<BankInfo> info) {
         String ids = withdrawal.getPaymentIDs();
         String amount = withdrawal.getTotalAmount();
-        String method = spinner2.getSelectedItem().toString();
+        String bankId = "";
+        if(ach.isSelected()) {
+            if (spinner2.getSelectedItemPosition() == 0) {
 
+                return;
+            }
+            String bankName = spinner2.getSelectedItem().toString();
+            List<BankInfo>  infoList =    withdrawal.getBankInfoList();
+            for (BankInfo info1:infoList){
+                if(info1.getName().equalsIgnoreCase(bankName)){
+                    bankId = info1.getId()+"";
+                    break;
+                }
+            }
+        }
 
+        if(ach.isSelected()){
+            method ="ACH";
+        } else if(paypal.isSelected()){
+            method ="Paypal";
+        }else if(cheque.isSelected()){
+            method ="Cheque";
+        }
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.SEND_WITHDRAWAL_REQUEST);
         map.put(tags.USER_ID, active.getUser().getUserId() + "");
         map.put(tags.WITHDRAWAL_PAYMENT_METHOD, method);
         map.put(tags.WITHDRAWAL_PAYMENT_ID, ids);
-        map.put(tags.WITHDRAWAL_BANK_ID, id + "");
+        if(ach.isSelected()) {
+            map.put(tags.WITHDRAWAL_BANK_ID, bankId);
+        }
         map.put(tags.WITHDRAWAL_AMOUNT, amount);
         dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
             @Override

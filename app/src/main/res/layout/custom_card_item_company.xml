@@ -324,24 +324,18 @@
                     android:text="@string/about_brand_text"/>
             </LinearLayout>
 
-            <Button
-                android:id="@+id/company_card_card_buy_now"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="@dimen/button_margin_left"
-                android:background="@drawable/button_fill_background"
-                android:text="ADD CART"
-                android:textColor="@color/button_foreground" />
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="45dp">
+                android:layout_height="45dp"
+                android:layout_marginTop="@dimen/button_margin_left">
                 <Button
                     android:id="@+id/add_to_cart"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_toLeftOf="@+id/divider"
                     android:text="ADD TO CART"
-                    />
+                    android:textColor="@color/button_foreground"
+                    android:background="@drawable/button_fill_background" />
                 <View
                     android:id="@+id/divider"
                     android:layout_width="1dp"
@@ -357,7 +351,8 @@
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/divider"
                     android:text="BUY NOW"
-                    />
+                    android:textColor="@color/button_foreground"
+                    android:background="@drawable/button_fill_background"/>
             </RelativeLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
