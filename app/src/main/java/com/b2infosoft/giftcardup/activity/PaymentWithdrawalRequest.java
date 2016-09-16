@@ -87,8 +87,7 @@ public class PaymentWithdrawalRequest extends AppCompatActivity {
         sendReq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<BankInfo> info = withdrawal.getBankInfoList();
-                sendData(info);
+                sendData();
             }
         });
 
@@ -128,8 +127,8 @@ public class PaymentWithdrawalRequest extends AppCompatActivity {
 
                             List<BankInfo> info = withdrawal.getBankInfoList();
                             String banks[] = new String[info.size() + 1];
-                            int value = banks.length;
-                            Log.d("value",value + "");
+                            //int value = banks.length;
+                            //Log.d("value",value + "");
                             for (int i = 0; i < banks.length; i++) {
                                 if(i==0){
                                     banks[i] = "Select Your Bank";
@@ -155,13 +154,16 @@ public class PaymentWithdrawalRequest extends AppCompatActivity {
         });
     }
 
-    private void sendData(List<BankInfo> info) {
+    private void sendData() {
+        TextView selectedTextView = (TextView) spinner2.getSelectedView();
+        selectedTextView.setError(null);
         String ids = withdrawal.getPaymentIDs();
         String amount = withdrawal.getTotalAmount();
         String bankId = "";
         if(ach.isSelected()) {
             if (spinner2.getSelectedItemPosition() == 0) {
-               // ((TextView)spinner2.getSelectedView()).setError("");
+                selectedTextView.setError("Please Fill Bank");
+                spinner2.requestFocus();
                 return;
             }
             String bankName = spinner2.getSelectedItem().toString();
@@ -174,13 +176,15 @@ public class PaymentWithdrawalRequest extends AppCompatActivity {
             }
         }
 
-        if(ach.isSelected()){
+        int btnId = radioGroup.getCheckedRadioButtonId();
+        if(btnId == R.id.withdraw_req_ach){
             method ="ACH";
-        } else if(paypal.isSelected()){
+        }else if(btnId == R.id.withdraw_req_paypal){
             method ="Paypal";
-        }else if(cheque.isSelected()){
+        }else if(btnId == R.id.withdraw_req_cheque){
             method ="Cheque";
         }
+        Log.d("withdrawal",method);
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.SEND_WITHDRAWAL_REQUEST);
         map.put(tags.USER_ID, active.getUser().getUserId() + "");
@@ -193,9 +197,11 @@ public class PaymentWithdrawalRequest extends AppCompatActivity {
         dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
+                //Log.d("win",jsonObject.toString());
                 try {
                     if (jsonObject.has(tags.SUCCESS)) {
                         if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                            Toast.makeText(getBaseContext(),"success",Toast.LENGTH_SHORT).show();
                             finish();
                         }
                     }
