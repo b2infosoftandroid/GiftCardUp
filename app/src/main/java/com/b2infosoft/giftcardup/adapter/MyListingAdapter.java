@@ -176,6 +176,9 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             cardHolder.soldOn.setText(card.getSoldOn().equalsIgnoreCase("00-00-0000") ? "" : card.getSoldOn());
             cardHolder.fund.setText(card.getYourEarning());
             cardHolder.status.setText(card.getApproveStatusName(card.getApproveStatus()));
+
+            cardHolder.status.setBackgroundColor(card.getApproveStatusColor(context,card.getApproveStatus()));
+
             setActions(cardHolder, card.getApproveStatus());
             cardHolder.card1.setOnClickListener(new View.OnClickListener() {
                 @Override

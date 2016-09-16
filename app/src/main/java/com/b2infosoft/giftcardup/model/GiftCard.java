@@ -1,9 +1,15 @@
 package com.b2infosoft.giftcardup.model;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
+
+import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.app.Tags;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.Serializable;
 
 /**
@@ -40,6 +46,7 @@ public class GiftCard implements Serializable {
     private String needReview;
     private int cardType;
     private String disputeResult;
+
     public int getGiftCardID() {
         return giftCardID;
     }
@@ -207,6 +214,7 @@ public class GiftCard implements Serializable {
     public void setApproveDate(String approveDate) {
         this.approveDate = approveDate;
     }
+
     /**
      * 0=> Processing,
      * 1=> Listed,
@@ -217,17 +225,44 @@ public class GiftCard implements Serializable {
      * 7 => Under Investigation,
      * 8 => Investigated,
      * 9 => Needs Review,
-     *
-     *
-     * */
+     */
     public int getApproveStatus() {
         return approveStatus;
     }
-    public String getApproveStatusName(int status){
-        String statusType[] = {"Processing","Listed","Sold","Sold","Denied",
-                "Deleted","Pending Shipment","Under Investigation","Investigated","Needs Review"};
+
+    public String getApproveStatusName(int status) {
+        String statusType[] = {"Processing", "Listed", "Sold", "Sold", "Denied",
+                "Deleted", "Pending Shipment", "Under Investigation", "Investigated", "Needs Review"};
         return statusType[status];
     }
+
+    /**
+     * 0=> Processing,
+     * 1=> Listed,
+     * 2,3 => Sold,
+     * 4 => Denied,
+     * 5 => Deleted,
+     * 6 => Pending Shipment,
+     * 7 => Under Investigation,
+     * 8 => Investigated,
+     * 9 => Needs Review,
+     */
+    public int getApproveStatusColor(Context context, int status) {
+        int[] colorCode = {
+                context.getResources().getColor(R.color.verification_expired),
+                context.getResources().getColor(R.color.login_edit_text_text),
+                context.getResources().getColor(R.color.verification_approve),
+                context.getResources().getColor(R.color.verification_approve),
+                context.getResources().getColor(R.color.verification_rejected),
+                context.getResources().getColor(R.color.verification_pending),
+                context.getResources().getColor(R.color.verification_font),
+                context.getResources().getColor(R.color.verification_not_submitted),
+                context.getResources().getColor(R.color.buy_card_company),
+                context.getResources().getColor(R.color.profile_account_details_divider)
+        };
+        return colorCode[status];
+    }
+
     public void setApproveStatus(int approveStatus) {
         this.approveStatus = approveStatus;
     }
@@ -279,9 +314,10 @@ public class GiftCard implements Serializable {
     }
 
     /**
-     *  2 => E-Card
-     *  1 => Physical Card
-     *  0 => Physical Card
+     * 2 => E-Card
+     * 1 => Physical Card
+     * 0 => Physical Card
+     *
      * @return int
      */
     public int getCardType() {
