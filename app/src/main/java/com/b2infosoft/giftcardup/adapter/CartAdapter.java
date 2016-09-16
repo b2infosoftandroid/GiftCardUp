@@ -52,8 +52,6 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof CardHolder) {
             final GiftCard card = cardInfoList.get(position);
-            Gson gson = new Gson();
-            Log.d("DATA",gson.toJson(card));
             final CardHolder cardHolder = (CardHolder) holder;
             cardHolder.type.setText(card.getCardType()==2?"E-CARD":"PHYSICAL");
             cardHolder.value.setText("$"+card.getCardPrice());

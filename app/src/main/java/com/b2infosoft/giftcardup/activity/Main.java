@@ -126,7 +126,9 @@ public class Main extends GiftCardUp {
             });
         }
     }
+    private void refreshCartItems(){
 
+    }
     @Override
     protected void onRestart() {
         super.onRestart();
