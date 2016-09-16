@@ -191,7 +191,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/divider"
-            android:background="@drawable/button_empty_background"
+            android:background="@drawable/button_background"
             android:text="Cancel"
             android:textColor="@color/app_background" />
 
@@ -208,7 +208,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/divider"
-            android:background="@drawable/button_empty_background"
+            android:background="@drawable/button_background"
             android:gravity="center"
             android:text="Save"
             android:textColor="@color/app_background" />

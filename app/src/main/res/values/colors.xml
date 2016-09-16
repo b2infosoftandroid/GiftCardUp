@@ -18,7 +18,9 @@
     <color name="button_foreground">#fff</color>
     <color name="button_background">#00aff0</color>
     <color name="button_stroke">#00aff0</color>
+    <color name="button_stroke_black">#151515</color>
     <color name="button_empty_stroke">#C2DFFF</color>
+    <color name="button_fill_stroke">#545454</color>
 
     <!-- LOGINT     -->
     <color name="login_edit_text_text">#b4ebff</color>
