@@ -9,108 +9,134 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp">
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/card_image"
-            android:layout_width="70dp"
-            android:layout_height="40dp"
-            android:scaleType="fitXY"
-            android:layout_marginRight="5dp"
-            android:src="@drawable/not_find"
-            android:layout_gravity="center"
-            />
-        <TableLayout
-            android:layout_width="fill_parent"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:stretchColumns="0,1,2"
-            >
-            <TableRow
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                >
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/card_image"
+                    android:layout_width="70dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="5dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/not_find" />
+
                 <TextView
                     android:id="@+id/card_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="TISCON"
                     android:textAllCaps="true"
-                    android:textStyle="bold"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Card Value:"
-                    android:textAllCaps="true"
-                    android:textStyle="bold"
-                    />
-                <TextView
-                    android:id="@+id/card_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="$33.33"
-                    android:textAllCaps="true"
-                    android:textStyle="normal"
-                    />
-            </TableRow>
-            <TableRow
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                >
+                    android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/card_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="E-CARD"
                     android:textAllCaps="true"
-                    android:textStyle="bold"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Price:"
-                    android:textAllCaps="true"
-                    android:textStyle="bold"
-                    />
-                <TextView
-                    android:id="@+id/card_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="$5150.0"
-                    android:textAllCaps="true"
-                    android:textStyle="normal"
-                    />
-            </TableRow>
-            <TableRow
-                android:layout_width="wrap_content"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                >
-                <ImageView
-                    android:id="@+id/action_delete"
-                    android:layout_width="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="Card Value:"
+                        android:textAllCaps="true"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/card_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="$33.33"
+                        android:textAllCaps="true"
+                        android:textStyle="normal" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_delete_24dp_1"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="Price:"
+                        android:textAllCaps="true"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/card_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="$5150.0"
+                        android:textAllCaps="true"
+                        android:textStyle="normal" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Saving:"
-                    android:textAllCaps="true"
-                    android:textStyle="bold"
-                    />
-                <TextView
-                    android:id="@+id/card_saving"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="85%"
-                    android:textAllCaps="true"
-                    android:textStyle="normal"
-                    />
-            </TableRow>
-        </TableLayout>
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="Saving:"
+                        android:textAllCaps="true"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/card_saving"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="85%"
+                        android:textAllCaps="true"
+                        android:textStyle="normal" />
+                </RelativeLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/divider" />
+
+        <Button
+            android:id="@+id/action_delete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_empty_background"
+            android:text="Remove"
+            android:textColor="@color/app_background" />
     </LinearLayout>
 </android.support.v7.widget.CardView>

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,7 +68,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public class CardHolder extends RecyclerView.ViewHolder {
 
         ImageView image;
-        ImageView action_delete;
+        Button action_delete;
         TextView name;
         TextView type;
         TextView value;
@@ -77,7 +78,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public CardHolder(View view) {
             super(view);
             image = (ImageView) view.findViewById(R.id.card_image);
-            action_delete = (ImageView) view.findViewById(R.id.action_delete);
+            action_delete = (Button) view.findViewById(R.id.action_delete);
             name = (TextView) view.findViewById(R.id.card_name);
             type = (TextView) view.findViewById(R.id.card_type);
             value = (TextView) view.findViewById(R.id.card_value);
