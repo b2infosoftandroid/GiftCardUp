@@ -346,7 +346,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_toLeftOf="@+id/divider"
-                        android:background="@color/button_foreground"
+                        android:background="@drawable/button_empty_background"
                         android:text="ADD TO CART"
                         android:textColor="@color/app_background" />
 
@@ -363,7 +363,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@+id/divider"
-                        android:background="@color/button_foreground"
+                        android:background="@drawable/button_empty_background"
                         android:text="BUY NOW"
                         android:textColor="@color/app_background" />
                 </RelativeLayout>
