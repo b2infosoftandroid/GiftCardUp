@@ -25,7 +25,9 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="45dp"
+        android:background="@drawable/button_background"
         android:layout_gravity="bottom"
         android:text="CHECK OUT"
+        android:textColor="@color/app_background"
         />
 </FrameLayout>

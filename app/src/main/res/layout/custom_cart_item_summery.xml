@@ -6,39 +6,48 @@
     card_view:cardCornerRadius="0dp"
     card_view:cardUseCompatPadding="true">
     <TableLayout
-        android:layout_margin="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:stretchColumns="*"
-        >
+        android:padding="5dp">
         <TableRow
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_span="2"
-            >
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Summary"
+                android:textColor="@color/app_background"
+                android:textSize="@dimen/button_text_font_size"
                 android:textAllCaps="true"
                 android:textStyle="bold"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 />
         </TableRow>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/colorPrimary" />
 
         <TableRow
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            >
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin">
             <TextView
                 android:id="@+id/card_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Total Card Value:"
+                android:textSize="@dimen/button_text_font_size"
                 android:textAllCaps="true"
-                android:textStyle="bold"
+                android:textStyle="normal"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 />
             <TextView
@@ -55,13 +64,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            >
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Total Price:"
+                android:textSize="@dimen/button_text_font_size"
                 android:textAllCaps="true"
-                android:textStyle="bold"
+                android:textStyle="normal"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 />
             <TextView
@@ -83,11 +94,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            >
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Saving:"
+                android:textSize="@dimen/button_text_font_size"
                 android:textAllCaps="true"
                 android:textStyle="bold"
                 android:textAppearance="?android:attr/textAppearanceMedium"
