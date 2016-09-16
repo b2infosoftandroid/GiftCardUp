@@ -179,52 +179,6 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             cardHolder.cardOff.setText(String.valueOf(giftCard.getPercentageOff()) + "%");
             cardHolder.cardValue.setText("$" + String.valueOf(giftCard.getCardPrice()));
             cardHolder.cardPrice.setText("$" + String.valueOf(giftCard.getCardValue()));
-            /*
-            cardHolder.buyNow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    final Cart cart = (Cart) context.getApplicationContext();
-                    cart.addCartItem(card);
-                    final Map<String, String> map = new HashMap<>();
-                    map.put(tags.USER_ACTION, tags.ADD_CART_ITEM_GIFT_CARD);
-                    map.put(tags.USER_ID, active.getUser().getUserId());
-                    map.put(tags.GIFT_CARD_GIFT_CARD_ID, card.getGiftCardID() + "");
-                    dmrRequest.doPost(urls.getCartInfo(), map, new DMRResult() {
-                        @Override
-                        public void onSuccess(JSONObject jsonObject) {
-                            try {
-                                if (jsonObject.has(tags.SUCCESS)) {
-                                    if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
-                                        JSONArray array = jsonObject.getJSONArray(tags.GIFT_CARDS);
-                                        cart.removeAll();
-                                        for (int i = 0; i < array.length(); i++) {
-                                            GiftCard giftCard=GiftCard.fromJSON(array.getJSONObject(i));
-                                            cart.addCartItem(giftCard);
-                                            Gson gson = new Gson();
-                                            Log.d("DATA", gson.toJson(giftCard));
-                                        }
-                                        CompanyCardAdapter.super.notifyDataSetChanged();
-                                    } else if (jsonObject.getInt(tags.SUCCESS) == tags.SUSPEND) {
-
-                                    } else {
-
-                                    }
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                Log.e(TAG, e.getMessage());
-                            }
-                        }
-
-                        @Override
-                        public void onError(VolleyError volleyError) {
-                            volleyError.printStackTrace();
-                            Log.e(TAG, volleyError.getMessage());
-                        }
-                    });
-                }
-            });
-            */
             cardHolder.add_to_cart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

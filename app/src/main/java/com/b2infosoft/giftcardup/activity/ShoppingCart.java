@@ -68,7 +68,9 @@ public class ShoppingCart extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     private void refreshShoppingCartItemList(){
-        adapter = new CartAdapter(this, cart.getCartItemList());
+        List<GiftCard> cartList = cart.getCartItemList();
+        cartList.add(null);
+        adapter = new CartAdapter(this, cartList);
         recyclerView.setAdapter(adapter);
     }
     @Override
