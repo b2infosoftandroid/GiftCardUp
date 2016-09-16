@@ -67,7 +67,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             cardHolder.name.setText(card.getCardName());
             cardHolder.value.setText("$" + card.getCardPrice());
             cardHolder.price.setText("$" + card.getCardValue());
-            cardHolder.saving.setText(String.valueOf(card.getSellingPercentage()));
+            cardHolder.saving.setText(String.valueOf(card.getSellingPercentage())+"%");
         }
     }
 
