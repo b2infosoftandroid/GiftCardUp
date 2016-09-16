@@ -128,12 +128,14 @@ public class PaymentWithdrawalRequest extends AppCompatActivity {
 
                             List<BankInfo> info = withdrawal.getBankInfoList();
                             String banks[] = new String[info.size() + 1];
+                            int value = banks.length;
+                            Log.d("value",value + "");
                             for (int i = 0; i < banks.length; i++) {
                                 if(i==0){
                                     banks[i] = "Select Your Bank";
                                     continue;
                                 }
-                                banks[i] = info.get(i).getName();
+                                banks[i] = info.get(i-1).getName();
                             }
                             spinner2.setAdapter(new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_dropdown_item, banks));
                         }
