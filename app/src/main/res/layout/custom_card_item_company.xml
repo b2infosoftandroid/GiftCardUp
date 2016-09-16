@@ -9,7 +9,7 @@
         android:id="@+id/card_view1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardCornerRadius="5dp"
+        card_view:cardCornerRadius="0dp"
         card_view:cardUseCompatPadding="true">
 
         <LinearLayout
@@ -105,7 +105,7 @@
                 android:id="@+id/card_view2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:visibility="visible"
                 android:orientation="vertical">
@@ -330,38 +330,42 @@
                         android:textAllCaps="true"
                         android:textColor="@color/buy_card_text" />
                 </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="@dimen/button_margin_left"
+                    android:background="@color/colorPrimary" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_marginTop="@dimen/button_margin_left">
+                    android:layout_height="35dp"
+                    >
 
                     <Button
                         android:id="@+id/add_to_cart"
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_toLeftOf="@+id/divider"
-                        android:background="@drawable/button_fill_background"
+                        android:background="@color/button_foreground"
                         android:text="ADD TO CART"
-                        android:textColor="@color/button_foreground" />
+                        android:textColor="@color/app_background" />
 
                     <View
                         android:id="@+id/divider"
-                        android:layout_width="1dp"
+                        android:layout_width="0.5dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentTop="true"
                         android:layout_centerInParent="true"
-                        android:layout_margin="5dp"
-                        android:background="@color/colorPrimaryDark" />
+                        android:background="@color/colorPrimary" />
 
                     <Button
                         android:id="@+id/card_buy_now"
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@+id/divider"
-                        android:background="@drawable/button_fill_background"
+                        android:background="@color/button_foreground"
                         android:text="BUY NOW"
-                        android:textColor="@color/button_foreground" />
+                        android:textColor="@color/app_background" />
                 </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
