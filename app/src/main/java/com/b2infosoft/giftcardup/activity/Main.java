@@ -10,12 +10,14 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.app.Cart;
 import com.b2infosoft.giftcardup.app.Config;
@@ -37,15 +39,24 @@ import com.b2infosoft.giftcardup.fragments.SpeedySell;
 import com.b2infosoft.giftcardup.fragments.TinderWork;
 import com.b2infosoft.giftcardup.fragments.WithdrawalHistory;
 import com.b2infosoft.giftcardup.model.CompanyCategory;
+import com.b2infosoft.giftcardup.model.GiftCard;
 import com.b2infosoft.giftcardup.model.User;
 import com.b2infosoft.giftcardup.utils.Utils1;
 import com.b2infosoft.giftcardup.utils.Utils2;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
+import com.b2infosoft.giftcardup.volly.DMRResult;
 import com.b2infosoft.giftcardup.volly.LruBitmapCache;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class Main extends GiftCardUp {
     private final static String TAG = Main.class.getName();
@@ -109,6 +120,7 @@ public class Main extends GiftCardUp {
         setNavigationMenu();
         updateMenuItemLeft(dbHelper.getCategories());
         replaceFragment(new Dashboard());
+        loadAvailableCartItems();
     }
 
     private void updateMenuItemLeft(List<CompanyCategory> categoryList) {
@@ -127,15 +139,53 @@ public class Main extends GiftCardUp {
         }
     }
 
+    private void loadAvailableCartItems() {
+        Map<String, String> map = new HashMap<>();
+        map.put(tags.USER_ACTION, tags.CHECK_CART_ITEMS);
+        map.put(tags.USER_ID, active.getUser().getUserId() + "");
+        dmrRequest.doPost(urls.getCartInfo(), map, new DMRResult() {
+            @Override
+            public void onSuccess(JSONObject jsonObject) {
+                try {
+                    if (jsonObject.has(tags.SUCCESS)) {
+                        if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                            if (jsonObject.has(tags.GIFT_CARDS)) {
+                                JSONArray array = jsonObject.getJSONArray(tags.GIFT_CARDS);
+                                cart.removeAll();
+                                for (int i = 0; i < array.length(); i++) {
+                                    cart.addCartItem(GiftCard.fromJSON(array.getJSONObject(i)));
+                                }
+                            }
+                        } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
+                            cart.removeAll();
+                        }
+                    }
+                    invalidateOptionsMenu();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, e.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(VolleyError volleyError) {
+                volleyError.printStackTrace();
+                Log.e(TAG, volleyError.getMessage());
+            }
+        });
+    }
+
     @Override
     protected void onRestart() {
         super.onRestart();
+        loadAvailableCartItems();
         invalidateOptionsMenu();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        loadAvailableCartItems();
         invalidateOptionsMenu();
     }
 
