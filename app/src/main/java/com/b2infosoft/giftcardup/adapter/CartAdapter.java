@@ -148,6 +148,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                 @Override
                                 public void onSuccess(JSONObject jsonObject) {
                                     progress.dismiss();
+
                                     try {
                                         if (jsonObject.has(tags.SUCCESS)) {
                                             if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {

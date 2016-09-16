@@ -1,5 +1,6 @@
 package com.b2infosoft.giftcardup.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 
 import android.support.v7.widget.CardView;
@@ -20,6 +21,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.activity.CompanyCard;
 import com.b2infosoft.giftcardup.activity.Main;
 import com.b2infosoft.giftcardup.app.Cart;
 import com.b2infosoft.giftcardup.app.Config;
@@ -108,7 +110,7 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         Button buyNow, info;
         Button add_to_cart, card_buy_now;
         CardView card1;
-        LinearLayout linearLayout,layout2;
+        LinearLayout linearLayout, layout2;
         int count = 0;
 
         public CardHolder(View view) {
@@ -196,15 +198,14 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                     if (jsonObject.has(tags.SUCCESS)) {
                                         if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
                                             JSONArray array = jsonObject.getJSONArray(tags.GIFT_CARDS);
+                                            cart.removeAll();
                                             for (int i = 0; i < array.length(); i++) {
                                                 GiftCard giftCard1 = GiftCard.fromJSON(array.getJSONObject(i));
-                                                if (giftCard.getGiftCardID() == giftCard1.getGiftCardID()) {
-                                                    cart.addCartItem(giftCard);
-                                                    showMessage("Successfully Add to Cart");
-                                                    break;
-                                                }
+                                                cart.addCartItem(giftCard);
                                             }
+                                            showMessage("Successfully Add to Cart");
                                             cardHolder.add_to_cart.setText("Remove to cart");
+                                            ((CompanyCard) context).invalidateOptionsMenu();
                                         } else if (jsonObject.getInt(tags.SUCCESS) == tags.SUSPEND) {
                                             showMessage("You have to attempt more three times. So you can add item in cart after three hours.");
                                         } else {
@@ -241,6 +242,7 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                             }
                                             cardHolder.add_to_cart.setText("Add to cart");
                                             showMessage("Successfully remove to Cart ");
+                                            ((Activity) context).invalidateOptionsMenu();
                                         } else if (jsonObject.getInt(tags.SUCCESS) == tags.SUSPEND) {
 
                                         } else {
