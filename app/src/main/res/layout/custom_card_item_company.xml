@@ -53,7 +53,7 @@
                             android:textAllCaps="true"
                             android:textColor="@color/buy_card_company"
                             android:textStyle="bold" />
-
+<!--
                         <TextView
                             android:id="@+id/card_item_count"
                             android:layout_width="wrap_content"
@@ -63,6 +63,7 @@
                             android:textAllCaps="true"
                             android:textColor="@color/buy_card_company"
                             android:textStyle="bold" />
+                            -->
                     </LinearLayout>
 
                     <LinearLayout

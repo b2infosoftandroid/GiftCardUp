@@ -211,6 +211,10 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     context.startActivity(intent);
                     break;
                 case R.id.action_delete:
+                    AlertBox alertBox = new AlertBox(context);
+                    alertBox.setTitle("Alert");
+                    alertBox.setMessage("Sure You Want To Delete Card");
+                    alertBox.show();
                     Map<String, String> map = new HashMap<>();
                     map.put(tags.USER_ACTION, tags.DELETE_GIFT_CARD);
                     map.put(tags.USER_ID, active.getUser().getUserId() + "");
