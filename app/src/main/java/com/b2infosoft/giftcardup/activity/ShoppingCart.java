@@ -15,6 +15,7 @@ import com.b2infosoft.giftcardup.app.Cart;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
+import com.b2infosoft.giftcardup.model.CartSummary;
 import com.b2infosoft.giftcardup.model.GiftCard;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
@@ -68,8 +69,14 @@ public class ShoppingCart extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     private void refreshShoppingCartItemList(){
-        List<GiftCard> cartList = cart.getCartItemList();
-        cartList.add(null);
+        List<Object> cartList = new ArrayList<>();
+        for (GiftCard giftCard:cart.getCartItemList())       {
+            cartList.add(giftCard);
+        }
+        if(cartList.size()>0){
+            CartSummary summary = new CartSummary(cart.getCartItemList());
+            cartList.add(summary);
+        }
         adapter = new CartAdapter(this, cartList);
         recyclerView.setAdapter(adapter);
     }

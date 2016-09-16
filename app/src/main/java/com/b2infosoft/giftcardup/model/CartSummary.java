@@ -1,5 +1,7 @@
 package com.b2infosoft.giftcardup.model;
 
+import android.util.Log;
+
 import java.util.List;
 
 /**
@@ -11,16 +13,50 @@ public class CartSummary {
     private float value;
     private float price;
     private float saving;
+
     public CartSummary(List<GiftCard> cardList) {
         this.cardList = cardList;
     }
-    public float getValue(){
-        return 0.0f;
+
+    public float getValue() {
+        float value = 0.0f;
+        if (cardList == null)
+            return value;
+        for (GiftCard giftCard : cardList) {
+            String v = giftCard.getCardValue();
+            if (v.length() == 0) {
+                v = "0";
+            }
+            try {
+                value += Float.parseFloat(v);
+            } catch (NumberFormatException ex) {
+                ex.printStackTrace();
+                Log.e("Error", ex.getMessage());
+            }
+        }
+        return value;
     }
-    public float getPrice(){
-        return 0.0f;
+
+    public float getPrice() {
+        float price = 0.0f;
+        if (cardList == null)
+            return price;
+        for (GiftCard giftCard : cardList) {
+            String p = giftCard.getCardPrice();
+            if (p.length() == 0) {
+                p = "0";
+            }
+            try {
+                price += Float.parseFloat(p);
+            } catch (NumberFormatException ex) {
+                ex.printStackTrace();
+                Log.e("Error", ex.getMessage());
+            }
+        }
+        return price;
     }
-    public float getSaving(){
-        return 0.0f;
+
+    public float getSaving() {
+        return getPrice() - getValue();
     }
 }
