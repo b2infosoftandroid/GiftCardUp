@@ -1,6 +1,7 @@
 package com.b2infosoft.giftcardup.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,9 +11,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.activity.PaymentWithdrawalRequest;
 import com.b2infosoft.giftcardup.adapter.AvailableFundRecyclerViewAdapter;
 import com.b2infosoft.giftcardup.adapter.WithdrawalHistoryRecyclerViewAdapter;
 import com.b2infosoft.giftcardup.app.Tags;
@@ -43,6 +46,7 @@ public class AvailableFund extends Fragment {
     DMRRequest dmrRequest;
     private Progress progress;
     RecyclerView recyclerView;
+    Button withdrawReq;
     AvailableFundRecyclerViewAdapter adapter;
     List<GetWithdrawHistory> cardList;
     boolean isLoading = false;
@@ -65,6 +69,14 @@ public class AvailableFund extends Fragment {
                              Bundle savedInstanceState) {
         init();
         View view = inflater.inflate(R.layout.fragment_available_fund, container, false);
+        withdrawReq = (Button) view.findViewById(R.id.available_fund_withdrawal_request);
+        withdrawReq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), PaymentWithdrawalRequest.class);
+                startActivity(intent);
+            }
+        });
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new AvailableFundRecyclerViewAdapter(getContext(), cardList, recyclerView);

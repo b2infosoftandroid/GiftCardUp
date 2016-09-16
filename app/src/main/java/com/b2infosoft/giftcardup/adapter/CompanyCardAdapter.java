@@ -107,8 +107,8 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         TextView cardPrice;
         Button buyNow, info;
         Button add_to_cart, card_buy_now;
-        CardView card1, card2;
-        LinearLayout linearLayout;
+        CardView card1;
+        LinearLayout linearLayout,layout2;
         int count = 0;
 
         public CardHolder(View view) {
@@ -122,11 +122,11 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             add_to_cart = (Button) view.findViewById(R.id.add_to_cart);
             card_buy_now = (Button) view.findViewById(R.id.card_buy_now);
             card1 = (CardView) view.findViewById(R.id.card_view1);
-            card2 = (CardView) view.findViewById(R.id.card_view2);
+            layout2 = (LinearLayout) view.findViewById(R.id.card_view2);
             card1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    card2.setVisibility(card2.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                    layout2.setVisibility(layout2.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 }
             });
             linearLayout = (LinearLayout) view.findViewById(R.id.buy_card_linear_layout);

@@ -67,7 +67,7 @@ public class AvailableFundRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         TextView fund;
         TextView withdrawal;
         TextView status;
-        Button withdrawReq;
+
 
         public CardHolder(View view) {
             super(view);
@@ -77,7 +77,6 @@ public class AvailableFundRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             status = (TextView) view.findViewById(R.id.available_fund_status);
             fund = (TextView) view.findViewById(R.id.available_fund_funds);
             withdrawal = (TextView) view.findViewById(R.id.available_fund_withdrawal);
-            withdrawReq = (Button) view.findViewById(R.id.available_fund_withdrawal_request);
         }
     }
 
@@ -105,13 +104,7 @@ public class AvailableFundRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             cardHolder.status.setText(card.getPayStatus());
             cardHolder.fund.setText("$" + String.valueOf(card.getCreditAmount()));
             cardHolder.withdrawal.setText("$" + String.valueOf(card.getDebitAmount()));
-            cardHolder.withdrawReq.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, PaymentWithdrawalRequest.class);
-                    context.startActivity(intent);
-                }
-            });
+
         }
     }
 
