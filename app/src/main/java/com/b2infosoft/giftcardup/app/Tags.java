@@ -64,6 +64,7 @@ public class Tags {
     public final String SEND_WITHDRAWAL_REQUEST = "send_withdrawal_request";
     public final String ADD_CART_ITEM_GIFT_CARD = "add_card_item_gift_card";
     public final String REMOVE_CART_ITEM_GIFT_CARD = "remove_card_item_gift_card";
+    public final String CHECK_CART_ITEMS = "check_cart_items";
 
 
 
