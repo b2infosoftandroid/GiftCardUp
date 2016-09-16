@@ -24,11 +24,14 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Format format;
     private List<GiftCard> cardInfoList;
     private Config config;
+    private final int VIEW_CART_ITEM = 0;
+    private final int VIEW_CART_SUMMARY = 1;
+
     public CartAdapter(Context context, List<GiftCard> cardInfoList) {
         this.context = context;
         this.cardInfoList = cardInfoList;
         format = Format.getInstance();
-        config =Config.getInstance();
+        config = Config.getInstance();
     }
 
     public class CardHolder extends RecyclerView.ViewHolder {
@@ -51,10 +54,34 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
+    public class CartSummery extends RecyclerView.ViewHolder {
+        TextView value;
+        TextView price;
+        TextView saving;
+
+        public CartSummery(View view) {
+            super(view);
+            value = (TextView) view.findViewById(R.id.card_value);
+            price = (TextView) view.findViewById(R.id.card_price);
+            saving = (TextView) view.findViewById(R.id.card_saving);
+        }
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_cart_item, parent, false);
-        return new CardHolder(view);
+        if (viewType == VIEW_CART_ITEM) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_cart_item, parent, false);
+            return new CardHolder(view);
+        } else if (viewType == VIEW_CART_SUMMARY) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_cart_item_summery, parent, false);
+            return new CartSummery(view);
+        }
+        return null;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return cardInfoList.get(position) == null ? VIEW_CART_SUMMARY : VIEW_CART_ITEM;
     }
 
     @Override
@@ -67,7 +94,9 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             cardHolder.name.setText(card.getCardName());
             cardHolder.value.setText("$" + card.getCardPrice());
             cardHolder.price.setText("$" + card.getCardValue());
-            cardHolder.saving.setText(String.valueOf(card.getSellingPercentage())+"%");
+            cardHolder.saving.setText(String.valueOf(card.getSellingPercentage()) + "%");
+        }else if(holder instanceof CartSummery){
+
         }
     }
 
