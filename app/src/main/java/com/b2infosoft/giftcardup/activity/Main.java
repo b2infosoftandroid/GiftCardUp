@@ -41,6 +41,7 @@ import com.b2infosoft.giftcardup.fragments.WithdrawalHistory;
 import com.b2infosoft.giftcardup.model.CompanyCategory;
 import com.b2infosoft.giftcardup.model.GiftCard;
 import com.b2infosoft.giftcardup.model.User;
+import com.b2infosoft.giftcardup.services.MyServices;
 import com.b2infosoft.giftcardup.utils.Utils1;
 import com.b2infosoft.giftcardup.utils.Utils2;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
@@ -140,6 +141,21 @@ public class Main extends GiftCardUp {
             });
         }
     }
+    private void checkBackgroundServices(){
+        MyServices.startLeftCartTimeService(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        checkBackgroundServices();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        checkBackgroundServices();
+    }
 
     private void loadAvailableCartItems() {
         Map<String, String> map = new HashMap<>();
@@ -183,6 +199,8 @@ public class Main extends GiftCardUp {
         if (active.getUser() != null)
             loadAvailableCartItems();
         invalidateOptionsMenu();
+        checkBackgroundServices();
+
     }
 
     @Override
@@ -191,6 +209,8 @@ public class Main extends GiftCardUp {
         if (active.getUser() != null)
             loadAvailableCartItems();
         invalidateOptionsMenu();
+        checkBackgroundServices();
+
     }
 
     @Override
@@ -381,8 +401,8 @@ public class Main extends GiftCardUp {
         if (userIsLogin) {
             User user = active.getUser();
             user_profile_name.setText(user.getFirstName() + " " + user.getLastName());
-            user_total_saving.setText(user.getTotalSave());
-            user_total_sold.setText(user.getTotalSold());
+            user_total_saving.setText("$"+user.getTotalSave());
+            user_total_sold.setText("$"+user.getTotalSold());
             LruBitmapCache.loadCacheImage(this, user_profile_icon, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
             setMenuItems(user.getUserType());
         } else {

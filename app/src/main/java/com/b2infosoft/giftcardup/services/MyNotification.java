@@ -13,22 +13,35 @@ import com.b2infosoft.giftcardup.activity.ShoppingCart;
 /**
  * Created by rajesh on 9/17/2016.
  */
+
 public class MyNotification {
     Context context;
     NotificationManager notificationManager;
-
+    Notification myNotification;
     public MyNotification(Context context) {
         this.context = context;
         notificationManager = (NotificationManager) context.getSystemService(Activity.NOTIFICATION_SERVICE);
     }
 
-    public void setNotificationCartLeftTime(String title, String message) {
-        /*
-        Notification notification = new Notification(R.drawable.ic_logo, "Cart Alert", System.currentTimeMillis());
+    public void setNotificationCartLeftTime(String message) {
+
         Intent intent = new Intent(context, ShoppingCart.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-        notification.setLatestEventInfo(context, title, message, pendingIntent);
-        notificationManager.notify(9999, notification);
-        */
+
+        Notification.Builder builder = new Notification.Builder(context);
+
+        builder.setAutoCancel(true );
+        builder.setTicker("GiftCardUp Notification");
+        builder.setContentTitle("Cart Item");
+        builder.setContentText(message);
+        builder.setSmallIcon(R.drawable.ic_logo);
+        builder.setContentIntent(pendingIntent);
+        builder.setOngoing(true);
+        //builder.setSubText("This is subtext...");   //API level 16
+        builder.setNumber(1);
+        //builder.build();
+
+        myNotification = builder.getNotification();
+        notificationManager.notify(100, myNotification);
     }
 }

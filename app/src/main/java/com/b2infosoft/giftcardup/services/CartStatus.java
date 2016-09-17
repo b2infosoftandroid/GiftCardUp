@@ -72,7 +72,11 @@ public class CartStatus extends Service {
                                     CartStatus.this.sendBroadcast(intent1);
                                 }
                                 if (jsonObject.has(tags.STATUS)) {
-
+                                    if (jsonObject.getInt(tags.STATUS) == tags.FAIL) {
+                                        MyNotification notification = new MyNotification(CartStatus.this);
+                                        String message = "Please check your shopping cart otherwise next to 2 minutes cart will be empty.";
+                                        notification.setNotificationCartLeftTime(message);
+                                    }
                                 }
                             } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
                                 CartStatus.this.sendBroadcast(intent1);
