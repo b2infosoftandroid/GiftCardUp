@@ -109,6 +109,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="5dp"
+                                android:background="@drawable/image_fill_background"
                                 android:src="@drawable/ic_edit_icon_1"
                                 android:visibility="gone" />
 
@@ -117,6 +118,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="5dp"
+                                android:background="@drawable/image_fill_background"
                                 android:src="@drawable/ic_delete_24dp_1"
                                 android:visibility="gone" />
 
@@ -125,6 +127,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="5dp"
+                                android:background="@drawable/image_fill_background"
                                 android:src="@drawable/ic_view_24dp"
                                 android:visibility="gone" />
 
@@ -133,6 +136,7 @@
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
                                 android:layout_margin="5dp"
+                                android:background="@drawable/image_fill_background"
                                 android:src="@drawable/ic_view_24dp"
                                 android:visibility="gone" />
 
@@ -141,6 +145,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="5dp"
+                                android:background="@drawable/image_fill_background"
                                 android:src="@drawable/ic_view_24dp"
                                 android:visibility="gone" />
                         </LinearLayout>

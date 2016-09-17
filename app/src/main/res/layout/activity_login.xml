@@ -87,6 +87,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:text="@string/login_forgot_password"
+                    android:background="@drawable/image_background"
                     android:textAllCaps="true"
                     android:textColor="@color/login_forgot_password" />
 
@@ -96,6 +97,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:text="@string/login_sign_up"
+                    android:background="@drawable/image_background"
                     android:textAllCaps="true"
                     android:textColor="@color/login_sign_up" />
             </RelativeLayout>
