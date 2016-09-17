@@ -70,13 +70,7 @@ public class AvailableFund extends Fragment {
         init();
         View view = inflater.inflate(R.layout.fragment_available_fund, container, false);
         withdrawReq = (Button) view.findViewById(R.id.available_fund_withdrawal_request);
-        withdrawReq.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), PaymentWithdrawalRequest.class);
-                startActivity(intent);
-            }
-        });
+
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new AvailableFundRecyclerViewAdapter(getContext(), cardList, recyclerView);
@@ -102,6 +96,15 @@ public class AvailableFund extends Fragment {
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     GetWithdrawHistory card = new GetWithdrawHistory();
                                     cards.add(card.fromJSON(jsonArray.getJSONObject(i)));
+                                }
+                                if(cards != null){
+                                    withdrawReq.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent intent = new Intent(getActivity(), PaymentWithdrawalRequest.class);
+                                            startActivity(intent);
+                                        }
+                                    });
                                 }
                                 setDataInRecycleView(cards);
                             }
