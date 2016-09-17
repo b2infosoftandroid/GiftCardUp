@@ -3,6 +3,10 @@
     <solid
         android:color="@color/colorAccent"
         />
+    <padding android:bottom="2dp"
+        android:left="2dp"
+        android:right="2dp"
+        android:top="2dp"></padding>
     <stroke
         android:width="@dimen/button_stroke_width"
         android:color="@color/button_stroke" />
