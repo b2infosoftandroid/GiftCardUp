@@ -40,19 +40,19 @@
                     android:textAllCaps="true"
                     android:textColor="@color/profile_text" />
 
-                <com.mikhaellopez.circularimageview.CircularImageView
-                    android:id="@+id/profile_user_image"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/activity_horizontal_margin"
-                    android:src="@drawable/ic_user_icon"
-                    app:civ_border="true"
-                    app:civ_border_color="@color/border_user_picture"
-                    app:civ_border_width="4dp"
-                    app:civ_shadow="true"
-                    app:civ_shadow_color="@color/border_shadow_user_picture"
-                    app:civ_shadow_radius="0.5" />
+                    <com.mikhaellopez.circularimageview.CircularImageView
+                        android:id="@+id/profile_user_image"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/ic_user_icon"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/activity_horizontal_margin"
+                        app:civ_border="true"
+                        app:civ_border_color="@color/border_user_picture"
+                        app:civ_border_width="4dp"
+                        app:civ_shadow="true"
+                        app:civ_shadow_color="@color/border_shadow_user_picture"
+                        app:civ_shadow_radius="0.5" />
 
                 <TextView
                     android:id="@+id/profile_user_name"

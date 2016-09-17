@@ -1,14 +1,23 @@
 package com.b2infosoft.giftcardup.activity;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
@@ -24,6 +33,7 @@ import com.b2infosoft.giftcardup.fragments.profile.SsnEin;
 import com.b2infosoft.giftcardup.fragments.profile.SsnEin1;
 import com.b2infosoft.giftcardup.model.Approve;
 import com.b2infosoft.giftcardup.model.User;
+import com.b2infosoft.giftcardup.urlconnection.MultipartUtility;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 import com.b2infosoft.giftcardup.volly.LruBitmapCache;
@@ -32,6 +42,9 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,10 +56,14 @@ public class MyProfile extends AppCompatActivity implements Identification.OnFra
     private Config config;
     private Format format;
     private DMRRequest dmrRequest;
+    private final int PICK_IMAGE_REQUEST = 1;
     private Map<Integer,Integer> approveMap;
     static private TabLayout tabLayout;
     static private ViewPager viewPager;
     private ViewPagerAdapter adapter;
+    CircularImageView profile_image;
+    private Uri filePath;
+    private Bitmap bitmap,oldFileName;
 
     private void init() {
         active = Active.getInstance(this);
@@ -109,13 +126,48 @@ public class MyProfile extends AppCompatActivity implements Identification.OnFra
         TextView total_saving = (TextView)findViewById(R.id.total_saving);
         TextView total_sold = (TextView)findViewById(R.id.total_sold);
         TextView profile_user_name = (TextView)findViewById(R.id.profile_user_name);
-        CircularImageView profile_image = (CircularImageView)findViewById(R.id.profile_user_image);
+        profile_image = (CircularImageView)findViewById(R.id.profile_user_image);
         member_science.setText("Member Since: ".concat(format.getDate(user.getJoinDate())));
         total_saving.setText("$"+user.getTotalSave());
         total_sold.setText("$"+user.getTotalSold());
         profile_user_name.setText(user.getFirstName()+" "+user.getLastName());
+
         LruBitmapCache.loadCacheImage(this, profile_image, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
+        profile_user_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),"success",Toast.LENGTH_SHORT).show();
+                showFileChooser();
+            }
+        });
+
     }
+
+    //method to show file chooser
+    private void showFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == this.RESULT_OK && data != null && data.getData() != null) {
+            filePath = data.getData();
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), filePath);
+                if (profile_image != null)
+                    profile_image.setImageBitmap(bitmap);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        new updateImage().execute();
+    }
+
     private void setUpViewPager(ViewPager pager) {
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new Identification(), "Identification");
@@ -237,5 +289,38 @@ public class MyProfile extends AppCompatActivity implements Identification.OnFra
     @Override
     public void onSsnEin(Uri uri) {
 
+    }
+
+    private class updateImage extends AsyncTask<String,String ,String>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            User user = active.getUser();
+            String url = urls.getUserInfo();
+            try {
+                MultipartUtility multipart = new MultipartUtility(url);
+                multipart.addHeaderField("User-Agent", "CodeJava");
+                multipart.addHeaderField("Test-Header", "Header-Value");
+                multipart.addFormField(tags.USER_ACTION, tags.UPDATE_PROFILE_PIC);
+                multipart.addFormField(tags.USER_ID, active.getUser().getUserId() + "");
+                multipart.addFilePartBitmap(tags.PROFILE_NAME, "bank_void_image.png", bitmap);
+                multipart.addFormField(tags.PROFILE_OLD_NAME,user.getImage() );
+                return multipart.finishString();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e(TAG, e.getMessage() + "");
+            }
+            return "";
+        }
     }
 }

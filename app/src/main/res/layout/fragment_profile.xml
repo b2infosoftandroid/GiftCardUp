@@ -1,12 +1,11 @@
-<ru.noties.scrollable.ScrollableLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ru.noties.scrollable.ScrollableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scrollable_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.Profile"
-    app:scrollable_maxScroll="@dimen/profile_header_height">
+    app:scrollable_maxScroll="@dimen/profile_header_height"
+    tools:context=".fragments.Profile">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,19 +28,37 @@
                 android:textAllCaps="true"
                 android:textColor="@color/profile_text" />
 
-            <com.mikhaellopez.circularimageview.CircularImageView
-                android:id="@+id/profile_user_image"
+            <FrameLayout
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:src="@drawable/ic_user_icon"
-                app:civ_border="true"
-                app:civ_border_color="@color/border_user_picture"
-                app:civ_border_width="4dp"
-                app:civ_shadow="true"
-                app:civ_shadow_color="@color/border_shadow_user_picture"
-                app:civ_shadow_radius="0.5" />
+                android:layout_marginTop="@dimen/activity_horizontal_margin">
+
+                <com.mikhaellopez.circularimageview.CircularImageView
+                    android:id="@+id/profile_user_image"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_user_icon"
+                    app:civ_border="true"
+                    app:civ_border_color="@color/border_user_picture"
+                    app:civ_border_width="4dp"
+                    app:civ_shadow="true"
+                    app:civ_shadow_color="@color/border_shadow_user_picture"
+                    app:civ_shadow_radius="0.5" />
+                <com.mikhaellopez.circularimageview.CircularImageView
+                    android:id="@+id/profile_edit_image"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="bottom|end"
+                    android:src="@drawable/ic_edit_icon"
+                    app:civ_border="true"
+                    app:civ_border_color="@color/button_stroke_black"
+                    app:civ_border_width="4dp"
+                    app:civ_shadow="true"
+                    app:civ_shadow_color="@color/button_stroke_black"
+                    app:civ_shadow_radius="0.5" />
+            </FrameLayout>
 
             <TextView
                 android:id="@+id/profile_user_name"
@@ -123,11 +140,10 @@
             android:layout_height="@dimen/profile_tabs_height"
             android:background="@color/colorPrimary"
             app:tabGravity="fill"
-            app:tabMode="fixed"
             app:tabIndicatorColor="#FFF"
-            app:tabTextColor="#FFF"
+            app:tabMode="fixed"
             app:tabSelectedTextColor="#FFF"
-            />
+            app:tabTextColor="#FFF" />
     </LinearLayout>
 
     <android.support.v4.view.ViewPager
