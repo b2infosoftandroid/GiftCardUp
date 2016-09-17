@@ -133,8 +133,8 @@
 
                             <ImageView
                                 android:id="@+id/action_need_review"
-                                android:layout_width="30dp"
-                                android:layout_height="30dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
                                 android:layout_margin="5dp"
                                 android:background="@drawable/image_fill_background"
                                 android:src="@drawable/ic_view_24dp"
