@@ -54,7 +54,11 @@
         <activity
             android:name=".activity.MyProfile"
             android:label="PROFILE"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".activity.Main" />
+        </activity>
         <activity
             android:name=".activity.AddAccountInfo"
             android:label="AddAccount"
