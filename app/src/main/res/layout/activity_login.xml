@@ -70,7 +70,7 @@
                 android:paddingRight="@dimen/button_padding_right"
                 android:text="@string/login_button"
                 android:textSize="@dimen/button_text_font_size"
-                android:background="@drawable/button_login_background"
+                android:background="@drawable/button_empty_background"
                 android:textAllCaps="true"
                 android:textColor="@color/app_background" />
 

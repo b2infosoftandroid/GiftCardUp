@@ -104,8 +104,8 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public class CardHolder extends RecyclerView.ViewHolder {
         ImageView cardType;
         ImageView imageUrl;
-        TextView cardValue;
-        TextView cardOff;
+        TextView cardValue,name;
+        TextView cardOff,saving;
         TextView cardPrice;
         Button buyNow, info;
         Button add_to_cart, card_buy_now;
@@ -116,8 +116,10 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         public CardHolder(View view) {
             super(view);
             cardType = (ImageView) view.findViewById(R.id.card_type);
+            name = (TextView) view.findViewById(R.id.card_item_company_name);
             cardValue = (TextView) view.findViewById(R.id.company_card_card_value);
             cardOff = (TextView) view.findViewById(R.id.company_card_card_off);
+            saving = (TextView) view.findViewById(R.id.card_item_saving);
             cardPrice = (TextView) view.findViewById(R.id.company_card_card_price);
             imageUrl = (ImageView) view.findViewById(R.id.company_card_image);
             buyNow = (Button) view.findViewById(R.id.company_card_card_buy_now);
@@ -178,7 +180,9 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             } else {
                 cardHolder.cardType.setImageDrawable(null);
             }
+            cardHolder.name.setText(giftCard.getCardName());
             cardHolder.cardOff.setText(String.valueOf(giftCard.getPercentageOff()) + "%");
+            cardHolder.saving.setText(String.valueOf(giftCard.getPercentageOff()) + "%");
             cardHolder.cardValue.setText("$" + String.valueOf(giftCard.getCardPrice()));
             cardHolder.cardPrice.setText("$" + String.valueOf(giftCard.getCardValue()));
             cardHolder.add_to_cart.setOnClickListener(new View.OnClickListener() {
