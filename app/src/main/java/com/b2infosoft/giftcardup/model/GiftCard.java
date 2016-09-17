@@ -250,11 +250,11 @@ public class GiftCard implements Serializable {
     public int getApproveStatusColor(Context context, int status) {
         int[] colorCode = {
                 context.getResources().getColor(R.color.verification_expired),
-                context.getResources().getColor(R.color.login_edit_text_text),
-                context.getResources().getColor(R.color.verification_approve),
-                context.getResources().getColor(R.color.verification_approve),
+                context.getResources().getColor(R.color.listed),
+                context.getResources().getColor(R.color.sold),
+                context.getResources().getColor(R.color.sold),
                 context.getResources().getColor(R.color.verification_rejected),
-                context.getResources().getColor(R.color.verification_pending),
+                context.getResources().getColor(R.color.deleted),
                 context.getResources().getColor(R.color.verification_font),
                 context.getResources().getColor(R.color.verification_not_submitted),
                 context.getResources().getColor(R.color.buy_card_company),

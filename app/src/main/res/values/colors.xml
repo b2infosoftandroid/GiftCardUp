@@ -60,5 +60,8 @@
     <color name="verification_not_submitted_border">#2ee3d4</color>
     <color name="verification_pending">#f8ef01</color>
     <color name="verification_pending_border">#f8ef01</color>
+    <color name="deleted">#AA5542</color>
+    <color name="sold">#1D8348 </color>
+    <color name="listed">#7D3C98 </color>
 
 </resources>
