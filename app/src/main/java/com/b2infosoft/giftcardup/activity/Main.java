@@ -378,6 +378,8 @@ public class Main extends GiftCardUp {
         if (userIsLogin) {
             User user = active.getUser();
             user_profile_name.setText(user.getFirstName() + " " + user.getLastName());
+            user_total_saving.setText(user.getTotalSave());
+            user_total_sold.setText(user.getTotalSold());
             LruBitmapCache.loadCacheImage(this, user_profile_icon, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
             setMenuItems(user.getUserType());
         } else {

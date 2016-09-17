@@ -65,6 +65,7 @@ public class Tags {
     public final String ADD_CART_ITEM_GIFT_CARD = "add_card_item_gift_card";
     public final String REMOVE_CART_ITEM_GIFT_CARD = "remove_card_item_gift_card";
     public final String CHECK_CART_ITEMS = "check_cart_items";
+    public final String UPDATE_PROFILE_PIC = "update_profile_pic";
 
 
 
@@ -268,5 +269,7 @@ public class Tags {
     public final String WITHDRAWAL_REQUEST_STATUS = "withdrawal_request_status";
     public final String WITHDRAWAL_REQUEST_DATE = "request_date";
 
-
+    //////////////////     PROFILE PIC UPDATE  ////////////////////
+    public final String PROFILE_NAME = "filedata8";
+    public final String PROFILE_OLD_NAME = "old_file_name";
 }
