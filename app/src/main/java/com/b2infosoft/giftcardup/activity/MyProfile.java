@@ -127,19 +127,20 @@ public class MyProfile extends AppCompatActivity implements Identification.OnFra
         TextView total_sold = (TextView)findViewById(R.id.total_sold);
         TextView profile_user_name = (TextView)findViewById(R.id.profile_user_name);
         profile_image = (CircularImageView)findViewById(R.id.profile_user_image);
-        member_science.setText("Member Since: ".concat(format.getDate(user.getJoinDate())));
-        total_saving.setText("$"+user.getTotalSave());
-        total_sold.setText("$"+user.getTotalSold());
-        profile_user_name.setText(user.getFirstName()+" "+user.getLastName());
-
-        LruBitmapCache.loadCacheImage(this, profile_image, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
-        profile_user_name.setOnClickListener(new View.OnClickListener() {
+        profile_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(),"success",Toast.LENGTH_SHORT).show();
                 showFileChooser();
             }
         });
+        member_science.setText("Member Since: ".concat(format.getDate(user.getJoinDate())));
+        total_saving.setText("$"+user.getTotalSave());
+        total_sold.setText("$"+user.getTotalSold());
+        profile_user_name.setText(user.getFirstName()+" "+user.getLastName());
+
+        LruBitmapCache.loadCacheImage(this, profile_image, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
+
 
     }
 
