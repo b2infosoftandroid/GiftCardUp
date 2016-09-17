@@ -78,10 +78,20 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.Main" />
         </activity>
-        <activity android:name=".activity.PaymentWithdrawalRequest"
+        <activity
+            android:name=".activity.PaymentWithdrawalRequest"
             android:label="PaymentWithdrawalRequest"
-            android:windowSoftInputMode="adjustResize">
-        </activity>
+            android:windowSoftInputMode="adjustResize" />
+
+        <receiver
+            android:name=".recevier.MyReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
+        <service
+            android:name=".services.CartStatus"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

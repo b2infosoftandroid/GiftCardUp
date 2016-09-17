@@ -66,6 +66,12 @@ public class Tags {
     public final String REMOVE_CART_ITEM_GIFT_CARD = "remove_card_item_gift_card";
     public final String CHECK_CART_ITEMS = "check_cart_items";
     public final String UPDATE_PROFILE_PIC = "update_profile_pic";
+    public final String CHECK_CART_STATUS = "check_cart_status";
+
+
+    /*  CART PROCESSING  */
+    public final String LEFT_TIME = "left_time";
+    public final String STATUS = "status";
 
 
 

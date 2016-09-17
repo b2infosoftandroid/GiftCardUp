@@ -89,7 +89,7 @@ public class Main extends GiftCardUp {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        cart = (Cart)getApplicationContext();
+        cart = (Cart) getApplicationContext();
         init();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -120,7 +120,9 @@ public class Main extends GiftCardUp {
         setNavigationMenu();
         updateMenuItemLeft(dbHelper.getCategories());
         replaceFragment(new Dashboard());
-        loadAvailableCartItems();
+        if (active.getUser() != null)
+            loadAvailableCartItems();
+
     }
 
     private void updateMenuItemLeft(List<CompanyCategory> categoryList) {
@@ -166,7 +168,7 @@ public class Main extends GiftCardUp {
                     Log.e(TAG, e.getMessage());
                 }
             }
-            
+
             @Override
             public void onError(VolleyError volleyError) {
                 volleyError.printStackTrace();
@@ -178,14 +180,16 @@ public class Main extends GiftCardUp {
     @Override
     protected void onRestart() {
         super.onRestart();
-        loadAvailableCartItems();
+        if (active.getUser() != null)
+            loadAvailableCartItems();
         invalidateOptionsMenu();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        loadAvailableCartItems();
+        if (active.getUser() != null)
+            loadAvailableCartItems();
         invalidateOptionsMenu();
     }
 
@@ -227,7 +231,6 @@ public class Main extends GiftCardUp {
 
         return true;
     }
-
 
 
     @Override

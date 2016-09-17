@@ -148,18 +148,19 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                 @Override
                                 public void onSuccess(JSONObject jsonObject) {
                                     progress.dismiss();
-
                                     try {
                                         if (jsonObject.has(tags.SUCCESS)) {
                                             if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
-                                                JSONArray array = jsonObject.getJSONArray(tags.GIFT_CARDS);
-                                                cart.removeAll();
-                                                for (int i = 0; i < array.length(); i++) {
-                                                    cart.addCartItem(GiftCard.fromJSON(array.getJSONObject(i)));
+                                                if(jsonObject.has(tags.GIFT_CARDS)) {
+                                                    JSONArray array = jsonObject.getJSONArray(tags.GIFT_CARDS);
+                                                    cart.removeAll();
+                                                    for (int i = 0; i < array.length(); i++) {
+                                                        cart.addCartItem(GiftCard.fromJSON(array.getJSONObject(i)));
+                                                    }
+                                                    showMessage("Successfully remove to Cart ");
+                                                    cardInfoList.remove(card);
+                                                    isLastCard();
                                                 }
-                                                showMessage("Successfully remove to Cart ");
-                                                cardInfoList.remove(card);
-                                                CartAdapter.super.notifyDataSetChanged();
                                             } else if (jsonObject.getInt(tags.SUCCESS) == tags.SUSPEND) {
 
                                             } else {
@@ -206,5 +207,11 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private void showMessage(String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
+    private void isLastCard(){
+        if(cardInfoList.size()==1){
+            cardInfoList.clear();
+        }
+        CartAdapter.super.notifyDataSetChanged();
     }
 }

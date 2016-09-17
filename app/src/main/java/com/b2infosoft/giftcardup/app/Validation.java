@@ -1,11 +1,15 @@
 package com.b2infosoft.giftcardup.app;
 
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.Context;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * Created by rajesh on 7/14/2016.
  */
+
 public class Validation {
 
     private static Validation instance = new Validation();
@@ -108,6 +112,22 @@ public class Validation {
         Matcher matcher = pattern.matcher(str);
         if (matcher.matches()) {
             return true;
+        }
+        return false;
+    }
+
+    /**
+     *
+      * @param context
+     * @param serviceName enter full service name with package
+     * @return boolean
+     */
+    public static boolean isServiceRunning(Context context,String serviceName) {
+        ActivityManager manager = (ActivityManager)context.getSystemService(Activity.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)){
+            if(serviceName.equals(service.service.getClassName())) {
+                return true;
+            }
         }
         return false;
     }

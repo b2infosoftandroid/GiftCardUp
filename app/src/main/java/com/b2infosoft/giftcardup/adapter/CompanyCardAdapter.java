@@ -3,6 +3,7 @@ package com.b2infosoft.giftcardup.adapter;
 import android.app.Activity;
 import android.content.Context;
 
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,11 +30,14 @@ import com.b2infosoft.giftcardup.app.Format;
 import com.b2infosoft.giftcardup.app.Notify;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
+import com.b2infosoft.giftcardup.app.Validation;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.listener.OnLoadMoreListener;
 import com.b2infosoft.giftcardup.model.CompanyBrand;
 import com.b2infosoft.giftcardup.model.GiftCard;
+import com.b2infosoft.giftcardup.services.CartStatus;
+import com.b2infosoft.giftcardup.services.MyServices;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 import com.b2infosoft.giftcardup.volly.LruBitmapCache;
@@ -210,6 +214,7 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                             showMessage("Successfully Add to Cart");
                                             cardHolder.add_to_cart.setText("Remove to cart");
                                             ((CompanyCard) context).invalidateOptionsMenu();
+                                            MyServices.startLeftCartTimeService(context);
                                         } else if (jsonObject.getInt(tags.SUCCESS) == tags.SUSPEND) {
                                             showMessage("You have to attempt more three times. So you can add item in cart after three hours.");
                                         } else {
@@ -247,6 +252,7 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                             cardHolder.add_to_cart.setText("Add to cart");
                                             showMessage("Successfully remove to Cart ");
                                             ((Activity) context).invalidateOptionsMenu();
+                                            MyServices.startLeftCartTimeService(context);
                                         } else if (jsonObject.getInt(tags.SUCCESS) == tags.SUSPEND) {
 
                                         } else {

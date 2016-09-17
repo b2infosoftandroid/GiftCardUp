@@ -100,6 +100,8 @@ public class CompanyCard extends AppCompatActivity {
         invalidateOptionsMenu();
     }
     private void loadAvailableCartItems() {
+        if(active.getUser()==null)
+            return;
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.CHECK_CART_ITEMS);
         map.put(tags.USER_ID, active.getUser().getUserId() + "");
