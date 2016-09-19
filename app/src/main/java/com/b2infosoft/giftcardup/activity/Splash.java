@@ -71,10 +71,15 @@ public class Splash extends AppCompatActivity implements DMRResult {
         map.put(tags.USER_ACTION, tags.COMPANY_CATEGORY_ALL);
         dmrRequest.doPost(urls.getAppAction(), map, this);
 
-                /* LOADING ALL STATES */
+        /* LOADING ALL STATES */
         Map<String, String> map2 = new HashMap<>();
         map2.put(tags.USER_ACTION, tags.STATES_ALL);
         dmrRequest.doPost(urls.getAppAction(), map2, this);
+
+        /* LOADING ALL STATES */
+        Map<String, String> map3 = new HashMap<>();
+        map3.put(tags.USER_ACTION, tags.STATES_ALL);
+        dmrRequest.doPost(urls.getAppAction(), map3, this);
 
         /*LOADING USER PROFILE*/
         if (active.isLogin()) {
@@ -83,7 +88,7 @@ public class Splash extends AppCompatActivity implements DMRResult {
             map1.put(tags.USER_ID, active.getUser().getUserId() + "");
             dmrRequest.doPost(urls.getUserInfo(), map1, this);
         }
-        
+
     }
 
     @Override

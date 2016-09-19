@@ -278,4 +278,10 @@ public class Tags {
     //////////////////     PROFILE PIC UPDATE  ////////////////////
     public final String PROFILE_NAME = "filedata8";
     public final String PROFILE_OLD_NAME = "old_file_name";
+
+    /*                  MAIL PRICE   */
+    public final String FIRST_CLASS_PRICE =  "first_class_price";
+    public final String PRIORITY_PRICE =  "priority_price";
+    public final String EXPRESS_PRICE =  "express_price";
+
 }

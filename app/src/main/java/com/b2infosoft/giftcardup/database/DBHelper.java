@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.b2infosoft.giftcardup.model.CompanyCategory;
+import com.b2infosoft.giftcardup.model.MailPrice;
 import com.b2infosoft.giftcardup.model.State;
 
 import java.util.ArrayList;
@@ -34,12 +35,17 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(TABLE_STATE);
         String TABLE_CATEGORIES = "CREATE TABLE " + SC.CATEGORY_TABLE + "(" + SC.CATEGORY_ID_COLUMN + " int," + SC.CATEGORY_NAME_COLUMN + " text)";
         db.execSQL(TABLE_CATEGORIES);
+
+        String MAIL_PRICE = "CREATE TABLE " + SC.MAIL_PRICE_TABLE + "(" + SC.MAIL_PRICE_FIRST_CLASS_COLUMN + " double," + SC.MAIL_PRICE_PRIORITY_COLUMN + " double," + SC.MAIL_PRICE_EXPRESS_COLUMN + " double)";
+        db.execSQL(MAIL_PRICE);
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + SC.STATE_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + SC.CATEGORY_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + SC.MAIL_PRICE_TABLE);
     }
 
     /* ----------------- STATE PART START --------------------- */
@@ -71,8 +77,9 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         return state;
     }
-    public Map<String,State> getStateMap() {
-        Map<String,State> stateMap = new HashMap<>();
+
+    public Map<String, State> getStateMap() {
+        Map<String, State> stateMap = new HashMap<>();
         SQLiteDatabase database = this.getReadableDatabase();
         Cursor cursor = database.rawQuery("SELECT * FROM " + SC.STATE_TABLE, null);
         while (cursor.moveToNext()) {
@@ -87,6 +94,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         return stateMap;
     }
+
     public State getStateByAbbreviation(String abbreviation) {
         State state = new State();
         SQLiteDatabase database = this.getReadableDatabase();
@@ -127,9 +135,42 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         return categories;
     }
+
     public void deleteCategories() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM " + SC.CATEGORY_TABLE);
     }
     /* ----------------- CATEGORIES PART END ---------------- */
+
+    /* ----------------- MAIL PRICE PART START -------------- */
+    public void setMailPrice(MailPrice category) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(SC.MAIL_PRICE_FIRST_CLASS_COLUMN, category.getFirstClass());
+        values.put(SC.MAIL_PRICE_PRIORITY_COLUMN, category.getPriorityMail());
+        values.put(SC.MAIL_PRICE_EXPRESS_COLUMN, category.getExpressMail());
+        db.insert(SC.MAIL_PRICE_TABLE, null, values);
+    }
+
+    public MailPrice getMailPrice() {
+        MailPrice mailPrice = new MailPrice();
+        SQLiteDatabase database = this.getReadableDatabase();
+        Cursor cursor = database.rawQuery("SELECT * FROM " + SC.MAIL_PRICE_TABLE, null);
+        while (cursor.moveToNext()) {
+            mailPrice.setFirstClass(cursor.getString(cursor.getColumnIndex(SC.MAIL_PRICE_FIRST_CLASS_COLUMN)));
+            mailPrice.setPriorityMail(cursor.getString(cursor.getColumnIndex(SC.MAIL_PRICE_PRIORITY_COLUMN)));
+            mailPrice.setExpressMail(cursor.getString(cursor.getColumnIndex(SC.MAIL_PRICE_EXPRESS_COLUMN)));
+        }
+        if (!cursor.isClosed()) {
+            cursor.close();
+        }
+        return mailPrice;
+    }
+
+    public void deleteMailPrice() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + SC.MAIL_PRICE_TABLE);
+    }
+    /* ----------------- CATEGORIES PART END ---------------- */
+
 }

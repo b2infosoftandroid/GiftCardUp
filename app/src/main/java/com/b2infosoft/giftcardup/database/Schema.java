@@ -27,6 +27,11 @@ public class Schema {
     public final String STATE_ABBREVIATION_COLUMN = "state_abbreviation";
     /*       STATE TABLE SCHEMA END       */
 
-
+    /*       MAIL PRICE TABLE SCHEMA START       */
+    public final String MAIL_PRICE_TABLE = "mail_price";
+    public final String MAIL_PRICE_FIRST_CLASS_COLUMN = "first_class_price";
+    public final String MAIL_PRICE_PRIORITY_COLUMN = "priority_price";
+    public final String MAIL_PRICE_EXPRESS_COLUMN = "express_price";
+    /*       MAIL PRICE TABLE SCHEMA END       */
 
 }
