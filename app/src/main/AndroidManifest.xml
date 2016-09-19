@@ -103,6 +103,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.ShoppingCart" />
         </activity>
+        <activity android:name=".activity.ChangeAddress"></activity>
     </application>
 
 </manifest>

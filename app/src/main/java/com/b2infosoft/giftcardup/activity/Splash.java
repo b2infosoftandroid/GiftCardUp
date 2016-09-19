@@ -6,17 +6,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.animation.AnimationUtils;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.database.DBHelper;
 import com.b2infosoft.giftcardup.model.CompanyCategory;
-import com.b2infosoft.giftcardup.model.ContactInformation;
 import com.b2infosoft.giftcardup.model.State;
 import com.b2infosoft.giftcardup.model.User;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
@@ -69,28 +65,30 @@ public class Splash extends AppCompatActivity implements DMRResult {
     }
 
     private void loadDefaultData() {
-        Map<String, String> map = new HashMap<>();
-
-        /* LOADING ALL STATES */
-        map.put(tags.USER_ACTION, tags.STATES_ALL);
-        dmrRequest.doPost(urls.getAppAction(), map, this);
 
         /*LOADING ALL CATEGORIES*/
-        map.clear();
+        Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.COMPANY_CATEGORY_ALL);
         dmrRequest.doPost(urls.getAppAction(), map, this);
 
+                /* LOADING ALL STATES */
+        Map<String, String> map2 = new HashMap<>();
+        map2.put(tags.USER_ACTION, tags.STATES_ALL);
+        dmrRequest.doPost(urls.getAppAction(), map2, this);
+
         /*LOADING USER PROFILE*/
-        if(active.isLogin()) {
-            map.clear();
-            map.put(tags.USER_ACTION, tags.USER_INFO);
-            map.put(tags.USER_ID, active.getUser().getUserId()+"");
-            dmrRequest.doPost(urls.getUserInfo(), map, this);
+        if (active.isLogin()) {
+            Map<String, String> map1 = new HashMap<>();
+            map1.put(tags.USER_ACTION, tags.USER_INFO);
+            map1.put(tags.USER_ID, active.getUser().getUserId() + "");
+            dmrRequest.doPost(urls.getUserInfo(), map1, this);
         }
+        
     }
 
     @Override
     public void onSuccess(JSONObject jsonObject) {
+        Log.d("SPLASH DATA", jsonObject.toString());
         try {
             if (jsonObject.has(tags.SUCCESS)) {
                 if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
@@ -107,7 +105,7 @@ public class Splash extends AppCompatActivity implements DMRResult {
                         for (int i = 0; i < jsonArray.length(); i++) {
                             dbHelper.setCategory(CompanyCategory.fromJSON(jsonArray.getJSONObject(i)));
                         }
-                    }else if(jsonObject.has(tags.USER_INFO)){
+                    } else if (jsonObject.has(tags.USER_INFO)) {
                         JSONObject object = jsonObject.getJSONObject(tags.USER_INFO);
                         User user = User.fromJSON(object);
                         active.setUser(user);
