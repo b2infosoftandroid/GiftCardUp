@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:text="ADDRESS"
                 android:textAllCaps="true"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/app_background"
                 android:textSize="@dimen/button_text_font_size"
                 android:textStyle="bold"
@@ -34,7 +34,7 @@
                 android:id="@+id/edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/layout_border"
+                android:background="@drawable/button_empty_background"
                 android:text="CHANGE"
                 android:textAllCaps="true"
                 android:padding="2dp"
@@ -54,14 +54,23 @@
         <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="Ruchi"
+            android:layout_marginTop="10dp"
+            android:textStyle="normal" />
         <TextView
             android:id="@+id/address"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="Jaipur"
+            android:layout_marginTop="5dp"
+            android:textStyle="normal"/>
         <TextView
             android:id="@+id/phone"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="(823) 324-5461"
+            android:layout_marginTop="5dp"
+            android:textStyle="normal"/>
     </LinearLayout>
 </android.support.v7.widget.CardView>

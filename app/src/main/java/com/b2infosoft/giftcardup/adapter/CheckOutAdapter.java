@@ -107,7 +107,7 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == VIEW_CART_ITEM) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_cart_checkout_item, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_cart_checkout_item_1, parent, false);
             return new CardHolder(view);
         } else if (viewType == VIEW_CART_ADDRESS) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_cart_item_address, parent, false);
