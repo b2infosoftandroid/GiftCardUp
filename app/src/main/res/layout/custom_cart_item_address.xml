@@ -32,7 +32,6 @@
                 android:id="@+id/edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button_empty_background"
                 android:text="CHANGE"
                 android:textAllCaps="true"
                 android:padding="2dp"
