@@ -68,24 +68,22 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public class CardHolder extends RecyclerView.ViewHolder {
-
         ImageView image;
-        Button action_delete;
         TextView name;
         TextView type;
         TextView value;
         TextView price;
-        TextView saving;
+        View physical, e_card;
 
         public CardHolder(View view) {
             super(view);
+            physical = view.findViewById(R.id.view_e_card);
+            e_card = view.findViewById(R.id.view_physical_card);
             image = (ImageView) view.findViewById(R.id.card_image);
-            action_delete = (Button) view.findViewById(R.id.action_delete);
             name = (TextView) view.findViewById(R.id.card_name);
             type = (TextView) view.findViewById(R.id.card_type);
             value = (TextView) view.findViewById(R.id.card_value);
             price = (TextView) view.findViewById(R.id.card_price);
-            saving = (TextView) view.findViewById(R.id.card_saving);
         }
     }
 
@@ -107,7 +105,7 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == VIEW_CART_ITEM) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_cart_item, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_cart_checkout_item, parent, false);
             return new CardHolder(view);
         } else if (viewType == VIEW_CART_ADDRESS) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_cart_item_address, parent, false);
@@ -128,73 +126,14 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             final CardHolder cardHolder = (CardHolder) holder;
             LruBitmapCache.loadCacheImage(context, cardHolder.image, config.getGiftCardImageAddress().concat(card.getCardImage()), "");
             cardHolder.type.setText(card.getCardType() == 2 ? "E-CARD" : "PHYSICAL");
+            cardHolder.e_card.setVisibility(card.getCardType() == 2 ? View.GONE : View.VISIBLE);
+            cardHolder.physical.setVisibility(card.getCardType() == 2 ? View.VISIBLE : View.GONE);
+
             cardHolder.name.setText(card.getCardName());
             cardHolder.value.setText("$" + card.getCardPrice());
             cardHolder.price.setText("$" + card.getCardValue());
-            cardHolder.saving.setText(String.valueOf(card.getSellingPercentage()) + "%");
-            cardHolder.action_delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setTitle("Alert");
-                    builder.setMessage("Sure to delete ?");
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            progress.show();
-                            final Map<String, String> map = new HashMap<>();
-                            map.put(tags.USER_ACTION, tags.REMOVE_CART_ITEM_GIFT_CARD);
-                            map.put(tags.USER_ID, active.getUser().getUserId());
-                            map.put(tags.GIFT_CARD_GIFT_CARD_ID, card.getGiftCardID() + "");
 
-                            dmrRequest.doPost(urls.getCartInfo(), map, new DMRResult() {
-                                @Override
-                                public void onSuccess(JSONObject jsonObject) {
-                                    progress.dismiss();
-                                    try {
-                                        if (jsonObject.has(tags.SUCCESS)) {
-                                            if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
-                                                if (jsonObject.has(tags.GIFT_CARDS)) {
-                                                    JSONArray array = jsonObject.getJSONArray(tags.GIFT_CARDS);
-                                                    cart.removeAll();
-                                                    for (int i = 0; i < array.length(); i++) {
-                                                        cart.addCartItem(GiftCard.fromJSON(array.getJSONObject(i)));
-                                                    }
-                                                    showMessage("Successfully remove to Cart ");
-                                                    cardInfoList.remove(card);
-                                                    isLastCard();
-                                                }
-                                            } else if (jsonObject.getInt(tags.SUCCESS) == tags.SUSPEND) {
 
-                                            } else {
-
-                                            }
-                                        }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                        Log.e(TAG, e.getMessage());
-                                    }
-                                }
-
-                                @Override
-                                public void onError(VolleyError volleyError) {
-                                    volleyError.printStackTrace();
-                                    Log.e(TAG, volleyError.getMessage());
-                                    progress.dismiss();
-                                }
-                            });
-                        }
-                    });
-                    builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    builder.create().show();
-                }
-            });
         } else if (holder instanceof Address) {
             final ContactInformation contactInformation = (ContactInformation) cardInfoList.get(position);
             final Address cardHolder = (Address) holder;
