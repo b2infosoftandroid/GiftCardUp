@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -55,7 +56,7 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(SC.STATE_ID_COLUMN, state.getId());
-        values.put(SC.STATE_NAME_COLUMN, state.getName());
+        values.put(SC.STATE_NAME_COLUMN, state.getName().toUpperCase(Locale.getDefault()));
         values.put(SC.STATE_ABBREVIATION_COLUMN, state.getAbbreviation());
         db.insert(SC.STATE_TABLE, null, values);
     }
@@ -68,7 +69,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public State getStateByName(String stateName) {
         State state = new State();
         SQLiteDatabase database = this.getReadableDatabase();
-        Cursor cursor = database.rawQuery("SELECT * FROM " + SC.STATE_TABLE + " WHERE " + SC.STATE_NAME_COLUMN + " = '" + stateName + "' LIMIT 1", null);
+        String sql ="SELECT * FROM " + SC.STATE_TABLE + " WHERE " + SC.STATE_NAME_COLUMN + " = '" + stateName.toUpperCase(Locale.getDefault()) + "' LIMIT 1";
+        Cursor cursor = database.rawQuery(sql, null);
         while (cursor.moveToNext()) {
             state.setId(cursor.getString(cursor.getColumnIndex(SC.STATE_ID_COLUMN)));
             state.setName(cursor.getString(cursor.getColumnIndex(SC.STATE_NAME_COLUMN)));
