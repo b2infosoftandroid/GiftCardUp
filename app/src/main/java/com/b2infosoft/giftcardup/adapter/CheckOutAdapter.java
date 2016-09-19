@@ -2,7 +2,6 @@ package com.b2infosoft.giftcardup.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,7 +16,6 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
-import com.b2infosoft.giftcardup.activity.ChangeAddress;
 import com.b2infosoft.giftcardup.app.Cart;
 import com.b2infosoft.giftcardup.app.Config;
 import com.b2infosoft.giftcardup.app.Format;
@@ -99,14 +97,14 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public class Address extends RecyclerView.ViewHolder {
-        Button edit;
+        TextView edit;
         TextView name;
         TextView address;
         TextView phone;
 
         public Address(View view) {
             super(view);
-            edit = (Button) view.findViewById(R.id.edit);
+            edit = (TextView) view.findViewById(R.id.edit);
             name = (TextView) view.findViewById(R.id.name);
             address = (TextView) view.findViewById(R.id.address);
             phone = (TextView) view.findViewById(R.id.phone);
@@ -154,12 +152,7 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             final ContactInformation contactInformation = (ContactInformation) cardInfoList.get(position);
             final Address cardHolder = (Address) holder;
             User user = active.getUser();
-            cardHolder.edit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    context.startActivity(new Intent(context, ChangeAddress.class));
-                }
-            });
+
             cardHolder.name.setText(user.getFirstName() + " " + user.getLastName());
             cardHolder.address.setText(contactInformation.getAddressFull(context));
             cardHolder.phone.setText(contactInformation.getPhoneNumber());
