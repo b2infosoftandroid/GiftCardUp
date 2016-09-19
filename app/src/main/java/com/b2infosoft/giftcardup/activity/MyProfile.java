@@ -6,8 +6,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +18,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -123,14 +127,25 @@ public class MyProfile extends AppCompatActivity implements Identification.OnFra
     private void setProfile(){
         User user = active.getUser();
         TextView member_science = (TextView)findViewById(R.id.profile_member);
+        member_science.setGravity(Gravity.RIGHT);
         TextView total_saving = (TextView)findViewById(R.id.total_saving);
         TextView total_sold = (TextView)findViewById(R.id.total_sold);
         TextView profile_user_name = (TextView)findViewById(R.id.profile_user_name);
+
+        int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+        Toast.makeText(this,currentapiVersion + "",Toast.LENGTH_SHORT).show();
+        CollapsingToolbarLayout toolbarLayout = (CollapsingToolbarLayout)findViewById(R.id.htab_collapse_toolbar);
+        if (currentapiVersion >= android.os.Build.VERSION_CODES.LOLLIPOP){
+
+        } else{
+
+        }
+
         profile_image = (CircularImageView)findViewById(R.id.profile_user_image);
         profile_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"success",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),"success",Toast.LENGTH_SHORT).show();
                 showFileChooser();
             }
         });
