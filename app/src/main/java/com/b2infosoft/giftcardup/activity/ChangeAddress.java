@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
@@ -22,7 +23,9 @@ import com.b2infosoft.giftcardup.model.ContactInformation;
 import com.b2infosoft.giftcardup.model.State;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
+import com.google.gson.Gson;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -79,6 +82,11 @@ public class ChangeAddress extends AppCompatActivity implements DMRResult{
             }
         });
 
+        HashMap<String,String> hashMap = new HashMap<>();
+        hashMap.put(tags.USER_ACTION,tags.USER_CONTACT_INFORMATION);
+        hashMap.put(tags.USER_ID,active.getUser().getUserId());
+        dmrRequest.doPost(urls.getUserInfo(),hashMap,this);
+
     }
 
     private void setData(ContactInformation information){
@@ -132,7 +140,7 @@ public class ChangeAddress extends AppCompatActivity implements DMRResult{
                 }
 
             }
-        }catch (Exception e){
+        }catch (JSONException e){
             e.printStackTrace();
             Log.d(TAG,e.getMessage());
         }
@@ -154,6 +162,10 @@ public class ChangeAddress extends AppCompatActivity implements DMRResult{
         String add_cmpny  = company.getText().toString();
         String add_phone  = mobile.getText().toString();
         State state = dbHelper.getStateByName(spinner.getSelectedItem().toString());
+        Log.d("addState",state.getAbbreviation());
+        Gson gson = new Gson();
+        Log.d("GSON",gson.toJson(state));
+
         HashMap<String,String> map = new HashMap<>();
         map.put(tags.USER_ACTION,tags.UPDATE_ADDRESS);
         map.put(tags.USER_ID,active.getUser().getUserId());
@@ -164,6 +176,6 @@ public class ChangeAddress extends AppCompatActivity implements DMRResult{
         map.put(tags.CONTACT_INFO_PHONE_NUMBER,add_phone);
         map.put(tags.ADDRESS,address1);
         map.put(tags.CONTACT_INFO_SUITE_NUMBER,add_suite);
-        dmrRequest.doPost(urls.getCompany(),map,this);
+        dmrRequest.doPost(urls.getUserInfo(),map,this);
     }
 }
