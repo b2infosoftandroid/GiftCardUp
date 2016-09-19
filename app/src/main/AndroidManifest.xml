@@ -56,9 +56,9 @@
             android:label="PROFILE"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize">
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value=".activity.Main" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.Main" />
         </activity>
         <activity
             android:name=".activity.AddAccountInfo"
@@ -96,7 +96,13 @@
         <service
             android:name=".services.CartStatus"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
+        <activity android:name=".activity.CheckOut">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.ShoppingCart" />
+        </activity>
     </application>
 
 </manifest>

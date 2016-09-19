@@ -23,6 +23,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.activity.CompanyCard;
+import com.b2infosoft.giftcardup.activity.Login;
 import com.b2infosoft.giftcardup.activity.Main;
 import com.b2infosoft.giftcardup.app.Cart;
 import com.b2infosoft.giftcardup.app.Config;
@@ -194,6 +195,10 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 public void onClick(View v) {
                     final Cart cart = (Cart) context.getApplicationContext();
                     String cardAction = cardHolder.add_to_cart.getText().toString();
+                    if(!active.isLogin()){
+                        context.startActivity(new Intent(context, Login.class));
+                        return;
+                    }
                     if (cardAction.equalsIgnoreCase("Add to cart")) {
                         final Map<String, String> map = new HashMap<>();
                         map.put(tags.USER_ACTION, tags.ADD_CART_ITEM_GIFT_CARD);

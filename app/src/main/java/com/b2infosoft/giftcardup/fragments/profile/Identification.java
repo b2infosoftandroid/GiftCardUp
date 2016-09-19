@@ -253,7 +253,6 @@ public class Identification extends Fragment implements CanScrollVerticallyDeleg
 
     @Override
     public void onSuccess(JSONObject jsonObject) {
-        Log.d(TAG, jsonObject.toString());
         try {
             if (jsonObject.has(tags.SUCCESS)) {
                 if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {

@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.adapter.CartAdapter;
+import com.b2infosoft.giftcardup.adapter.CheckOutAdapter;
 import com.b2infosoft.giftcardup.app.Cart;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
@@ -95,11 +96,7 @@ public class ShoppingCart extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.action_checkout:
-                if (!Validation.isServiceRunning(this, CartStatus.class.getName())) {
-                    startService(new Intent(this, CartStatus.class));
-                } else {
-                   showMessage("Already Start");
-                }
+                startActivity(new Intent(this, CheckOut.class));
                 break;
             default:
 

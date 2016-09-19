@@ -1,8 +1,10 @@
 package com.b2infosoft.giftcardup.model;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.b2infosoft.giftcardup.app.Tags;
+import com.b2infosoft.giftcardup.database.DBHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -103,6 +105,18 @@ public class ContactInformation implements Serializable {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getAddressFull(Context context) {
+        DBHelper dbHelper = new DBHelper(context);
+        State state = dbHelper.getStateByAbbreviation(getState());
+        StringBuffer address = new StringBuffer();
+        address.append(getAddress() + ",");
+        address.append(getSuiteNumber() + ",");
+        address.append(getCity() + ",");
+        address.append(state.getName() + ",");
+        address.append(getZipCode());
+        return address.toString();
     }
 
     public static ContactInformation fromJSON(JSONObject object) {
