@@ -13,6 +13,7 @@ import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.database.DBHelper;
 import com.b2infosoft.giftcardup.model.CompanyCategory;
+import com.b2infosoft.giftcardup.model.MailPrice;
 import com.b2infosoft.giftcardup.model.State;
 import com.b2infosoft.giftcardup.model.User;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
@@ -78,7 +79,7 @@ public class Splash extends AppCompatActivity implements DMRResult {
 
         /* LOADING ALL STATES */
         Map<String, String> map3 = new HashMap<>();
-        map3.put(tags.USER_ACTION, tags.STATES_ALL);
+        map3.put(tags.USER_ACTION, tags.MY_CONTROL_PANEL);
         dmrRequest.doPost(urls.getAppAction(), map3, this);
 
         /*LOADING USER PROFILE*/
@@ -114,6 +115,10 @@ public class Splash extends AppCompatActivity implements DMRResult {
                         JSONObject object = jsonObject.getJSONObject(tags.USER_INFO);
                         User user = User.fromJSON(object);
                         active.setUser(user);
+                    } else if (jsonObject.has(tags.MY_CONTROL_PANEL)) {
+                        JSONObject object = jsonObject.getJSONObject(tags.MY_CONTROL_PANEL);
+                        dbHelper.deleteMailPrice();
+                        dbHelper.setMailPrice(MailPrice.fromJSON(object));
                     }
                 }
             }

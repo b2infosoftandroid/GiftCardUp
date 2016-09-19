@@ -162,9 +162,10 @@ public class ChangeAddress extends AppCompatActivity implements DMRResult{
         String add_cmpny  = company.getText().toString();
         String add_phone  = mobile.getText().toString();
         State state = dbHelper.getStateByName(spinner.getSelectedItem().toString());
-        Log.d("addState",state.getAbbreviation());
         Gson gson = new Gson();
         Log.d("GSON",gson.toJson(state));
+
+        Log.d("addState",state.getAbbreviation());
 
         HashMap<String,String> map = new HashMap<>();
         map.put(tags.USER_ACTION,tags.UPDATE_ADDRESS);

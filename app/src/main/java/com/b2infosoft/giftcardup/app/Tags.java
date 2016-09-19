@@ -68,6 +68,7 @@ public class Tags {
     public final String UPDATE_PROFILE_PIC = "update_profile_pic";
     public final String CHECK_CART_STATUS = "check_cart_status";
     public final String UPDATE_ADDRESS = "update_address";
+    public final String MY_CONTROL_PANEL = "my_control_panel";
 
 
     /*  CART PROCESSING  */

@@ -5,10 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.b2infosoft.giftcardup.model.CompanyCategory;
 import com.b2infosoft.giftcardup.model.MailPrice;
 import com.b2infosoft.giftcardup.model.State;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,9 +25,11 @@ import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.Progress;
+import com.b2infosoft.giftcardup.database.DBHelper;
 import com.b2infosoft.giftcardup.model.CartSummary;
 import com.b2infosoft.giftcardup.model.ContactInformation;
 import com.b2infosoft.giftcardup.model.GiftCard;
+import com.b2infosoft.giftcardup.model.MailPrice;
 import com.b2infosoft.giftcardup.model.User;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
@@ -53,6 +56,7 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private Format format;
     private List<Object> cardInfoList;
     private Config config;
+    private DBHelper dbHelper;
     private final int VIEW_CART_ITEM = 0;
     private final int VIEW_CART_ADDRESS = 1;
 
@@ -67,6 +71,7 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         dmrRequest = DMRRequest.getInstance(context, TAG);
         progress = new Progress(context);
         cart = (Cart) context.getApplicationContext();
+        dbHelper = new DBHelper(context);
     }
 
     public class CardHolder extends RecyclerView.ViewHolder {
@@ -76,6 +81,7 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView value;
         TextView price;
         View physical, e_card;
+        RadioButton first_class, priority_mail, express_mail;
 
         public CardHolder(View view) {
             super(view);
@@ -86,6 +92,9 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             type = (TextView) view.findViewById(R.id.card_type);
             value = (TextView) view.findViewById(R.id.card_value);
             price = (TextView) view.findViewById(R.id.card_price);
+            first_class = (RadioButton) view.findViewById(R.id.first_class);
+            priority_mail = (RadioButton) view.findViewById(R.id.priority_mail);
+            express_mail = (RadioButton) view.findViewById(R.id.express_mail);
         }
     }
 
@@ -131,10 +140,15 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             cardHolder.e_card.setVisibility(card.getCardType() == 2 ? View.GONE : View.VISIBLE);
             cardHolder.physical.setVisibility(card.getCardType() == 2 ? View.VISIBLE : View.GONE);
 
+
+
             cardHolder.name.setText(card.getCardName());
             cardHolder.value.setText("$" + card.getCardPrice());
             cardHolder.price.setText("$" + card.getCardValue());
-
+            MailPrice price = dbHelper.getMailPrice();
+            cardHolder.first_class.setText("First Class [$"+String.valueOf(price.getFirstClass())+"]");
+            cardHolder.priority_mail.setText("First Class [$"+String.valueOf(price.getPriorityMail())+"]");
+            cardHolder.express_mail.setText("First Class [$"+String.valueOf(price.getExpressMail())+"]");
 
         } else if (holder instanceof Address) {
             final ContactInformation contactInformation = (ContactInformation) cardInfoList.get(position);

@@ -12,9 +12,9 @@ import org.json.JSONObject;
  */
 
 public class MailPrice {
-    private String firstClass = "First Class[ Free ]";
-    private String priorityMail = "Priority Mail[ Free ]";
-    private String expressMail = "Express Mail[ Free ]";
+    private String firstClass ;
+    private String priorityMail ;
+    private String expressMail ;
 
     public String getFirstClass() {
         return firstClass;
@@ -40,7 +40,7 @@ public class MailPrice {
         this.expressMail = expressMail;
     }
 
-    public MailPrice fromJSON(JSONObject object) {
+    public static MailPrice fromJSON(JSONObject object) {
         Tags tags = Tags.getInstance();
         MailPrice price = new MailPrice();
         try {
