@@ -220,16 +220,32 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     }
                     Map<String, String> map = new HashMap<String, String>();
                     map.put(tags.USER_ACTION, tags.PROMO_CODE_APPLY);
+                    map.put(tags.USER_ID, active.getUser().getUserId());
                     map.put(tags.PROMO_CODE, promo);
                     map.put(tags.TOTAL_AMOUNT, orderSummery.getBalance() + "");
                     dmrRequest.doPost(urls.getCartInfo(), map, new DMRResult() {
                         @Override
                         public void onSuccess(JSONObject jsonObject) {
-                            Log.d(TAG, jsonObject.toString());
                             try {
                                 if (jsonObject.has(tags.SUCCESS)) {
                                     if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
-
+                                        int total = 0;
+                                        if (jsonObject.has(tags.TOTAL)) {
+                                            total = jsonObject.getInt(tags.TOTAL);
+                                        }
+                                        if (jsonObject.has(tags.AMOUNT_TYPE)) {
+                                            if (jsonObject.getInt(tags.AMOUNT_TYPE) == tags.PASS) {
+                                            /* 1 MEAN PROMO DISCOUNT IN $ */
+                                                orderSummery.setDiscountAmount(total);
+                                            }
+                                            if (jsonObject.getInt(tags.AMOUNT_TYPE) == tags.SUSPEND) {
+                                            /* 2 MEAN PROMO DISCOUNT IN PERCENTAGE */
+                                                orderSummery.setDiscountPercentage(total);
+                                            }
+                                        }
+                                        CheckOutAdapter.super.notifyDataSetChanged();
+                                        showMessage("Your Code Successfully Applied.");
+                                        order.apply.setEnabled(false);
                                     }
                                     if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
                                         /* 0  mean promo code not match */

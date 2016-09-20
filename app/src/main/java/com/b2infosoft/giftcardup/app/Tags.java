@@ -290,11 +290,13 @@ public class Tags {
     /*                  PROMO CODE      */
     public final String PROMO_CODE =  "promo_code";
     public final String TOTAL_AMOUNT =  "total_amount";
-
-
+    public final String AMOUNT_TYPE =  "amount_type";
+    public final String TOTAL =  "total";
 
     /////////////     PUSH NOTIFICATION    /////////////////
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
     public static final String REGISTRATION_COMPLETE = "registrationComplete";
+
+    ///////////////   CONTROL PANEL    /////////////
 
 }

@@ -113,7 +113,11 @@ public class CheckOut extends AppCompatActivity implements DMRResult{
         for (GiftCard giftCard : cart.getCartItemList()) {
             cartList.add(giftCard);
         }
-        cartList.add(new OrderSummery());
+        CartSummary summary = new CartSummary(cart.getCartItemList());
+        OrderSummery orderSummery = new OrderSummery();
+        orderSummery.setPrice(summary.getValue());
+        orderSummery.setShipping(2.0f);
+        cartList.add(orderSummery);
         adapter = new CheckOutAdapter(this, cartList);
         recyclerView.setAdapter(adapter);
     }
