@@ -38,6 +38,12 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(TABLE_STATE);
         String TABLE_CATEGORIES = "CREATE TABLE " + SC.CATEGORY_TABLE + "(" + SC.CATEGORY_ID_COLUMN + " int," + SC.CATEGORY_NAME_COLUMN + " text)";
         db.execSQL(TABLE_CATEGORIES);
+        String TABLE_CONTROL_PANEL = "CREATE TABLE " + SC.CONTROL_PANEL_TABLE + "(" + SC.CONTROL_PANEL_ID + " int," + SC.CONTROL_PANEL_GENERAL_COMMISSION + " text," + SC.CONTROL_PANEL_SHIPPING_CHARGE + " text,"
+                + SC.CONTROL_PANEL_SELLING_PERCENTAGE + " int," + SC.CONTROL_PANEL_COMPANY_NAME + " text," + SC.CONTROL_PANEL_PHONE_NO + " text," + SC.CONTROL_PANEL_EMAIL + " text,"
+                + SC.CONTROL_PANEL_CITY + " text," + SC.CONTROL_PANEL_ADDRESS + " text," + SC.CONTROL_PANEL_STATE + " text," + SC.CONTROL_PANEL_ZIP_CODE + " int,"
+                + SC.CONTROL_PANEL_PROCESS_TIME + " text," + SC.CONTROL_PANEL_CARD_ATTEMPT_TIME + " int," + SC.CONTROL_PANEL_IMAGE + " text," + SC.CONTROL_PANEL_FIRST_CLASS_PRICE + " text," + SC.CONTROL_PANEL_PRIORITY_PRICE + " text,"
+                + SC.CONTROL_PANEL_EXPRESS_PRICE + " text,"+ SC.CONTROL_PANEL_MIN_SCORE + " text,"+ SC.CONTROL_PANEL_MAX_SCORE + " text,"+ SC.CONTROL_PANEL_REFFERAL_AMOUNT + " int,";
+        db.execSQL(TABLE_CONTROL_PANEL);
 
         String MAIL_PRICE = "CREATE TABLE " + SC.MAIL_PRICE_TABLE + "(" + SC.MAIL_PRICE_FIRST_CLASS_COLUMN + " double," + SC.MAIL_PRICE_PRIORITY_COLUMN + " double," + SC.MAIL_PRICE_EXPRESS_COLUMN + " double)";
         db.execSQL(MAIL_PRICE);
@@ -49,6 +55,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + SC.STATE_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + SC.CATEGORY_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + SC.MAIL_PRICE_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + SC.CONTROL_PANEL_TABLE);
     }
 
     /* ----------------- STATE PART START --------------------- */
