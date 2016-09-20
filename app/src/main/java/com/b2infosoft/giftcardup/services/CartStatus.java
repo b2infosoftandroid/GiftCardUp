@@ -68,8 +68,10 @@ public class CartStatus extends Service {
                         if (jsonObject.has(tags.SUCCESS)) {
                             if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
                                 if (jsonObject.has(tags.LEFT_TIME)) {
-                                    intent1.putExtra(tags.LEFT_TIME, jsonObject.getString(tags.LEFT_TIME));
-                                    CartStatus.this.sendBroadcast(intent1);
+                                    if (jsonObject.getString(tags.LEFT_TIME) != null) {
+                                        intent1.putExtra(tags.LEFT_TIME, jsonObject.getString(tags.LEFT_TIME));
+                                        CartStatus.this.sendBroadcast(intent1);
+                                    }
                                 }
                                 if (jsonObject.has(tags.STATUS)) {
                                     if (jsonObject.getInt(tags.STATUS) == tags.FAIL) {

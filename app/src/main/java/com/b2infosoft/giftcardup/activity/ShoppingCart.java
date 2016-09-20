@@ -26,6 +26,7 @@ import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.app.Validation;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.model.CartSummary;
+import com.b2infosoft.giftcardup.model.EmptyCart;
 import com.b2infosoft.giftcardup.model.GiftCard;
 import com.b2infosoft.giftcardup.services.CartStatus;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
@@ -121,7 +122,6 @@ public class ShoppingCart extends AppCompatActivity implements View.OnClickListe
         left_time = menu.findItem(R.id.left_time);
         return super.onCreateOptionsMenu(menu);
     }
-
     private void refreshShoppingCartItemList() {
         List<Object> cartList = new ArrayList<>();
         for (GiftCard giftCard : cart.getCartItemList()) {
@@ -131,7 +131,11 @@ public class ShoppingCart extends AppCompatActivity implements View.OnClickListe
             CartSummary summary = new CartSummary(cart.getCartItemList());
             cartList.add(summary);
         }
-        adapter = new CartAdapter(this, cartList);
+        if(cartList.size()==0){
+            cartList.add(new EmptyCart());
+            action_checkout.setVisibility(View.GONE);
+        }
+        adapter = new CartAdapter(this, cartList,action_checkout);
         recyclerView.setAdapter(adapter);
     }
 

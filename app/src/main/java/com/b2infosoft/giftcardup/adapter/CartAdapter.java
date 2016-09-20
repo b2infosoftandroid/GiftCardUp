@@ -24,6 +24,7 @@ import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.AlertBox;
 import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.model.CartSummary;
+import com.b2infosoft.giftcardup.model.EmptyCart;
 import com.b2infosoft.giftcardup.model.GiftCard;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
@@ -51,8 +52,10 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Config config;
     private final int VIEW_CART_ITEM = 0;
     private final int VIEW_CART_SUMMARY = 1;
+    private final int VIEW_CART_EMPTY = 2;
+    Button button;
 
-    public CartAdapter(Context context, List<Object> cardInfoList) {
+    public CartAdapter(Context context, List<Object> cardInfoList, Button button) {
         this.context = context;
         this.cardInfoList = cardInfoList;
         format = Format.getInstance();
@@ -60,9 +63,10 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         tags = Tags.getInstance();
         urls = Urls.getInstance();
         active = Active.getInstance(context);
-        dmrRequest = DMRRequest.getInstance(context,TAG);
+        dmrRequest = DMRRequest.getInstance(context, TAG);
         progress = new Progress(context);
-        cart = (Cart)context.getApplicationContext();
+        cart = (Cart) context.getApplicationContext();
+        this.button = button;
     }
 
     public class CardHolder extends RecyclerView.ViewHolder {
@@ -100,6 +104,13 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
+    public class Empty extends RecyclerView.ViewHolder {
+
+        public Empty(View view) {
+            super(view);
+        }
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == VIEW_CART_ITEM) {
@@ -108,13 +119,17 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else if (viewType == VIEW_CART_SUMMARY) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_cart_item_summery, parent, false);
             return new Summery(view);
+        } else if (viewType == VIEW_CART_EMPTY) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_cart_item_empty, parent, false);
+            return new Empty(view);
         }
         return null;
     }
 
     @Override
     public int getItemViewType(int position) {
-        return cardInfoList.get(position) instanceof CartSummary ? VIEW_CART_SUMMARY : VIEW_CART_ITEM;
+        Object o = cardInfoList.get(position);
+        return o instanceof CartSummary ? VIEW_CART_SUMMARY : o instanceof EmptyCart ? VIEW_CART_EMPTY : VIEW_CART_ITEM;
     }
 
     @Override
@@ -151,7 +166,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                     try {
                                         if (jsonObject.has(tags.SUCCESS)) {
                                             if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
-                                                if(jsonObject.has(tags.GIFT_CARDS)) {
+                                                if (jsonObject.has(tags.GIFT_CARDS)) {
                                                     JSONArray array = jsonObject.getJSONArray(tags.GIFT_CARDS);
                                                     cart.removeAll();
                                                     for (int i = 0; i < array.length(); i++) {
@@ -197,6 +212,8 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             cardHolder.value.setText("$" + card.getPrice());
             cardHolder.price.setText("$" + card.getValue());
             cardHolder.saving.setText("$" + card.getSaving());
+        } else if (holder instanceof Empty) {
+
         }
     }
 
@@ -208,9 +225,12 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private void showMessage(String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
-    private void isLastCard(){
-        if(cardInfoList.size()==1){
+
+    private void isLastCard() {
+        if (cardInfoList.size() == 1) {
             cardInfoList.clear();
+            cardInfoList.add(new EmptyCart());
+            button.setVisibility(View.GONE);
         }
         CartAdapter.super.notifyDataSetChanged();
     }

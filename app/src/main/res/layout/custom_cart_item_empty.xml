@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/verification_expired"
+    >
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_add_shopping_cart_24dp"
+        />
+    <Button
+        android:id="@+id/action_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_background"
+        android:text="GO SHOPPING"
+        android:textColor="@color/app_background"
+        android:layout_gravity="bottom"
+        />
+</FrameLayout>
