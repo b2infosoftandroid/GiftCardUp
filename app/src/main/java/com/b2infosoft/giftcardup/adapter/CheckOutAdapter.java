@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.b2infosoft.giftcardup.app.Format;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
+import com.b2infosoft.giftcardup.custom.AlertBox;
 import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.database.DBHelper;
 import com.b2infosoft.giftcardup.model.CartSummary;
@@ -200,6 +202,70 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     cardHolder.shipping.setVisibility(View.GONE);
                 }
             }
+        } else if (holder instanceof Order) {
+            final OrderSummery orderSummery = (OrderSummery) cardInfoList.get(position);
+            final Order order = (Order) holder;
+            order.price.setText(String.valueOf(orderSummery.getPrice()));
+            order.shipping.setText(String.valueOf(orderSummery.getShipping()));
+            order.discount.setText(String.valueOf(orderSummery.getDiscount()));
+            order.balance.setText(String.valueOf(orderSummery.getBalance()));
+            order.apply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String promo = order.promotion_code.getText().toString();
+                    if (TextUtils.isEmpty(promo)) {
+                        order.promotion_code.setError("Enter Promo code");
+                        order.promotion_code.requestFocus();
+                        return;
+                    }
+                    Map<String, String> map = new HashMap<String, String>();
+                    map.put(tags.USER_ACTION, tags.PROMO_CODE_APPLY);
+                    map.put(tags.PROMO_CODE, promo);
+                    map.put(tags.TOTAL_AMOUNT, orderSummery.getBalance() + "");
+                    dmrRequest.doPost(urls.getCartInfo(), map, new DMRResult() {
+                        @Override
+                        public void onSuccess(JSONObject jsonObject) {
+                            Log.d(TAG, jsonObject.toString());
+                            try {
+                                if (jsonObject.has(tags.SUCCESS)) {
+                                    if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+
+                                    }
+                                    if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
+                                        /* 0  mean promo code not match */
+                                        AlertBox box = new AlertBox(context);
+                                        box.setTitle("Alert");
+                                        box.setMessage("Promotion code does not match. Please enter valid promotion code.");
+                                        box.show();
+                                    }
+                                    if (jsonObject.getInt(tags.SUCCESS) == tags.SUSPEND) {
+                                        /* 2 mean amount is less */
+                                        AlertBox box = new AlertBox(context);
+                                        box.setTitle("Alert");
+                                        box.setMessage("Promotion code does not apply. Because your total amount is less than to promotion code amount.");
+                                        box.show();
+                                    }
+                                    if (jsonObject.getInt(tags.SUCCESS) == tags.EXISTING_USER) {
+                                        /* 3 mean User already used this promo code */
+                                        AlertBox box = new AlertBox(context);
+                                        box.setTitle("Alert");
+                                        box.setMessage("Already User Promo Code");
+                                        box.show();
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Log.d(TAG, e.getMessage());
+                            }
+                        }
+
+                        @Override
+                        public void onError(VolleyError volleyError) {
+
+                        }
+                    });
+                }
+            });
         }
     }
 

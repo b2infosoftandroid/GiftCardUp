@@ -69,6 +69,7 @@ public class Tags {
     public final String CHECK_CART_STATUS = "check_cart_status";
     public final String UPDATE_ADDRESS = "update_address";
     public final String MY_CONTROL_PANEL = "my_control_panel";
+    public final String PROMO_CODE_APPLY = "promo_code_apply";
 
 
     /*  CART PROCESSING  */
@@ -285,6 +286,12 @@ public class Tags {
     public final String FIRST_CLASS_PRICE =  "first_class_price";
     public final String PRIORITY_PRICE =  "priority_price";
     public final String EXPRESS_PRICE =  "express_price";
+
+    /*                  PROMO CODE      */
+    public final String PROMO_CODE =  "promo_code";
+    public final String TOTAL_AMOUNT =  "total_amount";
+
+
 
     /////////////     PUSH NOTIFICATION    /////////////////
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
