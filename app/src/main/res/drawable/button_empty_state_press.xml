@@ -4,6 +4,10 @@
     <solid
         android:color="@color/button_empty_stroke"
         />
+    <padding android:bottom="5dp"
+        android:left="10dp"
+        android:right="10dp"
+        android:top="5dp"></padding>
     <stroke
         android:width="@dimen/button_stroke_width"
         android:color="@color/login_sign_up" />

@@ -2,6 +2,7 @@ package com.b2infosoft.giftcardup.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.activity.Main;
 import com.b2infosoft.giftcardup.app.Cart;
 import com.b2infosoft.giftcardup.app.Config;
 import com.b2infosoft.giftcardup.app.Format;
@@ -105,9 +107,10 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public class Empty extends RecyclerView.ViewHolder {
-
+        Button goShop;
         public Empty(View view) {
             super(view);
+            goShop = (Button)view.findViewById(R.id.action_shop);
         }
     }
 
@@ -213,7 +216,13 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             cardHolder.price.setText("$" + card.getValue());
             cardHolder.saving.setText("$" + card.getSaving());
         } else if (holder instanceof Empty) {
-
+           final Empty cardHolder = (Empty)holder;
+            cardHolder.goShop.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    context.startActivity(new Intent(context, Main.class));
+                }
+            });
         }
     }
 

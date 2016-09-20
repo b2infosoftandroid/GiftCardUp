@@ -286,4 +286,8 @@ public class Tags {
     public final String PRIORITY_PRICE =  "priority_price";
     public final String EXPRESS_PRICE =  "express_price";
 
+    /////////////     PUSH NOTIFICATION    /////////////////
+    public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
+    public static final String REGISTRATION_COMPLETE = "registrationComplete";
+
 }

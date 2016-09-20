@@ -87,10 +87,10 @@ public class ShoppingCart extends AppCompatActivity implements View.OnClickListe
         init();
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        refreshShoppingCartItemList();
 
         action_checkout = (Button) findViewById(R.id.action_checkout);
         action_checkout.setOnClickListener(this);
+        refreshShoppingCartItemList();
     }
 
     @Override

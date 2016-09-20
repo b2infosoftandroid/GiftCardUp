@@ -1,7 +1,9 @@
 package com.b2infosoft.giftcardup.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -214,38 +216,54 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     context.startActivity(intent);
                     break;
                 case R.id.action_delete:
-                    AlertBox alertBox = new AlertBox(context);
-                    alertBox.setTitle("Alert");
-                    alertBox.setMessage("Sure You Want To Delete Card");
-                    alertBox.show();
-                    Map<String, String> map = new HashMap<>();
-                    map.put(tags.USER_ACTION, tags.DELETE_GIFT_CARD);
-                    map.put(tags.USER_ID, active.getUser().getUserId() + "");
-                    map.put(tags.CARD_ID, giftCard.getGiftCardID() + "");
-                    dmrRequest.doPost(urls.getGiftCardInfo(), map, new DMRResult() {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle("Alert");
+                    builder.setMessage("Sure You Want To Delete Card");
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onSuccess(JSONObject jsonObject) {
-                            try {
-                                if (jsonObject.has(tags.SUCCESS)) {
-                                    if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
-                                        int index = cardInfoList.indexOf(giftCard);
-                                        giftCard.setApproveStatus(5);
-                                        cardInfoList.set(index, giftCard);
-                                        MyListingAdapter.super.notifyDataSetChanged();
+                        public void onClick(DialogInterface dialog, int which) {
+                            Map<String, String> map = new HashMap<>();
+                            map.put(tags.USER_ACTION, tags.DELETE_GIFT_CARD);
+                            map.put(tags.USER_ID, active.getUser().getUserId() + "");
+                            map.put(tags.CARD_ID, giftCard.getGiftCardID() + "");
+                            dmrRequest.doPost(urls.getGiftCardInfo(), map, new DMRResult() {
+                                @Override
+                                public void onSuccess(JSONObject jsonObject) {
+                                    try {
+                                        if (jsonObject.has(tags.SUCCESS)) {
+                                            if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                                                int index = cardInfoList.indexOf(giftCard);
+                                                giftCard.setApproveStatus(5);
+                                                cardInfoList.set(index, giftCard);
+                                                MyListingAdapter.super.notifyDataSetChanged();
+                                            }
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                        Log.e(TAG, e.getMessage());
                                     }
                                 }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                Log.e(TAG, e.getMessage());
-                            }
-                        }
 
-                        @Override
-                        public void onError(VolleyError volleyError) {
-                            volleyError.printStackTrace();
-                            Log.e(TAG, volleyError.getMessage());
+                                @Override
+                                public void onError(VolleyError volleyError) {
+                                    volleyError.printStackTrace();
+                                    Log.e(TAG, volleyError.getMessage());
+                                }
+                            });
                         }
                     });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                @Override
+                                public void onDismiss(DialogInterface dialog) {
+                                    
+                                }
+                            });
+                        }
+                    });
+                    builder.create().show();
                     break;
                 case R.id.action_deny:
                     box.setTitle("Reason for card deny");
