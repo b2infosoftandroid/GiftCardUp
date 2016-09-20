@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.b2infosoft.giftcardup.model.CompanyCategory;
+import com.b2infosoft.giftcardup.model.ControlPanel;
 import com.b2infosoft.giftcardup.model.MailPrice;
 import com.b2infosoft.giftcardup.model.State;
 import com.google.gson.Gson;
@@ -183,5 +184,71 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM " + SC.MAIL_PRICE_TABLE);
     }
     /* ----------------- CATEGORIES PART END ---------------- */
+
+
+    /* ------------------ CONTROL PANEL PART START ------------------*/
+    public void setControlPanel(ControlPanel panel) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(SC.CONTROL_PANEL_ID, panel.getId());
+        values.put(SC.CONTROL_PANEL_GENERAL_COMMISSION, panel.getGeneralCommission());
+        values.put(SC.CONTROL_PANEL_SHIPPING_CHARGE, panel.getShippingCharge());
+        values.put(SC.CONTROL_PANEL_SELLING_PERCENTAGE, panel.getSellingPercentage());
+        values.put(SC.CONTROL_PANEL_COMPANY_NAME, panel.getCompanyName());
+        values.put(SC.CONTROL_PANEL_PHONE_NO, panel.getPhoneNumber());
+        values.put(SC.CONTROL_PANEL_EMAIL, panel.getEmail());
+        values.put(SC.CONTROL_PANEL_CITY, panel.getCity());
+        values.put(SC.CONTROL_PANEL_ADDRESS, panel.getAddress());
+        values.put(SC.CONTROL_PANEL_STATE, panel.getState());
+        values.put(SC.CONTROL_PANEL_ZIP_CODE, panel.getZipCode());
+        values.put(SC.CONTROL_PANEL_PROCESS_TIME, panel.getProcessTime());
+        values.put(SC.CONTROL_PANEL_CARD_ATTEMPT_TIME, panel.getCardAttemptTime());
+        values.put(SC.CONTROL_PANEL_IMAGE, panel.getImage());
+        values.put(SC.CONTROL_PANEL_FIRST_CLASS_PRICE, panel.getFirstClassPrice());
+        values.put(SC.CONTROL_PANEL_PRIORITY_PRICE, panel.getPriorityPrice());
+        values.put(SC.CONTROL_PANEL_EXPRESS_PRICE, panel.getExpressPrice());
+        values.put(SC.CONTROL_PANEL_MIN_SCORE, panel.getMinimumScore());
+        values.put(SC.CONTROL_PANEL_MAX_SCORE, panel.getMaximumScore());
+        values.put(SC.CONTROL_PANEL_REFFERAL_AMOUNT, panel.getReferralAmount());
+        db.insert(SC.CONTROL_PANEL_TABLE, null, values);
+    }
+
+    public ControlPanel getControlPanel() {
+        ControlPanel panel = new ControlPanel();
+        SQLiteDatabase database = this.getReadableDatabase();
+        Cursor cursor = database.rawQuery("SELECT * FROM " + SC.CONTROL_PANEL_TABLE, null);
+        while (cursor.moveToNext()) {
+            panel.setId(cursor.getString(cursor.getColumnIndex(SC.CONTROL_PANEL_ID)));
+            panel.setGeneralCommission(cursor.getString(cursor.getColumnIndex(SC.CONTROL_PANEL_GENERAL_COMMISSION)));
+            panel.setShippingCharge(cursor.getString(cursor.getColumnIndex(SC.CONTROL_PANEL_SHIPPING_CHARGE)));
+            panel.setSellingPercentage(cursor.getString(cursor.getColumnIndex(SC.CONTROL_PANEL_SELLING_PERCENTAGE)));
+            panel.setCompanyName(cursor.getString(cursor.getColumnIndex(SC.CONTROL_PANEL_COMPANY_NAME)));
+            panel.setPhoneNumber(cursor.getString(cursor.getColumnIndex(SC.CONTROL_PANEL_PHONE_NO)));
+            panel.setEmail(cursor.getString(cursor.getColumnIndex(SC.CONTROL_PANEL_EMAIL)));
+            panel.setCity(cursor.getString(cursor.getColumnIndex(SC.CONTROL_PANEL_CITY)));
+            panel.setAddress(cursor.getString(cursor.getColumnIndex(SC.CONTROL_PANEL_ADDRESS)));
+            panel.setState(cursor.getString(cursor.getColumnIndex(SC.CONTROL_PANEL_STATE)));
+            panel.setZipCode(cursor.getString(cursor.getColumnIndex(SC.CONTROL_PANEL_ZIP_CODE)));
+            panel.setProcessTime(cursor.getString(cursor.getColumnIndex(SC.CONTROL_PANEL_PROCESS_TIME)));
+            panel.setCardAttemptTime(cursor.getString(cursor.getColumnIndex(SC.CONTROL_PANEL_CARD_ATTEMPT_TIME)));
+            panel.setImage(cursor.getString(cursor.getColumnIndex(SC.CONTROL_PANEL_IMAGE)));
+            panel.setFirstClassPrice(cursor.getString(cursor.getColumnIndex(SC.CONTROL_PANEL_FIRST_CLASS_PRICE)));
+            panel.setPriorityPrice(cursor.getString(cursor.getColumnIndex(SC.CONTROL_PANEL_PRIORITY_PRICE)));
+            panel.setExpressPrice(cursor.getString(cursor.getColumnIndex(SC.CONTROL_PANEL_EXPRESS_PRICE)));
+            panel.setMinimumScore(cursor.getString(cursor.getColumnIndex(SC.CONTROL_PANEL_MIN_SCORE)));
+            panel.setMaximumScore(cursor.getString(cursor.getColumnIndex(SC.CONTROL_PANEL_MAX_SCORE)));
+            panel.setReferralAmount(cursor.getString(cursor.getColumnIndex(SC.CONTROL_PANEL_REFFERAL_AMOUNT)));
+        }
+        if (!cursor.isClosed()) {
+            cursor.close();
+        }
+        return panel;
+    }
+
+    public void deleteControlPanel() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + SC.CONTROL_PANEL_TABLE);
+    }
+    /* ------------------ CONTROL PANEL END ------------------*/
 
 }
