@@ -298,5 +298,12 @@ public class Tags {
     public static final String REGISTRATION_COMPLETE = "registrationComplete";
 
     ///////////////   CONTROL PANEL    /////////////
+    public static final String ID = "id";
+    public static final String GENERAL_COMMISSION = "general_commission";
+    public static final String SHIPPING_CHARGE = "shipping_charge";
+    public static final String PROCESS_TIME = "process_time";
+    public static final String CARD_ATTEMPT_TIME = "card_attempt_time";
+    public static final String MINIMUM_SCORE = "minimum_score";
+    public static final String MAXIMUM_SCORE = "maximum_score";
 
 }

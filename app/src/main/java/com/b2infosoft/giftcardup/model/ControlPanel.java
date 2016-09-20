@@ -191,16 +191,75 @@ public class ControlPanel {
     public void setReferralAmount(String referralAmount) {
         this.referralAmount = referralAmount;
     }
-    /*
-    public static ControlPanel fromJSON(JSONObject object){
+
+    public static ControlPanel fromJSON(JSONObject object) {
         Tags tags = Tags.getInstance();
         ControlPanel panel = new ControlPanel();
-        try{
-            if(object.has(tags.I))
-        }catch (JSONException e){
+        try {
+            if (object.has(tags.ID)) {
+                panel.setId(object.getString(tags.ID));
+            }
+            if (object.has(tags.GENERAL_COMMISSION)) {
+                panel.setGeneralCommission(object.getString(tags.GENERAL_COMMISSION));
+            }
+            if (object.has(tags.SHIPPING_CHARGE)) {
+                panel.setShippingCharge(object.getString(tags.SHIPPING_CHARGE));
+            }
+            if (object.has(tags.GIFT_CARD_SELLING_PERCENTAGE)) {
+                panel.setSellingPercentage(object.getString(tags.GIFT_CARD_SELLING_PERCENTAGE));
+            }
+            if (object.has(tags.COMPANY_NAME)) {
+                panel.setCompanyName(object.getString(tags.COMPANY_NAME));
+            }
+            if (object.has(tags.PHONE_NUMBER)) {
+                panel.setPhoneNumber(object.getString(tags.PHONE_NUMBER));
+            }
+            if (object.has(tags.EMAIL)) {
+                panel.setEmail(object.getString(tags.EMAIL));
+            }
+            if (object.has(tags.ADDRESS)) {
+                panel.setAddress(object.getString(tags.ADDRESS));
+            }
+            if (object.has(tags.CITY)) {
+                panel.setAddress(object.getString(tags.CITY));
+            }
+            if (object.has(tags.STATE)) {
+                panel.setState(object.getString(tags.STATE));
+            }
+            if (object.has(tags.ZIP_CODE)) {
+                panel.setZipCode(object.getString(tags.ZIP_CODE));
+            }
+            if (object.has(tags.PROCESS_TIME)) {
+                panel.setProcessTime(object.getString(tags.PROCESS_TIME));
+            }
+            if (object.has(tags.CARD_ATTEMPT_TIME)) {
+                panel.setCardAttemptTime(object.getString(tags.CARD_ATTEMPT_TIME));
+            }
+            if (object.has(tags.IMAGE)) {
+                panel.setImage(object.getString(tags.IMAGE));
+            }
+            if (object.has(tags.FIRST_CLASS_PRICE)) {
+                panel.setFirstClassPrice(object.getString(tags.FIRST_CLASS_PRICE));
+            }
+            if (object.has(tags.PRIORITY_PRICE)) {
+                panel.setPriorityPrice(object.getString(tags.PRIORITY_PRICE));
+            }
+            if (object.has(tags.EXPRESS_PRICE)) {
+                panel.setExpressPrice(object.getString(tags.EXPRESS_PRICE));
+            }
+            if (object.has(tags.MINIMUM_SCORE)) {
+                panel.setMinimumScore(object.getString(tags.MINIMUM_SCORE));
+            }
+            if (object.has(tags.MAXIMUM_SCORE)) {
+                panel.setMaximumScore(object.getString(tags.MAXIMUM_SCORE));
+            }
+            if (object.has(tags.REFERRAL_AMOUNT)) {
+                panel.setReferralAmount(object.getString(tags.REFERRAL_AMOUNT));
+            }
+        } catch (JSONException e) {
             e.printStackTrace();
-            Log.e(ControlPanel.class.getName(),e.getMessage());
+            Log.e(ControlPanel.class.getName(), e.getMessage());
         }
+        return panel;
     }
-    */
 }

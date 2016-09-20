@@ -13,7 +13,7 @@ import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.database.DBHelper;
 import com.b2infosoft.giftcardup.model.CompanyCategory;
-import com.b2infosoft.giftcardup.model.MailPrice;
+import com.b2infosoft.giftcardup.model.ControlPanel;
 import com.b2infosoft.giftcardup.model.State;
 import com.b2infosoft.giftcardup.model.User;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
@@ -117,8 +117,8 @@ public class Splash extends AppCompatActivity implements DMRResult {
                         active.setUser(user);
                     } else if (jsonObject.has(tags.MY_CONTROL_PANEL)) {
                         JSONObject object = jsonObject.getJSONObject(tags.MY_CONTROL_PANEL);
-                        dbHelper.deleteMailPrice();
-                        dbHelper.setMailPrice(MailPrice.fromJSON(object));
+                        dbHelper.deleteControlPanel();
+                        dbHelper.setControlPanel(ControlPanel.fromJSON(object));
                     }
                 }
             }

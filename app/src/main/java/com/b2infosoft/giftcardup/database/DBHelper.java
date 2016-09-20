@@ -5,13 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.b2infosoft.giftcardup.model.CompanyCategory;
 import com.b2infosoft.giftcardup.model.ControlPanel;
-import com.b2infosoft.giftcardup.model.MailPrice;
 import com.b2infosoft.giftcardup.model.State;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,11 +40,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 + SC.CONTROL_PANEL_SELLING_PERCENTAGE + " int," + SC.CONTROL_PANEL_COMPANY_NAME + " text," + SC.CONTROL_PANEL_PHONE_NO + " text," + SC.CONTROL_PANEL_EMAIL + " text,"
                 + SC.CONTROL_PANEL_CITY + " text," + SC.CONTROL_PANEL_ADDRESS + " text," + SC.CONTROL_PANEL_STATE + " text," + SC.CONTROL_PANEL_ZIP_CODE + " int,"
                 + SC.CONTROL_PANEL_PROCESS_TIME + " text," + SC.CONTROL_PANEL_CARD_ATTEMPT_TIME + " int," + SC.CONTROL_PANEL_IMAGE + " text," + SC.CONTROL_PANEL_FIRST_CLASS_PRICE + " text," + SC.CONTROL_PANEL_PRIORITY_PRICE + " text,"
-                + SC.CONTROL_PANEL_EXPRESS_PRICE + " text,"+ SC.CONTROL_PANEL_MIN_SCORE + " text,"+ SC.CONTROL_PANEL_MAX_SCORE + " text,"+ SC.CONTROL_PANEL_REFFERAL_AMOUNT + " int,";
+                + SC.CONTROL_PANEL_EXPRESS_PRICE + " text,"+ SC.CONTROL_PANEL_MIN_SCORE + " text,"+ SC.CONTROL_PANEL_MAX_SCORE + " text,"+ SC.CONTROL_PANEL_REFFERAL_AMOUNT + " int)";
         db.execSQL(TABLE_CONTROL_PANEL);
 
-        String MAIL_PRICE = "CREATE TABLE " + SC.MAIL_PRICE_TABLE + "(" + SC.MAIL_PRICE_FIRST_CLASS_COLUMN + " double," + SC.MAIL_PRICE_PRIORITY_COLUMN + " double," + SC.MAIL_PRICE_EXPRESS_COLUMN + " double)";
-        db.execSQL(MAIL_PRICE);
 
     }
 
@@ -55,7 +50,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + SC.STATE_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + SC.CATEGORY_TABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + SC.MAIL_PRICE_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + SC.CONTROL_PANEL_TABLE);
     }
 
@@ -153,38 +147,6 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM " + SC.CATEGORY_TABLE);
     }
     /* ----------------- CATEGORIES PART END ---------------- */
-
-    /* ----------------- MAIL PRICE PART START -------------- */
-    public void setMailPrice(MailPrice category) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(SC.MAIL_PRICE_FIRST_CLASS_COLUMN, category.getFirstClass());
-        values.put(SC.MAIL_PRICE_PRIORITY_COLUMN, category.getPriorityMail());
-        values.put(SC.MAIL_PRICE_EXPRESS_COLUMN, category.getExpressMail());
-        db.insert(SC.MAIL_PRICE_TABLE, null, values);
-    }
-
-    public MailPrice getMailPrice() {
-        MailPrice mailPrice = new MailPrice();
-        SQLiteDatabase database = this.getReadableDatabase();
-        Cursor cursor = database.rawQuery("SELECT * FROM " + SC.MAIL_PRICE_TABLE, null);
-        while (cursor.moveToNext()) {
-            mailPrice.setFirstClass(cursor.getString(cursor.getColumnIndex(SC.MAIL_PRICE_FIRST_CLASS_COLUMN)));
-            mailPrice.setPriorityMail(cursor.getString(cursor.getColumnIndex(SC.MAIL_PRICE_PRIORITY_COLUMN)));
-            mailPrice.setExpressMail(cursor.getString(cursor.getColumnIndex(SC.MAIL_PRICE_EXPRESS_COLUMN)));
-        }
-        if (!cursor.isClosed()) {
-            cursor.close();
-        }
-        return mailPrice;
-    }
-
-    public void deleteMailPrice() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DELETE FROM " + SC.MAIL_PRICE_TABLE);
-    }
-    /* ----------------- CATEGORIES PART END ---------------- */
-
 
     /* ------------------ CONTROL PANEL PART START ------------------*/
     public void setControlPanel(ControlPanel panel) {

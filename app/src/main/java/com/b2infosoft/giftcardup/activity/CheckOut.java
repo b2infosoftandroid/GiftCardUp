@@ -16,8 +16,10 @@ import com.b2infosoft.giftcardup.app.Cart;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
+import com.b2infosoft.giftcardup.database.DBHelper;
 import com.b2infosoft.giftcardup.model.CartSummary;
 import com.b2infosoft.giftcardup.model.ContactInformation;
+import com.b2infosoft.giftcardup.model.ControlPanel;
 import com.b2infosoft.giftcardup.model.GiftCard;
 import com.b2infosoft.giftcardup.model.OrderSummery;
 import com.b2infosoft.giftcardup.model.User;
@@ -32,7 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CheckOut extends AppCompatActivity implements DMRResult{
+public class CheckOut extends AppCompatActivity implements DMRResult {
     public static final String TAG = CheckOut.class.getName();
     private Urls urls;
     private Tags tags;
@@ -42,6 +44,8 @@ public class CheckOut extends AppCompatActivity implements DMRResult{
     CheckOutAdapter adapter;
     List<GiftCard> cardList;
     Cart cart;
+    DBHelper dbHelper;
+    ControlPanel controlPanel;
 
     private void init() {
         tags = Tags.getInstance();
@@ -50,6 +54,8 @@ public class CheckOut extends AppCompatActivity implements DMRResult{
         active = Active.getInstance(this);
         cardList = new ArrayList<>();
         cart = (Cart) getApplicationContext();
+        dbHelper = new DBHelper(this);
+        controlPanel = dbHelper.getControlPanel();
     }
 
     @Override
@@ -61,7 +67,7 @@ public class CheckOut extends AppCompatActivity implements DMRResult{
         init();
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-      //  refreshShoppingCartItemList();
+        //  refreshShoppingCartItemList();
         fetchContactInfo();
     }
 
@@ -85,6 +91,7 @@ public class CheckOut extends AppCompatActivity implements DMRResult{
             dmrRequest.doPost(urls.getUserInfo(), map1, this);
         }
     }
+
     @Override
     public void onSuccess(JSONObject jsonObject) {
         try {
@@ -107,7 +114,8 @@ public class CheckOut extends AppCompatActivity implements DMRResult{
         volleyError.printStackTrace();
         Log.e(TAG, volleyError.getMessage());
     }
-    private void refreshShoppingCartItemList(ContactInformation information ) {
+
+    private void refreshShoppingCartItemList(ContactInformation information) {
         List<Object> cartList = new ArrayList<>();
         cartList.add(information);
         for (GiftCard giftCard : cart.getCartItemList()) {
@@ -116,7 +124,7 @@ public class CheckOut extends AppCompatActivity implements DMRResult{
         CartSummary summary = new CartSummary(cart.getCartItemList());
         OrderSummery orderSummery = new OrderSummery();
         orderSummery.setPrice(summary.getValue());
-        orderSummery.setShipping(2.0f);
+        orderSummery.setShipping(Float.parseFloat(controlPanel.getShippingCharge()));
         cartList.add(orderSummery);
         adapter = new CheckOutAdapter(this, cartList);
         recyclerView.setAdapter(adapter);

@@ -1,9 +1,7 @@
 package com.b2infosoft.giftcardup.adapter;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -29,18 +27,15 @@ import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.AlertBox;
 import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.database.DBHelper;
-import com.b2infosoft.giftcardup.model.CartSummary;
 import com.b2infosoft.giftcardup.model.ContactInformation;
+import com.b2infosoft.giftcardup.model.ControlPanel;
 import com.b2infosoft.giftcardup.model.GiftCard;
-import com.b2infosoft.giftcardup.model.MailPrice;
 import com.b2infosoft.giftcardup.model.OrderSummery;
 import com.b2infosoft.giftcardup.model.User;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 import com.b2infosoft.giftcardup.volly.LruBitmapCache;
-import com.google.gson.Gson;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -174,10 +169,10 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             cardHolder.name.setText(card.getCardName());
             cardHolder.value.setText("$" + card.getCardPrice());
             cardHolder.price.setText("$" + card.getCardValue());
-            MailPrice price = dbHelper.getMailPrice();
-            cardHolder.first_class.setText("First Class [$" + String.valueOf(price.getFirstClass()) + "]");
-            cardHolder.priority_mail.setText("First Class [$" + String.valueOf(price.getPriorityMail()) + "]");
-            cardHolder.express_mail.setText("First Class [$" + String.valueOf(price.getExpressMail()) + "]");
+            ControlPanel panel = dbHelper.getControlPanel();
+            cardHolder.first_class.setText("First Class [$" + String.valueOf(panel.getFirstClassPrice()) + "]");
+            cardHolder.priority_mail.setText("First Class [$" + String.valueOf(panel.getPriorityPrice()) + "]");
+            cardHolder.express_mail.setText("First Class [$" + String.valueOf(panel.getExpressPrice()) + "]");
 
         } else if (holder instanceof Address) {
             final ContactInformation contactInformation = (ContactInformation) cardInfoList.get(position);
