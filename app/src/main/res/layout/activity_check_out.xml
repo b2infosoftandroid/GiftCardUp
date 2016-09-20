@@ -8,7 +8,16 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layoutManager="LinearLayoutManager">
+        android:layout_height="fill_parent"
+        app:layoutManager="LinearLayoutManager"
+        android:layout_above="@+id/action_continue">
     </android.support.v7.widget.RecyclerView>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="CONTINUE"
+        android:background="@drawable/button_background"
+        android:textColor="@color/app_background"
+        android:id="@+id/action_continue" />
 </RelativeLayout>

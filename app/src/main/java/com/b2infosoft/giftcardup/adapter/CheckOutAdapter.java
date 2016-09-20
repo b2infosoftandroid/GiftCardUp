@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -30,6 +31,7 @@ import com.b2infosoft.giftcardup.model.CartSummary;
 import com.b2infosoft.giftcardup.model.ContactInformation;
 import com.b2infosoft.giftcardup.model.GiftCard;
 import com.b2infosoft.giftcardup.model.MailPrice;
+import com.b2infosoft.giftcardup.model.OrderSummery;
 import com.b2infosoft.giftcardup.model.User;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
@@ -59,6 +61,7 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private DBHelper dbHelper;
     private final int VIEW_CART_ITEM = 0;
     private final int VIEW_CART_ADDRESS = 1;
+    private final int VIEW_CART_ORDER_SUMMERY = 2;
 
     public CheckOutAdapter(Context context, List<Object> cardInfoList) {
         this.context = context;
@@ -103,6 +106,7 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView name;
         TextView address;
         TextView phone;
+        View shipping;
 
         public Address(View view) {
             super(view);
@@ -110,8 +114,29 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             name = (TextView) view.findViewById(R.id.name);
             address = (TextView) view.findViewById(R.id.address);
             phone = (TextView) view.findViewById(R.id.phone);
+            shipping = view.findViewById(R.id.shipping);
         }
     }
+
+    public class Order extends RecyclerView.ViewHolder {
+        TextView price;
+        TextView shipping;
+        TextView discount;
+        TextView balance;
+        EditText promotion_code;
+        Button apply;
+
+        public Order(View view) {
+            super(view);
+            price = (TextView) view.findViewById(R.id.price);
+            shipping = (TextView) view.findViewById(R.id.shipping);
+            discount = (TextView) view.findViewById(R.id.discount);
+            balance = (TextView) view.findViewById(R.id.balance);
+            promotion_code = (EditText) view.findViewById(R.id.promotion_code);
+            apply = (Button) view.findViewById(R.id.apply);
+        }
+    }
+
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -121,13 +146,17 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         } else if (viewType == VIEW_CART_ADDRESS) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_cart_item_address, parent, false);
             return new Address(view);
+        } else if (viewType == VIEW_CART_ORDER_SUMMERY) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_cart_item_summery_order, parent, false);
+            return new Order(view);
         }
         return null;
     }
 
     @Override
     public int getItemViewType(int position) {
-        return cardInfoList.get(position) instanceof ContactInformation ? VIEW_CART_ADDRESS : VIEW_CART_ITEM;
+        Object o = cardInfoList.get(position);
+        return o instanceof ContactInformation ? VIEW_CART_ADDRESS : o instanceof GiftCard ? VIEW_CART_ITEM : VIEW_CART_ORDER_SUMMERY;
     }
 
     @Override
@@ -140,14 +169,13 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             cardHolder.e_card.setVisibility(card.getCardType() == 2 ? View.GONE : View.VISIBLE);
             cardHolder.physical.setVisibility(card.getCardType() == 2 ? View.VISIBLE : View.GONE);
 
-
             cardHolder.name.setText(card.getCardName());
             cardHolder.value.setText("$" + card.getCardPrice());
             cardHolder.price.setText("$" + card.getCardValue());
             MailPrice price = dbHelper.getMailPrice();
-            cardHolder.first_class.setText("First Class [$"+String.valueOf(price.getFirstClass())+"]");
-            cardHolder.priority_mail.setText("First Class [$"+String.valueOf(price.getPriorityMail())+"]");
-            cardHolder.express_mail.setText("First Class [$"+String.valueOf(price.getExpressMail())+"]");
+            cardHolder.first_class.setText("First Class [$" + String.valueOf(price.getFirstClass()) + "]");
+            cardHolder.priority_mail.setText("First Class [$" + String.valueOf(price.getPriorityMail()) + "]");
+            cardHolder.express_mail.setText("First Class [$" + String.valueOf(price.getExpressMail()) + "]");
 
         } else if (holder instanceof Address) {
             final ContactInformation contactInformation = (ContactInformation) cardInfoList.get(position);
@@ -157,12 +185,21 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             cardHolder.edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    context.startActivity(new Intent(context,ChangeAddress.class));
+                    context.startActivity(new Intent(context, ChangeAddress.class));
                 }
             });
             cardHolder.name.setText(user.getFirstName() + " " + user.getLastName());
             cardHolder.address.setText(contactInformation.getAddressFull(context));
             cardHolder.phone.setText(contactInformation.getPhoneNumber());
+            if (isPhysicalFound()) {
+                if (cardHolder.shipping.getVisibility() == View.GONE) {
+                    cardHolder.shipping.setVisibility(View.VISIBLE);
+                }
+            } else {
+                if (cardHolder.shipping.getVisibility() == View.VISIBLE) {
+                    cardHolder.shipping.setVisibility(View.GONE);
+                }
+            }
         }
     }
 
@@ -180,5 +217,17 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             cardInfoList.clear();
         }
         CheckOutAdapter.super.notifyDataSetChanged();
+    }
+
+    public boolean isPhysicalFound() {
+        for (Object o : cardInfoList) {
+            if (o instanceof GiftCard) {
+                GiftCard card = (GiftCard) o;
+                if (card.getCardType() != 2) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

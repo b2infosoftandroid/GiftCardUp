@@ -19,6 +19,7 @@ import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.model.CartSummary;
 import com.b2infosoft.giftcardup.model.ContactInformation;
 import com.b2infosoft.giftcardup.model.GiftCard;
+import com.b2infosoft.giftcardup.model.OrderSummery;
 import com.b2infosoft.giftcardup.model.User;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
@@ -112,6 +113,7 @@ public class CheckOut extends AppCompatActivity implements DMRResult{
         for (GiftCard giftCard : cart.getCartItemList()) {
             cartList.add(giftCard);
         }
+        cartList.add(new OrderSummery());
         adapter = new CheckOutAdapter(this, cartList);
         recyclerView.setAdapter(adapter);
     }
