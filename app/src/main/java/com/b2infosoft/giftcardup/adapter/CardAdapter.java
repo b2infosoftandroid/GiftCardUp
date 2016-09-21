@@ -21,6 +21,7 @@ import com.b2infosoft.giftcardup.app.Config;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.listener.OnLoadMoreListener;
 import com.b2infosoft.giftcardup.model.CompanyBrand;
+import com.b2infosoft.giftcardup.model.EmptyBrand;
 import com.b2infosoft.giftcardup.volly.LruBitmapCache;
 import com.b2infosoft.giftcardup.volly.MySingleton;
 
@@ -36,12 +37,12 @@ public class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private int lastVisibleItem, totalItemCount;
     private OnLoadMoreListener mOnLoadMoreListener;
     private Context context;
-    private List<CompanyBrand> cardList;
+    private List<Object> cardList;
     private Config config;
     private Tags tags;
     private RecyclerView recyclerView;
 
-    public CardAdapter(Context context, List<CompanyBrand> cardList, RecyclerView recyclerView) {
+    public CardAdapter(Context context, List<Object> cardList, RecyclerView recyclerView) {
         this.context = context;
         this.cardList = cardList;
         config = Config.getInstance();
@@ -117,14 +118,15 @@ public class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-
-        return cardList.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
+        Object obj = cardList.get(position);
+        return obj instanceof EmptyBrand ? VIEW_TYPE_EMPTY : obj == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
+        //return obj == null ? VIEW_TYPE_LOADING : obj instanceof EmptyBrand ? VIEW_TYPE_EMPTY : VIEW_TYPE_ITEM;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof CardHolder) {
-            final CompanyBrand card = cardList.get(position);
+            final CompanyBrand card = (CompanyBrand)cardList.get(position);
             final CardHolder cardHolder = (CardHolder) holder;
             cardHolder.name.setText(card.getCompanyName());
             cardHolder.discount.setText(String.valueOf(card.getDiscount()) + "%");
@@ -158,6 +160,7 @@ public class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public void clear() {
         cardList.clear();
+        cardList.add(new EmptyBrand());
         this.notifyDataSetChanged();
     }
 }

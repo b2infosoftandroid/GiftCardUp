@@ -23,6 +23,7 @@ import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.listener.OnLoadMoreListener;
 import com.b2infosoft.giftcardup.model.CompanyBrand;
+import com.b2infosoft.giftcardup.model.EmptyBrand;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 import com.paginate.Paginate;
@@ -46,7 +47,7 @@ public class Dashboard extends Fragment {
     RecyclerView recyclerView;
     CardAdapter adapter;
     Button actionButton;
-    List<CompanyBrand> cardList;
+    List<Object> cardList;
     boolean isLoading = false;
     boolean isMore = false;
     int loadMore = 0;
@@ -82,7 +83,7 @@ public class Dashboard extends Fragment {
                         actionButton.setText(items[which]);
                         loadCards();
                         loadMore = 0;
-                       adapter.clear();
+                        adapter.clear();
                     }
                 });
                 builder.create().show();
@@ -114,6 +115,9 @@ public class Dashboard extends Fragment {
             isLoading = false;
         }
         cardList.addAll(cards);
+        if (cardList.size() == 0) {
+            cardList.add(new EmptyBrand());
+        }
         adapter.notifyDataSetChanged();
         adapter.setLoaded();
         //setPaginate();
@@ -185,10 +189,12 @@ public class Dashboard extends Fragment {
                     if (jsonObject.has(tags.SUCCESS)) {
                         if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
                             List<CompanyBrand> cards = new ArrayList<CompanyBrand>();
-                            JSONArray jsonArray = jsonObject.getJSONArray(tags.GIFT_CARDS);
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                CompanyBrand brand = new CompanyBrand();
-                                cards.add(brand.fromJSON(jsonArray.getJSONObject(i)));
+                            if (jsonObject.has(tags.GIFT_CARDS)) {
+                                JSONArray jsonArray = jsonObject.getJSONArray(tags.GIFT_CARDS);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    CompanyBrand brand = new CompanyBrand();
+                                    cards.add(brand.fromJSON(jsonArray.getJSONObject(i)));
+                                }
                             }
                             setDataInRecycleView(cards);
                         } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
