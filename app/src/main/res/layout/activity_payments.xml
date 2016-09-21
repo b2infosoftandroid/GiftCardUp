@@ -44,6 +44,10 @@
             android:id="@+id/action_continue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="CONTINUE" />
+            android:text="CONTINUE"
+            android:layout_marginTop="@dimen/button_margin_top"
+            android:background="@drawable/button_fill_background"
+            android:textAllCaps="true"
+            android:textColor="@color/button_foreground"/>
     </LinearLayout>
 </RelativeLayout>

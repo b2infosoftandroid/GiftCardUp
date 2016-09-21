@@ -33,58 +33,61 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <LinearLayout
+                    <TableLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/layout_empty_background"
-                        android:clickable="true"
-                        android:descendantFocusability="blocksDescendants"
-                        android:orientation="horizontal"
-                        android:padding="10dp">
+                        android:stretchColumns="*">
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <TableRow
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Total Available Fund :"
-                            android:textAllCaps="true"
-                            android:textStyle="bold" />
+                            android:background="@drawable/layout_empty_background"
+                            android:clickable="true"
+                            android:descendantFocusability="blocksDescendants"
+                            android:padding="10dp">
 
-                        <TextView
-                            android:id="@+id/available_fund"
-                            android:layout_width="wrap_content"
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Total Available Fund :"
+                                android:textAllCaps="true"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/available_fund"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:text="$0"
+                                android:textAllCaps="true"
+                                android:textStyle="bold" />
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:text="$0"
-                            android:textAllCaps="true"
-                            android:textStyle="bold" />
-                    </LinearLayout>
+                            android:background="@drawable/layout_empty_background"
+                            android:clickable="true"
+                            android:descendantFocusability="blocksDescendants"
+                            android:padding="10dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/layout_empty_background"
-                        android:clickable="true"
-                        android:descendantFocusability="blocksDescendants"
-                        android:orientation="horizontal"
-                        android:padding="10dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Total Balance :"
+                                android:textAllCaps="true"
+                                android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Total Balance :"
-                            android:textAllCaps="true"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/balance"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:text="$0"
-                            android:textAllCaps="true"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
+                            <TextView
+                                android:id="@+id/balance"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:text="$0"
+                                android:textAllCaps="true"
+                                android:textStyle="bold" />
+                        </TableRow>
+                    </TableLayout>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
@@ -103,9 +106,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:text="How would you like pay remaining amount?"
+                        android:text="How would you like to pay remaining amount?"
                         android:textAllCaps="true"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textStyle="bold" />
 
                     <View
                         android:layout_width="match_parent"
@@ -113,83 +117,86 @@
                         android:alpha="0.5"
                         android:background="@color/colorPrimary" />
 
-                    <LinearLayout
+                    <TableLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/layout_empty_background"
-                        android:clickable="true"
-                        android:descendantFocusability="blocksDescendants"
-                        android:orientation="horizontal"
-                        android:padding="10dp">
+                        android:stretchColumns="*">
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <TableRow
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Total Available Fund :"
-                            android:textAllCaps="true"
-                            android:textStyle="bold" />
+                            android:background="@drawable/layout_empty_background"
+                            android:clickable="true"
+                            android:descendantFocusability="blocksDescendants"
+                            android:padding="10dp">
 
-                        <TextView
-                            android:id="@+id/available_fund_1"
-                            android:layout_width="wrap_content"
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Total Available Fund :"
+                                android:textAllCaps="true"
+                                android:textStyle="normal" />
+
+                            <TextView
+                                android:id="@+id/available_fund_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:text="$0"
+                                android:textAllCaps="true"
+                                android:textStyle="bold" />
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:text="$0"
-                            android:textAllCaps="true"
-                            android:textStyle="bold" />
-                    </LinearLayout>
+                            android:background="@drawable/layout_empty_background"
+                            android:clickable="true"
+                            android:descendantFocusability="blocksDescendants"
+                            android:padding="10dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/layout_empty_background"
-                        android:clickable="true"
-                        android:descendantFocusability="blocksDescendants"
-                        android:orientation="horizontal"
-                        android:padding="10dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Total Balance :"
+                                android:textAllCaps="true"
+                                android:textStyle="normal" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                            <TextView
+                                android:id="@+id/balance_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:text="$0"
+                                android:textAllCaps="true"
+                                android:textStyle="bold" />
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Total Balance :"
-                            android:textAllCaps="true"
-                            android:textStyle="bold" />
+                            android:background="@drawable/layout_empty_background"
+                            android:clickable="true"
+                            android:descendantFocusability="blocksDescendants"
+                            android:padding="10dp">
 
-                        <TextView
-                            android:id="@+id/balance_1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:text="$0"
-                            android:textAllCaps="true"
-                            android:textStyle="bold" />
-                    </LinearLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Remaining Amount :"
+                                android:textAllCaps="true"
+                                android:textStyle="normal" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/layout_empty_background"
-                        android:clickable="true"
-                        android:descendantFocusability="blocksDescendants"
-                        android:orientation="horizontal"
-                        android:padding="10dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Remaining Amount :"
-                            android:textAllCaps="true"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/remaining"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:text="$0"
-                            android:textAllCaps="true"
-                            android:textStyle="bold" />
-                    </LinearLayout>
+                            <TextView
+                                android:id="@+id/remaining"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:text="$0"
+                                android:textAllCaps="true"
+                                android:textStyle="bold" />
+                        </TableRow>
+                    </TableLayout>
 
                     <View
                         android:layout_width="match_parent"
@@ -208,18 +215,20 @@
                             android:checked="true"
                             android:padding="10dp"
                             android:text="PayPal"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            />
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
                     </RadioGroup>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
+
             <Button
                 android:id="@+id/action_continue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAllCaps="true"
+                android:layout_marginTop="@dimen/button_margin_top"
+                android:background="@drawable/button_fill_background"
                 android:text="Continue"
-                />
+                android:textAllCaps="true"
+                android:textColor="@color/button_foreground" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
