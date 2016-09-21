@@ -55,6 +55,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/profile_total_saving"
+                    android:textSize="12sp"
                     android:textAllCaps="true"
                     android:textColor="@android:color/white"
                     android:textStyle="normal" />
@@ -63,6 +64,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="$0"
+                    android:textSize="12sp"
                     android:textAllCaps="true"
                     android:textColor="@android:color/white"
                     android:textStyle="bold"
@@ -78,6 +80,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/profile_total_sold"
+                    android:textSize="12sp"
                     android:textAllCaps="true"
                     android:textColor="@android:color/white"
                     android:textStyle="normal" />
@@ -86,6 +89,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="$0"
+                    android:textSize="12sp"
                     android:textAllCaps="true"
                     android:textColor="@android:color/white"
                     android:textStyle="bold"
