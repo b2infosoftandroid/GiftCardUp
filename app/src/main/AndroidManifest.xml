@@ -54,7 +54,7 @@
         <activity
             android:name=".activity.MyProfile"
             android:label="PROFILE"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/MyNoActionBar"
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
