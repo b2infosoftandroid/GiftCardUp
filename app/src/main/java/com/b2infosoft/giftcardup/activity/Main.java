@@ -287,7 +287,7 @@ public class Main extends GiftCardUp {
         switch (v.getId()) {
             case R.id.user_profile_icon:
                 //startActivity(new Intent(this,Profile.class));
-                replaceFragment(new TinderWork());
+                //replaceFragment(new TinderWork());
                 break;
             default:
                 break;
