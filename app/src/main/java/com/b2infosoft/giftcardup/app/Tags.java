@@ -77,7 +77,6 @@ public class Tags {
     public final String STATUS = "status";
 
 
-
     /* USER LOGIN SIGNUP */
     public final String USER_LOGIN = "login";
     public final String USER_SIGNUP = "sign_up";
@@ -283,27 +282,30 @@ public class Tags {
     public final String PROFILE_OLD_NAME = "old_file_name";
 
     /*                  MAIL PRICE   */
-    public final String FIRST_CLASS_PRICE =  "first_class_price";
-    public final String PRIORITY_PRICE =  "priority_price";
-    public final String EXPRESS_PRICE =  "express_price";
+    public final String FIRST_CLASS_PRICE = "first_class_price";
+    public final String PRIORITY_PRICE = "priority_price";
+    public final String EXPRESS_PRICE = "express_price";
 
     /*                  PROMO CODE      */
-    public final String PROMO_CODE =  "promo_code";
-    public final String TOTAL_AMOUNT =  "total_amount";
-    public final String AMOUNT_TYPE =  "amount_type";
-    public final String TOTAL =  "total";
+    public final String PROMO_CODE = "promo_code";
+    public final String TOTAL_AMOUNT = "total_amount";
+    public final String AMOUNT_TYPE = "amount_type";
+    public final String TOTAL = "total";
 
     /////////////     PUSH NOTIFICATION    /////////////////
-    public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
-    public static final String REGISTRATION_COMPLETE = "registrationComplete";
+    public final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
+    public final String REGISTRATION_COMPLETE = "registrationComplete";
 
     ///////////////   CONTROL PANEL    /////////////
-    public static final String ID = "id";
-    public static final String GENERAL_COMMISSION = "general_commission";
-    public static final String SHIPPING_CHARGE = "shipping_charge";
-    public static final String PROCESS_TIME = "process_time";
-    public static final String CARD_ATTEMPT_TIME = "card_attempt_time";
-    public static final String MINIMUM_SCORE = "minimum_score";
-    public static final String MAXIMUM_SCORE = "maximum_score";
+    public final String ID = "id";
+    public final String GENERAL_COMMISSION = "general_commission";
+    public final String SHIPPING_CHARGE = "shipping_charge";
+    public final String PROCESS_TIME = "process_time";
+    public final String CARD_ATTEMPT_TIME = "card_attempt_time";
+    public final String MINIMUM_SCORE = "minimum_score";
+    public final String MAXIMUM_SCORE = "maximum_score";
+
+    /*          PAYMENTS        */
+    public final String ORDER_SUMMERY = "order_summery";
 
 }

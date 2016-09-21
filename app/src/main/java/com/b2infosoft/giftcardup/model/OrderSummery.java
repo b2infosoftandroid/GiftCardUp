@@ -1,14 +1,21 @@
 package com.b2infosoft.giftcardup.model;
 
+import android.os.Parcelable;
+
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by rajesh on 9/20/2016.
  */
 
-public class OrderSummery {
+public class OrderSummery implements Serializable {
     private float price;
     private float shipping;
     private float discount;
     private float discountPercentage;
+    private Map<String, MailPrice> priceHashMap = new HashMap<>();
 
     public float getPrice() {
         return price;
@@ -19,7 +26,11 @@ public class OrderSummery {
     }
 
     public float getShipping() {
-        return shipping;
+        float sss = 0.0f;
+        for (MailPrice price : priceHashMap.values()) {
+            sss += price.getCost();
+        }
+        return shipping + sss;
     }
 
     public void setShipping(float shipping) {
@@ -35,7 +46,7 @@ public class OrderSummery {
     }
 
     public float getBalance() {
-        return (price + shipping) - discount;
+        return (price + getShipping()) - discount;
     }
 
     public float getDiscountPercentage() {
@@ -52,5 +63,27 @@ public class OrderSummery {
     public void setDiscountAmount(float discountPercentage) {
         setDiscount(discountPercentage);
         this.discountPercentage = discountPercentage;
+    }
+
+    public void setShippingMailType(String cardID, String mailType, float cost) {
+        priceHashMap.put(cardID, new MailPrice(mailType, cost));
+    }
+
+    private class MailPrice implements Serializable{
+        private String name;
+        private float cost;
+
+        public MailPrice(String name, float cost) {
+            this.name = name;
+            this.cost = cost;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public float getCost() {
+            return cost;
+        }
     }
 }

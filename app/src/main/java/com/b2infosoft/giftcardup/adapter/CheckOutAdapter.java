@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.activity.ChangeAddress;
+import com.b2infosoft.giftcardup.activity.Payments;
 import com.b2infosoft.giftcardup.app.Cart;
 import com.b2infosoft.giftcardup.app.Config;
 import com.b2infosoft.giftcardup.app.Format;
@@ -40,6 +42,7 @@ import com.b2infosoft.giftcardup.volly.LruBitmapCache;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,10 +63,10 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final int VIEW_CART_ITEM = 0;
     private final int VIEW_CART_ADDRESS = 1;
     private final int VIEW_CART_ORDER_SUMMERY = 2;
+    OrderSummery orderSummery;
     private int shipping_view;
     private CheckBox shipping;
     private TextView error_shipping;
-
     private Button action_continue;
 
     public CheckOutAdapter(Context context, List<Object> cardInfoList, Button action_continue) {
@@ -123,7 +126,7 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             phone = (TextView) view.findViewById(R.id.phone);
             shipping = (CheckBox) view.findViewById(R.id.shipping);
             shipping_view = view.findViewById(R.id.shipping_view);
-            error_shipping = (TextView)view.findViewById(R.id.error_shipping);
+            error_shipping = (TextView) view.findViewById(R.id.error_shipping);
         }
     }
 
@@ -180,11 +183,40 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             cardHolder.name.setText(card.getCardName());
             cardHolder.value.setText("$" + card.getCardPrice());
             cardHolder.price.setText("$" + card.getCardValue());
-            ControlPanel panel = dbHelper.getControlPanel();
+            final ControlPanel panel = dbHelper.getControlPanel();
             cardHolder.first_class.setText("First Class [$" + String.valueOf(panel.getFirstClassPrice()) + "]");
-            cardHolder.priority_mail.setText("First Class [$" + String.valueOf(panel.getPriorityPrice()) + "]");
-            cardHolder.express_mail.setText("First Class [$" + String.valueOf(panel.getExpressPrice()) + "]");
-
+            cardHolder.priority_mail.setText("Priority Mail [$" + String.valueOf(panel.getPriorityPrice()) + "]");
+            cardHolder.express_mail.setText("Express Mail [$" + String.valueOf(panel.getExpressPrice()) + "]");
+            cardHolder.first_class.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (cardHolder.first_class.isChecked()) {
+                        if (orderSummery != null)
+                            orderSummery.setShippingMailType(card.getGiftCardID() + "", "First Class", Float.parseFloat(panel.getFirstClassPrice()));
+                        CheckOutAdapter.super.notifyDataSetChanged();
+                    }
+                }
+            });
+            cardHolder.priority_mail.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (cardHolder.priority_mail.isChecked()) {
+                        if (orderSummery != null)
+                            orderSummery.setShippingMailType(card.getGiftCardID() + "", "Priority Mail", Float.parseFloat(panel.getPriorityPrice()));
+                        CheckOutAdapter.super.notifyDataSetChanged();
+                    }
+                }
+            });
+            cardHolder.express_mail.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (cardHolder.express_mail.isChecked()) {
+                        if (orderSummery != null)
+                            orderSummery.setShippingMailType(card.getGiftCardID() + "", "Express Mail", Float.parseFloat(panel.getExpressPrice()));
+                        CheckOutAdapter.super.notifyDataSetChanged();
+                    }
+                }
+            });
         } else if (holder instanceof Address) {
             final ContactInformation contactInformation = (ContactInformation) cardInfoList.get(position);
             final Address cardHolder = (Address) holder;
@@ -213,7 +245,7 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             }
         } else if (holder instanceof Order) {
-            final OrderSummery orderSummery = (OrderSummery) cardInfoList.get(position);
+            orderSummery = (OrderSummery) cardInfoList.get(position);
             final Order order = (Order) holder;
             order.price.setText("$" + String.valueOf(orderSummery.getPrice()));
             order.shipping.setText("$" + String.valueOf(orderSummery.getShipping()));
@@ -334,5 +366,8 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 return;
             }
         }
+        Intent intent = new Intent(context, Payments.class);
+        intent.putExtra(tags.ORDER_SUMMERY, orderSummery);
+        context.startActivity(intent);
     }
 }
