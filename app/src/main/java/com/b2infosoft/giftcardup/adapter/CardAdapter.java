@@ -63,9 +63,11 @@ public class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
         });
     }
+
     public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
         this.mOnLoadMoreListener = mOnLoadMoreListener;
     }
+
     public class CardHolder extends RecyclerView.ViewHolder {
         TextView name;
         ImageView imageUrl;
@@ -120,11 +122,11 @@ public class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, CompanyCard.class);
-                    intent.putExtra(tags.COMPANY_BRAND,card);
+                    intent.putExtra(tags.COMPANY_BRAND, card);
                     context.startActivity(intent);
                 }
             });
-            LruBitmapCache.loadCacheImage(context,cardHolder.imageUrl,url,CardAdapter.class.getName());
+            LruBitmapCache.loadCacheImage(context, cardHolder.imageUrl, url, CardAdapter.class.getName());
         } else if (holder instanceof LoadingHolder) {
             LoadingHolder loadingHolder = (LoadingHolder) holder;
             loadingHolder.progressBar.setIndeterminate(true);
@@ -135,7 +137,13 @@ public class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public int getItemCount() {
         return cardList == null ? 0 : cardList.size();
     }
+
     public void setLoaded() {
         isLoading = false;
+    }
+
+    public void clear() {
+        cardList.clear();
+        this.notifyDataSetChanged();
     }
 }

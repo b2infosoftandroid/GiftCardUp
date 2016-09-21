@@ -48,14 +48,15 @@ public class Dashboard extends Fragment {
     Button actionButton;
     List<CompanyBrand> cardList;
     boolean isLoading = false;
-    boolean isMore  = false;
+    boolean isMore = false;
     int loadMore = 0;
     private OnFragmentDashboard mListener;
+
     public Dashboard() {
 
     }
 
-    private void init(){
+    private void init() {
         dmrRequest = DMRRequest.getInstance(getActivity(), TAG);
         urls = Urls.getInstance();
         tags = Tags.getInstance();
@@ -72,13 +73,16 @@ public class Dashboard extends Fragment {
         actionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String[] items = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T",
-                                         "U","V","W","X","Y","Z"};
+                final String[] items = {"ALL", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
+                        "U", "V", "W", "X", "Y", "Z"};
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                         actionButton.setText(items[which]);
+                        actionButton.setText(items[which]);
+                        loadCards();
+                        loadMore = 0;
+                       adapter.clear();
                     }
                 });
                 builder.create().show();
@@ -91,7 +95,7 @@ public class Dashboard extends Fragment {
         adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                if(isMore) {
+                if (isMore) {
                     cardList.add(null);
                     adapter.notifyItemInserted(cardList.size() - 1);
                     isLoading = true;
@@ -167,9 +171,13 @@ public class Dashboard extends Fragment {
     }
 
     private void loadCards() {
+        String s = actionButton.getText().toString();
         Map<String, String> map = new HashMap<>();
-        map.put(tags.USER_ACTION,tags.COMPANY_ALL_BRAND);
-        map.put(tags.LOAD_MORE,String.valueOf(loadMore));
+        map.put(tags.USER_ACTION, tags.COMPANY_ALL_BRAND);
+        map.put(tags.LOAD_MORE, String.valueOf(loadMore));
+        if (!s.equalsIgnoreCase("ALL")) {
+            map.put(tags.SORT_BY, s);
+        }
         dmrRequest.doPost(urls.getGiftCardInfo(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
@@ -189,10 +197,10 @@ public class Dashboard extends Fragment {
 
                         }
                     }
-                    if(jsonObject.has(tags.IS_MORE)){
+                    if (jsonObject.has(tags.IS_MORE)) {
                         isMore = jsonObject.getBoolean(tags.IS_MORE);
-                        if(isMore){
-                            loadMore+=tags.DEFAULT_LOADING_DATA;
+                        if (isMore) {
+                            loadMore += tags.DEFAULT_LOADING_DATA;
                         }
                     }
                 } catch (JSONException e) {
