@@ -160,7 +160,6 @@ public class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public void clear() {
         cardList.clear();
-        cardList.add(new EmptyBrand());
         this.notifyDataSetChanged();
     }
 }

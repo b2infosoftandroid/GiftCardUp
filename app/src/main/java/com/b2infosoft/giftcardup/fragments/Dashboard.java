@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,9 +82,9 @@ public class Dashboard extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         actionButton.setText(items[which]);
+                        adapter.clear();
                         loadCards();
                         loadMore = 0;
-                        adapter.clear();
                     }
                 });
                 builder.create().show();
@@ -114,7 +115,9 @@ public class Dashboard extends Fragment {
             adapter.notifyItemRemoved(cardList.size());
             isLoading = false;
         }
-        cardList.addAll(cards);
+        Log.d("search",cards.size() + "");
+        if (cards.size() > 0)
+            cardList.addAll(cards);
         if (cardList.size() == 0) {
             cardList.add(new EmptyBrand());
         }
@@ -210,7 +213,8 @@ public class Dashboard extends Fragment {
                         }
                     }
                 } catch (JSONException e) {
-
+                    e.printStackTrace();
+                    Log.e(TAG,e.getMessage());
                 }
             }
 
