@@ -30,6 +30,7 @@ public class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
+    private final int VIEW_TYPE_EMPTY = 2;
     private boolean isLoading;
     private int visibleThreshold = 5;
     private int lastVisibleItem, totalItemCount;
@@ -92,6 +93,13 @@ public class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
+    public class EmptyHolder extends RecyclerView.ViewHolder {
+
+        public EmptyHolder(View itemView) {
+            super(itemView);
+        }
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_ITEM) {
@@ -100,12 +108,16 @@ public class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else if (viewType == VIEW_TYPE_LOADING) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_loading_item, parent, false);
             return new LoadingHolder(view);
+        } else if (viewType == VIEW_TYPE_EMPTY) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_empty_brand, parent, false);
+            return new EmptyHolder(view);
         }
         return null;
     }
 
     @Override
     public int getItemViewType(int position) {
+
         return cardList.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
     }
 
@@ -130,6 +142,8 @@ public class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else if (holder instanceof LoadingHolder) {
             LoadingHolder loadingHolder = (LoadingHolder) holder;
             loadingHolder.progressBar.setIndeterminate(true);
+        } else if (holder instanceof EmptyHolder) {
+
         }
     }
 

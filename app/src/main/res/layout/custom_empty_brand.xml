@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <ImageView
+        android:id="@+id/empty_warning"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/ic_warning_144dp"
+        android:alpha="0.3"/>
+
+    <TextView
+        android:id="@+id/empty_card"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Oops"
+        android:layout_marginTop="10dp"
+        android:textAllCaps="true"
+        android:alpha="0.3"/>
+
+        <TextView
+            android:id="@+id/brand_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Brand Not Available"
+            android:layout_marginTop="5dp"
+            android:textAllCaps="true"
+            android:alpha="0.3"/>
+</LinearLayout>

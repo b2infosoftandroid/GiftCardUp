@@ -18,6 +18,8 @@ import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
+import com.b2infosoft.giftcardup.custom.AlertBox;
+import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.database.DBHelper;
 import com.b2infosoft.giftcardup.model.ContactInformation;
 import com.b2infosoft.giftcardup.model.State;
@@ -33,7 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-public class ChangeAddress extends AppCompatActivity implements DMRResult{
+public class ChangeAddress extends AppCompatActivity{
     private final String TAG = ChangeAddress.class.getName();
     EditText address,city,zipCode,suiteNo,mobile,company;
     AppCompatSpinner spinner;
@@ -42,6 +44,8 @@ public class ChangeAddress extends AppCompatActivity implements DMRResult{
     Urls urls;
     DBHelper dbHelper;
     Active active;
+    Progress progress;
+    AlertBox alertBox;
     DMRRequest dmrRequest;
 
     private void init(){
@@ -49,6 +53,8 @@ public class ChangeAddress extends AppCompatActivity implements DMRResult{
         urls = Urls.getInstance();
         dbHelper = new DBHelper(getApplicationContext());
         active = Active.getInstance(getApplicationContext());
+        progress = new Progress(this);
+        alertBox = new AlertBox(this);
         dmrRequest = DMRRequest.getInstance(getApplicationContext(),TAG);
     }
 
@@ -82,11 +88,7 @@ public class ChangeAddress extends AppCompatActivity implements DMRResult{
             }
         });
 
-        HashMap<String,String> hashMap = new HashMap<>();
-        hashMap.put(tags.USER_ACTION,tags.USER_CONTACT_INFORMATION);
-        hashMap.put(tags.USER_ID,active.getUser().getUserId());
-        dmrRequest.doPost(urls.getUserInfo(),hashMap,this);
-
+        loadInfo();
     }
 
     private void setData(ContactInformation information){
@@ -128,29 +130,35 @@ public class ChangeAddress extends AppCompatActivity implements DMRResult{
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onSuccess(JSONObject jsonObject) {
-        try {
-            if(jsonObject.has(tags.SUCCESS)){
-                if(jsonObject.getInt(tags.SUCCESS) == tags.PASS){
-                       if(jsonObject.has(tags.USER_CONTACT_INFORMATION)){
-                           ContactInformation info = ContactInformation.fromJSON(jsonObject.getJSONObject(tags.USER_CONTACT_INFORMATION));
-                           setData(info);
-                       }
+    private void loadInfo(){
+        HashMap<String,String> hashMap = new HashMap<>();
+        hashMap.put(tags.USER_ACTION,tags.USER_CONTACT_INFORMATION);
+        hashMap.put(tags.USER_ID,active.getUser().getUserId());
+        dmrRequest.doPost(urls.getUserInfo(), hashMap, new DMRResult() {
+            @Override
+            public void onSuccess(JSONObject jsonObject) {
+                try {
+                    if(jsonObject.has(tags.SUCCESS)){
+                        if(jsonObject.getInt(tags.SUCCESS) == tags.PASS){
+                            if(jsonObject.has(tags.USER_CONTACT_INFORMATION)){
+                                ContactInformation info = ContactInformation.fromJSON(jsonObject.getJSONObject(tags.USER_CONTACT_INFORMATION));
+                                setData(info);
+                            }
+                        }
+
+                    }
+                }catch (JSONException e){
+                    e.printStackTrace();
+                    Log.d(TAG,e.getMessage());
                 }
-
             }
-        }catch (JSONException e){
-            e.printStackTrace();
-            Log.d(TAG,e.getMessage());
-        }
 
-    }
-
-    @Override
-    public void onError(VolleyError volleyError) {
-        volleyError.printStackTrace();
-        Log.d(TAG,volleyError.getMessage());
+            @Override
+            public void onError(VolleyError volleyError) {
+                volleyError.printStackTrace();
+                Log.d(TAG,volleyError.getMessage());
+            }
+        });
     }
 
 
@@ -162,10 +170,6 @@ public class ChangeAddress extends AppCompatActivity implements DMRResult{
         String add_cmpny  = company.getText().toString();
         String add_phone  = mobile.getText().toString();
         State state = dbHelper.getStateByName(spinner.getSelectedItem().toString());
-        Gson gson = new Gson();
-        Log.d("GSON",gson.toJson(state));
-
-        Log.d("addState",state.getAbbreviation());
 
         HashMap<String,String> map = new HashMap<>();
         map.put(tags.USER_ACTION,tags.UPDATE_ADDRESS);
@@ -177,6 +181,36 @@ public class ChangeAddress extends AppCompatActivity implements DMRResult{
         map.put(tags.CONTACT_INFO_PHONE_NUMBER,add_phone);
         map.put(tags.ADDRESS,address1);
         map.put(tags.CONTACT_INFO_SUITE_NUMBER,add_suite);
-        dmrRequest.doPost(urls.getUserInfo(),map,this);
+        progress.show();
+        dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
+            @Override
+            public void onSuccess(JSONObject jsonObject) {
+                progress.dismiss();
+                try {
+                    if (jsonObject.has(tags.SUCCESS)) {
+                        if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                            alertBox.setTitle("Alert");
+                            alertBox.setMessage("Address is Successfully Updated");
+                            alertBox.show();
+
+                        }else if(jsonObject.getInt(tags.SUCCESS) == tags.FAIL){
+                            alertBox.setTitle("Alert");
+                            alertBox.setMessage("Try Again");
+                            alertBox.show();
+                        }
+                    }
+                }catch (JSONException e){
+                    e.printStackTrace();
+                    Log.d(TAG,e.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(VolleyError volleyError) {
+                 volleyError.printStackTrace();
+                Log.d(TAG,volleyError.getMessage());
+            }
+        });
     }
+
 }

@@ -18,14 +18,14 @@
             android:padding="10dp"/>
         <Button
             android:id="@+id/floating_btn"
-            android:layout_width="25dp"
+            android:layout_width="50dp"
             android:layout_height="25dp"
             android:layout_margin="6dp"
             android:gravity="center"
-            android:text="A"
+            android:text="All"
             android:textColor="@color/app_background"
             android:textAllCaps="true"
-            android:background="@drawable/button_shape_round"
+            android:background="@drawable/button_shape_background"
             android:layout_alignParentRight="true"/>
     </RelativeLayout>
     <android.support.v7.widget.RecyclerView
