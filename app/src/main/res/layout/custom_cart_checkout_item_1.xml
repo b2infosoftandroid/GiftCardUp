@@ -145,7 +145,9 @@
                             android:id="@+id/first_class"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="First Class[$5.00]" />
+                            android:text="First Class[$5.00]"
+                            android:checked="true"
+                            />
 
                         <RadioButton
                             android:id="@+id/priority_mail"

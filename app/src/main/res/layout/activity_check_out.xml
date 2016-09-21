@@ -13,11 +13,12 @@
         android:layout_above="@+id/action_continue">
     </android.support.v7.widget.RecyclerView>
     <Button
+        android:id="@+id/action_continue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:text="CONTINUE"
         android:background="@drawable/button_background"
         android:textColor="@color/app_background"
-        android:id="@+id/action_continue" />
+         />
 </RelativeLayout>

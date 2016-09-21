@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -43,7 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
     private Cart cart;
     private final String TAG = CheckOutAdapter.class.getName();
     private Urls urls;
@@ -59,8 +60,13 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final int VIEW_CART_ITEM = 0;
     private final int VIEW_CART_ADDRESS = 1;
     private final int VIEW_CART_ORDER_SUMMERY = 2;
+    private int shipping_view;
+    private CheckBox shipping;
+    private TextView error_shipping;
 
-    public CheckOutAdapter(Context context, List<Object> cardInfoList) {
+    private Button action_continue;
+
+    public CheckOutAdapter(Context context, List<Object> cardInfoList, Button action_continue) {
         this.context = context;
         this.cardInfoList = cardInfoList;
         format = Format.getInstance();
@@ -72,6 +78,8 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         progress = new Progress(context);
         cart = (Cart) context.getApplicationContext();
         dbHelper = new DBHelper(context);
+        this.action_continue = action_continue;
+        this.action_continue.setOnClickListener(this);
     }
 
     public class CardHolder extends RecyclerView.ViewHolder {
@@ -103,7 +111,9 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView name;
         TextView address;
         TextView phone;
-        View shipping;
+        View shipping_view;
+        CheckBox shipping;
+        TextView error_shipping;
 
         public Address(View view) {
             super(view);
@@ -111,7 +121,9 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             name = (TextView) view.findViewById(R.id.name);
             address = (TextView) view.findViewById(R.id.address);
             phone = (TextView) view.findViewById(R.id.phone);
-            shipping = view.findViewById(R.id.shipping);
+            shipping = (CheckBox) view.findViewById(R.id.shipping);
+            shipping_view = view.findViewById(R.id.shipping_view);
+            error_shipping = (TextView)view.findViewById(R.id.error_shipping);
         }
     }
 
@@ -133,7 +145,6 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             apply = (Button) view.findViewById(R.id.apply);
         }
     }
-
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -188,22 +199,26 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             cardHolder.name.setText(user.getFirstName() + " " + user.getLastName());
             cardHolder.address.setText(contactInformation.getAddressFull(context));
             cardHolder.phone.setText(contactInformation.getPhoneNumber());
+            this.shipping = cardHolder.shipping;
+            this.error_shipping = cardHolder.error_shipping;
             if (isPhysicalFound()) {
-                if (cardHolder.shipping.getVisibility() == View.GONE) {
-                    cardHolder.shipping.setVisibility(View.VISIBLE);
+                if (cardHolder.shipping_view.getVisibility() == View.GONE) {
+                    shipping_view = View.VISIBLE;
+                    cardHolder.shipping_view.setVisibility(shipping_view);
                 }
             } else {
-                if (cardHolder.shipping.getVisibility() == View.VISIBLE) {
-                    cardHolder.shipping.setVisibility(View.GONE);
+                if (cardHolder.shipping_view.getVisibility() == View.VISIBLE) {
+                    shipping_view = View.GONE;
+                    cardHolder.shipping_view.setVisibility(shipping_view);
                 }
             }
         } else if (holder instanceof Order) {
             final OrderSummery orderSummery = (OrderSummery) cardInfoList.get(position);
             final Order order = (Order) holder;
-            order.price.setText(String.valueOf(orderSummery.getPrice()));
-            order.shipping.setText(String.valueOf(orderSummery.getShipping()));
-            order.discount.setText(String.valueOf(orderSummery.getDiscount()));
-            order.balance.setText(String.valueOf(orderSummery.getBalance()));
+            order.price.setText("$" + String.valueOf(orderSummery.getPrice()));
+            order.shipping.setText("$" + String.valueOf(orderSummery.getShipping()));
+            order.discount.setText("$" + String.valueOf(orderSummery.getDiscount()));
+            order.balance.setText("$" + String.valueOf(orderSummery.getBalance()));
             order.apply.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -306,5 +321,18 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
         }
         return false;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (shipping_view == View.VISIBLE) {
+            if (shipping.isChecked()) {
+                error_shipping.setVisibility(View.GONE);
+            } else {
+                error_shipping.setVisibility(View.VISIBLE);
+                Toast.makeText(context, "Please select shipping.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
     }
 }

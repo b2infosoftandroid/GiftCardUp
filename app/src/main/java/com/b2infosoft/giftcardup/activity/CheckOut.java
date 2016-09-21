@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Button;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
@@ -46,7 +47,7 @@ public class CheckOut extends AppCompatActivity implements DMRResult {
     Cart cart;
     DBHelper dbHelper;
     ControlPanel controlPanel;
-
+    Button action_continue;
     private void init() {
         tags = Tags.getInstance();
         dmrRequest = DMRRequest.getInstance(this, TAG);
@@ -65,6 +66,7 @@ public class CheckOut extends AppCompatActivity implements DMRResult {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         init();
+        action_continue = (Button)findViewById(R.id.action_continue);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         //  refreshShoppingCartItemList();
@@ -126,7 +128,7 @@ public class CheckOut extends AppCompatActivity implements DMRResult {
         orderSummery.setPrice(summary.getValue());
         orderSummery.setShipping(Float.parseFloat(controlPanel.getShippingCharge()));
         cartList.add(orderSummery);
-        adapter = new CheckOutAdapter(this, cartList);
+        adapter = new CheckOutAdapter(this, cartList,action_continue);
         recyclerView.setAdapter(adapter);
     }
 }
