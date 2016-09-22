@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.app.Tags;
+import com.b2infosoft.giftcardup.app.Validation;
 import com.b2infosoft.giftcardup.model.OrderSummery;
 
 public class PayCreditDebit extends AppCompatActivity {
@@ -74,7 +75,7 @@ public class PayCreditDebit extends AppCompatActivity {
             datespin.requestFocus();
             return;
         }
-        if (cvc.length() == 0) {
+        if (cvc.length() == 0 || cvc.length() > 3 || cvc.length() < 3) {
             security.setError("Invalid CVC");
             security.requestFocus();
             return;

@@ -63,7 +63,6 @@ public class Validation {
         return check;
     }
 
-
     public boolean isPasswordConfirm(String s, String s1) {
         return s.equals(s1);
     }
