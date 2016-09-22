@@ -75,9 +75,8 @@ public class PlaceOrder extends AppCompatActivity {
              linearLayout.setVisibility(View.VISIBLE);
             String num = getIntent().getStringExtra("Card");
             String code = getIntent().getStringExtra("CVC");
-            String month = getIntent().getStringExtra("Month");
+            int month = getIntent().getIntExtra("Month",0);
             String monthDate = getIntent().getStringExtra("Date");
-            month.indexOf(getIntent().getStringExtra("Month"));
 
             card_no.setText("Card Number :" + num);
             security_code.setText("Security code :" + code);
