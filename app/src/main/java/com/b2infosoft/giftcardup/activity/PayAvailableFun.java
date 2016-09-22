@@ -1,5 +1,6 @@
 package com.b2infosoft.giftcardup.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -97,7 +98,9 @@ public class PayAvailableFun extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         if (R.id.action_continue == v.getId()) {
-
+            Intent intent = new Intent(getApplicationContext(),PlaceOrder.class);
+            intent.putExtra("Method","Available Funds");
+            startActivity(intent);
         }
     }
 }

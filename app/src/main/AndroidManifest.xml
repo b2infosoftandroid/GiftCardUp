@@ -98,7 +98,8 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".activity.CheckOut"
+        <activity
+            android:name=".activity.CheckOut"
             android:label="Checkout">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -108,30 +109,36 @@
             android:name=".activity.ChangeAddress"
             android:label="Change Address"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".activity.Payments"
+        <activity
+            android:name=".activity.Payments"
             android:label="Payment">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.CheckOut" />
         </activity>
-        <activity android:name=".activity.PayAvailableFun"
+        <activity
+            android:name=".activity.PayAvailableFun"
             android:label="Payment">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.Payments" />
         </activity>
-        <activity android:name=".activity.PayCreditDebit"
+        <activity
+            android:name=".activity.PayCreditDebit"
             android:label="Payment">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.Payments" />
         </activity>
-        <activity android:name=".activity.PayPayPal"
+        <activity
+            android:name=".activity.PayPayPal"
             android:label="Payment">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.Payments" />
         </activity>
+        <activity android:name=".activity.PlaceOrder"
+            android:label="Place Order"></activity>
     </application>
 
 </manifest>

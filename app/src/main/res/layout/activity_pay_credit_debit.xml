@@ -28,28 +28,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="10dp"
         android:layout_marginTop="@dimen/activity_horizontal_margin">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Expiration Date"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textSize="16sp"/>
 
         <Spinner
-
+            android:id="@+id/month_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
+            android:layout_marginLeft="40dp"
             android:entries="@array/month"
             android:padding="10dp"
             android:background="@drawable/layout_border"/>
 
         <Spinner
+            android:id="@+id/date_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="10dp"
             android:entries="@array/date_arr"
             android:padding="10dp"
             android:background="@drawable/layout_border"/>
