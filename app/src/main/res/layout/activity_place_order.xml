@@ -30,14 +30,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:text="Method :"
-        android:textAllCaps="true"
-        android:layout_gravity="center"/>
+        android:layout_gravity="start"/>
 
     <LinearLayout
         android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:gravity="start"
         android:visibility="gone">
 
         <TextView
@@ -45,27 +45,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="Card Number :"
-            android:textAllCaps="true"
-            android:layout_gravity="center"/>
+            android:text="Card Number :" />
 
         <TextView
             android:id="@+id/pay_credit_expiry_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="Expiration date :"
-            android:textAllCaps="true"
-            android:layout_gravity="center"/>
+            android:text="Expiration date :" />
 
         <TextView
             android:id="@+id/pay_credit_security_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="Security code :"
-            android:textAllCaps="true"
-            android:layout_gravity="center"/>
+            android:text="Security code :" />
     </LinearLayout>
 
     <TextView

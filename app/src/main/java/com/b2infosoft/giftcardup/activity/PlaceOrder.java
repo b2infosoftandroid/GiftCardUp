@@ -51,7 +51,8 @@ public class PlaceOrder extends AppCompatActivity {
         setContentView(R.layout.activity_place_order);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         init();
-        String str = getIntent().getExtras().getString("Mehtod");
+
+        String str = getIntent().getStringExtra("Method");
 
         name = (TextView)findViewById(R.id.name);
         address = (TextView)findViewById(R.id.address);
@@ -70,6 +71,18 @@ public class PlaceOrder extends AppCompatActivity {
         });
         fetchAddress();
         method.setText("METHOD :" + str);
+        if(str.equalsIgnoreCase("Credit/Debit Card")){
+             linearLayout.setVisibility(View.VISIBLE);
+            String num = getIntent().getStringExtra("Card");
+            String code = getIntent().getStringExtra("CVC");
+            String month = getIntent().getStringExtra("Month");
+            String monthDate = getIntent().getStringExtra("Date");
+            month.indexOf(getIntent().getStringExtra("Month"));
+
+            card_no.setText("Card Number :" + num);
+            security_code.setText("Security code :" + code);
+            expiry.setText("Expiration Date :" + month + " Months "  + monthDate + " days");
+        }
     }
 
     @Override

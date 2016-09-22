@@ -82,6 +82,10 @@ public class PayCreditDebit extends AppCompatActivity {
 
         Intent intent = new Intent(getApplicationContext(), PlaceOrder.class);
         intent.putExtra("Method", "Credit/Debit Card");
+        intent.putExtra("Card", card);
+        intent.putExtra("CVC", cvc);
+        intent.putExtra("Month", month.getSelectedItem().toString());
+        intent.putExtra("Date", datespin.getSelectedItem().toString());
         startActivity(intent);
     }
 
