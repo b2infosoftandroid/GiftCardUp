@@ -34,19 +34,25 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Expiration Date"/>
+            android:text="Expiration Date"
+            android:textStyle="bold"/>
 
         <Spinner
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="60dp"
-            android:entries="@array/month"/>
+            android:entries="@array/month"
+            android:padding="10dp"
+            android:background="@drawable/layout_border"/>
 
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:entries="@array/date_arr"/>
+            android:entries="@array/date_arr"
+            android:padding="10dp"
+            android:background="@drawable/layout_border"/>
 
     </LinearLayout>
 
