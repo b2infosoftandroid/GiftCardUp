@@ -70,7 +70,7 @@ public class PlaceOrder extends AppCompatActivity {
             }
         });
         fetchAddress();
-        method.setText("METHOD :" + str);
+        method.setText("METHOD : " + str);
         if(str.equalsIgnoreCase("Credit/Debit Card")){
              linearLayout.setVisibility(View.VISIBLE);
             String num = getIntent().getStringExtra("Card");
@@ -78,9 +78,9 @@ public class PlaceOrder extends AppCompatActivity {
             int month = getIntent().getIntExtra("Month",0);
             String monthDate = getIntent().getStringExtra("Date");
 
-            card_no.setText("Card Number :" + num);
-            security_code.setText("Security code :" + code);
-            expiry.setText("Expiration Date :" + month + " Months "  + monthDate + " days");
+            card_no.setText("Card Number : " + num);
+            security_code.setText("Security code : " + code);
+            expiry.setText("Expiration Date : " + month + " Months "  + monthDate + " days");
         }
     }
 
