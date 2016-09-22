@@ -1,8 +1,11 @@
 package com.b2infosoft.giftcardup.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.app.Tags;
@@ -11,6 +14,7 @@ import com.b2infosoft.giftcardup.model.OrderSummery;
 public class PayPayPal extends AppCompatActivity {
     private Tags tags;
     private OrderSummery orderSummery;
+    Button action;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +26,16 @@ public class PayPayPal extends AppCompatActivity {
         if (getIntent().hasExtra(tags.ORDER_SUMMERY)) {
             orderSummery = (OrderSummery) getIntent().getSerializableExtra(tags.ORDER_SUMMERY);
         }
+
+        action = (Button) findViewById(R.id.action_continue);
+        action.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), PlaceOrder.class);
+                intent.putExtra("Method", "Paypal");
+                startActivity(intent);
+            }
+        });
     }
 
     private void init() {
