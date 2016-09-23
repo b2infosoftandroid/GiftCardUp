@@ -21,6 +21,7 @@ import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.listener.OnLoadMoreListener;
+import com.b2infosoft.giftcardup.model.EmptyBrand;
 import com.b2infosoft.giftcardup.model.GetWithdrawHistory;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
@@ -38,12 +39,13 @@ public class WithdrawalHistoryRecyclerViewAdapter extends RecyclerView.Adapter<R
     private final String TAG = WithdrawalHistoryRecyclerViewAdapter.class.getName();
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
+    private final int VIEW_TYPE_EMPTY = 2;
     private boolean isLoading;
     private int visibleThreshold = 5;
     private int lastVisibleItem, totalItemCount;
     private OnLoadMoreListener mOnLoadMoreListener;
     private Context context;
-    private List<GetWithdrawHistory> cardInfoList;
+    private List<Object> cardInfoList;
     private Config config;
     HistoryDialogBoxAdapter adapter;
     private Tags tags;
@@ -51,7 +53,7 @@ public class WithdrawalHistoryRecyclerViewAdapter extends RecyclerView.Adapter<R
     private Urls urls;
     private Active active;
 
-    public WithdrawalHistoryRecyclerViewAdapter(Context context, List<GetWithdrawHistory> cardInfoList, RecyclerView recyclerView) {
+    public WithdrawalHistoryRecyclerViewAdapter(Context context, List<Object> cardInfoList, RecyclerView recyclerView) {
         this.context = context;
         this.cardInfoList = cardInfoList;
         config = Config.getInstance();
@@ -128,6 +130,13 @@ public class WithdrawalHistoryRecyclerViewAdapter extends RecyclerView.Adapter<R
         }
     }
 
+    public class EmptyHolder extends RecyclerView.ViewHolder {
+
+        public EmptyHolder(View itemView) {
+            super(itemView);
+        }
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_ITEM) {
@@ -136,20 +145,24 @@ public class WithdrawalHistoryRecyclerViewAdapter extends RecyclerView.Adapter<R
         } else if (viewType == VIEW_TYPE_LOADING) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_loading_item, parent, false);
             return new LoadingHolder(view);
+        } else if (viewType == VIEW_TYPE_EMPTY) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_empty_fragment, parent, false);
+            return new EmptyHolder(view);
         }
         return null;
     }
 
     @Override
     public int getItemViewType(int position) {
-        return cardInfoList.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
+        Object obj = cardInfoList.get(position);
+        return obj instanceof EmptyBrand ? VIEW_TYPE_EMPTY : obj == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof CardHolder)
         {
-            final GetWithdrawHistory card = cardInfoList.get(position);
+            final GetWithdrawHistory card = (GetWithdrawHistory) cardInfoList.get(position);
             final CardHolder cardHolder = (CardHolder) holder;
 
             cardHolder.request_date.setText(card.getRequestDate().equalsIgnoreCase("00-00-0000") ? "" : card.getRequestDate());
@@ -211,6 +224,8 @@ public class WithdrawalHistoryRecyclerViewAdapter extends RecyclerView.Adapter<R
         } else if (holder instanceof LoadingHolder) {
             LoadingHolder loadingHolder = (LoadingHolder) holder;
             loadingHolder.progressBar.setIndeterminate(true);
+        } else if (holder instanceof EmptyHolder) {
+
         }
     }
 

@@ -19,6 +19,7 @@ import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.listener.OnLoadMoreListener;
+import com.b2infosoft.giftcardup.model.EmptyBrand;
 import com.b2infosoft.giftcardup.model.GiftCard;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
@@ -44,7 +45,7 @@ public class ShippingCenter extends Fragment {
     private Progress progress;
     RecyclerView recyclerView;
     ShipmentCardRecyclerViewAdapter adapter;
-    List<GiftCard> cardList;
+    List<Object> cardList;
     boolean isLoading = false;
     boolean isMore = false;
     int loadMore = 0;
@@ -79,7 +80,7 @@ public class ShippingCenter extends Fragment {
                     cardList.add(null);
                     adapter.notifyItemInserted(cardList.size() - 1);
                     isLoading = true;
-                   loadCards();
+                    loadCards();
                 }
             }
         });
@@ -138,7 +139,11 @@ public class ShippingCenter extends Fragment {
             adapter.notifyItemRemoved(cardList.size());
             isLoading = false;
         }
-        cardList.addAll(cards);
+        if (cards.size() > 0)
+            cardList.addAll(cards);
+        if (cardList.size() == 0) {
+            cardList.add(new EmptyBrand());
+        }
         adapter.notifyDataSetChanged();
         adapter.setLoaded();
     }

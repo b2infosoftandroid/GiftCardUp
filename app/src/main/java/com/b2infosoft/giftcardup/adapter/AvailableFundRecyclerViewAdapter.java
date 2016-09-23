@@ -27,6 +27,7 @@ import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.listener.OnLoadMoreListener;
 import com.b2infosoft.giftcardup.model.BankInfo;
+import com.b2infosoft.giftcardup.model.EmptyBrand;
 import com.b2infosoft.giftcardup.model.GetWithdrawHistory;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
@@ -42,15 +43,17 @@ import java.util.Map;
 
 public class AvailableFundRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final String TAG = AvailableFundRecyclerViewAdapter.class.getName();
+    private final int VIEW_TYPE_ITEM = 0;
+    private final int VIEW_TYPE_EMPTY = 1;
     private Context context;
-    private List<GetWithdrawHistory> cardInfoList;
+    private List<Object> cardInfoList;
     private Config config;
     private Tags tags;
     private DMRRequest dmrRequest;
     private Urls urls;
     private Active active;
 
-    public AvailableFundRecyclerViewAdapter(Context context, List<GetWithdrawHistory> cardInfoList, RecyclerView recyclerView) {
+    public AvailableFundRecyclerViewAdapter(Context context, List<Object> cardInfoList, RecyclerView recyclerView) {
         this.context = context;
         this.cardInfoList = cardInfoList;
         config = Config.getInstance();
@@ -80,22 +83,35 @@ public class AvailableFundRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         }
     }
 
+    public class EmptyHolder extends RecyclerView.ViewHolder {
+
+        public EmptyHolder(View itemView) {
+            super(itemView);
+        }
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == VIEW_TYPE_ITEM) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_available_fund_card, parent, false);
             return new CardHolder(view);
+        } else if (viewType == VIEW_TYPE_EMPTY) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_empty_fragment, parent, false);
+            return new EmptyHolder(view);
+        }
+        return null;
     }
 
     @Override
     public int getItemViewType(int position) {
-        return position;
+        return cardInfoList.get(position) instanceof EmptyBrand ? VIEW_TYPE_EMPTY : VIEW_TYPE_ITEM;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof CardHolder)
         {
-            final GetWithdrawHistory card = cardInfoList.get(position);
+            final GetWithdrawHistory card = (GetWithdrawHistory) cardInfoList.get(position);
             final CardHolder cardHolder = (CardHolder) holder;
 
             cardHolder.payment_no.setText(String.valueOf(card.getUserPaymentId()));
@@ -104,6 +120,8 @@ public class AvailableFundRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             cardHolder.status.setText(card.getPayStatus());
             cardHolder.fund.setText("$" + String.valueOf(card.getCreditAmount()));
             cardHolder.withdrawal.setText("$" + String.valueOf(card.getDebitAmount()));
+
+        } else if (holder instanceof EmptyHolder) {
 
         }
     }

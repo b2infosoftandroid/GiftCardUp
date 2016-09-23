@@ -20,6 +20,7 @@ import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.listener.OnLoadMoreListener;
+import com.b2infosoft.giftcardup.model.EmptyBrand;
 import com.b2infosoft.giftcardup.model.GetWithdrawHistory;
 import com.b2infosoft.giftcardup.model.GiftCard;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
@@ -44,7 +45,7 @@ public class WithdrawalHistory extends Fragment {
     private Progress progress;
     RecyclerView recyclerView;
     WithdrawalHistoryRecyclerViewAdapter adapter;
-    List<GetWithdrawHistory> cardList;
+    List<Object> cardList;
     boolean isLoading = false;
     boolean isMore = false;
     int loadMore = 0;
@@ -137,7 +138,12 @@ public class WithdrawalHistory extends Fragment {
             adapter.notifyItemRemoved(cardList.size());
             isLoading = false;
         }
-        cardList.addAll(cards);
+        //Log.d("search",cards.size() + "");
+        if (cards.size() > 0)
+            cardList.addAll(cards);
+        if (cardList.size() == 0) {
+            cardList.add(new EmptyBrand());
+        }
         adapter.notifyDataSetChanged();
         adapter.setLoaded();
     }

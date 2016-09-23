@@ -24,6 +24,7 @@ import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.listener.OnLoadMoreListener;
+import com.b2infosoft.giftcardup.model.EmptyBrand;
 import com.b2infosoft.giftcardup.model.GiftCard;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
@@ -50,7 +51,7 @@ public class MyListing extends Fragment implements View.OnClickListener {
     View mView;
     RecyclerView recyclerView;
     MyListingAdapter adapter;
-    List<GiftCard> cardList;
+    List<Object> cardList;
     boolean isLoading = false;
     boolean isMore = false;
     int loadMore = 0;
@@ -186,7 +187,11 @@ public class MyListing extends Fragment implements View.OnClickListener {
             adapter.notifyItemRemoved(cardList.size());
             isLoading = false;
         }
-        cardList.addAll(cards);
+        if (cards.size() > 0)
+            cardList.addAll(cards);
+        if (cardList.size() == 0) {
+            cardList.add(new EmptyBrand());
+        }
         adapter.notifyDataSetChanged();
         adapter.setLoaded();
     }

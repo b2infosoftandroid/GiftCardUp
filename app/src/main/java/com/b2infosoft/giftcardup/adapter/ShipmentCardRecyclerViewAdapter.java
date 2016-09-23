@@ -24,6 +24,7 @@ import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.AlertBox;
 import com.b2infosoft.giftcardup.listener.OnLoadMoreListener;
+import com.b2infosoft.giftcardup.model.EmptyBrand;
 import com.b2infosoft.giftcardup.model.GiftCard;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
@@ -39,19 +40,20 @@ public class ShipmentCardRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
     private final String TAG = ShipmentCardRecyclerViewAdapter.class.getName();
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
+    private final int VIEW_TYPE_EMPTY = 2;
     private boolean isLoading;
     private int visibleThreshold = 5;
     private int lastVisibleItem, totalItemCount;
     private OnLoadMoreListener mOnLoadMoreListener;
     private Context context;
-    private List<GiftCard> cardInfoList;
+    private List<Object> cardInfoList;
     private Config config;
     private Tags tags;
     private DMRRequest dmrRequest;
     private Urls urls;
     private Active active;
 
-    public ShipmentCardRecyclerViewAdapter(Context context, List<GiftCard> cardInfoList, RecyclerView recyclerView) {
+    public ShipmentCardRecyclerViewAdapter(Context context, List<Object> cardInfoList, RecyclerView recyclerView) {
         this.context = context;
         this.cardInfoList = cardInfoList;
         config = Config.getInstance();
@@ -137,6 +139,13 @@ public class ShipmentCardRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
         }
     }
 
+    public class EmptyHolder extends RecyclerView.ViewHolder {
+
+        public EmptyHolder(View itemView) {
+            super(itemView);
+        }
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_ITEM) {
@@ -145,19 +154,23 @@ public class ShipmentCardRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
         } else if (viewType == VIEW_TYPE_LOADING) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_loading_item, parent, false);
             return new LoadingHolder(view);
+        } else if (viewType == VIEW_TYPE_EMPTY) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_empty_fragment, parent, false);
+            return new EmptyHolder(view);
         }
         return null;
     }
 
     @Override
     public int getItemViewType(int position) {
-        return cardInfoList.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
+        Object obj = cardInfoList.get(position);
+        return obj instanceof EmptyBrand ? VIEW_TYPE_EMPTY : obj == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof CardHolder) {
-            final GiftCard card = cardInfoList.get(position);
+            final GiftCard card = (GiftCard) cardInfoList.get(position);
             final CardHolder cardHolder = (CardHolder) holder;
 
             cardHolder.giftCard.setText(card.getCardName() + "(" + card.getSerialNumber() + ")");
@@ -181,6 +194,8 @@ public class ShipmentCardRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
         } else if (holder instanceof LoadingHolder) {
             LoadingHolder loadingHolder = (LoadingHolder) holder;
             loadingHolder.progressBar.setIndeterminate(true);
+        } else if (holder instanceof EmptyHolder) {
+
         }
     }
 

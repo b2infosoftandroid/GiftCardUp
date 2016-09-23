@@ -23,6 +23,7 @@ import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.listener.OnLoadMoreListener;
+import com.b2infosoft.giftcardup.model.EmptyBrand;
 import com.b2infosoft.giftcardup.model.GetWithdrawHistory;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
@@ -48,7 +49,7 @@ public class AvailableFund extends Fragment {
     RecyclerView recyclerView;
     Button withdrawReq;
     AvailableFundRecyclerViewAdapter adapter;
-    List<GetWithdrawHistory> cardList;
+    List<Object> cardList;
     boolean isLoading = false;
 
     public AvailableFund() {
@@ -97,7 +98,7 @@ public class AvailableFund extends Fragment {
                                     GetWithdrawHistory card = new GetWithdrawHistory();
                                     cards.add(card.fromJSON(jsonArray.getJSONObject(i)));
                                 }
-                                if(cards != null){
+                                if (cards != null) {
                                     withdrawReq.setVisibility(View.VISIBLE);
                                     withdrawReq.setOnClickListener(new View.OnClickListener() {
                                         @Override
@@ -133,7 +134,12 @@ public class AvailableFund extends Fragment {
             adapter.notifyItemRemoved(cardList.size());
             isLoading = false;
         }
-        cardList.addAll(cards);
+       // Log.d("search",cards.size() + "");
+        if (cards.size() > 0)
+            cardList.addAll(cards);
+        if (cardList.size() == 0) {
+            cardList.add(new EmptyBrand());
+        }
         adapter.notifyDataSetChanged();
     }
 }
