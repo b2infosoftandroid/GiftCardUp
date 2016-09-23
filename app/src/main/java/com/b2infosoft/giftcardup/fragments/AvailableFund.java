@@ -98,6 +98,7 @@ public class AvailableFund extends Fragment {
                                     cards.add(card.fromJSON(jsonArray.getJSONObject(i)));
                                 }
                                 if(cards != null){
+                                    withdrawReq.setVisibility(View.VISIBLE);
                                     withdrawReq.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {

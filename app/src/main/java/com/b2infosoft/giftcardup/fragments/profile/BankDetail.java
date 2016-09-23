@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.b2infosoft.giftcardup.R;
@@ -57,6 +58,7 @@ public class BankDetail extends Fragment {
     EditText name, routing_no, account_no, status;
     AppCompatImageView imageView;
     ImageView edit, less;
+    TextView bankName;
     LinearLayout linearLayout;
     int count = 0;
     // TODO: Rename parameter arguments, choose names that match
@@ -112,6 +114,7 @@ public class BankDetail extends Fragment {
                              Bundle savedInstanceState) {
         init();
         View view = inflater.inflate(R.layout.fragment_bank_detail, container, false);
+        bankName = (TextView)view.findViewById(R.id.name);
         name = (EditText) view.findViewById(R.id.bank_name);
         routing_no = (EditText) view.findViewById(R.id.bank_routing_no);
         account_no = (EditText) view.findViewById(R.id.bank_account_no);
@@ -163,7 +166,7 @@ public class BankDetail extends Fragment {
         name.setEnabled(isUpdate);
         routing_no.setEnabled(isUpdate);
         account_no.setEnabled(isUpdate);
-        chooseImage.setEnabled(isUpdate);
+        chooseImage.setVisibility(View.VISIBLE);
         status.setEnabled(isUpdate);
     }
 

@@ -23,15 +23,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_fill_background"
-                android:gravity="center"
+                android:gravity="center_horizontal|center_vertical"
                 android:padding="10dp">
 
                 <TextView
+                    android:id="@+id/textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:gravity="center"
+                    android:layout_centerInParent="true"
                     android:text="Bank Info"
+                    android:textAllCaps="true"
+                    android:textColor="@color/button_foreground" />
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_centerInParent="true"
+                    android:layout_toLeftOf="@+id/bank_info_edit"
+                    android:layout_toRightOf="@+id/textView"
+                    android:text="( )"
                     android:textAllCaps="true"
                     android:textColor="@color/button_foreground" />
 
@@ -41,16 +54,16 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="16dp"
                     android:layout_toLeftOf="@+id/bank_info_less"
-                    android:src="@drawable/ic_edit_icon"
-                    android:background="@drawable/image_background"/>
+                    android:background="@drawable/image_background"
+                    android:src="@drawable/ic_edit_icon" />
 
                 <ImageView
                     android:id="@+id/bank_info_less"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:src="@drawable/ic_add_24dp"
-                    android:background="@drawable/image_background"/>
+                    android:background="@drawable/image_background"
+                    android:src="@drawable/ic_add_24dp" />
 
             </RelativeLayout>
 
@@ -59,7 +72,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="gone"
+                >
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
@@ -71,9 +85,9 @@
                         android:id="@+id/bank_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:enabled="false"
                         android:hint="@string/bank_info_name"
                         android:inputType="text"
-                        android:enabled="false"
                         android:textAllCaps="true"
                         android:textColor="@color/edit_text_text" />
                 </android.support.design.widget.TextInputLayout>
@@ -88,8 +102,8 @@
                         android:id="@+id/bank_routing_no"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/bank_info_routing_no"
                         android:enabled="false"
+                        android:hint="@string/bank_info_routing_no"
                         android:inputType="text"
                         android:textAllCaps="true"
                         android:textColor="@color/edit_text_text" />
@@ -105,8 +119,8 @@
                         android:id="@+id/bank_account_no"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/bank_info_account_no"
                         android:enabled="false"
+                        android:hint="@string/bank_info_account_no"
                         android:inputType="number"
                         android:textAllCaps="true"
                         android:textColor="@color/edit_text_text" />
@@ -122,8 +136,8 @@
                         android:id="@+id/bank_status"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/bank_info_status"
                         android:enabled="false"
+                        android:hint="@string/bank_info_status"
                         android:inputType="text"
                         android:textAllCaps="true"
                         android:textColor="@color/edit_text_text" />
@@ -144,8 +158,11 @@
                         android:id="@+id/choose_void_image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:enabled="false"
                         android:layout_gravity="center"
+                        android:layout_marginLeft="16dp"
+                        android:background="@drawable/button_empty_background"
+                        android:textColor="@color/app_background"
+                        android:visibility="gone"
                         android:text="choose image" />
                 </LinearLayout>
 

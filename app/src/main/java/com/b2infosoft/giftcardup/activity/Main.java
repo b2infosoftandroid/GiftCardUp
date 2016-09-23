@@ -132,6 +132,13 @@ public class Main extends GiftCardUp {
         navigationViewLeft.setNavigationItemSelectedListener(new MenuSelect());
 
         headerView = LayoutInflater.from(this).inflate(R.layout.nav_header_main, navigationViewRight, false);
+        headerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Main.this, MyProfile.class));
+            }
+        });
+
         isLoginLayout = headerView.findViewById(R.id.layout_user_is_login);
         isLogoutLayout = headerView.findViewById(R.id.layout_user_is_log_out);
         user_profile_icon = (CircularImageView) headerView.findViewById(R.id.user_profile_icon);
@@ -314,8 +321,7 @@ public class Main extends GiftCardUp {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.user_profile_icon:
-                //startActivity(new Intent(this,Profile.class));
-                //replaceFragment(new TinderWork());
+                startActivity(new Intent(Main.this, MyProfile.class));
                 break;
             default:
                 break;
@@ -381,8 +387,6 @@ public class Main extends GiftCardUp {
                         setTitle("PROFILE");
                     */
                     startActivity(new Intent(Main.this, MyProfile.class));
-                    //startActivity(new Intent(Main.this,MyAccount.class));
-
                     break;
                 case R.id.menu_item_my_orders:
 

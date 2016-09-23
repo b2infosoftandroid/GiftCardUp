@@ -90,7 +90,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="choose image" />
+                        android:text="choose image"
+                        android:layout_marginLeft="16dp"
+                        android:background="@drawable/button_empty_background"
+                        android:textColor="@color/app_background"/>
                 </LinearLayout>
 
                 <Button

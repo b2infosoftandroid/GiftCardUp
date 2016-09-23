@@ -1,8 +1,11 @@
 package com.b2infosoft.giftcardup.fragments;
 
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
@@ -258,7 +261,7 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
                                 JSONArray jsonArray = jsonObject.getJSONArray(tags.COMPANY_BRANDS);
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     merchant = Merchant.fromJSON(jsonArray.getJSONObject(i));
-                                    hashMap.put(merchant.getCompanyID(), merchant);
+                                    hashMap.put(merchant.getCompanyID(),merchant);
                                 }
                             }
                             refreshMerchant();
@@ -377,7 +380,7 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
 
     private void addGiftCard() {
         String company_id = merchant.getCompanyID();
-        String card_name = merchant.getCompanyName();
+        String card_name = brand_name.getText().toString();
         String serial_no = serial_number.getText().toString();
         String pin = card_pin.getText().toString();
         String balance = card_balance.getText().toString();
@@ -447,8 +450,38 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
     @Override
     public void onSuccess(JSONObject jsonObject) {
         progress.dismiss();
-        brand_name.requestFocus();
-        Log.d(TAG, jsonObject.toString());
+        try {
+            if(jsonObject.has(tags.SUCCESS)){
+                if(jsonObject.getInt(tags.SUCCESS) == tags.PASS){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("Alert");
+                    builder.setMessage("Your Card is Successfully Added");
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            final AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
+                            builder1.setMessage("Do You Want To Add More Cards ? ");
+                            builder1.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    brand_name.requestFocus();
+                                }
+                            });
+                            builder1.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                        replaceFragment(new MyListing());
+                                }
+                            });
+                            builder1.create().show();
+                        }
+                    });
+                    builder.create().show();
+                }
+            }
+        }catch (JSONException e){
+
+        }
     }
 
     @Override
@@ -485,4 +518,14 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
+    private void replaceFragment(Fragment fragment) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.main_content, fragment);
+        if (fragment instanceof Dashboard) {
+
+        } else {
+            transaction.addToBackStack(null);
+        }
+        transaction.commit();
+    }
 }
