@@ -1,4 +1,7 @@
 <resources>
+
+    <string name="facebook_app_id">1021399817971136</string>
+
     <string name="app_name">GiftCardUp</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>

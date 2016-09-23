@@ -34,7 +34,7 @@ public class MyNotification {
         builder.setTicker("GiftCardUp Notification");
         builder.setContentTitle("Cart Item");
         builder.setContentText(message);
-        builder.setSmallIcon(R.drawable.ic_logo);
+        builder.setSmallIcon(R.mipmap.ic_launcher);
         builder.setContentIntent(pendingIntent);
         builder.setOngoing(true);
         //builder.setSubText("This is subtext...");   //API level 16

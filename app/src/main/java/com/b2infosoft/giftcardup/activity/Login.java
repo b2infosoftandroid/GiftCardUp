@@ -18,11 +18,19 @@ import com.b2infosoft.giftcardup.custom.AlertBox;
 import com.b2infosoft.giftcardup.model.User;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,6 +43,11 @@ public class Login extends AppCompatActivity implements DMRResult {
     EditText userName, userPassword;
     Button login_button;
     TextView forgot_password, sign_up;
+
+    /* FACEBOOK INTEGRATION  */
+    LoginButton loginButtonFB;
+    CallbackManager callbackManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +56,7 @@ public class Login extends AppCompatActivity implements DMRResult {
         tags = Tags.getInstance();
         active = Active.getInstance(this);
 
-        if(active.isLogin()){
+        if (active.isLogin()) {
             loginSuccess();
         }
 
@@ -71,11 +84,40 @@ public class Login extends AppCompatActivity implements DMRResult {
                 startActivity(new Intent(Login.this, ForgotPassword.class));
             }
         });
+        initFB();
     }
-    private void loginSuccess(){
-        startActivity(new Intent(this,Main.class));
+
+    private void initFB() {
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
+        callbackManager = CallbackManager.Factory.create();
+        loginButtonFB = (LoginButton) findViewById(R.id.login_button_fb);
+        loginButtonFB.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
+        loginButtonFB.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Gson gson = new Gson();
+                Log.d("SUCCESS LOGIN ", gson.toJson(loginResult));
+            }
+
+            @Override
+            public void onCancel() {
+                Log.d("SUCCESS CANCEL ", "CANCEL");
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                error.printStackTrace();
+                Log.d("Error ", error.getMessage());
+            }
+        });
+    }
+
+    private void loginSuccess() {
+        startActivity(new Intent(this, Main.class));
         finish();
     }
+
     private void attemptLogin() {
 
         String uName = userName.getText().toString();
@@ -108,7 +150,7 @@ public class Login extends AppCompatActivity implements DMRResult {
             if (jsonObject.has(tags.SUCCESS)) {
                 int success = jsonObject.getInt(tags.SUCCESS);
                 if (success == tags.PASS) {
-                    if(jsonObject.has(tags.USER_INFO)){
+                    if (jsonObject.has(tags.USER_INFO)) {
                         JSONObject object = jsonObject.getJSONObject(tags.USER_INFO);
                         User user = User.fromJSON(object);
                         active.setUser(user);
@@ -116,8 +158,8 @@ public class Login extends AppCompatActivity implements DMRResult {
                         loginSuccess();
                     }
                 } else if (success == tags.SUSPEND) {
-                    String message = "" ;
-                    if(jsonObject.has(tags.MESSAGE)){
+                    String message = "";
+                    if (jsonObject.has(tags.MESSAGE)) {
                         message = jsonObject.getString(tags.MESSAGE);
                     }
                     AlertBox box = new AlertBox(this);
@@ -125,8 +167,8 @@ public class Login extends AppCompatActivity implements DMRResult {
                     box.setMessage(message);
                     box.show();
                 } else if (success == tags.FAIL) {
-                    String message = "" ;
-                    if(jsonObject.has(tags.MESSAGE)){
+                    String message = "";
+                    if (jsonObject.has(tags.MESSAGE)) {
                         message = jsonObject.getString(tags.MESSAGE);
                     }
                     AlertBox box = new AlertBox(this);
@@ -145,5 +187,11 @@ public class Login extends AppCompatActivity implements DMRResult {
     public void onError(VolleyError volleyError) {
         volleyError.printStackTrace();
         Log.e(TAG, volleyError.getMessage());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 }

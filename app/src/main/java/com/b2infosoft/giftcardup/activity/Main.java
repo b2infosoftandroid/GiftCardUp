@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
@@ -47,6 +48,16 @@ import com.b2infosoft.giftcardup.utils.Utils2;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 import com.b2infosoft.giftcardup.volly.LruBitmapCache;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.Profile;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.google.gson.Gson;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import org.json.JSONArray;
@@ -69,12 +80,14 @@ public class Main extends GiftCardUp {
     Tags tags;
     DBHelper dbHelper;
     Notify notify;
-    int count;
     NavigationView navigationViewRight, navigationViewLeft;
     View headerView, isLoginLayout, isLogoutLayout;
     CircularImageView user_profile_icon;
     TextView user_profile_name, user_total_sold, user_total_saving;
     DrawerLayout drawer;
+
+    /* FACEBOOK INTEGRATION */
+    CallbackManager callbackManager;
 
     private void init() {
         dmrRequest = DMRRequest.getInstance(this, TAG);
@@ -86,9 +99,18 @@ public class Main extends GiftCardUp {
         dbHelper = new DBHelper(this);
     }
 
+    public boolean isLoggedIn() {
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        return accessToken != null;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
+        callbackManager = CallbackManager.Factory.create();
+
         setContentView(R.layout.activity_main);
         cart = (Cart) getApplicationContext();
         init();
@@ -96,7 +118,6 @@ public class Main extends GiftCardUp {
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
-        count = intent.getIntExtra("COUNT", 0);
         //View view1 = getLayoutInflater().inflate(R.layout.fragment_dashboard,null);
         //toolbar.addView(view1);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -124,6 +145,12 @@ public class Main extends GiftCardUp {
         if (active.getUser() != null)
             loadAvailableCartItems();
 
+        if (isLoggedIn()) {
+            showMessage("LOGIN ALREADY");
+            Profile profile = Profile.getCurrentProfile();
+            Gson gson = new Gson();
+            Log.d("PROFILE", gson.toJson(profile));
+        }
     }
 
     private void updateMenuItemLeft(List<CompanyCategory> categoryList) {
@@ -141,7 +168,8 @@ public class Main extends GiftCardUp {
             });
         }
     }
-    private void checkBackgroundServices(){
+
+    private void checkBackgroundServices() {
         MyServices.startLeftCartTimeService(this);
     }
 
@@ -401,8 +429,8 @@ public class Main extends GiftCardUp {
         if (userIsLogin) {
             User user = active.getUser();
             user_profile_name.setText(user.getFirstName() + " " + user.getLastName());
-            user_total_saving.setText("$"+user.getTotalSave());
-            user_total_sold.setText("$"+user.getTotalSold());
+            user_total_saving.setText("$" + user.getTotalSave());
+            user_total_sold.setText("$" + user.getTotalSold());
             LruBitmapCache.loadCacheImage(this, user_profile_icon, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
             setMenuItems(user.getUserType());
         } else {
@@ -421,5 +449,15 @@ public class Main extends GiftCardUp {
         navigationViewRight.getMenu().setGroupVisible(R.id.menu_6, userType == 0 ? true : false);
         isLoginLayout.setVisibility(userType != 0 ? View.VISIBLE : View.GONE);
         isLogoutLayout.setVisibility(userType == 0 ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

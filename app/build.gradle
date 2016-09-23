@@ -3,10 +3,9 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
-
     defaultConfig {
         applicationId "com.b2infosoft.giftcardup"
-        minSdkVersion 15
+        minSdkVersion 17
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -25,6 +24,11 @@ android {
     dexOptions {
         incremental true
     }
+    productFlavors {
+    }
+}
+repositories {
+    mavenCentral()
 }
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -42,6 +46,8 @@ dependencies {
     compile 'net.gotev:uploadservice:3.0.3'
     compile 'com.libaml.android.view.chip:AndroidChipLayout:1.0.3'
     compile 'com.google.android.gms:play-services-gcm:9.4.0'
+    compile 'com.stripe:stripe-android:1.0.5'
+    compile 'com.facebook.android:facebook-android-sdk:4.15.0'
 }
 apply plugin: 'com.google.gms.google-services'
 
