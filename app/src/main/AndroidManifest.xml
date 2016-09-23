@@ -139,8 +139,7 @@
         </activity>
         <activity
             android:name=".activity.PlaceOrder"
-            android:label="Place Order"></activity>
-
+            android:label="Place Order" />
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -150,6 +149,8 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+
+        <activity android:name=".activity.FBUserUpdate"></activity>
     </application>
 
 </manifest>

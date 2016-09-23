@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
@@ -18,11 +19,16 @@ import com.b2infosoft.giftcardup.custom.AlertBox;
 import com.b2infosoft.giftcardup.model.User;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.Profile;
 import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
@@ -90,14 +96,37 @@ public class Login extends AppCompatActivity implements DMRResult {
     private void initFB() {
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
+
         callbackManager = CallbackManager.Factory.create();
         loginButtonFB = (LoginButton) findViewById(R.id.login_button_fb);
         loginButtonFB.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
         loginButtonFB.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Gson gson = new Gson();
-                Log.d("SUCCESS LOGIN ", gson.toJson(loginResult));
+                GraphRequest graphRequest = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        try {
+                            if (object.has("email")) {
+                                Profile profile = Profile.getCurrentProfile();
+                                Map<String, String> map = new HashMap<>();
+                                map.put(tags.USER_ACTION, tags.FB_LOGIN_USER);
+                                map.put(tags.EMAIL, object.getString("email"));
+                                map.put(tags.FB_ID, profile.getId());
+                                map.put(tags.FIRST_NAME, profile.getFirstName());
+                                map.put(tags.LAST_NAME, profile.getLastName());
+                                integrateWithFB(map);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.d("PRINT", e.getMessage());
+                        }
+                    }
+                });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email,gender,birthday");
+                graphRequest.setParameters(parameters);
+                graphRequest.executeAsync();
             }
 
             @Override
@@ -111,6 +140,30 @@ public class Login extends AppCompatActivity implements DMRResult {
                 Log.d("Error ", error.getMessage());
             }
         });
+        loginButtonFB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isLoggedIn()) {
+                    Log.d("PROFILE", "LOG IN");
+                    Profile profile = Profile.getCurrentProfile();
+                    Log.d("PROFILE NAME", profile.getFirstName() + " " + profile.getLastName());
+                    Log.d("PROFILE ID", profile.getId());
+
+                    Gson gson = new Gson();
+                    Log.d("PROFILE", gson.toJson(profile));
+
+                } else {
+                    Log.d("PROFILE", "LOG OUT");
+                }
+            }
+        });
+    }
+
+    public boolean isLoggedIn() {
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        Gson gson = new Gson();
+        Log.d("PROFILE TOKENS", gson.toJson(accessToken));
+        return accessToken != null;
     }
 
     private void loginSuccess() {
@@ -143,6 +196,43 @@ public class Login extends AppCompatActivity implements DMRResult {
 
         dmrRequest.doPost(urls.getUserInfo(), map, this);
     }
+
+    private void integrateWithFB(Map<String, String> map) {
+        dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
+            @Override
+            public void onSuccess(JSONObject jsonObject) {
+                try {
+                    if (jsonObject.has(tags.SUCCESS)) {
+                        if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                            if (jsonObject.has(tags.USER_TYPE)) {
+                                if (jsonObject.getInt(tags.USER_TYPE) == tags.EXISTING_USER) {
+                                    if (jsonObject.has(tags.USER_INFO)) {
+                                        JSONObject object = jsonObject.getJSONObject(tags.USER_INFO);
+                                        User user = User.fromJSON(object);
+                                        active.setUser(user);
+                                        active.setLogin();
+                                        loginSuccess();
+                                    }
+                                } else if (jsonObject.getInt(tags.USER_TYPE) == tags.NEW_USER) {
+                                    
+                                }
+                            }
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, e.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(VolleyError volleyError) {
+                volleyError.printStackTrace();
+                Log.e(TAG, volleyError.getMessage());
+            }
+        });
+    }
+
 
     @Override
     public void onSuccess(JSONObject jsonObject) {

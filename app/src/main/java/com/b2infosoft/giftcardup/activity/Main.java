@@ -1,5 +1,6 @@
 package com.b2infosoft.giftcardup.activity;
 
+
 import android.content.Intent;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
@@ -53,6 +54,8 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
@@ -151,12 +154,27 @@ public class Main extends GiftCardUp {
         replaceFragment(new Dashboard());
         if (active.getUser() != null)
             loadAvailableCartItems();
-
         if (isLoggedIn()) {
             showMessage("LOGIN ALREADY");
             Profile profile = Profile.getCurrentProfile();
-            Gson gson = new Gson();
+            final Gson gson = new Gson();
             Log.d("PROFILE", gson.toJson(profile));
+
+            GraphRequest graphRequest = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                @Override
+                public void onCompleted(JSONObject object, GraphResponse response) {
+                    Log.d("DATA JSON", object.toString());
+                    Log.d("DATA GRAPH RESPONSE", response.toString());
+                    Log.d("RESPONSE", gson.toJson(response));
+                }
+            });
+
+            Bundle parameters = new Bundle();
+            parameters.putString("fields", "id,name,email,gender,birthday");
+            graphRequest.setParameters(parameters);
+            graphRequest.executeAsync();
+
+
         }
     }
 
