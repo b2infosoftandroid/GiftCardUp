@@ -134,7 +134,7 @@ public class AvailableFund extends Fragment {
             adapter.notifyItemRemoved(cardList.size());
             isLoading = false;
         }
-       // Log.d("search",cards.size() + "");
+        Log.d("search",cards.size() + "");
         if (cards.size() > 0)
             cardList.addAll(cards);
         if (cardList.size() == 0) {
