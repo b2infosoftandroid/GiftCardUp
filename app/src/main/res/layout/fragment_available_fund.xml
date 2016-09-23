@@ -25,6 +25,7 @@
                 android:layout_alignParentRight="true"
                 android:background="@drawable/button_fill_background"
                 android:padding="10dp"
+                android:visibility="gone"
                 android:text="Withdrawal Request"
                 android:textAllCaps="true"
                 android:textColor="@color/button_foreground" />
