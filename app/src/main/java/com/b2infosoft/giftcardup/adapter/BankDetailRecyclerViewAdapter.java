@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
@@ -70,6 +71,7 @@ public class BankDetailRecyclerViewAdapter extends RecyclerView.Adapter<BankDeta
         ScrollView scrollView = holder.scrollView;
         final BankInfo info = bankInfoList.get(position);
 
+        TextView b_name = holder.b_name;
         EditText name = holder.name;
         EditText routing_no = holder.routing_no;
         EditText account_no = holder.account_no;
@@ -77,6 +79,7 @@ public class BankDetailRecyclerViewAdapter extends RecyclerView.Adapter<BankDeta
         EditText status = holder.status;
         LruBitmapCache.loadCacheImage(context, imageView, config.getGiftCardImageAddress().concat(info.getVoidCheckImage1()), "");
 
+         b_name.setText("(" + info.getName() + ")");
          name.setText(info.getName());
         routing_no.setText(info.getRoutingNumber());
         account_no.setText(info.getAccountNumber());
@@ -122,6 +125,7 @@ public class BankDetailRecyclerViewAdapter extends RecyclerView.Adapter<BankDeta
     public class ViewHolder extends RecyclerView.ViewHolder {
         Button save, chooseImage;
         EditText name, routing_no, account_no, status;
+        TextView b_name;
         AppCompatImageView imageView;
         ImageView edit, less;
         LinearLayout linearLayout;
@@ -129,6 +133,7 @@ public class BankDetailRecyclerViewAdapter extends RecyclerView.Adapter<BankDeta
 
         public ViewHolder(View view) {
             super(view);
+            this.b_name = (TextView) view.findViewById(R.id.name);
             this.name = (EditText) view.findViewById(R.id.bank_name);
             this.routing_no = (EditText) view.findViewById(R.id.bank_routing_no);
             this.account_no = (EditText) view.findViewById(R.id.bank_account_no);

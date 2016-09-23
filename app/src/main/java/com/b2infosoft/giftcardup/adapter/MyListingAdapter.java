@@ -86,14 +86,14 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public class CardHolder extends RecyclerView.ViewHolder {
         TextView giftCard;
-        ImageView cardType,cardImage;
+        ImageView cardType, cardImage;
         TextView cardValue;
         TextView cardPrice;
         TextView cardSell;
         TextView listedOn;
         TextView soldOn;
         TextView fund;
-        CardView card1,card2;
+        CardView card1, card2;
         ImageView quickSell;
         TextView status;
         ImageView action_edit, action_delete, action_deny, action_need_review, action_investigate;
@@ -101,8 +101,8 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         public CardHolder(View view) {
             super(view);
-            card1 = (CardView)view.findViewById(R.id.card_view1);
-            card2 = (CardView)view.findViewById(R.id.card_view2);
+            card1 = (CardView) view.findViewById(R.id.card_view1);
+            card2 = (CardView) view.findViewById(R.id.card_view2);
             cardImage = (ImageView) view.findViewById(R.id.my_listing_card_image);
             giftCard = (TextView) view.findViewById(R.id.company_card_gift_card);
             cardType = (ImageView) view.findViewById(R.id.company_card_e_card);
@@ -156,7 +156,7 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             final CardHolder cardHolder = (CardHolder) holder;
 
             final String url = config.getGiftCardImageAddress().concat(card.getCardImage());
-            LruBitmapCache.loadCacheImage(context,cardHolder.cardImage,url,TAG);
+            LruBitmapCache.loadCacheImage(context, cardHolder.cardImage, url, TAG);
             /* E-Card */
             if (card.getCardType() == 2) {
                 cardHolder.cardType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_check_24dp));
@@ -179,13 +179,13 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             cardHolder.fund.setText(card.getYourEarning());
             cardHolder.status.setText(card.getApproveStatusName(card.getApproveStatus()));
 
-            cardHolder.status.setBackgroundColor(card.getApproveStatusColor(context,card.getApproveStatus()));
+            cardHolder.status.setBackgroundColor(card.getApproveStatusColor(context, card.getApproveStatus()));
 
             setActions(cardHolder, card.getApproveStatus());
             cardHolder.card1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    cardHolder.card2.setVisibility(cardHolder.card2.getVisibility()==View.VISIBLE?View.GONE:View.VISIBLE);
+                    cardHolder.card2.setVisibility(cardHolder.card2.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 }
             });
             cardHolder.action_edit.setOnClickListener(new OnClick(card));
@@ -212,7 +212,7 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             switch (v.getId()) {
                 case R.id.action_edit:
                     Intent intent = new Intent(context, EditGiftCard.class);
-                    intent.putExtra(tags.GIFT_CARDS,giftCard);
+                    intent.putExtra(tags.GIFT_CARDS, giftCard);
                     context.startActivity(intent);
                     break;
                 case R.id.action_delete:
@@ -258,7 +258,7 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
                                 @Override
                                 public void onDismiss(DialogInterface dialog) {
-                                    
+
                                 }
                             });
                         }
@@ -351,7 +351,8 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void showToast(String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
-    public void removeAllItem(){
+
+    public void removeAllItem() {
         cardInfoList.clear();
         notifyDataSetChanged();
     }
