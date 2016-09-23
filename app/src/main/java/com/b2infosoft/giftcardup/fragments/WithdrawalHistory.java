@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
@@ -43,6 +44,7 @@ public class WithdrawalHistory extends Fragment {
     private Active active;
     DMRRequest dmrRequest;
     private Progress progress;
+    FrameLayout frameLayout;
     RecyclerView recyclerView;
     WithdrawalHistoryRecyclerViewAdapter adapter;
     List<Object> cardList;
@@ -69,6 +71,7 @@ public class WithdrawalHistory extends Fragment {
                              Bundle savedInstanceState) {
         init();
         View view = inflater.inflate(R.layout.fragment_withdrawal_history, container, false);
+        frameLayout = (FrameLayout)view.findViewById(R.id.frame);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new WithdrawalHistoryRecyclerViewAdapter(getContext(), cardList, recyclerView);
@@ -95,7 +98,7 @@ public class WithdrawalHistory extends Fragment {
         dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
-                Log.d("history", jsonObject.toString());
+                //Log.d("history", jsonObject.toString());
                 try {
                     if (jsonObject.has(tags.SUCCESS)) {
                         if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
@@ -109,7 +112,7 @@ public class WithdrawalHistory extends Fragment {
                                 setDataInRecycleView(cards);
                             }
                         } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
-
+                            frameLayout.setVisibility(View.VISIBLE);
                         }
                     }
                     if (jsonObject.has(tags.IS_MORE)) {

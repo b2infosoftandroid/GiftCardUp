@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
@@ -47,6 +48,7 @@ public class AvailableFund extends Fragment {
     DMRRequest dmrRequest;
     private Progress progress;
     RecyclerView recyclerView;
+    FrameLayout frameLayout;
     Button withdrawReq;
     AvailableFundRecyclerViewAdapter adapter;
     List<Object> cardList;
@@ -72,6 +74,7 @@ public class AvailableFund extends Fragment {
         View view = inflater.inflate(R.layout.fragment_available_fund, container, false);
         withdrawReq = (Button) view.findViewById(R.id.available_fund_withdrawal_request);
 
+        frameLayout = (FrameLayout)view.findViewById(R.id.frame);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new AvailableFundRecyclerViewAdapter(getContext(), cardList, recyclerView);
@@ -87,7 +90,7 @@ public class AvailableFund extends Fragment {
         dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
-                //Log.d("history", jsonObject.toString());
+                Log.d("history", jsonObject.toString());
                 try {
                     if (jsonObject.has(tags.SUCCESS)) {
                         if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
@@ -111,7 +114,7 @@ public class AvailableFund extends Fragment {
                                 setDataInRecycleView(cards);
                             }
                         } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
-
+                                frameLayout.setVisibility(View.VISIBLE);
                         }
                     }
                 } catch (JSONException e) {
@@ -142,4 +145,5 @@ public class AvailableFund extends Fragment {
         }
         adapter.notifyDataSetChanged();
     }
+
 }
