@@ -1,6 +1,8 @@
 package com.b2infosoft.giftcardup.activity;
 
+import android.content.DialogInterface;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -157,7 +159,7 @@ public class EditGiftCard extends AppCompatActivity implements TextWatcher, View
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.cancel:
-                brand_name.requestFocus();
+                super.onBackPressed();
                 break;
             case R.id.save:
                 updateGiftCard();
@@ -403,17 +405,24 @@ public class EditGiftCard extends AppCompatActivity implements TextWatcher, View
     @Override
     public void onSuccess(JSONObject jsonObject) {
         progress.dismiss();
-        AlertBox box = new AlertBox(this);
-        box.setTitle("Alert");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Alert");
         try {
             if (jsonObject.has(tags.SUCCESS)) {
                 if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
-                    box.setTitle("Successfully update");
+                    builder.setTitle("Successfully update");
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            onBackPressed();
+                            finish();
+                        }
+                    });
                 } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
-                    box.setTitle("Something went wrong? Try Again");
+                    builder.setTitle("Something went wrong? Try Again");
                 }
             }
-            box.show();
+            builder.create().show();
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e(TAG, e.getMessage());
