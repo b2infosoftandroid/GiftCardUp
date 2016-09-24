@@ -63,11 +63,11 @@
 
             <Button
                 android:id="@+id/login_button"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/button_margin_top"
-                android:paddingLeft="@dimen/button_padding_left"
-                android:paddingRight="@dimen/button_padding_right"
+                android:layout_marginLeft="@dimen/text_view_margin_left"
+                android:layout_marginRight="@dimen/text_view_margin_right"
                 android:text="@string/login_button"
                 android:textSize="@dimen/button_text_font_size"
                 android:background="@drawable/button_empty_background"
@@ -87,6 +87,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:text="@string/login_forgot_password"
+                    android:layout_toLeftOf="@+id/sign_up_text"
                     android:background="@drawable/image_background"
                     android:textAllCaps="true"
                     android:textColor="@color/login_forgot_password" />

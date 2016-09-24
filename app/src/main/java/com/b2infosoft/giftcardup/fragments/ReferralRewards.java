@@ -63,6 +63,7 @@ public class ReferralRewards extends Fragment implements View.OnClickListener,DM
         mView= inflater.inflate(R.layout.fragment_referral_rewards, container, false);
         referral_url = (EditText) mView.findViewById(R.id.refer_url);
         referral_url.setText(urls.getReferralURL(active.getUser().getReferralCode()));
+        referral_url.setOnClickListener(this);
         referral_url.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -71,7 +72,7 @@ public class ReferralRewards extends Fragment implements View.OnClickListener,DM
                 String getstring = referral_url.getText().toString();
                 ClipData clip = ClipData.newPlainText("Copy to clipboard", getstring);
                 clipboard.setPrimaryClip(clip);
-                return false;
+                return true;
             }
         });
         action_referral = (Button) mView.findViewById(R.id.action_refer);
@@ -88,6 +89,14 @@ public class ReferralRewards extends Fragment implements View.OnClickListener,DM
             sendIntent.setType("text/plain");
             startActivity(Intent.createChooser(sendIntent, "Refer to..."));
         }
+        if(R.id.refer_url==v.getId()){
+            Toast.makeText(getActivity(),"hello",Toast.LENGTH_SHORT).show();
+            ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+            String str = referral_url.getText().toString();
+            ClipData clip = ClipData.newPlainText("Copy to clipboard", str);
+            clipboard.setPrimaryClip(clip);
+        }
+
     }
 
     @Override

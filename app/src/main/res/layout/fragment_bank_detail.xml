@@ -73,7 +73,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:visibility="gone"
-                >
+                android:padding="10dp"
+                android:background="@drawable/layout_border_other">
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
@@ -174,6 +175,7 @@
                     android:background="@drawable/button_fill_background"
                     android:padding="@dimen/button_margin_left"
                     android:text="@string/bank_info_save_btn"
+                    android:visibility="gone"
                     android:textAllCaps="true"
                     android:textColor="@color/button_foreground" />
             </LinearLayout>

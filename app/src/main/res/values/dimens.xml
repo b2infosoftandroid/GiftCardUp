@@ -30,8 +30,8 @@
     <dimen name="button_stroke_width">1dp</dimen>
     <dimen name="button_stroke_corner_radius">2dp</dimen>
 
-    <dimen name="text_view_margin_left">45dp</dimen>
-    <dimen name="text_view_margin_right">45dp</dimen>
+    <dimen name="text_view_margin_left">40dp</dimen>
+    <dimen name="text_view_margin_right">40dp</dimen>
     <dimen name="text_view_margin_top">10dp</dimen>
     <dimen name="text_view_margin_bottom">10dp</dimen>
     <dimen name="text_view_padding_left">16dp</dimen>

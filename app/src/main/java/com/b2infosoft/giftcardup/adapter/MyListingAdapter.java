@@ -169,7 +169,7 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             final CardHolder cardHolder = (CardHolder) holder;
 
             final String url = config.getGiftCardImageAddress().concat(card.getCardImage());
-            LruBitmapCache.loadCacheImage(context,cardHolder.cardImage,url,TAG);
+            LruBitmapCache.loadCacheImage(context,cardHolder.cardImage,url,"");
             /* E-Card */
             if (card.getCardType() == 2) {
                 cardHolder.cardType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_check_24dp));
