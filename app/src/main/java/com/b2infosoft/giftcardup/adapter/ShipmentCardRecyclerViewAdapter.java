@@ -1,7 +1,9 @@
 package com.b2infosoft.giftcardup.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -189,7 +191,27 @@ public class ShipmentCardRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
             cardHolder.shipmentLabel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle("Alert");
+                    builder.setMessage("Are You Sure You Want to Ship this Gift Card ?");
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                          builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                              @Override
+                              public void onDismiss(DialogInterface dialog) {
+
+                              }
+                          });
+                        }
+                    });
+                    builder.create().show();
                 }
             });
         } else if (holder instanceof LoadingHolder) {
