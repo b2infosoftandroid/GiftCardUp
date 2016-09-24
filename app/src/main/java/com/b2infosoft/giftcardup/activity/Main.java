@@ -149,6 +149,8 @@ public class Main extends GiftCardUp {
         checkFBLogin();
     }
 
+    boolean checkedFB = true;
+
     private void checkFBLogin() {
         if (!active.isLogin()) {
             showMessage("Log Out");
@@ -161,7 +163,7 @@ public class Main extends GiftCardUp {
                             if (object != null) {
                                 try {
                                     showMessage("Data FOUND");
-                                    Log.d("OBJECT",object.toString());
+                                    Log.d("OBJECT", object.toString());
                                     if (object.has("id")) {
                                         Map<String, String> map = new HashMap<>();
                                         map.put(tags.USER_ACTION, tags.FB_LOGIN_USER);
@@ -169,6 +171,8 @@ public class Main extends GiftCardUp {
                                         map.put(tags.FIRST_NAME, object.getString("first_name"));
                                         map.put(tags.LAST_NAME, object.getString("last_name"));
                                         integrateWithFB(map);
+                                    } else {
+                                        showMessage("ID NOT FOUND");
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -221,11 +225,18 @@ public class Main extends GiftCardUp {
         super.onPause();
         checkBackgroundServices();
     }
+
     private void integrateWithFB(Map<String, String> map) {
+        if(checkedFB){
+           return;
+        }
+        checkedFB = false;
         dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
                 showMessage("FB CHECK");
+                Log.d("RES", jsonObject.toString());
+                checkedFB = true;
                 try {
                     if (jsonObject.has(tags.SUCCESS)) {
                         if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
@@ -257,6 +268,7 @@ public class Main extends GiftCardUp {
 
             @Override
             public void onError(VolleyError volleyError) {
+                checkedFB = true;
                 volleyError.printStackTrace();
                 Log.e(TAG, volleyError.getMessage());
             }
