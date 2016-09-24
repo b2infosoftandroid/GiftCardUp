@@ -94,6 +94,37 @@ public class LruBitmapCache extends LruCache<String, Bitmap>
             MySingleton.getInstance(context).addToRequestQueue(request);
         }
     }
+    public static void loadCacheImageProfile(Context context, final ImageView imageView, String imageUrl, String tag) {
+        Cache cache = MySingleton.getInstance(context).getRequestQueue().getCache();
+        Cache.Entry entry = cache.get(imageUrl);
+        if (entry != null) {
+            try {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(entry.data, 0, entry.data.length);
+                imageView.setImageBitmap(bitmap);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e("ERROR", e.getMessage());
+            }
+        } else {
+            cache.invalidate(imageUrl, true);
+            ImageRequest request = new ImageRequest(imageUrl,
+                    new Response.Listener<Bitmap>() {
+                        @Override
+                        public void onResponse(Bitmap bitmap) {
+                            imageView.setImageBitmap(bitmap);
+                        }
+                    }, 0, 0, null,
+                    new Response.ErrorListener() {
+                        public void onErrorResponse(VolleyError error) {
+                            error.printStackTrace();
+                            Log.e("ERROR VOLLY 1", error.getMessage() + "");
+                            imageView.setImageResource(R.drawable.ic_user_icon);
+                        }
+                    });
+            request.setTag(tag);
+            MySingleton.getInstance(context).addToRequestQueue(request);
+        }
+    }
 
     public static void loadCacheImage(Context context, final CircularImageView imageView, String imageUrl, String tag) {
         Cache cache = MySingleton.getInstance(context).getRequestQueue().getCache();
@@ -120,6 +151,37 @@ public class LruBitmapCache extends LruCache<String, Bitmap>
                             error.printStackTrace();
                             Log.e("ERROR VOLLY 1", error.getMessage() + "");
                             imageView.setImageResource(R.drawable.not_find);
+                        }
+                    });
+            request.setTag(tag);
+            MySingleton.getInstance(context).addToRequestQueue(request);
+        }
+    }
+    public static void loadCacheImageProfile(Context context, final CircularImageView imageView, String imageUrl, String tag) {
+        Cache cache = MySingleton.getInstance(context).getRequestQueue().getCache();
+        Cache.Entry entry = cache.get(imageUrl);
+        if (entry != null) {
+            try {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(entry.data, 0, entry.data.length);
+                imageView.setImageBitmap(bitmap);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e("ERROR", e.getMessage());
+            }
+        } else {
+            cache.invalidate(imageUrl, true);
+            ImageRequest request = new ImageRequest(imageUrl,
+                    new Response.Listener<Bitmap>() {
+                        @Override
+                        public void onResponse(Bitmap bitmap) {
+                            imageView.setImageBitmap(bitmap);
+                        }
+                    }, 0, 0, null,
+                    new Response.ErrorListener() {
+                        public void onErrorResponse(VolleyError error) {
+                            error.printStackTrace();
+                            Log.e("ERROR VOLLY 1", error.getMessage() + "");
+                            imageView.setImageResource(R.drawable.ic_user_icon);
                         }
                     });
             request.setTag(tag);

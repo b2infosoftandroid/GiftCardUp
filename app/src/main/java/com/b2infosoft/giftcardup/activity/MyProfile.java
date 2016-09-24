@@ -154,7 +154,7 @@ public class MyProfile extends AppCompatActivity implements Identification.OnFra
         total_sold.setText("$"+user.getTotalSold());
         profile_user_name.setText(user.getFirstName()+" "+user.getLastName());
 
-        LruBitmapCache.loadCacheImage(this, profile_image, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
+        LruBitmapCache.loadCacheImageProfile(this, profile_image, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
 
 
     }

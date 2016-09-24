@@ -1,8 +1,12 @@
 package com.b2infosoft.giftcardup.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatSpinner;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -10,17 +14,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.app.Validation;
+import com.b2infosoft.giftcardup.credential.Active;
+import com.b2infosoft.giftcardup.custom.AlertBox;
 import com.b2infosoft.giftcardup.database.DBHelper;
 import com.b2infosoft.giftcardup.model.State;
+import com.b2infosoft.giftcardup.model.User;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -31,9 +38,10 @@ import java.util.Map;
 
 public class FBUserUpdate extends AppCompatActivity implements DMRResult {
     private final String TAG = FBUserUpdate.class.getName();
-    EditText email,mobile, password, password_confirm, address, suite_no, city, zip_code, company_name;
+    EditText email, mobile, password, password_confirm, address, suite_no, city, zip_code, company_name;
     Button update;
-    Spinner s1;
+    AppCompatSpinner s1;
+    Active active;
     Validation validation;
     Tags tags;
     DMRRequest dmrRequest;
@@ -42,6 +50,7 @@ public class FBUserUpdate extends AppCompatActivity implements DMRResult {
     String user_id;
 
     private void init() {
+        active = Active.getInstance(this);
         validation = Validation.getInstance();
         tags = Tags.getInstance();
         dmrRequest = DMRRequest.getInstance(this, TAG);
@@ -67,7 +76,7 @@ public class FBUserUpdate extends AppCompatActivity implements DMRResult {
         address = (EditText) findViewById(R.id.sign_up_address);
         suite_no = (EditText) findViewById(R.id.sign_up_suite_number);
         city = (EditText) findViewById(R.id.sign_up_city);
-        s1 = (Spinner) findViewById(R.id.sign_up_state);
+        s1 = (AppCompatSpinner) findViewById(R.id.sign_up_state);
         zip_code = (EditText) findViewById(R.id.sign_up_zip_code);
         company_name = (EditText) findViewById(R.id.sign_up_company_name);
         update = (Button) findViewById(R.id.sign_up_action_next);
@@ -82,7 +91,7 @@ public class FBUserUpdate extends AppCompatActivity implements DMRResult {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 //NavUtils.navigateUpFromSameTask(this);
                 this.onBackPressed();
@@ -192,11 +201,45 @@ public class FBUserUpdate extends AppCompatActivity implements DMRResult {
 
     @Override
     public void onSuccess(JSONObject jsonObject) {
+        Log.d("RESPONSE",jsonObject.toString());
+        try {
+            if (jsonObject.has(tags.SUCCESS)) {
+                if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                    if (jsonObject.has(tags.USER_INFO)) {
+                        JSONObject object = jsonObject.getJSONObject(tags.USER_INFO);
+                        User user = User.fromJSON(object);
+                        active.setUser(user);
+                        active.setLogin();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                        builder.setMessage("Your Profile Successfully Update");
+                        builder.setTitle("Alert");
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                startActivity(new Intent(FBUserUpdate.this,Main.class));
+                                FBUserUpdate.this.finish();
+                            }
+                        });
+                        builder.create().show();
+                    }
+                } else if (jsonObject.getInt(tags.SUCCESS) == tags.EXISTING_USER) {
+                    email.setError("Email already Exists");
+                    email.requestFocus();
+                } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
+
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(TAG, e.getMessage());
+        }
 
     }
 
     @Override
     public void onError(VolleyError volleyError) {
-
+        volleyError.printStackTrace();
+        Log.e(TAG, volleyError.getMessage());
     }
 }
