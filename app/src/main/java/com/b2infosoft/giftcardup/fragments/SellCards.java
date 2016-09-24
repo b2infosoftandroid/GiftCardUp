@@ -111,7 +111,12 @@ public class SellCards extends Fragment implements DMRResult {
         accept_offer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                replaceFragment(new SpeedySell());
+                SpeedySell frag = new SpeedySell();
+                Bundle bundle = new Bundle();
+                bundle.putString("card",merchant.getText().toString());
+                bundle.putString("bal",value.getText().toString());
+                frag.setArguments(bundle);
+                replaceFragment(frag);
             }
         });
         loadMerchants();

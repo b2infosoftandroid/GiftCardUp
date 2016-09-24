@@ -29,7 +29,7 @@ import java.util.Map;
 
 public class FBUserUpdate extends AppCompatActivity implements DMRResult {
     private final String TAG = FBUserUpdate.class.getName();
-    EditText mobile, password, password_confirm, address, suite_no, city, zip_code, company_name;
+    EditText email,mobile, password, password_confirm, address, suite_no, city, zip_code, company_name;
     Button update;
     Spinner s1;
     Validation validation;
@@ -57,6 +57,7 @@ public class FBUserUpdate extends AppCompatActivity implements DMRResult {
             user_id = getIntent().getExtras().getString(tags.USER_ID);
         }
 
+        email = (EditText) findViewById(R.id.sign_up_email);
         mobile = (EditText) findViewById(R.id.sign_up_mobile_number);
         password = (EditText) findViewById(R.id.sign_up_password);
         password_confirm = (EditText) findViewById(R.id.sign_up_password_confirm);
@@ -98,6 +99,7 @@ public class FBUserUpdate extends AppCompatActivity implements DMRResult {
     }
 
     private void checkBlank() {
+        String mail_id = email.getText().toString();
         String phone = mobile.getText().toString();
         String passwrd = password.getText().toString();
         String passwrd_confrm = password_confirm.getText().toString();
@@ -108,6 +110,7 @@ public class FBUserUpdate extends AppCompatActivity implements DMRResult {
         String company = company_name.getText().toString();
         State state = dbHelper.getStateByName(s1.getSelectedItem().toString());
 
+        email.setError(null);
         mobile.setError(null);
         password.setError(null);
         password_confirm.setError(null);
@@ -117,6 +120,11 @@ public class FBUserUpdate extends AppCompatActivity implements DMRResult {
         TextView selectedTextView = (TextView) s1.getSelectedView();
         selectedTextView.setError(null);
 
+        if (!validation.isEmail(mail_id)) {
+            email.setError("Enter Correct Email Id");
+            email.requestFocus();
+            return;
+        }
         if (!validation.isMobileNumber(phone)) {
             mobile.setError("Enter Correct Mobile Number");
             mobile.requestFocus();
@@ -156,6 +164,7 @@ public class FBUserUpdate extends AppCompatActivity implements DMRResult {
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.FB_PROFILE_UPDATE);
         map.put(tags.USER_ID, user_id);
+        map.put(tags.EMAIL, mail_id);
         map.put(tags.PHONE_NUMBER, phone);
         map.put(tags.PASSWORD, passwrd);
         map.put(tags.ADDRESS, address_1);

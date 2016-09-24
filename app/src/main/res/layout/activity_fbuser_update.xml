@@ -25,6 +25,18 @@
                 android:layout_marginTop="@dimen/input_text_layout_margin_top">
 
                 <EditText
+                    android:id="@+id/sign_up_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/sign_up_email"
+                    android:inputType="textEmailAddress" />
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/input_text_layout_margin_top">
+
+                <EditText
                     android:id="@+id/sign_up_mobile_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

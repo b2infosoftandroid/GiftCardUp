@@ -115,6 +115,8 @@ public class SpeedySell extends Fragment implements TextWatcher, View.OnClickLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         init();
         mView = inflater.inflate(R.layout.fragment_speedy_sell, container, false);
+        Bundle bundle = this.getArguments();
+
         brand_name = (AutoCompleteTextView) mView.findViewById(R.id.brand_name);
         brand_name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -126,12 +128,12 @@ public class SpeedySell extends Fragment implements TextWatcher, View.OnClickLis
                 }
             }
         });
-        cardType = (ImageView) mView.findViewById(R.id.cardType);
+        card_balance = (EditText) mView.findViewById(R.id.card_balance);
         textView = (TextView)mView.findViewById(R.id.e_card_img_text);
+        card_balance.addTextChangedListener(this);
+        cardType = (ImageView) mView.findViewById(R.id.cardType);
         serial_number = (EditText) mView.findViewById(R.id.serial_number);
         card_pin = (EditText) mView.findViewById(R.id.card_pin);
-        card_balance = (EditText) mView.findViewById(R.id.card_balance);
-        card_balance.addTextChangedListener(this);
         selling_percentage = (EditText) mView.findViewById(R.id.selling_percentage);
         selling_percentage.setFilters(new InputFilter[]{new EditTextMaxFloat(selling_percentage, 100f, ERROR_MESSAGE_SELLING_PERCENTAGE)});
         your_earning = (EditText) mView.findViewById(R.id.your_earning);
@@ -140,8 +142,28 @@ public class SpeedySell extends Fragment implements TextWatcher, View.OnClickLis
         cancel.setOnClickListener(this);
         save = (Button) mView.findViewById(R.id.save);
         save.setOnClickListener(this);
+
+        if(bundle != null) {
+            String str1 = bundle.getString("card");
+            if(str1.equalsIgnoreCase("tata")){
+                textView.setText("Physical");
+            }
+            String str2 = bundle.getString("bal");
+            brand_name.setText(str1);
+            card_balance.setText(str2);
+            enableData(true);
+        }
+
         loadMerchants();
         return mView;
+    }
+
+    private void enableData(boolean b){
+        serial_number.setEnabled(b);
+        card_pin.setEnabled(b);
+        card_balance.setEnabled(b);
+        Merchant merchant = hashMap.get(getCompanyID(brand_name.getAdapter() + ""));
+        selling_percentage.setText(format.getStringFloat(merchant.getSellingPercentage()));
     }
 
     private void loadMerchants() {
