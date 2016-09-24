@@ -29,6 +29,8 @@ public class Tags {
     public final int FAIL = 0;
     public final int EXISTING_USER = 3;
     public final int NEW_USER = 4;
+    public final int PASSWORD_NOT_UPDATE = 5;
+
     public final int DEFAULT_LOADING_DATA = 10;
 
     //////////////  USER ACTIONS    //////////////
@@ -72,6 +74,7 @@ public class Tags {
     public final String MY_CONTROL_PANEL = "my_control_panel";
     public final String PROMO_CODE_APPLY = "promo_code_apply";
     public final String FB_LOGIN_USER = "fb_login_user";
+    public final String FB_PROFILE_UPDATE = "fb_profile_update";
 
 
     /*  CART PROCESSING  */

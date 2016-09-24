@@ -7,11 +7,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.HurlStack;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
@@ -29,9 +27,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class FBUserUpdate extends AppCompatActivity implements DMRResult{
+public class FBUserUpdate extends AppCompatActivity implements DMRResult {
     private final String TAG = FBUserUpdate.class.getName();
-    EditText mobile, password, password_confirm,address, suite_no, city, zip_code, company_name;
+    EditText mobile, password, password_confirm, address, suite_no, city, zip_code, company_name;
     Button update;
     Spinner s1;
     Validation validation;
@@ -39,17 +37,25 @@ public class FBUserUpdate extends AppCompatActivity implements DMRResult{
     DMRRequest dmrRequest;
     Urls urls;
     DBHelper dbHelper;
+    String user_id;
+
+    private void init() {
+        validation = Validation.getInstance();
+        tags = Tags.getInstance();
+        dmrRequest = DMRRequest.getInstance(this, TAG);
+        urls = Urls.getInstance();
+        dbHelper = new DBHelper(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fbuser_update);
+        init();
 
-        validation = Validation.getInstance();
-        tags = Tags.getInstance();
-        dmrRequest = DMRRequest.getInstance(this,TAG);
-        urls = Urls.getInstance();
-        dbHelper = new DBHelper(getApplicationContext());
+        if (getIntent().hasExtra(tags.USER_ID)) {
+            user_id = getIntent().getExtras().getString(tags.USER_ID);
+        }
 
         mobile = (EditText) findViewById(R.id.sign_up_mobile_number);
         password = (EditText) findViewById(R.id.sign_up_password);
@@ -67,10 +73,10 @@ public class FBUserUpdate extends AppCompatActivity implements DMRResult{
                 checkBlank();
             }
         });
-        setState(s1.getSelectedItem().toString());
+        setState();
     }
 
-    private void setState(String abbreviation){
+    private void setState() {
         List<String> states = new ArrayList<>();
         states.add("SELECT STATE");
         for (String state : dbHelper.getStateMap().keySet()) {
@@ -78,18 +84,20 @@ public class FBUserUpdate extends AppCompatActivity implements DMRResult{
         }
         ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, states);
         s1.setAdapter(adapter);
+        /*
         State state = dbHelper.getStateByAbbreviation(abbreviation);
         SpinnerAdapter arrayAdapter = s1.getAdapter();
-        for(int i = 0;i<arrayAdapter.getCount();i++) {
+        for (int i = 0; i < arrayAdapter.getCount(); i++) {
             String item = arrayAdapter.getItem(i).toString();
-            if(item.equalsIgnoreCase(state.getName())){
+            if (item.equalsIgnoreCase(state.getName())) {
                 s1.setSelection(i);
                 break;
             }
         }
+        */
     }
 
-    private void checkBlank(){
+    private void checkBlank() {
         String phone = mobile.getText().toString();
         String passwrd = password.getText().toString();
         String passwrd_confrm = password_confirm.getText().toString();
@@ -146,16 +154,16 @@ public class FBUserUpdate extends AppCompatActivity implements DMRResult{
         }
 
         Map<String, String> map = new HashMap<>();
-        map.put(tags.USER_ACTION, tags.USER_SIGNUP);
-        map.put(tags.USER_ID, "1");
-        map.put(tags.PHONE_NUMBER,phone);
-        map.put(tags.PASSWORD,passwrd);
+        map.put(tags.USER_ACTION, tags.FB_PROFILE_UPDATE);
+        map.put(tags.USER_ID, user_id);
+        map.put(tags.PHONE_NUMBER, phone);
+        map.put(tags.PASSWORD, passwrd);
         map.put(tags.ADDRESS, address_1);
-        map.put(tags.SUITE_NUMBER,suite);
+        map.put(tags.SUITE_NUMBER, suite);
         map.put(tags.CITY, city_name);
         map.put(tags.STATE, state.getAbbreviation());
         map.put(tags.ZIP_CODE, zip);
-        map.put(tags.COMPANY_NAME,company);
+        map.put(tags.COMPANY_NAME, company);
         dmrRequest.doPost(urls.getUserInfo(), map, this);
     }
 

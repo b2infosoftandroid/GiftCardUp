@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
@@ -108,13 +107,12 @@ public class Login extends AppCompatActivity implements DMRResult {
                     public void onCompleted(JSONObject object, GraphResponse response) {
                         try {
                             if (object.has("email")) {
-                                Profile profile = Profile.getCurrentProfile();
                                 Map<String, String> map = new HashMap<>();
                                 map.put(tags.USER_ACTION, tags.FB_LOGIN_USER);
                                 map.put(tags.EMAIL, object.getString("email"));
-                                map.put(tags.FB_ID, profile.getId());
-                                map.put(tags.FIRST_NAME, profile.getFirstName());
-                                map.put(tags.LAST_NAME, profile.getLastName());
+                                map.put(tags.FB_ID, object.getString("id"));
+                                map.put(tags.FIRST_NAME, object.getString("first_name"));
+                                map.put(tags.LAST_NAME, object.getString("last_name"));
                                 integrateWithFB(map);
                             }
                         } catch (JSONException e) {
@@ -124,7 +122,7 @@ public class Login extends AppCompatActivity implements DMRResult {
                     }
                 });
                 Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,name,email,gender,birthday");
+                parameters.putString("fields", "id,name,email,gender,birthday,first_name,last_name");
                 graphRequest.setParameters(parameters);
                 graphRequest.executeAsync();
             }
@@ -144,14 +142,7 @@ public class Login extends AppCompatActivity implements DMRResult {
             @Override
             public void onClick(View v) {
                 if (isLoggedIn()) {
-                    Log.d("PROFILE", "LOG IN");
                     Profile profile = Profile.getCurrentProfile();
-                    Log.d("PROFILE NAME", profile.getFirstName() + " " + profile.getLastName());
-                    Log.d("PROFILE ID", profile.getId());
-
-                    Gson gson = new Gson();
-                    Log.d("PROFILE", gson.toJson(profile));
-
                 } else {
                     Log.d("PROFILE", "LOG OUT");
                 }
@@ -161,8 +152,6 @@ public class Login extends AppCompatActivity implements DMRResult {
 
     public boolean isLoggedIn() {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        Gson gson = new Gson();
-        Log.d("PROFILE TOKENS", gson.toJson(accessToken));
         return accessToken != null;
     }
 
@@ -214,7 +203,14 @@ public class Login extends AppCompatActivity implements DMRResult {
                                         loginSuccess();
                                     }
                                 } else if (jsonObject.getInt(tags.USER_TYPE) == tags.NEW_USER) {
-                                    
+                                    Log.d("WORK","IN");
+                                    if (jsonObject.has(tags.USER_ID)) {
+                                        Log.d("WORK","IN 1");
+                                        Intent intent = new Intent(Login.this, FBUserUpdate.class);
+                                        intent.putExtra(tags.USER_ID, jsonObject.getString(tags.USER_ID));
+                                        startActivity(intent);
+                                        finish();
+                                    }
                                 }
                             }
                         }
@@ -232,7 +228,6 @@ public class Login extends AppCompatActivity implements DMRResult {
             }
         });
     }
-
 
     @Override
     public void onSuccess(JSONObject jsonObject) {

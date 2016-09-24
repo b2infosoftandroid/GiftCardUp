@@ -1,6 +1,5 @@
 package com.b2infosoft.giftcardup.activity;
 
-
 import android.content.Intent;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
@@ -38,7 +37,6 @@ import com.b2infosoft.giftcardup.fragments.ReferralRewards;
 import com.b2infosoft.giftcardup.fragments.SellCards;
 import com.b2infosoft.giftcardup.fragments.ShippingCenter;
 import com.b2infosoft.giftcardup.fragments.SpeedySell;
-import com.b2infosoft.giftcardup.fragments.TinderWork;
 import com.b2infosoft.giftcardup.fragments.WithdrawalHistory;
 import com.b2infosoft.giftcardup.model.CompanyCategory;
 import com.b2infosoft.giftcardup.model.GiftCard;
@@ -51,16 +49,10 @@ import com.b2infosoft.giftcardup.volly.DMRResult;
 import com.b2infosoft.giftcardup.volly.LruBitmapCache;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.Profile;
 import com.facebook.appevents.AppEventsLogger;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
-import com.google.gson.Gson;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import org.json.JSONArray;
@@ -121,8 +113,6 @@ public class Main extends GiftCardUp {
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
-        //View view1 = getLayoutInflater().inflate(R.layout.fragment_dashboard,null);
-        //toolbar.addView(view1);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -135,12 +125,7 @@ public class Main extends GiftCardUp {
         navigationViewLeft.setNavigationItemSelectedListener(new MenuSelect());
 
         headerView = LayoutInflater.from(this).inflate(R.layout.nav_header_main, navigationViewRight, false);
-        headerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Main.this, MyProfile.class));
-            }
-        });
+
 
         isLoginLayout = headerView.findViewById(R.id.layout_user_is_login);
         isLogoutLayout = headerView.findViewById(R.id.layout_user_is_log_out);
@@ -149,32 +134,58 @@ public class Main extends GiftCardUp {
         user_total_sold = (TextView) headerView.findViewById(R.id.user_total_sold);
         user_total_saving = (TextView) headerView.findViewById(R.id.user_total_saving);
         user_profile_icon.setOnClickListener(this);
+
+        isLoginLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Main.this, MyProfile.class));
+            }
+        });
         setNavigationMenu();
         updateMenuItemLeft(dbHelper.getCategories());
         replaceFragment(new Dashboard());
         if (active.getUser() != null)
             loadAvailableCartItems();
-        if (isLoggedIn()) {
-            showMessage("LOGIN ALREADY");
-            Profile profile = Profile.getCurrentProfile();
-            final Gson gson = new Gson();
-            Log.d("PROFILE", gson.toJson(profile));
+        checkFBLogin();
+    }
 
-            GraphRequest graphRequest = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
-                @Override
-                public void onCompleted(JSONObject object, GraphResponse response) {
-                    Log.d("DATA JSON", object.toString());
-                    Log.d("DATA GRAPH RESPONSE", response.toString());
-                    Log.d("RESPONSE", gson.toJson(response));
-                }
-            });
-
-            Bundle parameters = new Bundle();
-            parameters.putString("fields", "id,name,email,gender,birthday");
-            graphRequest.setParameters(parameters);
-            graphRequest.executeAsync();
-
-
+    private void checkFBLogin() {
+        if (!active.isLogin()) {
+            showMessage("Log Out");
+            if (isLoggedIn()) {
+                showMessage("FB LOGIN");
+                GraphRequest graphRequest = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        if (response.getError() == null) {
+                            if (object != null) {
+                                try {
+                                    showMessage("Data FOUND");
+                                    Log.d("OBJECT",object.toString());
+                                    if (object.has("id")) {
+                                        Map<String, String> map = new HashMap<>();
+                                        map.put(tags.USER_ACTION, tags.FB_LOGIN_USER);
+                                        map.put(tags.FB_ID, object.getString("id"));
+                                        map.put(tags.FIRST_NAME, object.getString("first_name"));
+                                        map.put(tags.LAST_NAME, object.getString("last_name"));
+                                        integrateWithFB(map);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                showMessage("Data Not Found");
+                            }
+                        } else {
+                            Log.d("ERROR_RES", "NOT NULL");
+                        }
+                    }
+                });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email,gender,birthday,first_name,last_name");
+                graphRequest.setParameters(parameters);
+                graphRequest.executeAsync();
+            }
         }
     }
 
@@ -202,12 +213,54 @@ public class Main extends GiftCardUp {
     protected void onStart() {
         super.onStart();
         checkBackgroundServices();
+        setNavigationMenu();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         checkBackgroundServices();
+    }
+    private void integrateWithFB(Map<String, String> map) {
+        dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
+            @Override
+            public void onSuccess(JSONObject jsonObject) {
+                showMessage("FB CHECK");
+                try {
+                    if (jsonObject.has(tags.SUCCESS)) {
+                        if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                            if (jsonObject.has(tags.USER_TYPE)) {
+                                if (jsonObject.getInt(tags.USER_TYPE) == tags.EXISTING_USER) {
+                                    if (jsonObject.has(tags.USER_INFO)) {
+                                        JSONObject object = jsonObject.getJSONObject(tags.USER_INFO);
+                                        User user = User.fromJSON(object);
+                                        active.setUser(user);
+                                        active.setLogin();
+                                        setNavigationMenu();
+                                    }
+                                } else if (jsonObject.getInt(tags.USER_TYPE) == tags.NEW_USER || jsonObject.getInt(tags.USER_TYPE) == tags.PASSWORD_NOT_UPDATE) {
+                                    if (jsonObject.has(tags.USER_ID)) {
+                                        Intent intent = new Intent(Main.this, FBUserUpdate.class);
+                                        intent.putExtra(tags.USER_ID, jsonObject.getString(tags.USER_ID));
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, e.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(VolleyError volleyError) {
+                volleyError.printStackTrace();
+                Log.e(TAG, volleyError.getMessage());
+            }
+        });
     }
 
     private void loadAvailableCartItems() {
@@ -253,7 +306,7 @@ public class Main extends GiftCardUp {
             loadAvailableCartItems();
         invalidateOptionsMenu();
         checkBackgroundServices();
-
+        setNavigationMenu();
     }
 
     @Override
@@ -263,7 +316,8 @@ public class Main extends GiftCardUp {
             loadAvailableCartItems();
         invalidateOptionsMenu();
         checkBackgroundServices();
-
+        setNavigationMenu();
+        checkFBLogin();
     }
 
     @Override
