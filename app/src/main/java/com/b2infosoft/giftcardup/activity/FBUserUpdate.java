@@ -51,6 +51,7 @@ public class FBUserUpdate extends AppCompatActivity implements DMRResult {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fbuser_update);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         init();
 
         if (getIntent().hasExtra(tags.USER_ID)) {
