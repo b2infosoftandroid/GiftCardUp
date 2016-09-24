@@ -162,8 +162,7 @@ public class SpeedySell extends Fragment implements TextWatcher, View.OnClickLis
         serial_number.setEnabled(b);
         card_pin.setEnabled(b);
         card_balance.setEnabled(b);
-        Merchant merchant = hashMap.get(getCompanyID(brand_name.getAdapter() + ""));
-        selling_percentage.setText(format.getStringFloat(merchant.getSellingPercentage()));
+        refreshMerchant();
     }
 
     private void loadMerchants() {
