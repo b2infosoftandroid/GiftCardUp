@@ -1,7 +1,9 @@
 package com.b2infosoft.giftcardup.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -76,6 +78,17 @@ public class FBUserUpdate extends AppCompatActivity implements DMRResult {
             }
         });
         setState();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                //NavUtils.navigateUpFromSameTask(this);
+                this.onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void setState() {
