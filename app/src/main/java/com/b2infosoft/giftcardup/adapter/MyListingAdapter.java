@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -95,7 +96,8 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         TextView listedOn;
         TextView soldOn;
         TextView fund;
-        CardView card1,card2;
+        LinearLayout card2;
+        CardView card1;
         ImageView quickSell;
         TextView status;
         ImageView action_edit, action_delete, action_deny, action_need_review, action_investigate;
@@ -104,7 +106,7 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public CardHolder(View view) {
             super(view);
             card1 = (CardView)view.findViewById(R.id.card_view1);
-            card2 = (CardView)view.findViewById(R.id.card_view2);
+            card2 = (LinearLayout) view.findViewById(R.id.card_view2);
             cardImage = (ImageView) view.findViewById(R.id.my_listing_card_image);
             giftCard = (TextView) view.findViewById(R.id.company_card_gift_card);
             cardType = (ImageView) view.findViewById(R.id.company_card_e_card);
@@ -189,7 +191,7 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             cardHolder.cardSell.setText(card.getStatusType() == 2 ? card.getSellingPercentage() : card.getSell() + "%");
             cardHolder.listedOn.setText(card.getApproveDate().equalsIgnoreCase("00-00-0000") ? "" : card.getApproveDate());
             cardHolder.soldOn.setText(card.getSoldOn().equalsIgnoreCase("00-00-0000") ? "" : card.getSoldOn());
-            cardHolder.fund.setText(card.getYourEarning());
+            cardHolder.fund.setText("$" + card.getYourEarning());
             cardHolder.status.setText(card.getApproveStatusName(card.getApproveStatus()));
 
             cardHolder.status.setBackgroundColor(card.getApproveStatusColor(context,card.getApproveStatus()));
