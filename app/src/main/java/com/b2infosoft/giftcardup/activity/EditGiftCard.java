@@ -160,6 +160,7 @@ public class EditGiftCard extends AppCompatActivity implements TextWatcher, View
         switch (v.getId()) {
             case R.id.cancel:
                 super.onBackPressed();
+                finish();
                 break;
             case R.id.save:
                 updateGiftCard();
