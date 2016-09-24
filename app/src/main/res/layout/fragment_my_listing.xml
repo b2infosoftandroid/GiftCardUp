@@ -52,7 +52,7 @@
         android:paddingTop="@dimen/activity_horizontal_margin"
         android:paddingLeft="2dp"
         android:paddingRight="2dp"
-        android:paddingBottom="@dimen/activity_horizontal_margin"
+        android:paddingBottom="10dp"
         >
     </android.support.v7.widget.RecyclerView>
 </LinearLayout>

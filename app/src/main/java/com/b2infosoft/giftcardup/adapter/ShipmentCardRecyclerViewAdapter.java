@@ -177,6 +177,7 @@ public class ShipmentCardRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
             //cardHolder.cardSell.setText(String.valueOf(card.getPercentageOff()) + "%");
             cardHolder.soldOn.setText(card.getSoldOn().equalsIgnoreCase("00-00-0000") ? "" : card.getSoldOn());
             cardHolder.status.setText(card.getApproveStatusName(card.getApproveStatus()));
+            cardHolder.status.setTextColor(card.getApproveStatusColor(context,card.getApproveStatus()));
             cardHolder.cardOwner.setText(card.getCardOwner());
             cardHolder.cardSerialNo.setText(card.getSerialNumber());
             cardHolder.cardPin.setText(card.getCardPin());
