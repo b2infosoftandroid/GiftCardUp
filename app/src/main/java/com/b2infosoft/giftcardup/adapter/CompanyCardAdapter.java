@@ -25,6 +25,7 @@ import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.activity.CompanyCard;
 import com.b2infosoft.giftcardup.activity.Login;
 import com.b2infosoft.giftcardup.activity.Main;
+import com.b2infosoft.giftcardup.activity.ShoppingCart;
 import com.b2infosoft.giftcardup.app.Cart;
 import com.b2infosoft.giftcardup.app.Config;
 import com.b2infosoft.giftcardup.app.Format;
@@ -216,7 +217,7 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                                 GiftCard giftCard1 = GiftCard.fromJSON(array.getJSONObject(i));
                                                 cart.addCartItem(giftCard);
                                             }
-                                            showMessage("Successfully Add to Cart");
+                                            showMessage("Successfully Added to Cart");
                                             cardHolder.add_to_cart.setText("Remove to cart");
                                             ((CompanyCard) context).invalidateOptionsMenu();
                                             MyServices.startLeftCartTimeService(context);
@@ -278,6 +279,54 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         });
                     }
                 }
+            });
+            cardHolder.card_buy_now.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final Cart cart = (Cart) context.getApplicationContext();
+                    if(!active.isLogin()){
+                        context.startActivity(new Intent(context, Login.class));
+                        return;
+                    }
+                        final Map<String, String> map = new HashMap<>();
+                        map.put(tags.USER_ACTION, tags.ADD_CART_ITEM_GIFT_CARD);
+                        map.put(tags.USER_ID, active.getUser().getUserId());
+                        map.put(tags.GIFT_CARD_GIFT_CARD_ID, giftCard.getGiftCardID() + "");
+                        dmrRequest.doPost(urls.getCartInfo(), map, new DMRResult() {
+                            @Override
+                            public void onSuccess(JSONObject jsonObject) {
+                                try {
+                                    if (jsonObject.has(tags.SUCCESS)) {
+                                        if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                                            JSONArray array = jsonObject.getJSONArray(tags.GIFT_CARDS);
+                                            cart.removeAll();
+                                            for (int i = 0; i < array.length(); i++) {
+                                                GiftCard giftCard1 = GiftCard.fromJSON(array.getJSONObject(i));
+                                                cart.addCartItem(giftCard);
+                                            }
+                                            showMessage("Successfully Added to Cart");
+                                            ((CompanyCard) context).invalidateOptionsMenu();
+                                            MyServices.startLeftCartTimeService(context);
+                                            context.startActivity(new Intent(context, ShoppingCart.class));
+                                        } else if (jsonObject.getInt(tags.SUCCESS) == tags.SUSPEND) {
+                                            showMessage("You have to attempt more three times. So you can add item in cart after three hours.");
+                                        } else {
+
+                                        }
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                    Log.e(TAG, e.getMessage());
+                                }
+                            }
+
+                            @Override
+                            public void onError(VolleyError volleyError) {
+                                volleyError.printStackTrace();
+                                Log.e(TAG, volleyError.getMessage());
+                            }
+                        });
+                    }
             });
             //count++;
             final String url = config.getGiftCardImageAddress().concat(companyBrand.getImage());
