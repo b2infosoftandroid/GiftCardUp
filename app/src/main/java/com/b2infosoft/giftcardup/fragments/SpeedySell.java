@@ -146,11 +146,13 @@ public class SpeedySell extends Fragment implements TextWatcher, View.OnClickLis
         if(bundle != null) {
             String str1 = bundle.getString("card");
             if(str1.equalsIgnoreCase("tata")){
-                textView.setText("Physical");
+                //textView.setText("Physical");
             }
             String str2 = bundle.getString("bal");
+            String str3 = bundle.getString("sellPercent");
             brand_name.setText(str1);
             card_balance.setText(str2);
+            selling_percentage.setText(str3);
             enableData(true);
         }
 

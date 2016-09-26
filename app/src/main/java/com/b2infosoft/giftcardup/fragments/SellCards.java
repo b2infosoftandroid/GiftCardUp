@@ -111,10 +111,12 @@ public class SellCards extends Fragment implements DMRResult {
         accept_offer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Merchant info = new Merchant();
                 SpeedySell frag = new SpeedySell();
                 Bundle bundle = new Bundle();
                 bundle.putString("card",merchant.getText().toString());
                 bundle.putString("bal",value.getText().toString());
+                bundle.putString("sellPercent",info.getSellingPercentage());
                 frag.setArguments(bundle);
                 replaceFragment(frag);
             }
@@ -129,7 +131,7 @@ public class SellCards extends Fragment implements DMRResult {
         dmrRequest.doPost(urls.getAppAction(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
-                // Log.d(TAG,jsonObject.toString());
+                 Log.d("merchant",jsonObject.toString());
                 try {
                     if (jsonObject.has(tags.SUCCESS)) {
                         if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {

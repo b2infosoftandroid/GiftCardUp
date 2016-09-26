@@ -456,10 +456,6 @@ public class Main extends GiftCardUp {
                     setTitle("Referral Rewards");
                     break;
                 case R.id.menu_item_my_account:
-                    /*
-                        replaceFragment(new Profile());
-                        setTitle("PROFILE");
-                    */
                     startActivity(new Intent(Main.this, MyProfile.class));
                     break;
                 case R.id.menu_item_my_orders:

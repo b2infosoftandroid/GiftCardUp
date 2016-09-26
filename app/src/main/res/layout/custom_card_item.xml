@@ -16,7 +16,7 @@
             android:id="@+id/card_item_imgae"
             android:layout_width="120dp"
             android:layout_height="80dp"
-            android:src="@drawable/popup" />
+            android:src="@drawable/not_find" />
 
         <LinearLayout
             android:layout_width="match_parent"
