@@ -1,5 +1,7 @@
 package com.b2infosoft.giftcardup.activity;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatSpinner;
@@ -45,7 +47,7 @@ public class ChangeAddress extends AppCompatActivity{
     DBHelper dbHelper;
     Active active;
     Progress progress;
-    AlertBox alertBox;
+    AlertDialog.Builder builder;
     DMRRequest dmrRequest;
 
     private void init(){
@@ -54,7 +56,7 @@ public class ChangeAddress extends AppCompatActivity{
         dbHelper = new DBHelper(getApplicationContext());
         active = Active.getInstance(getApplicationContext());
         progress = new Progress(this);
-        alertBox = new AlertBox(this);
+        builder = new AlertDialog.Builder(this);
         dmrRequest = DMRRequest.getInstance(getApplicationContext(),TAG);
     }
 
@@ -189,14 +191,28 @@ public class ChangeAddress extends AppCompatActivity{
                 try {
                     if (jsonObject.has(tags.SUCCESS)) {
                         if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
-                            alertBox.setTitle("Alert");
-                            alertBox.setMessage("Address is Successfully Updated");
-                            alertBox.show();
+
+                            builder.setTitle("Alert");
+                            builder.setMessage("Address is Successfully Updated");
+                            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    onBackPressed();
+                                    finish();
+                                }
+                            });
+                            builder.create().show();
 
                         }else if(jsonObject.getInt(tags.SUCCESS) == tags.FAIL){
-                            alertBox.setTitle("Alert");
-                            alertBox.setMessage("Try Again");
-                            alertBox.show();
+                            builder.setTitle("Alert");
+                            builder.setMessage("Try Again");
+                            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            });
+                            builder.create().show();
                         }
                     }
                 }catch (JSONException e){

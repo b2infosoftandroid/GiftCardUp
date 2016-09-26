@@ -20,6 +20,7 @@ import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
+import com.b2infosoft.giftcardup.custom.AlertBox;
 import com.b2infosoft.giftcardup.database.DBHelper;
 import com.b2infosoft.giftcardup.model.ContactInformation;
 import com.b2infosoft.giftcardup.model.State;
@@ -155,7 +156,31 @@ public class Identification extends Fragment implements CanScrollVerticallyDeleg
         map.put(tags.EMPLOYEE_ID,user.getEmployeeId() + "");
         map.put(tags.USER_ID,user.getUserId() + "");
         map.put(tags.STATE,state.getAbbreviation());
-        dmrRequest.doPost(urls.getUserInfo(),map,this);
+        dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
+            @Override
+            public void onSuccess(JSONObject jsonObject) {
+                try {
+                    if (jsonObject.has(tags.SUCCESS)) {
+                        if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                            AlertBox box = new AlertBox(getContext());
+                            box.setMessage("Successfully Updated");
+                            box.show();
+                            enableProfile(false);
+
+                        }else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
+
+                        }
+                    }
+                }catch (JSONException e){
+
+                }
+            }
+
+            @Override
+            public void onError(VolleyError volleyError) {
+
+            }
+        });
     }
 
     private void fetchContactInfo() {

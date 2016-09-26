@@ -144,7 +144,15 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             info.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    linearLayout.setVisibility(linearLayout.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                    count = count + 1;
+                    if(count % 2 != 0) {
+                        info.setText("- INFO");
+                        linearLayout.setVisibility(View.VISIBLE);
+                    }else {
+                        info.setText("+ INFO");
+                        linearLayout.setVisibility(View.GONE);
+                    }
+                    //linearLayout.setVisibility(linearLayout.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 }
             });
         }
