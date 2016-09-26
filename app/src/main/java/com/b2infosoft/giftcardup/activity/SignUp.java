@@ -1,6 +1,8 @@
 package com.b2infosoft.giftcardup.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +22,7 @@ import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.app.Validation;
 import com.b2infosoft.giftcardup.custom.AlertBox;
+import com.b2infosoft.giftcardup.database.DBHelper;
 import com.b2infosoft.giftcardup.model.State;
 import com.b2infosoft.giftcardup.model.User;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
@@ -47,8 +50,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
     DMRRequest dmrRequest;
     Urls urls;
     Validation validation;
-    List<State> statesList;
-    Map<String, String> stateMap = new HashMap<>();
+    DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
 
         tags = Tags.getInstance();
         urls = Urls.getInstance();
+        dbHelper = new DBHelper(this);
         dmrRequest = DMRRequest.getInstance(this, TAG);
         f_name = (EditText) findViewById(R.id.sign_up_name_first);
         l_name = (EditText) findViewById(R.id.sign_up_name_last);
@@ -82,9 +85,18 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
         back.setOnClickListener(this);
         create_acct.setOnClickListener(this);
 
-        Map<String, String> map = new HashMap<>();
-        map.put(tags.USER_ACTION, tags.STATES_ALL);
-        dmrRequest.doPost(urls.getAppAction(), map, this);
+        setState();
+
+    }
+
+    private void setState() {
+        List<String> states = new ArrayList<>();
+        states.add("SELECT STATE");
+        for (String state : dbHelper.getStateMap().keySet()) {
+            states.add(state.toUpperCase(Locale.getDefault()));
+        }
+        ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, states);
+        s1.setAdapter(adapter);
 
     }
 
@@ -165,7 +177,6 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
         }
         layout2.setVisibility(View.VISIBLE);
         layout1.setVisibility(View.GONE);
-
     }
 
     private void checkSignUp() {
@@ -180,8 +191,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
         String zip = zip_code.getText().toString();
         String suite = suite_no.getText().toString();
         String company = company_name.getText().toString();
-
-        String stat = s1.getSelectedItem().toString();
+        State state = dbHelper.getStateByName(s1.getSelectedItem().toString());
 
         address.setError(null);
         city.setError(null);
@@ -215,14 +225,22 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
         map.put(tags.FIRST_NAME, first_name);
         map.put(tags.LAST_NAME, last_name);
         map.put(tags.EMAIL, mail_id);
-        map.put(tags.PHONE_NUMBER,phone);
-        map.put(tags.PASSWORD,passwrd);
+        map.put(tags.PHONE_NUMBER, phone);
+        map.put(tags.PASSWORD, passwrd);
         map.put(tags.ADDRESS, address_1);
-        map.put(tags.SUITE_NUMBER,suite);
+        if (suite == null) {
+            map.put(tags.SUITE_NUMBER, "");
+        } else {
+            map.put(tags.SUITE_NUMBER, suite);
+        }
         map.put(tags.CITY, city_name);
-        map.put(tags.STATE, stateMap.get(stat));
+        map.put(tags.STATE, state.getAbbreviation());
         map.put(tags.ZIP_CODE, zip);
-        map.put(tags.COMPANY_NAME,company);
+        if (company == null) {
+            map.put(tags.COMPANY_NAME, "");
+        } else {
+            map.put(tags.COMPANY_NAME, company);
+        }
         dmrRequest.doPost(urls.getUserInfo(), map, this);
     }
 
@@ -232,27 +250,20 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
 
     @Override
     public void onSuccess(JSONObject jsonObject) {
-        Log.d("success", jsonObject.toString());
+        Log.d("checkuser", jsonObject.toString());
         try {
             if (jsonObject.has(tags.SUCCESS)) {
                 if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
-                    if (jsonObject.has(tags.USER_SIGNUP)) {
-                        User user = User.fromJSON(jsonObject.getJSONObject(tags.USER_SIGNUP));
-                        Toast.makeText(this, "success", Toast.LENGTH_SHORT).show();
-                        signUpSuccess();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setMessage("Successfully Registered");
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            signUpSuccess();
+                        }
+                    });
+                    builder.create().show();
 
-                    }
-                    if (jsonObject.has(tags.STATES_ALL)) {
-                        if (stateMap.size() > 0) {
-                            stateMap.clear();
-                        }
-                        JSONArray jsonArray = jsonObject.getJSONArray(tags.STATES_ALL);
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            State stateAll = State.fromJSON(jsonArray.getJSONObject(i));
-                            stateMap.put(stateAll.getName(), stateAll.getAbbreviation());
-                        }
-                        refreshStates();
-                    }
                 } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
 
                 } else if (jsonObject.getInt(tags.SUCCESS) == tags.EXISTING_USER) {
@@ -274,16 +285,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
     public void onError(VolleyError volleyError) {
         volleyError.printStackTrace();
         Log.d(TAG, volleyError.getMessage());
+        Log.d("failed", "success");
     }
 
-    private void refreshStates() {
-        List<String> states = new ArrayList<>();
-        states.add("SELECT STATE");
-        for (String state : stateMap.keySet()) {
-            states.add(state.toUpperCase(Locale.getDefault()));
-        }
-        ArrayAdapter adapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, states);
-        s1.setAdapter(adapter);
-    }
 
 }
