@@ -4,7 +4,7 @@ package com.b2infosoft.giftcardup.app;
  * Created by rajesh on 7/24/2016.
  */
 public class Config {
-    private final String SERVER_IP = "192.168.0.59";
+    private final String SERVER_IP = "192.168.0.52";
     public final String GIFT_CARD_IMAGE_FOLDER ="images/upload/";
     public final String USER_PROFILE_IMAGE_FOLDER ="img/avatar/";
     private final String REFERRAL_ADDRESS = "http://giftcardup.com/signup.php?ref=";
