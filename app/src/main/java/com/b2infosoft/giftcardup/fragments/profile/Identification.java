@@ -121,7 +121,7 @@ public class Identification extends Fragment implements CanScrollVerticallyDeleg
                 }
                 if(paypal_id.length() == 0){
                     paypal_id.setError("PLEASE ENTER ID");
-                    paypal_id.setFocusable(true);
+                    paypal_id.requestFocus();
                     return;
                 }
 
