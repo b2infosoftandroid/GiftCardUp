@@ -53,6 +53,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import org.json.JSONArray;
@@ -149,21 +150,20 @@ public class Main extends GiftCardUp {
         checkFBLogin();
     }
 
-    boolean checkedFB = true;
+    boolean checkedFB = false;
 
     private void checkFBLogin() {
         if (!active.isLogin()) {
-            showMessage("Log Out");
             if (isLoggedIn()) {
-                showMessage("FB LOGIN");
+                if (checkedFB)
+                    return;
+                checkedFB = true;
                 GraphRequest graphRequest = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
                         if (response.getError() == null) {
                             if (object != null) {
                                 try {
-                                    showMessage("Data FOUND");
-                                    Log.d("OBJECT", object.toString());
                                     if (object.has("id")) {
                                         Map<String, String> map = new HashMap<>();
                                         map.put(tags.USER_ACTION, tags.FB_LOGIN_USER);
@@ -171,14 +171,10 @@ public class Main extends GiftCardUp {
                                         map.put(tags.FIRST_NAME, object.getString("first_name"));
                                         map.put(tags.LAST_NAME, object.getString("last_name"));
                                         integrateWithFB(map);
-                                    } else {
-                                        showMessage("ID NOT FOUND");
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-                            } else {
-                                showMessage("Data Not Found");
                             }
                         } else {
                             Log.d("ERROR_RES", "NOT NULL");
@@ -227,16 +223,10 @@ public class Main extends GiftCardUp {
     }
 
     private void integrateWithFB(Map<String, String> map) {
-        if(checkedFB){
-           return;
-        }
-        checkedFB = false;
         dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
-                showMessage("FB CHECK");
-                Log.d("RES", jsonObject.toString());
-                checkedFB = true;
+                checkedFB = false;
                 try {
                     if (jsonObject.has(tags.SUCCESS)) {
                         if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
@@ -254,7 +244,6 @@ public class Main extends GiftCardUp {
                                         Intent intent = new Intent(Main.this, FBUserUpdate.class);
                                         intent.putExtra(tags.USER_ID, jsonObject.getString(tags.USER_ID));
                                         startActivity(intent);
-                                        finish();
                                     }
                                 }
                             }
@@ -268,7 +257,7 @@ public class Main extends GiftCardUp {
 
             @Override
             public void onError(VolleyError volleyError) {
-                checkedFB = true;
+                checkedFB = false;
                 volleyError.printStackTrace();
                 Log.e(TAG, volleyError.getMessage());
             }
@@ -319,6 +308,7 @@ public class Main extends GiftCardUp {
         invalidateOptionsMenu();
         checkBackgroundServices();
         setNavigationMenu();
+        checkFBLogin();
     }
 
     @Override
@@ -480,6 +470,7 @@ public class Main extends GiftCardUp {
                     break;
                 case R.id.menu_item_logout:
                     active.setLogOut();
+                    LoginManager.getInstance().logOut();
                     setNavigationMenu();
                     replaceFragment(new Dashboard());
                     break;
@@ -519,7 +510,7 @@ public class Main extends GiftCardUp {
             user_profile_name.setText(user.getFirstName() + " " + user.getLastName());
             user_total_saving.setText("$" + user.getTotalSave());
             user_total_sold.setText("$" + user.getTotalSold());
-            LruBitmapCache.loadCacheImage(this, user_profile_icon, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
+            LruBitmapCache.loadCacheImageProfile(this, user_profile_icon, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
             setMenuItems(user.getUserType());
         } else {
             setMenuItems(0);
