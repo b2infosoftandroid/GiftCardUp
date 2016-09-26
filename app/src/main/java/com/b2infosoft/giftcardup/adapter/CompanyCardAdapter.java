@@ -226,7 +226,7 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                                 cart.addCartItem(giftCard);
                                             }
                                             showMessage("Successfully Added to Cart");
-                                            cardHolder.add_to_cart.setText("Remove to cart");
+                                            cardHolder.add_to_cart.setText("Remove from cart");
                                             ((CompanyCard) context).invalidateOptionsMenu();
                                             MyServices.startLeftCartTimeService(context);
                                         } else if (jsonObject.getInt(tags.SUCCESS) == tags.SUSPEND) {
