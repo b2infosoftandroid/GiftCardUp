@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -50,6 +51,7 @@ public class MyListing extends Fragment implements View.OnClickListener {
     private Progress progress;
     View mView;
     RecyclerView recyclerView;
+    FrameLayout frameLayout;
     MyListingAdapter adapter;
     List<Object> cardList;
     boolean isLoading = false;
@@ -78,6 +80,7 @@ public class MyListing extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         init();
         mView = inflater.inflate(R.layout.fragment_my_listing, container, false);
+        frameLayout = (FrameLayout)mView.findViewById(R.id.frame);
         recyclerView = (RecyclerView) mView.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new MyListingAdapter(getContext(), cardList, recyclerView);
@@ -142,7 +145,7 @@ public class MyListing extends Fragment implements View.OnClickListener {
         dmrRequest.doPost(urls.getGiftCardInfo(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
-                //Log.d(TAG, jsonObject.toString());
+                Log.d("history", jsonObject.toString());
                 try {
                     if (jsonObject.has(tags.SUCCESS)) {
                         if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
@@ -156,7 +159,7 @@ public class MyListing extends Fragment implements View.OnClickListener {
                                 setDataInRecycleView(cards);
                             }
                         } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
-
+                            frameLayout.setVisibility(View.VISIBLE);
                         } else {
 
                         }

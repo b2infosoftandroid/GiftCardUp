@@ -144,7 +144,15 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             info.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    linearLayout.setVisibility(linearLayout.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                    count = count + 1;
+                    if(count % 2 != 0) {
+                        info.setText("- INFO");
+                        linearLayout.setVisibility(View.VISIBLE);
+                    }else {
+                        info.setText("+ INFO");
+                        linearLayout.setVisibility(View.GONE);
+                    }
+                    //linearLayout.setVisibility(linearLayout.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 }
             });
         }
@@ -218,7 +226,7 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                                 cart.addCartItem(giftCard);
                                             }
                                             showMessage("Successfully Added to Cart");
-                                            cardHolder.add_to_cart.setText("Remove to cart");
+                                            cardHolder.add_to_cart.setText("Remove from cart");
                                             ((CompanyCard) context).invalidateOptionsMenu();
                                             MyServices.startLeftCartTimeService(context);
                                         } else if (jsonObject.getInt(tags.SUCCESS) == tags.SUSPEND) {
