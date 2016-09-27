@@ -60,7 +60,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -139,7 +138,8 @@ public class Main extends GiftCardUp {
         isLoginLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Main.this, MyProfile.class));
+                //startActivity(new Intent(Main.this, MyProfile.class));
+                startActivity(new Intent(Main.this, ProfileNew.class));
             }
         });
         setNavigationMenu();

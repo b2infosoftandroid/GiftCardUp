@@ -251,4 +251,5 @@
         <item>Type</item>
     </string-array>
     <string name="title_activity_check_out">CheckOut</string>
+    <string name="title_activity_profile_new">ProfileNew</string>
 </resources>

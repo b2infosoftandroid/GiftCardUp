@@ -150,13 +150,18 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity android:name=".activity.FBUserUpdate"
+        <activity
+            android:name=".activity.FBUserUpdate"
             android:label="Profile Update"
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.Main" />
         </activity>
+        <activity
+            android:name=".activity.ProfileNew"
+            android:label="@string/title_activity_profile_new"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
