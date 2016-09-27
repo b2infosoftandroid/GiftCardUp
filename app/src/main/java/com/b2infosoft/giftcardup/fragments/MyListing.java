@@ -149,6 +149,7 @@ public class MyListing extends Fragment implements View.OnClickListener {
                 try {
                     if (jsonObject.has(tags.SUCCESS)) {
                         if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                            frameLayout.setVisibility(View.GONE);
                             if (jsonObject.has(tags.GIFT_CARDS)) {
                                 List<GiftCard> cards = new ArrayList<>();
                                 JSONArray jsonArray = jsonObject.getJSONArray(tags.GIFT_CARDS);
@@ -161,10 +162,11 @@ public class MyListing extends Fragment implements View.OnClickListener {
                         } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
                             frameLayout.setVisibility(View.VISIBLE);
                         } else {
-
+                            frameLayout.setVisibility(View.VISIBLE);
                         }
                     }
                     if (jsonObject.has(tags.IS_MORE)) {
+                        frameLayout.setVisibility(View.GONE);
                         isMore = jsonObject.getBoolean(tags.IS_MORE);
                         if (isMore) {
                             loadMore += tags.DEFAULT_LOADING_DATA;
