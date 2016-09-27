@@ -46,8 +46,7 @@
         </activity>
         <activity
             android:name=".activity.ShoppingCart"
-            android:label="Shopping Cart"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label="Shopping Cart">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.Main" />
