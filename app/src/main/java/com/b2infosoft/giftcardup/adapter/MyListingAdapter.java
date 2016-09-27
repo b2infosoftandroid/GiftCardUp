@@ -28,6 +28,7 @@ import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.AlertBox;
 import com.b2infosoft.giftcardup.listener.OnLoadMoreListener;
+import com.b2infosoft.giftcardup.model.CompanyBrand;
 import com.b2infosoft.giftcardup.model.EmptyBrand;
 import com.b2infosoft.giftcardup.model.GiftCard;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
@@ -89,7 +90,7 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public class CardHolder extends RecyclerView.ViewHolder {
         TextView giftCard;
-        ImageView cardType,cardImage;
+        ImageView cardType, cardImage;
         TextView cardValue;
         TextView cardPrice;
         TextView cardSell;
@@ -105,7 +106,7 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         public CardHolder(View view) {
             super(view);
-            card1 = (CardView)view.findViewById(R.id.card_view1);
+            card1 = (CardView) view.findViewById(R.id.card_view1);
             card2 = (LinearLayout) view.findViewById(R.id.card_view2);
             cardImage = (ImageView) view.findViewById(R.id.my_listing_card_image);
             giftCard = (TextView) view.findViewById(R.id.company_card_gift_card);
@@ -169,9 +170,14 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         if (holder instanceof CardHolder) {
             final GiftCard card = (GiftCard) cardInfoList.get(position);
             final CardHolder cardHolder = (CardHolder) holder;
-
-            final String url = config.getGiftCardImageAddress().concat(card.getCardImage());
-            LruBitmapCache.loadCacheImage(context,cardHolder.cardImage,url,"");
+            String url = config.getGiftCardImageAddress();
+            if (card.getCardImage() == null || (!card.getCardImage().contains(".")) || card.getCardImage().length() == 0) {
+                url = url.concat(card.getCardCompanyImage());
+            } else {
+                url = url.concat(card.getCardImage());
+            }
+            Log.d("urls",url);
+            LruBitmapCache.loadCacheImage(context, cardHolder.cardImage, url, "");
             /* E-Card */
             if (card.getCardType() == 2) {
                 cardHolder.cardType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_check_24dp));
@@ -194,13 +200,13 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             cardHolder.fund.setText("$" + card.getYourEarning());
             cardHolder.status.setText(card.getApproveStatusName(card.getApproveStatus()));
 
-            cardHolder.status.setBackgroundColor(card.getApproveStatusColor(context,card.getApproveStatus()));
+            cardHolder.status.setBackgroundColor(card.getApproveStatusColor(context, card.getApproveStatus()));
 
             setActions(cardHolder, card.getApproveStatus());
             cardHolder.card1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    cardHolder.card2.setVisibility(cardHolder.card2.getVisibility()==View.VISIBLE?View.GONE:View.VISIBLE);
+                    cardHolder.card2.setVisibility(cardHolder.card2.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 }
             });
             cardHolder.action_edit.setOnClickListener(new OnClick(card));
@@ -229,7 +235,7 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             switch (v.getId()) {
                 case R.id.action_edit:
                     Intent intent = new Intent(context, EditGiftCard.class);
-                    intent.putExtra(tags.GIFT_CARDS,giftCard);
+                    intent.putExtra(tags.GIFT_CARDS, giftCard);
                     context.startActivity(intent);
                     break;
                 case R.id.action_delete:
@@ -368,7 +374,8 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void showToast(String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
-    public void removeAllItem(){
+
+    public void removeAllItem() {
         cardInfoList.clear();
         notifyDataSetChanged();
     }

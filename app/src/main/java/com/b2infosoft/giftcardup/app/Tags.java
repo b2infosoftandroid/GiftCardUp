@@ -154,6 +154,7 @@ public class Tags {
     public final String GIFT_CARD_DENY_REASON = "deny_reason";
     public final String GIFT_CARD_NEED_REVIEW = "need_review";
     public final String GIFT_CARD_DISPUTE_RESULT = "dispute_result";
+    public final String GIFT_CARD_COMPANY_IMAGE = "card_company_image";
 
 
     /////////////// USER PROFILE  ///////////////

@@ -246,7 +246,7 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string-array name="search_type">
-        <item>Search Type</item>
+        <item>Select</item>
         <item>Name</item>
         <item>Type</item>
     </string-array>

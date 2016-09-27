@@ -14,7 +14,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/app_background">
+            android:background="@color/colorPrimaryDark">
 
             <EditText
                 android:id="@+id/search"
@@ -24,7 +24,7 @@
                 android:layout_centerVertical="true"
                 android:layout_margin="5dp"
                 android:layout_toLeftOf="@+id/type"
-                android:background="@drawable/search_box_layout_1"
+                android:background="@drawable/button_shape_background"
                 android:hint="Keyword..."
                 android:padding="5dp" />
 
@@ -35,7 +35,7 @@
                 android:layout_centerVertical="true"
                 android:layout_margin="5dp"
                 android:layout_toLeftOf="@+id/action_search"
-                android:background="@drawable/search_box_layout_1"
+                android:background="@drawable/button_shape_background"
                 android:entries="@array/search_type"
                 android:padding="5dp" />
 
@@ -48,7 +48,8 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="1dp"
                 android:layout_marginRight="5dp"
-                android:background="@drawable/search_box_layout_1"
+                android:padding="2dp"
+                android:background="@drawable/button_shape_background"
                 android:src="@drawable/ic_search_24dp" />
         </RelativeLayout>
 

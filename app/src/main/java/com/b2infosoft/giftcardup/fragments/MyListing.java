@@ -1,6 +1,7 @@
 package com.b2infosoft.giftcardup.fragments;
 
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,12 +20,14 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.activity.CompanyCard;
 import com.b2infosoft.giftcardup.adapter.MyListingAdapter;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.listener.OnLoadMoreListener;
+import com.b2infosoft.giftcardup.model.CompanyBrand;
 import com.b2infosoft.giftcardup.model.EmptyBrand;
 import com.b2infosoft.giftcardup.model.GiftCard;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
@@ -61,6 +64,7 @@ public class MyListing extends Fragment implements View.OnClickListener {
     EditText search;
     Spinner type;
     ImageButton action_search;
+    CompanyBrand brand;
 
     public MyListing() {
 

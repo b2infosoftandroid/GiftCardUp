@@ -1,0 +1,155 @@
+<ru.noties.scrollable.ScrollableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollable_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:scrollable_maxScroll="@dimen/profile_header_height"
+    tools:context=".fragments.Profile">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/profile_header_height"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/profile_member"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_margin="@dimen/text_view_margin_top"
+                android:text="@string/profile_member_since"
+                android:textAllCaps="true"
+                android:textColor="@color/profile_text" />
+
+            <FrameLayout
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/activity_horizontal_margin">
+
+                <com.mikhaellopez.circularimageview.CircularImageView
+                    android:id="@+id/profile_user_image"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_user_icon"
+                    app:civ_border="true"
+                    app:civ_border_color="@color/border_user_picture"
+                    app:civ_border_width="4dp"
+                    app:civ_shadow="true"
+                    app:civ_shadow_color="@color/border_shadow_user_picture"
+                    app:civ_shadow_radius="0.5" />
+                <com.mikhaellopez.circularimageview.CircularImageView
+                    android:id="@+id/profile_edit_image"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="bottom|end"
+                    android:src="@drawable/ic_edit_icon"
+                    app:civ_border="true"
+                    app:civ_border_color="@color/button_stroke_black"
+                    app:civ_border_width="4dp"
+                    app:civ_shadow="true"
+                    app:civ_shadow_color="@color/button_stroke_black"
+                    app:civ_shadow_radius="0.5" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/profile_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/custom_tab_margin_top"
+                android:layout_marginTop="@dimen/text_view_margin_top"
+                android:text="@string/profile_user_name"
+                android:textAllCaps="true"
+                android:textColor="@color/profile_text"
+                android:textSize="20dp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimaryDark"
+                android:padding="5dp">
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toLeftOf="@+id/profile_divider"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/total_saving"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="$5000"
+                        android:textAllCaps="true"
+                        android:textColor="@color/profile_text_view_text" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/profile_total_saving"
+                        android:textAllCaps="true"
+                        android:textColor="@color/profile_text_view_text" />
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/profile_divider"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerInParent="true"
+                    android:background="@color/colorPrimary" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@+id/profile_divider"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/total_sold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="$5120"
+                        android:textAllCaps="true"
+                        android:textColor="@color/profile_text_view_text" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/profile_total_sold"
+                        android:textAllCaps="true"
+                        android:textColor="@color/profile_text_view_text" />
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/profile_tabs_height"
+            android:background="@color/colorPrimary"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="#FFF"
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="#FFF"
+            app:tabTextColor="#FFF" />
+    </LinearLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/profile_tabs_height" />
+
+</ru.noties.scrollable.ScrollableLayout>
