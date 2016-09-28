@@ -12,6 +12,7 @@ import android.view.View;
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.adapter.BankDetailRecyclerViewAdapter;
+import com.b2infosoft.giftcardup.adapter.BankDetailRecyclerViewAdapter1;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
@@ -39,7 +40,7 @@ public class ProfileBankDetails extends AppCompatActivity {
 
     RecyclerView recyclerView;
     FloatingActionButton add_account;
-    BankDetailRecyclerViewAdapter adapter;
+    BankDetailRecyclerViewAdapter1 adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +57,7 @@ public class ProfileBankDetails extends AppCompatActivity {
         add_account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ProfileBankDetails.this, AddAccountInfo.class));
+                startActivity(new Intent(ProfileBankDetails.this, AddAccountInfo1.class));
             }
         });
         getBankDetails();
@@ -94,7 +95,7 @@ public class ProfileBankDetails extends AppCompatActivity {
                                     BankInfo info = BankInfo.fromJSON(jsonArray.getJSONObject(i));
                                     bankInfos.add(info);
                                 }
-                                adapter = new BankDetailRecyclerViewAdapter(getApplicationContext(),bankInfos);
+                                adapter = new BankDetailRecyclerViewAdapter1(getApplicationContext(),bankInfos);
                                 recyclerView.setAdapter(adapter);
                             }
                         }
