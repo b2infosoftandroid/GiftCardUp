@@ -125,7 +125,7 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
 
     private void setProfile(ContactInformation information) {
             mobile.setText(information.getPhoneNumber());
-            address.setText(information.getAddress());
+            address.setText(information.getAddressFull(this));
     }
 
 
