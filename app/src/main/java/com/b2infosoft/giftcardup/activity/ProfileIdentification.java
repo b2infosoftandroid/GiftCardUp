@@ -146,7 +146,7 @@ public class ProfileIdentification extends AppCompatActivity implements DMRResul
         appCompatSpinner.setEnabled(isUpdate);
     }
 
-    private void setProfile() {
+       private void setProfile() {
         if (active.isLogin()) {
             User user = active.getUser();
             Gson gson = new Gson();

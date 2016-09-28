@@ -24,11 +24,13 @@ import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.model.Approve;
+import com.b2infosoft.giftcardup.model.ContactInformation;
 import com.b2infosoft.giftcardup.model.User;
 import com.b2infosoft.giftcardup.urlconnection.MultipartUtility;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 import com.b2infosoft.giftcardup.volly.LruBitmapCache;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,7 +51,7 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
 
     CollapsingToolbarLayout toolbarLayout;
     ImageView profile_image,arrow1,arrow2,arrow3,identity,bank,ssn;
-    TextView member_science,total_sold,total_saving;
+    TextView member_science,total_sold,total_saving,mail,mobile,address;
     private final int PICK_IMAGE_REQUEST = 1;
     private Map<Integer,Integer> approveMap;
     private Uri filePath;
@@ -81,10 +83,11 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         User user = active.getUser();
 
-        getSupportActionBar().setSubtitle("Member Since : ".concat(format.getDate(user.getJoinDate())));
+        //getSupportActionBar().setSubtitle("Member Since : ".concat(format.getDate(user.getJoinDate())));
 
         toolbarLayout = (CollapsingToolbarLayout)findViewById(R.id.toolbar_layout);
         toolbarLayout.setTitle(user.getFirstName()+" "+user.getLastName());
+
         profile_image = (ImageView)findViewById(R.id.profile_user_image);
         identity = (ImageView)findViewById(R.id.user_identity_approve);
         bank = (ImageView)findViewById(R.id.user_bank_approve);
@@ -97,12 +100,19 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         arrow3.setOnClickListener(this);
         total_saving = (TextView)findViewById(R.id.total_saving);
         total_sold = (TextView)findViewById(R.id.total_sold);
+        mail = (TextView)findViewById(R.id.profile_short_mail);
+        mobile = (TextView)findViewById(R.id.profile_short_phone);
+        address = (TextView)findViewById(R.id.profile_short_address);
        // member_science = (TextView)findViewById(R.id.profile_member);
+        if (active.isLogin()) {
+            mail.setText(user.getEmail());
+        }
 
         LruBitmapCache.loadCacheImageProfile(this, profile_image, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
         total_saving.setText("$"+user.getTotalSave());
         total_sold.setText("$"+user.getTotalSold());
        // member_science.setText("Member Since : ".concat(format.getDate(user.getJoinDate())));
+         fetchContactInfo();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -112,6 +122,12 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
             }
         });
     }
+
+    private void setProfile(ContactInformation information) {
+            mobile.setText(information.getPhoneNumber());
+            address.setText(information.getAddress());
+    }
+
 
     private void setIcons(Approve approve){
            identity.setImageResource(approveMap.get(approve.getIdentification()));
@@ -203,6 +219,10 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
                     if(jsonObject.has(tags.USER_ALL_APPROVE_INFO)){
                         setIcons(Approve.fromJSON(jsonObject.getJSONObject(tags.USER_ALL_APPROVE_INFO)));
                     }
+                    if (jsonObject.has(tags.USER_CONTACT_INFORMATION)) {
+                        ContactInformation information = ContactInformation.fromJSON(jsonObject.getJSONObject(tags.USER_CONTACT_INFORMATION));
+                        setProfile(information);
+                    }
                 } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
 
                 }
@@ -217,5 +237,17 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
     public void onError(VolleyError volleyError) {
         volleyError.printStackTrace();
         Log.e(TAG, volleyError.getMessage());
+    }
+
+    private void fetchContactInfo() {
+        if (active.isLogin()) {
+            User user = active.getUser();
+
+            /* LOADING USER DETAILS */
+            Map<String, String> map1 = new HashMap<>();
+            map1.put(tags.USER_ACTION, tags.USER_CONTACT_INFORMATION);
+            map1.put(tags.USER_ID, user.getUserId() + "");
+            dmrRequest.doPost(urls.getUserInfo(), map1, this);
+        }
     }
 }
