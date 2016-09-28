@@ -186,7 +186,7 @@ public class MyProfile extends AppCompatActivity implements Identification.OnFra
 
     private void setUpViewPager(ViewPager pager) {
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new Identification(), "Identification");
+        adapter.addFragment(new Identification(), "ProfileIdentification");
         adapter.addFragment(new BankInformation(), "Bank details");
         adapter.addFragment(new SsnEin1(), "SSN/EIN");
         pager.setAdapter(adapter);
@@ -199,7 +199,7 @@ public class MyProfile extends AppCompatActivity implements Identification.OnFra
     }
     private void setTabIcons() {
         TextView tabOne = new TextView(this);
-        tabOne.setText("Identification");
+        tabOne.setText("ProfileIdentification");
         tabOne.setGravity(Gravity.CENTER);
         tabOne.setAllCaps(true);
         tabOne.setTextSize(10f);
@@ -231,7 +231,7 @@ public class MyProfile extends AppCompatActivity implements Identification.OnFra
         tabLayout.getTabAt(2).setCustomView(null);
 
         TextView tabOne = new TextView(this);
-        tabOne.setText("Identification");
+        tabOne.setText("ProfileIdentification");
         tabOne.setGravity(Gravity.CENTER);
         tabOne.setAllCaps(true);
         tabOne.setTextSize(10f);

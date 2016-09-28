@@ -161,7 +161,20 @@
         <activity
             android:name=".activity.ProfileNew"
             android:label="@string/title_activity_profile_new"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.ProfileIdentification"
+            android:label="Identification"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activity.ProfileBankDetails"
+            android:label="Bank Details"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activity.ProfileSsnEin"
+            android:label="SSN/EIN"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".activity.BankDetailItem"></activity>
     </application>
 
 </manifest>

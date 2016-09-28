@@ -139,7 +139,7 @@ public class Profile extends Fragment {
 
     private void setUpViewPager(ViewPager pager) {
         adapter = new ViewPagerAdapter(getFragmentManager());
-        adapter.addFragment(new Identification(), "Identification");
+        adapter.addFragment(new Identification(), "ProfileIdentification");
         adapter.addFragment(new BankInformation(), "Bank details");
         adapter.addFragment(new SsnEin(), "SSN/EIN");
         pager.setAdapter(adapter);
@@ -147,7 +147,7 @@ public class Profile extends Fragment {
 
     private void setTabIcons() {
         TextView tabOne = new TextView(getActivity());
-        tabOne.setText("Identification");
+        tabOne.setText("ProfileIdentification");
         tabOne.setGravity(Gravity.CENTER);
         tabOne.setAllCaps(true);
         tabOne.setTextSize(10f);

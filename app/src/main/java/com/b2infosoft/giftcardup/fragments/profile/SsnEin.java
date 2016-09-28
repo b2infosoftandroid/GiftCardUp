@@ -49,7 +49,7 @@ public class SsnEin extends Fragment implements CanScrollVerticallyDelegate {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment SsnEin.
+     * @return A new instance of fragment ProfileSsnEin.
      */
     public static SsnEin newInstance(String param1, String param2) {
         SsnEin fragment = new SsnEin();

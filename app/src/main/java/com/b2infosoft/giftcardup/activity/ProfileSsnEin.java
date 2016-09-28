@@ -1,18 +1,15 @@
-package com.b2infosoft.giftcardup.fragments.profile;
+package com.b2infosoft.giftcardup.activity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -23,9 +20,6 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
-import com.b2infosoft.giftcardup.activity.AddIdentity;
-import com.b2infosoft.giftcardup.activity.AddSSN;
-import com.b2infosoft.giftcardup.activity.MyProfile;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
@@ -41,31 +35,16 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import ru.noties.scrollable.CanScrollVerticallyDelegate;
+public class ProfileSsnEin extends AppCompatActivity implements DMRResult{
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link SsnEin1.OnFragmentSsnEin} interface
- * to handle interaction events.
- * Use the {@link SsnEin1#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class SsnEin1 extends Fragment implements CanScrollVerticallyDelegate, DMRResult {
-
-    private final String TAG = SsnEin1.class.getName();
+    private final String TAG = ProfileSsnEin.class.getName();
     private Active active;
     private Tags tags;
     private Urls urls;
     private DMRRequest dmrRequest;
-
-    //Image request code
     private final int PICK_IMAGE_REQUEST = 1;
-    //Uri to store the image uri
     private Uri filePath;
     private Bitmap bitmap;
-
-    View mView;
 
     Button approve_for_selling, identification_button, next_btn, save, cancel;
     Button verification_email, verification_identity, verification_ssn;
@@ -76,24 +55,15 @@ public class SsnEin1 extends Fragment implements CanScrollVerticallyDelegate, DM
     EditText ssn_ein, name, routing_no, account_no;
     ScrollView scroll_view_step_one, step_two;
     View approve_for_selling_layout, approve_status_layout;
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    private String mParam1;
-    private String mParam2;
 
-    private OnFragmentSsnEin mListener;
     private HashMap<Integer, String> statusName = new HashMap<>();
     private HashMap<Integer, Integer> statusColor = new HashMap<>();
 
-    public SsnEin1() {
-        // Required empty public constructor
-    }
-
     private void init() {
-        active = Active.getInstance(getActivity());
+        active = Active.getInstance(this);
         tags = Tags.getInstance();
         urls = Urls.getInstance();
-        dmrRequest = DMRRequest.getInstance(getActivity(), TAG);
+        dmrRequest = DMRRequest.getInstance(this, TAG);
         statusName.put(0, "PENDING");
         statusName.put(1, "APPROVE");
         statusName.put(2, "REJECTED");
@@ -108,43 +78,17 @@ public class SsnEin1 extends Fragment implements CanScrollVerticallyDelegate, DM
         statusColor.put(4, getResources().getColor(R.color.verification_suspend));
         statusColor.put(9, getResources().getColor(R.color.verification_not_submitted));
     }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileSsnEin.
-     */
-    public static SsnEin1 newInstance(String param1, String param2) {
-        SsnEin1 fragment = new SsnEin1();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        setContentView(R.layout.activity_ssn_ein);
         init();
-        mView = inflater.inflate(R.layout.fragment_ssn_ein_1, container, false);
-        scroll_view_step_one = (ScrollView) mView.findViewById(R.id.scroll_view_step_one);
-        approve_for_selling_layout = mView.findViewById(R.id.approve_for_selling_layout);
-        approve_status_layout = mView.findViewById(R.id.approve_status_layout);
-        approve_for_selling = (Button) mView.findViewById(R.id.ssn_ein_approved_for_sell);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        scroll_view_step_one = (ScrollView)findViewById(R.id.scroll_view_step_one);
+        approve_for_selling_layout = findViewById(R.id.approve_for_selling_layout);
+        approve_status_layout = findViewById(R.id.approve_status_layout);
+        approve_for_selling = (Button) findViewById(R.id.ssn_ein_approved_for_sell);
         approve_for_selling.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -152,18 +96,18 @@ public class SsnEin1 extends Fragment implements CanScrollVerticallyDelegate, DM
                 approve_for_selling_layout.setVisibility(View.VISIBLE);
             }
         });
-        identification_button = (Button) mView.findViewById(R.id.ssn_ein_identification_button);
+        identification_button = (Button)findViewById(R.id.ssn_ein_identification_button);
         identification_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showFileChooser();
             }
         });
-        identification_image = (ImageView) mView.findViewById(R.id.ssn_ein_identification_image);
-        ssn_ein = (EditText) mView.findViewById(R.id.ssn_ein_no);
-        idTypeSSN = (RadioButton) mView.findViewById(R.id.id_type_ssn);
-        idTypeEIN = (RadioButton) mView.findViewById(R.id.id_type_ein);
-        save = (Button) mView.findViewById(R.id.bank_save_btn);
+        identification_image = (ImageView)findViewById(R.id.ssn_ein_identification_image);
+        ssn_ein = (EditText)findViewById(R.id.ssn_ein_no);
+        idTypeSSN = (RadioButton)findViewById(R.id.id_type_ssn);
+        idTypeEIN = (RadioButton)findViewById(R.id.id_type_ein);
+        save = (Button)findViewById(R.id.bank_save_btn);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -175,12 +119,12 @@ public class SsnEin1 extends Fragment implements CanScrollVerticallyDelegate, DM
                     idType = "EIN";
                 }
                 if (bitmap == null) {
-                    Toast.makeText(getActivity(), "Please Select ProfileIdentification Image", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please Select ProfileIdentification Image", Toast.LENGTH_SHORT).show();
                 }
                 new AddInformation(bitmap, ssnName, idType).execute();
             }
         });
-        cancel = (Button) mView.findViewById(R.id.bank_cancel_btn);
+        cancel = (Button)findViewById(R.id.bank_cancel_btn);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -190,28 +134,38 @@ public class SsnEin1 extends Fragment implements CanScrollVerticallyDelegate, DM
         });
         getApproveForSelling();
 
-        verification_email = (Button) mView.findViewById(R.id.verified_email);
-        verification_identity = (Button) mView.findViewById(R.id.verified_identity);
+        verification_email = (Button)findViewById(R.id.verified_email);
+        verification_identity = (Button)findViewById(R.id.verified_identity);
         verification_identity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getContext(), AddIdentity.class));
+                startActivity(new Intent(ProfileSsnEin.this, AddIdentity.class));
             }
         });
 
-        verification_ssn = (Button) mView.findViewById(R.id.verified_ssn);
+        verification_ssn = (Button)findViewById(R.id.verified_ssn);
         verification_ssn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getContext(), AddSSN.class));
+                startActivity(new Intent(ProfileSsnEin.this, AddSSN.class));
             }
         });
 
-        verification_email_status = (TextView) mView.findViewById(R.id.verified_email_status);
-        verification_identity_status = (TextView) mView.findViewById(R.id.verified_identity_status);
-        verification_ssn_status = (TextView) mView.findViewById(R.id.verified_ssn_status);
+        verification_email_status = (TextView)findViewById(R.id.verified_email_status);
+        verification_identity_status = (TextView)findViewById(R.id.verified_identity_status);
+        verification_ssn_status = (TextView)findViewById(R.id.verified_ssn_status);
         checkVerifiedStatus();
-        return mView;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                //NavUtils.navigateUpFromSameTask(this);
+                this.onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void updateVerifiedStatus(Approve approve) {
@@ -287,67 +241,6 @@ public class SsnEin1 extends Fragment implements CanScrollVerticallyDelegate, DM
         Log.e(TAG, volleyError.getMessage());
     }
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onSsnEin(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentSsnEin) {
-            mListener = (OnFragmentSsnEin) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    @Override
-    public boolean canScrollVertically(int direction) {
-        return mView != null && mView.canScrollVertically(direction);
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentSsnEin {
-        void onSsnEin(Uri uri);
-    }
-
-    //method to get the file path from uri
-    public String getPath(Uri uri) {
-        Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
-        cursor.moveToFirst();
-        String document_id = cursor.getString(0);
-        document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
-        cursor.close();
-
-        cursor = getActivity().getContentResolver().query(
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
-        cursor.moveToFirst();
-        String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-        cursor.close();
-
-        return path;
-    }
-
-    //method to show file chooser
     private void showFileChooser() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -359,14 +252,14 @@ public class SsnEin1 extends Fragment implements CanScrollVerticallyDelegate, DM
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         MyProfile.setSelectedTabIndex(2);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == getActivity().RESULT_OK && data != null && data.getData() != null) {
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == this.RESULT_OK && data != null && data.getData() != null) {
             filePath = data.getData();
             try {
-                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), filePath);
                 if (identification_image != null)
                     identification_image.setImageBitmap(bitmap);
                 else {
-                    Toast.makeText(getContext(), "IMAGE NULL", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "IMAGE NULL", Toast.LENGTH_SHORT).show();
                 }
                 approve_for_selling.setVisibility(View.GONE);
                 approve_for_selling_layout.setVisibility(View.VISIBLE);
@@ -374,7 +267,6 @@ public class SsnEin1 extends Fragment implements CanScrollVerticallyDelegate, DM
                 e.printStackTrace();
             }
         }
-        //replaceFragment();
     }
 
     private class AddInformation extends AsyncTask<String, String, String> {
