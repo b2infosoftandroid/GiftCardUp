@@ -174,8 +174,8 @@
             android:name=".activity.ProfileSsnEin"
             android:label="SSN/EIN"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".activity.BankDetailItem"></activity>
         <activity android:name=".activity.AddAccountInfo1"></activity>
+        <activity android:name=".activity.UpdateAccountInfo1"></activity>
     </application>
 
 </manifest>

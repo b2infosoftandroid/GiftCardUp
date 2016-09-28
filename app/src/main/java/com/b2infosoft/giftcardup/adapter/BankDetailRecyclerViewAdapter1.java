@@ -1,5 +1,6 @@
 package com.b2infosoft.giftcardup.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.activity.UpdateAccountInfo;
+import com.b2infosoft.giftcardup.activity.UpdateAccountInfo1;
 import com.b2infosoft.giftcardup.app.Config;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
@@ -50,7 +52,7 @@ public class BankDetailRecyclerViewAdapter1 extends RecyclerView.Adapter<BankDet
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.activity_bank_detail_item, parent, false);
+                .inflate(R.layout.bank_detail_item, parent, false);
         return new ViewHolder(view);
     }
 
@@ -98,8 +100,9 @@ public class BankDetailRecyclerViewAdapter1 extends RecyclerView.Adapter<BankDet
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(context, UpdateAccountInfo.class);
+                Intent i = new Intent(context, UpdateAccountInfo1.class);
                 i.putExtra(tags.BANK_INFO, info);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(i);
             }
         });
