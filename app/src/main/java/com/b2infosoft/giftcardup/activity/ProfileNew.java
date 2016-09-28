@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.app.Config;
 import com.b2infosoft.giftcardup.app.Format;
@@ -22,25 +23,35 @@ import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.Progress;
+import com.b2infosoft.giftcardup.model.Approve;
 import com.b2infosoft.giftcardup.model.User;
 import com.b2infosoft.giftcardup.urlconnection.MultipartUtility;
+import com.b2infosoft.giftcardup.volly.DMRRequest;
+import com.b2infosoft.giftcardup.volly.DMRResult;
 import com.b2infosoft.giftcardup.volly.LruBitmapCache;
 
-import java.io.IOException;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-public class ProfileNew extends AppCompatActivity implements View.OnClickListener{
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+public class ProfileNew extends AppCompatActivity implements View.OnClickListener,DMRResult{
     final private static String TAG = ProfileNew.class.getName();
     private Active active;
     private Tags tags;
     private Urls urls;
     private Config config;
     private Format format;
+    private DMRRequest dmrRequest;
     Progress progress;
 
     CollapsingToolbarLayout toolbarLayout;
-    ImageView profile_image,arrow1,arrow2,arrow3;
+    ImageView profile_image,arrow1,arrow2,arrow3,identity,bank,ssn;
     TextView member_science,total_sold,total_saving;
     private final int PICK_IMAGE_REQUEST = 1;
+    private Map<Integer,Integer> approveMap;
     private Uri filePath;
     private Bitmap bitmap;
 
@@ -50,6 +61,14 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         urls = Urls.getInstance();
         config = Config.getInstance();
         format = Format.getInstance();
+        dmrRequest = DMRRequest.getInstance(this,TAG);
+        approveMap = new HashMap<>();
+        approveMap.put(0,R.drawable.ic_u_pending);
+        approveMap.put(1,R.drawable.ic_u_approved);
+        approveMap.put(2,R.drawable.ic_u_rejected);
+        approveMap.put(3,R.drawable.ic_u_expire);
+        approveMap.put(4,R.drawable.ic_u_suspend);
+        approveMap.put(9,R.drawable.ic_u_not_submitted);
     }
 
     @Override
@@ -67,6 +86,9 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         toolbarLayout = (CollapsingToolbarLayout)findViewById(R.id.toolbar_layout);
         toolbarLayout.setTitle(user.getFirstName()+" "+user.getLastName());
         profile_image = (ImageView)findViewById(R.id.profile_user_image);
+        identity = (ImageView)findViewById(R.id.user_identity_approve);
+        bank = (ImageView)findViewById(R.id.user_bank_approve);
+        ssn = (ImageView)findViewById(R.id.user_ssn_approve);
         arrow1 = (ImageView)findViewById(R.id.identification_arrow);
         arrow1.setOnClickListener(this);
         arrow2 = (ImageView)findViewById(R.id.bank_arrow);
@@ -89,6 +111,12 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
                 showFileChooser();
             }
         });
+    }
+
+    private void setIcons(Approve approve){
+           identity.setImageResource(approveMap.get(approve.getIdentification()));
+           bank.setImageResource(approveMap.get(approve.getBank()));
+           ssn.setImageResource(approveMap.get(approve.getSsn()));
     }
 
     private void showFileChooser() {
@@ -165,5 +193,29 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
             default:
 
         }
+    }
+
+    @Override
+    public void onSuccess(JSONObject jsonObject) {
+        try {
+            if (jsonObject.has(tags.SUCCESS)) {
+                if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                    if(jsonObject.has(tags.USER_ALL_APPROVE_INFO)){
+                        setIcons(Approve.fromJSON(jsonObject.getJSONObject(tags.USER_ALL_APPROVE_INFO)));
+                    }
+                } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
+
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(TAG, e.getMessage());
+        }
+    }
+
+    @Override
+    public void onError(VolleyError volleyError) {
+        volleyError.printStackTrace();
+        Log.e(TAG, volleyError.getMessage());
     }
 }
