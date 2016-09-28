@@ -1,6 +1,9 @@
 package com.b2infosoft.giftcardup.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.api.interfaces.PaymentForm;
@@ -22,6 +26,12 @@ import com.stripe.android.Stripe;
 import com.stripe.android.TokenCallback;
 import com.stripe.android.model.Card;
 import com.stripe.android.model.Token;
+import com.stripe.exception.APIConnectionException;
+import com.stripe.exception.APIException;
+import com.stripe.exception.AuthenticationException;
+import com.stripe.exception.CardException;
+import com.stripe.exception.InvalidRequestException;
+import com.stripe.model.Charge;
 import com.stripe.model.Order;
 import com.stripe.model.Product;
 import com.stripe.model.ProductCollection;
@@ -130,9 +140,15 @@ public class PayCreditDebit extends AppCompatActivity implements PaymentForm {
                             //getTokenList().addToList(token);
                             progress.dismiss();
                             Log.d("TOKEN NUMBER", token.getId());
-                            AlertBox box = new AlertBox(PayCreditDebit.this);
-                            box.setMessage(token.getId());
-                            box.show();
+                            AlertDialog.Builder builder = new AlertDialog.Builder(PayCreditDebit.this);
+                            builder.setMessage(token.getId());
+                            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    new madePayment().execute();
+                                }
+                            });
+                            builder.create().show();
                         }
 
                         public void onError(Exception error) {
@@ -159,6 +175,40 @@ public class PayCreditDebit extends AppCompatActivity implements PaymentForm {
             AlertBox box = new AlertBox(this);
             box.setMessage("The card details that you entered are invalid");
             box.show();
+        }
+    }
+
+    private class madePayment extends AsyncTask<Void,Void,Void>{
+               Charge charge;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Toast.makeText(getApplicationContext(),"Card Charged : " + charge.getCreated() + "\nPaid : " +charge.getPaid(),
+                    Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                final HashMap<String,Object> map = new HashMap<>();
+                map.put("amount","400");
+                map.put("currency","usd");
+                //map.put("card",token);
+
+                com.stripe.Stripe.apiKey = KeyDetails.SECRET_KEY;
+                charge = Charge.create(map);
+                Log.d("KeyCharge",charge.getId());
+            }catch (AuthenticationException |APIConnectionException | InvalidRequestException | CardException | APIException e){
+                e.printStackTrace();
+                Log.e(TAG,e.getMessage());
+            }
+
+            return null;
         }
     }
 
