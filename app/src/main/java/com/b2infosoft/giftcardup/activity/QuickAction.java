@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 /**
- * QuickAction dialog, shows action list as icon and text like the one in Gallery3D app. Currently supports vertical 
+ * QuickAction dialog, shows action_complete list as icon and text like the one in Gallery3D app. Currently supports vertical
  * and horizontal layout.
  * 
  * @author Lorensius W. L. T <lorenz@londatiga.net>
@@ -89,7 +89,7 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
     }
 
     /**
-     * Get action item at an index
+     * Get action_complete item at an index
      * 
      * @param index  Index of item (position from callback)
      * 
@@ -131,7 +131,7 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 	}
 	
 	/**
-	 * Set listener for action item clicked.
+	 * Set listener for action_complete item clicked.
 	 * 
 	 * @param listener Listener
 	 */

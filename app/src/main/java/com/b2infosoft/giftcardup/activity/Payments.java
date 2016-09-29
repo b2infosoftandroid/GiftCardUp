@@ -64,14 +64,17 @@ public class Payments extends AppCompatActivity implements View.OnClickListener 
             case R.id.action_continue:
                 if (available_fund.isChecked()) {
                     Intent intent = new Intent(this, PayAvailableFun.class);
+                    orderSummery.setMethod(tags.PAYMENT_WITH_AVAILABLE_FUND);
                     intent.putExtra(tags.ORDER_SUMMERY, orderSummery);
                     startActivity(intent);
                 } else if (credit_debit.isChecked()) {
                     Intent intent = new Intent(this, PayCreditDebit.class);
+                    orderSummery.setMethod(tags.PAYMENT_WITH_CARD);
                     intent.putExtra(tags.ORDER_SUMMERY, orderSummery);
                     startActivity(intent);
                 } else if (paypal.isChecked()) {
                     Intent intent = new Intent(this, PayPayPal.class);
+                    orderSummery.setMethod(tags.PAYMENT_WITH_PAY_PAL);
                     intent.putExtra(tags.ORDER_SUMMERY, orderSummery);
                     startActivity(intent);
                 }

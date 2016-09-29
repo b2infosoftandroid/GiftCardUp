@@ -11,7 +11,6 @@ import android.widget.Button;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
-import com.b2infosoft.giftcardup.adapter.CartAdapter;
 import com.b2infosoft.giftcardup.adapter.CheckOutAdapter;
 import com.b2infosoft.giftcardup.app.Cart;
 import com.b2infosoft.giftcardup.app.Tags;
@@ -127,6 +126,7 @@ public class CheckOut extends AppCompatActivity implements DMRResult {
         OrderSummery orderSummery = new OrderSummery();
         orderSummery.setPrice(summary.getValue());
         orderSummery.setShipping(Float.parseFloat(controlPanel.getShippingCharge()));
+        orderSummery.setDefaultShipping(cart.getCartItemList(),"First Class", Float.parseFloat(controlPanel.getFirstClassPrice()));
         cartList.add(orderSummery);
         adapter = new CheckOutAdapter(this, cartList,action_continue);
         recyclerView.setAdapter(adapter);

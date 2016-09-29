@@ -116,7 +116,7 @@ public class ShoppingCart extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // Inflate the menu; this adds items to the action_complete bar if it is present.
         getMenuInflater().inflate(R.menu.shopping_cart, menu);
         // Get the notifications MenuItem and LayerDrawable (layer-list)
         left_time = menu.findItem(R.id.left_time);

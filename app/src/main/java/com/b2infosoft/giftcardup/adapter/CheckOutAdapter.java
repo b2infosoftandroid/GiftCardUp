@@ -68,6 +68,7 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private CheckBox shipping;
     private TextView error_shipping;
     private Button action_continue;
+    private ControlPanel panel;
 
     public CheckOutAdapter(Context context, List<Object> cardInfoList, Button action_continue) {
         this.context = context;
@@ -83,6 +84,7 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         dbHelper = new DBHelper(context);
         this.action_continue = action_continue;
         this.action_continue.setOnClickListener(this);
+        panel = dbHelper.getControlPanel();
     }
 
     public class CardHolder extends RecyclerView.ViewHolder {
@@ -183,10 +185,10 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             cardHolder.name.setText(card.getCardName());
             cardHolder.value.setText("$" + card.getCardPrice());
             cardHolder.price.setText("$" + card.getCardValue());
-            final ControlPanel panel = dbHelper.getControlPanel();
             cardHolder.first_class.setText("First Class [$" + String.valueOf(panel.getFirstClassPrice()) + "]");
             cardHolder.priority_mail.setText("Priority Mail [$" + String.valueOf(panel.getPriorityPrice()) + "]");
             cardHolder.express_mail.setText("Express Mail [$" + String.valueOf(panel.getExpressPrice()) + "]");
+
             cardHolder.first_class.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -221,7 +223,6 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             final ContactInformation contactInformation = (ContactInformation) cardInfoList.get(position);
             final Address cardHolder = (Address) holder;
             User user = active.getUser();
-
             cardHolder.edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -231,6 +232,16 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             cardHolder.name.setText(user.getFirstName() + " " + user.getLastName());
             cardHolder.address.setText(contactInformation.getAddressFull(context));
             cardHolder.phone.setText(contactInformation.getPhoneNumber());
+            cardHolder.shipping.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (cardHolder.shipping.isChecked()) {
+                        error_shipping.setVisibility(View.GONE);
+                        //orderSummery.setDefaultShipping(cart.getCartItemList(), "First Class", Float.parseFloat(panel.getFirstClassPrice()));
+                        //CheckOutAdapter.super.notifyDataSetChanged();
+                    }
+                }
+            });
             this.shipping = cardHolder.shipping;
             this.error_shipping = cardHolder.error_shipping;
             if (isPhysicalFound()) {

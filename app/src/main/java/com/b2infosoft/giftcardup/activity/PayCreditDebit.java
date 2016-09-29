@@ -179,7 +179,7 @@ public class PayCreditDebit extends AppCompatActivity implements PaymentForm {
     }
 
     private class madePayment extends AsyncTask<Void,Void,Void>{
-               Charge charge;
+        Charge charge;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();

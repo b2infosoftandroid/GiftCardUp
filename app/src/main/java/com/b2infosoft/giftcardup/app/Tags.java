@@ -14,6 +14,12 @@ public class Tags {
 
     }
 
+    /////////////   PAYMENTS METHODS   /////////
+    public final String PAYMENT_WITH_PAY_PAL = "PayPal";
+    public final String PAYMENT_WITH_AVAILABLE_FUND = "Available Fund";
+    public final String PAYMENT_WITH_CARD = "Card";
+
+
     /////////////   GLOBAL TAGS   ////////////
     public final String SUCCESS = "success";
     public final String MESSAGE = "message";
@@ -63,6 +69,7 @@ public class Tags {
     public final String WITHDRAWAL_HISTORY = "withdrawal_history";
     public final String WITHDRAWAL_HISTORY_VIEW = "withdrawal_history_view";
     public final String AVAILABLE_FUND = "available_fund";
+    public final String AVAILABLE_FUND_BALANCE = "available_fund_balance";
     public final String WITHDRAWAL_REQUEST = "withdrawal_request";
     public final String SEND_WITHDRAWAL_REQUEST = "send_withdrawal_request";
     public final String ADD_CART_ITEM_GIFT_CARD = "add_card_item_gift_card";
@@ -75,6 +82,7 @@ public class Tags {
     public final String PROMO_CODE_APPLY = "promo_code_apply";
     public final String FB_LOGIN_USER = "fb_login_user";
     public final String FB_PROFILE_UPDATE = "fb_profile_update";
+    public final String PAY_WITH_AVAILABLE_FUND = "pay_with_available_fund";
 
 
     /*  CART PROCESSING  */
@@ -313,5 +321,9 @@ public class Tags {
 
     /*          PAYMENTS        */
     public final String ORDER_SUMMERY = "order_summery";
-
+    public final String ITEM_DATA = "item_data";
+    public final String ITEM_ID = "item_id";
+    public final String TOTAL_PRICE = "total_price";
+    public final String TOTAL_ITEM = "total_item";
+    public final String COMMISSION = "commission";
 }

@@ -9,19 +9,31 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.app.Tags;
+import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.model.OrderSummery;
-import com.b2infosoft.giftcardup.model.User;
+import com.b2infosoft.giftcardup.volly.DMRRequest;
+import com.b2infosoft.giftcardup.volly.DMRResult;
 
-public class PayAvailableFun extends AppCompatActivity implements View.OnClickListener {
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class PayAvailableFun extends AppCompatActivity implements View.OnClickListener, DMRResult {
     public static final String TAG = PayAvailableFun.class.getName();
     /* INITIAL REQUIREMENTS */
     private Tags tags;
     private Active active;
     private OrderSummery orderSummery;
+    private DMRRequest dmrRequest;
+    private Urls urls;
 
     /* UI VIEW */
     private TextView available_fund, balance, available_fund_1, balance_1, remaining;
@@ -39,12 +51,14 @@ public class PayAvailableFun extends AppCompatActivity implements View.OnClickLi
         if (getIntent().hasExtra(tags.ORDER_SUMMERY)) {
             orderSummery = (OrderSummery) getIntent().getExtras().getSerializable(tags.ORDER_SUMMERY);
         }
-        updateUI();
+        checkAvailableBalance();
     }
 
     private void init() {
         active = Active.getInstance(this);
         tags = Tags.getInstance();
+        dmrRequest = DMRRequest.getInstance(this, TAG);
+        urls = Urls.getInstance();
     }
 
     private void initUI() {
@@ -59,16 +73,14 @@ public class PayAvailableFun extends AppCompatActivity implements View.OnClickLi
         less_amount = findViewById(R.id.less_amount);
     }
 
-    private void updateUI() {
+    private void checkAvailableBalance() {
+        Map<String, String> map = new HashMap<>();
+        map.put(tags.USER_ACTION, tags.AVAILABLE_FUND_BALANCE);
+        map.put(tags.USER_ID, active.getUser().getUserId());
+        dmrRequest.doPost(urls.getUserInfo(), map, this);
+    }
 
-        User user = active.getUser();
-        float available = 0.0f;
-        try {
-            available = Float.parseFloat(user.getTotalSold());
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            Log.e(TAG, e.getMessage());
-        }
+    private void updateUI(float available) {
         available_fund.setText("$" + available);
         balance.setText("$" + orderSummery.getBalance());
 
@@ -103,9 +115,31 @@ public class PayAvailableFun extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         if (R.id.action_continue == v.getId()) {
-            Intent intent = new Intent(getApplicationContext(),PlaceOrder.class);
-            intent.putExtra("Method","Available Funds");
+            Intent intent = new Intent(getApplicationContext(), PlaceOrder.class);
+            intent.putExtra(tags.ORDER_SUMMERY, orderSummery);
             startActivity(intent);
         }
+    }
+
+    @Override
+    public void onSuccess(JSONObject jsonObject) {
+        try {
+            if (jsonObject.has(tags.SUCCESS)) {
+                if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                    if (jsonObject.has(tags.AVAILABLE_FUND_BALANCE)) {
+                        updateUI((float) jsonObject.getDouble(tags.AVAILABLE_FUND_BALANCE));
+                    }
+                }
+            }
+        } catch (JSONException error) {
+            error.printStackTrace();
+            Log.e(TAG, error.getLocalizedMessage());
+        }
+    }
+
+    @Override
+    public void onError(VolleyError volleyError) {
+        volleyError.printStackTrace();
+        Log.e(TAG, volleyError.getLocalizedMessage());
     }
 }

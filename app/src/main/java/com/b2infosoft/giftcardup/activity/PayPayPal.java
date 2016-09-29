@@ -32,7 +32,7 @@ public class PayPayPal extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), PlaceOrder.class);
-                intent.putExtra("Method", "Paypal");
+                intent.putExtra(tags.ORDER_SUMMERY, orderSummery);
                 startActivity(intent);
             }
         });
