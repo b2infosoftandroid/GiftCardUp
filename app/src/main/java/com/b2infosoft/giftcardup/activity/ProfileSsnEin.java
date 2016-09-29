@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -23,6 +24,7 @@ import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
+import com.b2infosoft.giftcardup.custom.AlertBox;
 import com.b2infosoft.giftcardup.model.Approve;
 import com.b2infosoft.giftcardup.urlconnection.MultipartUtility;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
@@ -52,9 +54,9 @@ public class ProfileSsnEin extends AppCompatActivity implements DMRResult{
 
     ImageView identification_image;
     RadioButton idTypeSSN, idTypeEIN;
-    EditText ssn_ein, name, routing_no, account_no;
-    ScrollView scroll_view_step_one, step_two;
-    View approve_for_selling_layout, approve_status_layout;
+    EditText ssn_ein;
+    ScrollView scroll_view_step_one;
+    LinearLayout approve_for_selling_layout, approve_status_layout;
 
     private HashMap<Integer, String> statusName = new HashMap<>();
     private HashMap<Integer, Integer> statusColor = new HashMap<>();
@@ -86,8 +88,8 @@ public class ProfileSsnEin extends AppCompatActivity implements DMRResult{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         scroll_view_step_one = (ScrollView)findViewById(R.id.scroll_view_step_one);
-        approve_for_selling_layout = findViewById(R.id.approve_for_selling_layout);
-        approve_status_layout = findViewById(R.id.approve_status_layout);
+        approve_for_selling_layout = (LinearLayout) findViewById(R.id.approve_for_selling_layout);
+        approve_status_layout = (LinearLayout)findViewById(R.id.approve_status_layout);
         approve_for_selling = (Button) findViewById(R.id.ssn_ein_approved_for_sell);
         approve_for_selling.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,6 +109,7 @@ public class ProfileSsnEin extends AppCompatActivity implements DMRResult{
         ssn_ein = (EditText)findViewById(R.id.ssn_ein_no);
         idTypeSSN = (RadioButton)findViewById(R.id.id_type_ssn);
         idTypeEIN = (RadioButton)findViewById(R.id.id_type_ein);
+        cancel = (Button)findViewById(R.id.bank_cancel_btn);
         save = (Button)findViewById(R.id.bank_save_btn);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,7 +127,6 @@ public class ProfileSsnEin extends AppCompatActivity implements DMRResult{
                 new AddInformation(bitmap, ssnName, idType).execute();
             }
         });
-        cancel = (Button)findViewById(R.id.bank_cancel_btn);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -251,7 +253,6 @@ public class ProfileSsnEin extends AppCompatActivity implements DMRResult{
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        MyProfile.setSelectedTabIndex(2);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == this.RESULT_OK && data != null && data.getData() != null) {
             filePath = data.getData();
             try {

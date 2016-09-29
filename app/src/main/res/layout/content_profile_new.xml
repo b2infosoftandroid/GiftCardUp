@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         card_view:cardCornerRadius="0dp"
         card_view:cardUseCompatPadding="false">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="100dp"
@@ -29,17 +30,18 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/total_saving"
+                    android:id="@+id/total_available_fund"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="$5000"
                     android:textAllCaps="true"
-                    android:textColor="@color/colorPrimaryDark" />
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/profile_total_saving"
+                    android:text="@string/menu_available_fund"
                     android:textAllCaps="true"
                     android:textColor="@color/colorPrimaryDark" />
             </LinearLayout>
@@ -52,224 +54,392 @@
                 android:layout_centerInParent="true"
                 android:background="@color/colorPrimary" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="fill_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/profile_divider"
-                android:gravity="center"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/total_sold"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="$5120"
-                    android:textAllCaps="true"
-                    android:textColor="@color/colorPrimaryDark" />
+                    android:layout_alignParentTop="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/total_saving"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="$5000"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/profile_total_saving"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorPrimaryDark" />
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/profile_fund_divider"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:background="@color/colorPrimary" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/profile_total_sold"
-                    android:textAllCaps="true"
-                    android:textColor="@color/colorPrimaryDark" />
-            </LinearLayout>
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        card_view:cardCornerRadius="0dp"
-        card_view:cardUseCompatPadding="false"
-        android:layout_marginTop="10dp">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:padding="10dp"
-            android:gravity="center_vertical">
-            <ImageView
-                android:id="@+id/user_identity_approve"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_u_expire"
-                android:layout_alignParentLeft="true"
-                android:layout_gravity="center_vertical"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Identification"
-                android:textAllCaps="true"
-                android:layout_toRightOf="@+id/user_identity_approve"
-                android:textColor="@color/colorPrimaryDark"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin" />
-            <ImageView
-                android:id="@+id/identification_arrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_arrow_right_144dp"
-                android:layout_alignParentRight="true"/>
+                    android:layout_alignBottom="@+id/profile_fund_divider"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/total_sold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="$5120"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/profile_total_sold"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorPrimaryDark" />
+                </LinearLayout>
+            </RelativeLayout>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 
-    <android.support.v7.widget.CardView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardCornerRadius="0dp"
-        card_view:cardUseCompatPadding="false"
-        android:layout_marginTop="1dp">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:padding="10dp"
-            android:gravity="center_vertical">
-            <ImageView
-                android:id="@+id/user_bank_approve"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_u_expire"
-                android:layout_alignParentLeft="true"
-                android:layout_gravity="center_vertical"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Bank Details"
-                android:textAllCaps="true"
-                android:layout_toRightOf="@+id/user_bank_approve"
-                android:textColor="@color/colorPrimaryDark"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin" />
-            <ImageView
-                android:id="@+id/bank_arrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_arrow_right_144dp"
-                android:layout_alignParentRight="true"/>
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        card_view:cardCornerRadius="0dp"
-        card_view:cardUseCompatPadding="false"
-        android:layout_marginTop="1dp">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:padding="10dp"
-            android:gravity="center_vertical">
-
-            <ImageView
-                android:id="@+id/user_ssn_approve"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_u_expire"
-                android:layout_alignParentLeft="true"
-                android:layout_gravity="center_vertical"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ssn/ein"
-                android:textAllCaps="true"
-                android:layout_toRightOf="@+id/user_ssn_approve"
-                android:textColor="@color/colorPrimaryDark"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin" />
-            <ImageView
-                android:id="@+id/ssn_arrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_arrow_right_144dp"
-                android:layout_alignParentRight="true"/>
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        card_view:cardCornerRadius="0dp"
-        card_view:cardUseCompatPadding="false"
-        android:layout_marginTop="10dp">
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="vertical">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAllCaps="true"
-                    android:text="Email"
-                    android:drawableLeft="@drawable/ic_email_24dp"
-                    android:drawablePadding="10dp"
-                    android:layout_alignParentLeft="true"
-                    android:textStyle="bold"
-                    android:textColor="@color/profile_text"/>
-                <TextView
-                    android:id="@+id/profile_short_mail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="mail"
-                    android:layout_alignParentRight="true"
-                    android:textStyle="normal"
-                    android:textColor="@color/profile_text"
-                    android:layout_gravity="right"/>
-
-            </RelativeLayout>
-            <RelativeLayout
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAllCaps="true"
-                    android:text="Phone"
-                    android:drawableLeft="@drawable/ic_phone_24dp"
-                    android:drawablePadding="10dp"
-                    android:layout_alignParentLeft="true"
-                    android:textStyle="bold"
-                    android:textColor="@color/profile_text"/>
-                <TextView
-                    android:id="@+id/profile_short_phone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="mail"
-                    android:layout_alignParentRight="true"
-                    android:textStyle="normal"
-                    android:textColor="@color/profile_text"
-                    android:layout_gravity="right"/>
-            </RelativeLayout>
-            <RelativeLayout
+                android:layout_marginTop="10dp"
+                card_view:cardCornerRadius="0dp"
+                card_view:cardUseCompatPadding="false">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:gravity="center_vertical"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/user_identity_approve"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_u_expire" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:layout_toRightOf="@+id/user_identity_approve"
+                        android:text="Identification"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorPrimaryDark" />
+
+                    <ImageView
+                        android:id="@+id/identification_arrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:src="@drawable/ic_arrow_right_144dp" />
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAllCaps="true"
-                    android:text="Address"
-                    android:layout_toLeftOf="@+id/profile_short_address"
-                    android:drawableLeft="@drawable/ic_address_24dp"
-                    android:drawablePadding="10dp"
-                    android:layout_alignParentLeft="true"
-                    android:textStyle="bold"
-                    android:textColor="@color/profile_text"/>
-                <TextView
-                    android:id="@+id/profile_short_address"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="mail"
-                    android:layout_alignParentRight="true"
-                    android:textStyle="normal"
-                    android:textColor="@color/profile_text"
-                    android:gravity="right"/>
-            </RelativeLayout>
+                android:layout_marginTop="1dp"
+                card_view:cardCornerRadius="0dp"
+                card_view:cardUseCompatPadding="false">
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:gravity="center_vertical"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/user_bank_approve"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_u_expire" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:layout_toRightOf="@+id/user_bank_approve"
+                        android:text="Bank Details"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorPrimaryDark" />
+
+                    <ImageView
+                        android:id="@+id/bank_arrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:src="@drawable/ic_arrow_right_144dp" />
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                card_view:cardCornerRadius="0dp"
+                card_view:cardUseCompatPadding="false">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:gravity="center_vertical"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/user_ssn_approve"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_u_expire" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:layout_toRightOf="@+id/user_ssn_approve"
+                        android:text="Ssn/ein"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorPrimaryDark" />
+
+                    <ImageView
+                        android:id="@+id/ssn_arrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:src="@drawable/ic_arrow_right_144dp" />
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                card_view:cardCornerRadius="0dp"
+                card_view:cardUseCompatPadding="false">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:gravity="center"
+                    android:padding="10dp">
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:layout_toLeftOf="@+id/profile_div"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="5dp">
+
+                        <RelativeLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_toLeftOf="@+id/profile_short_mail"
+                                android:drawableLeft="@drawable/ic_email_24dp"
+                                android:drawablePadding="10dp"
+                                android:text="Email"
+                                android:textAllCaps="true"
+                                android:textColor="@color/profile_text"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/profile_short_mail"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_gravity="right"
+                                android:text="mail"
+                                android:textColor="@color/profile_text"
+                                android:textStyle="normal" />
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/profile_div"
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_toStartOf="@+id/layout"
+                        android:background="@color/button_foreground" />
+
+                    <LinearLayout
+                        android:id="@+id/layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:padding="5dp">
+
+                        <ImageView
+                            android:id="@+id/image_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_check_24dp"
+                            android:visibility="gone" />
+
+                        <Button
+                            android:id="@+id/resend_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/button_fill_background"
+                            android:drawableLeft="@drawable/ic_email_white_18dp"
+                            android:padding="3dp"
+                            android:text="Resend"
+                            android:textAllCaps="true"
+                            android:textColor="@color/button_foreground"
+                            android:visibility="gone" />
+                    </LinearLayout>
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                card_view:cardCornerRadius="0dp"
+                card_view:cardUseCompatPadding="false">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_gravity="right"
+                            android:text="Profile Info"
+                            android:textAllCaps="false"
+                            android:textColor="@color/profile_text"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:id="@+id/info_arrow"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:src="@drawable/ic_arrow_right_144dp" />
+                    </RelativeLayout>
+
+                    <View
+                        android:id="@+id/divider"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10dp"
+                        android:alpha="0.3"
+                        android:background="@color/profile_text" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:drawableLeft="@drawable/ic_phone_24dp"
+                                android:drawablePadding="10dp"
+                                android:text="Phone"
+                                android:textAllCaps="true"
+                                android:textColor="@color/profile_text"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/profile_short_phone"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_gravity="right"
+                                android:text="mail"
+                                android:textColor="@color/profile_text"
+                                android:textStyle="normal" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_toLeftOf="@+id/profile_short_address"
+                                android:drawableLeft="@drawable/ic_address_24dp"
+                                android:drawablePadding="10dp"
+                                android:text="Address"
+                                android:textAllCaps="true"
+                                android:textColor="@color/profile_text"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/profile_short_address"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:gravity="right"
+                                android:text="mail"
+                                android:textColor="@color/profile_text"
+                                android:textStyle="normal" />
+                        </RelativeLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
         </LinearLayout>
-
-    </android.support.v7.widget.CardView>
+    </ScrollView>
 </LinearLayout>

@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatSpinner;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -43,7 +44,7 @@ public class ProfileIdentification extends AppCompatActivity implements DMRResul
     private Urls urls;
     AlertBox box;
     EditText f_name, l_name, email, mobile, city, zip_code, cmpny_name, paypal_id, address, suite_no;
-    Button b1,b2;
+    Button b2;
     private AppCompatSpinner appCompatSpinner;
 
     private void init() {
@@ -73,16 +74,7 @@ public class ProfileIdentification extends AppCompatActivity implements DMRResul
         cmpny_name = (EditText)findViewById(R.id.identity_cmpny_name);
         paypal_id = (EditText)findViewById(R.id.identity_paypal_id);
         appCompatSpinner = (AppCompatSpinner)findViewById(R.id.identity_state_spinner);
-        b1 = (Button)findViewById(R.id.edit_save_btn);
         b2 = (Button)findViewById(R.id.save_btn);
-        b1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                b2.setVisibility(View.VISIBLE);
-                b1.setVisibility(View.GONE);
-                enableProfile(true);
-            }
-        });
         b2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,7 +91,6 @@ public class ProfileIdentification extends AppCompatActivity implements DMRResul
                 }
 
                 updateProfile();
-                b1.setVisibility(View.VISIBLE);
                 b2.setVisibility(View.GONE);
                 //enableProfile(false);
             }
@@ -111,12 +102,21 @@ public class ProfileIdentification extends AppCompatActivity implements DMRResul
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_identification,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
                 //NavUtils.navigateUpFromSameTask(this);
                 this.onBackPressed();
                 return true;
+            case R.id.action_edit:
+                b2.setVisibility(View.VISIBLE);
+                enableProfile(true);
         }
         return super.onOptionsItemSelected(item);
     }

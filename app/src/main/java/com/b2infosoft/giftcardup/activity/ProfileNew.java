@@ -11,9 +11,13 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
@@ -50,8 +54,9 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
     Progress progress;
 
     CollapsingToolbarLayout toolbarLayout;
-    ImageView profile_image,arrow1,arrow2,arrow3,identity,bank,ssn;
+    ImageView profile_image,arrow1,arrow2,arrow3,identity,bank,ssn,arrow4,image_approve_mail;
     TextView member_science,total_sold,total_saving,mail,mobile,address;
+    Button resend;
     private final int PICK_IMAGE_REQUEST = 1;
     private Map<Integer,Integer> approveMap;
     private Uri filePath;
@@ -71,6 +76,7 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         approveMap.put(3,R.drawable.ic_u_expire);
         approveMap.put(4,R.drawable.ic_u_suspend);
         approveMap.put(9,R.drawable.ic_u_not_submitted);
+
     }
 
     @Override
@@ -89,6 +95,7 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         toolbarLayout.setTitle(user.getFirstName()+" "+user.getLastName());
 
         profile_image = (ImageView)findViewById(R.id.profile_user_image);
+        image_approve_mail = (ImageView)findViewById(R.id.image_view);
         identity = (ImageView)findViewById(R.id.user_identity_approve);
         bank = (ImageView)findViewById(R.id.user_bank_approve);
         ssn = (ImageView)findViewById(R.id.user_ssn_approve);
@@ -98,11 +105,15 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         arrow2.setOnClickListener(this);
         arrow3 = (ImageView)findViewById(R.id.ssn_arrow);
         arrow3.setOnClickListener(this);
+        arrow4 = (ImageView)findViewById(R.id.info_arrow);
+        arrow4.setOnClickListener(this);
         total_saving = (TextView)findViewById(R.id.total_saving);
         total_sold = (TextView)findViewById(R.id.total_sold);
         mail = (TextView)findViewById(R.id.profile_short_mail);
         mobile = (TextView)findViewById(R.id.profile_short_phone);
         address = (TextView)findViewById(R.id.profile_short_address);
+        resend = (Button)findViewById(R.id.resend_btn);
+        resend.setOnClickListener(this);
        // member_science = (TextView)findViewById(R.id.profile_member);
         if (active.isLogin()) {
             mail.setText(user.getEmail());
@@ -113,14 +124,22 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         total_sold.setText("$"+user.getTotalSold());
        // member_science.setText("Member Since : ".concat(format.getDate(user.getJoinDate())));
          fetchContactInfo();
+        checkVerifiedStatus();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showFileChooser();
-            }
-        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_profile_new,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.action_edit){
+            showFileChooser();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void setProfile(ContactInformation information) {
@@ -133,6 +152,12 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
            identity.setImageResource(approveMap.get(approve.getIdentification()));
            bank.setImageResource(approveMap.get(approve.getBank()));
            ssn.setImageResource(approveMap.get(approve.getSsn()));
+        int mail = approve.getEmail();
+        if(mail == 1){
+            image_approve_mail.setVisibility(View.VISIBLE);
+        }else{
+            resend.setVisibility(View.VISIBLE);
+        }
     }
 
     private void showFileChooser() {
@@ -206,9 +231,22 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
             case R.id.ssn_arrow:
                 startActivity(new Intent(this, ProfileSsnEin.class));
                 break;
+            case R.id.info_arrow:
+                startActivity(new Intent(this, ProfileIdentification.class));
+                break;
+            case R.id.resend_btn:
+                Toast.makeText(this,"Coming Soon...",Toast.LENGTH_SHORT).show();
+                break;
             default:
 
         }
+    }
+
+    private void checkVerifiedStatus() {
+        Map<String, String> map = new HashMap<>();
+        map.put(tags.USER_ACTION, tags.USER_ALL_APPROVE_INFO);
+        map.put(tags.USER_ID, active.getUser().getUserId() + "");
+        dmrRequest.doPost(urls.getUserInfo(), map, this);
     }
 
     @Override
