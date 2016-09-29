@@ -1,10 +1,12 @@
 package com.b2infosoft.giftcardup.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,7 +39,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProfileSsnEin extends AppCompatActivity implements DMRResult{
+public class ProfileSsnEin extends AppCompatActivity implements DMRResult {
 
     private final String TAG = ProfileSsnEin.class.getName();
     private Active active;
@@ -47,39 +49,24 @@ public class ProfileSsnEin extends AppCompatActivity implements DMRResult{
     private final int PICK_IMAGE_REQUEST = 1;
     private Uri filePath;
     private Bitmap bitmap;
+    AlertDialog.Builder dialog;
 
-    Button approve_for_selling, identification_button, next_btn, save, cancel;
-    Button verification_email, verification_identity, verification_ssn;
-    TextView verification_email_status, verification_identity_status, verification_ssn_status;
+    Button identification_button, save, cancel;
 
     ImageView identification_image;
     RadioButton idTypeSSN, idTypeEIN;
     EditText ssn_ein;
     ScrollView scroll_view_step_one;
-    LinearLayout approve_for_selling_layout, approve_status_layout;
-
-    private HashMap<Integer, String> statusName = new HashMap<>();
-    private HashMap<Integer, Integer> statusColor = new HashMap<>();
+    LinearLayout approve_for_selling_layout;
 
     private void init() {
         active = Active.getInstance(this);
         tags = Tags.getInstance();
         urls = Urls.getInstance();
         dmrRequest = DMRRequest.getInstance(this, TAG);
-        statusName.put(0, "PENDING");
-        statusName.put(1, "APPROVE");
-        statusName.put(2, "REJECTED");
-        statusName.put(3, "EXPIRED");
-        statusName.put(4, "SUSPEND");
-        statusName.put(9, "NOT SUBMITTED");
-
-        statusColor.put(0, getResources().getColor(R.color.verification_pending));
-        statusColor.put(1, getResources().getColor(R.color.verification_approve));
-        statusColor.put(2, getResources().getColor(R.color.verification_rejected));
-        statusColor.put(3, getResources().getColor(R.color.verification_expired));
-        statusColor.put(4, getResources().getColor(R.color.verification_suspend));
-        statusColor.put(9, getResources().getColor(R.color.verification_not_submitted));
+        dialog = new AlertDialog.Builder(this);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,30 +74,21 @@ public class ProfileSsnEin extends AppCompatActivity implements DMRResult{
         init();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        scroll_view_step_one = (ScrollView)findViewById(R.id.scroll_view_step_one);
+        scroll_view_step_one = (ScrollView) findViewById(R.id.scroll_view_step_one);
         approve_for_selling_layout = (LinearLayout) findViewById(R.id.approve_for_selling_layout);
-        approve_status_layout = (LinearLayout)findViewById(R.id.approve_status_layout);
-        approve_for_selling = (Button) findViewById(R.id.ssn_ein_approved_for_sell);
-        approve_for_selling.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                approve_for_selling.setVisibility(View.GONE);
-                approve_for_selling_layout.setVisibility(View.VISIBLE);
-            }
-        });
-        identification_button = (Button)findViewById(R.id.ssn_ein_identification_button);
+        identification_button = (Button) findViewById(R.id.ssn_ein_identification_button);
         identification_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showFileChooser();
             }
         });
-        identification_image = (ImageView)findViewById(R.id.ssn_ein_identification_image);
-        ssn_ein = (EditText)findViewById(R.id.ssn_ein_no);
-        idTypeSSN = (RadioButton)findViewById(R.id.id_type_ssn);
-        idTypeEIN = (RadioButton)findViewById(R.id.id_type_ein);
-        cancel = (Button)findViewById(R.id.bank_cancel_btn);
-        save = (Button)findViewById(R.id.bank_save_btn);
+        identification_image = (ImageView) findViewById(R.id.ssn_ein_identification_image);
+        ssn_ein = (EditText) findViewById(R.id.ssn_ein_no);
+        idTypeSSN = (RadioButton) findViewById(R.id.id_type_ssn);
+        idTypeEIN = (RadioButton) findViewById(R.id.id_type_ein);
+        cancel = (Button) findViewById(R.id.bank_cancel_btn);
+        save = (Button) findViewById(R.id.bank_save_btn);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,38 +108,14 @@ public class ProfileSsnEin extends AppCompatActivity implements DMRResult{
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                approve_for_selling.setVisibility(View.VISIBLE);
-                approve_for_selling_layout.setVisibility(View.GONE);
+                onBackPressed();
             }
         });
-        getApproveForSelling();
-
-        verification_email = (Button)findViewById(R.id.verified_email);
-        verification_identity = (Button)findViewById(R.id.verified_identity);
-        verification_identity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ProfileSsnEin.this, AddIdentity.class));
-            }
-        });
-
-        verification_ssn = (Button)findViewById(R.id.verified_ssn);
-        verification_ssn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ProfileSsnEin.this, AddSSN.class));
-            }
-        });
-
-        verification_email_status = (TextView)findViewById(R.id.verified_email_status);
-        verification_identity_status = (TextView)findViewById(R.id.verified_identity_status);
-        verification_ssn_status = (TextView)findViewById(R.id.verified_ssn_status);
-        checkVerifiedStatus();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 //NavUtils.navigateUpFromSameTask(this);
                 this.onBackPressed();
@@ -170,63 +124,12 @@ public class ProfileSsnEin extends AppCompatActivity implements DMRResult{
         return super.onOptionsItemSelected(item);
     }
 
-    private void updateVerifiedStatus(Approve approve) {
-        verification_email_status.setText(statusName.get(approve.getEmail()));
-        verification_email_status.setBackgroundColor(statusColor.get(approve.getEmail()));
-        //       verification_email_status.setBackgroundColor(getResources().getColor());
-        verification_identity_status.setText(statusName.get(approve.getIdentification()));
-        verification_identity_status.setBackgroundColor(statusColor.get(approve.getIdentification()));
-        verification_ssn_status.setText(statusName.get(approve.getSsn()));
-        verification_ssn_status.setBackgroundColor(statusColor.get(approve.getSsn()));
-        int identi = approve.getIdentification();
-        if (identi != 0 && identi != 1) {
-            verification_identity.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_publish_24dp, 0);
-            verification_identity.setClickable(true);
-        } else {
-            verification_identity.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-            verification_identity.setClickable(false);
-        }
-        int ssn = approve.getSsn();
-        if (ssn != 0 && ssn != 1) {
-            verification_ssn.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_publish_24dp, 0);
-            verification_ssn.setClickable(true);
-        } else {
-            verification_ssn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-            verification_ssn.setClickable(false);
-        }
-    }
-
-    private void checkVerifiedStatus() {
-        Map<String, String> map = new HashMap<>();
-        map.put(tags.USER_ACTION, tags.USER_ALL_APPROVE_INFO);
-        map.put(tags.USER_ID, active.getUser().getUserId() + "");
-        dmrRequest.doPost(urls.getUserInfo(), map, this);
-    }
-
-    private void getApproveForSelling() {
-        Map<String, String> map = new HashMap<>();
-        map.put(tags.USER_ACTION, tags.CHECK_APPROVE_FOR_SELLING);
-        map.put(tags.USER_ID, active.getUser().getUserId() + "");
-        dmrRequest.doPost(urls.getUserInfo(), map, this);
-    }
-
     @Override
     public void onSuccess(JSONObject jsonObject) {
         try {
             if (jsonObject.has(tags.SUCCESS)) {
                 if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
-                    if (jsonObject.has(tags.CHECK_APPROVE_FOR_SELLING)) {
-                        if (jsonObject.getInt(tags.CHECK_APPROVE_FOR_SELLING) == tags.PASS) {
-                            approve_for_selling.setVisibility(View.GONE);
-                            approve_status_layout.setVisibility(View.VISIBLE);
-                        } else if (jsonObject.getInt(tags.CHECK_APPROVE_FOR_SELLING) == tags.FAIL) {
-                            approve_for_selling.setVisibility(View.VISIBLE);
-                            approve_status_layout.setVisibility(View.GONE);
-                        }
-                    }
-                    if (jsonObject.has(tags.USER_ALL_APPROVE_INFO)) {
-                        updateVerifiedStatus(Approve.fromJSON(jsonObject.getJSONObject(tags.USER_ALL_APPROVE_INFO)));
-                    }
+
                 } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
 
                 }
@@ -262,8 +165,6 @@ public class ProfileSsnEin extends AppCompatActivity implements DMRResult{
                 else {
                     Toast.makeText(this, "IMAGE NULL", Toast.LENGTH_SHORT).show();
                 }
-                approve_for_selling.setVisibility(View.GONE);
-                approve_for_selling_layout.setVisibility(View.VISIBLE);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -317,6 +218,32 @@ public class ProfileSsnEin extends AppCompatActivity implements DMRResult{
         @Override
         protected void onPostExecute(String s) {
             Log.d("OUTPUT", s);
+            try {
+                JSONObject jsonObject = new JSONObject(s);
+                if (jsonObject.has(tags.SUCCESS)) {
+                    if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                        dialog.setMessage("Successfully Submitted");
+                        dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivity(new Intent(ProfileSsnEin.this, ProfileNew.class));
+                                finish();
+                            }
+                        });
+                    } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
+                        dialog.setMessage("Try Again");
+                        dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                    }
+                }
+                dialog.create().show();
+            } catch (JSONException e) {
+
+            }
             super.onPostExecute(s);
 
         }

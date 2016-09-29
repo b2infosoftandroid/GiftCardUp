@@ -18,7 +18,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="110dp"
             android:background="@color/button_foreground"
             android:padding="5dp">
 
@@ -34,6 +34,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="$5000"
+                    android:textSize="30sp"
                     android:textAllCaps="true"
                     android:textColor="@color/colorPrimaryDark"
                     android:textStyle="bold" />
@@ -43,6 +44,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/menu_available_fund"
                     android:textAllCaps="true"
+                    android:layout_marginTop="10dp"
                     android:textColor="@color/colorPrimaryDark" />
             </LinearLayout>
 
@@ -72,6 +74,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="$5000"
+                        android:textSize="20sp"
                         android:textAllCaps="true"
                         android:textColor="@color/colorPrimaryDark"
                         android:textStyle="bold" />
@@ -81,6 +84,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/profile_total_saving"
                         android:textAllCaps="true"
+                        android:layout_marginTop="3dp"
                         android:textColor="@color/colorPrimaryDark" />
                 </LinearLayout>
 
@@ -97,6 +101,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/profile_fund_divider"
                     android:layout_alignParentBottom="true"
+                    android:layout_marginTop="10dp"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -105,6 +110,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="$5120"
+                        android:textSize="20sp"
                         android:textAllCaps="true"
                         android:textColor="@color/colorPrimaryDark"
                         android:textStyle="bold" />
@@ -114,6 +120,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/profile_total_sold"
                         android:textAllCaps="true"
+                        android:layout_marginTop="3dp"
                         android:textColor="@color/colorPrimaryDark" />
                 </LinearLayout>
             </RelativeLayout>
@@ -158,14 +165,16 @@
                         android:layout_toRightOf="@+id/user_identity_approve"
                         android:text="Identification"
                         android:textAllCaps="true"
-                        android:textColor="@color/colorPrimaryDark" />
+                        android:textColor="@color/profile_text"
+                        android:textStyle="bold"/>
 
                     <ImageView
                         android:id="@+id/identification_arrow"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:src="@drawable/ic_arrow_right_144dp" />
+                        android:src="@drawable/ic_upload_24dp"
+                        android:visibility="gone"/>
                 </RelativeLayout>
             </android.support.v7.widget.CardView>
 
@@ -197,7 +206,8 @@
                         android:layout_toRightOf="@+id/user_bank_approve"
                         android:text="Bank Details"
                         android:textAllCaps="true"
-                        android:textColor="@color/colorPrimaryDark" />
+                        android:textColor="@color/profile_text"
+                        android:textStyle="bold" />
 
                     <ImageView
                         android:id="@+id/bank_arrow"
@@ -236,16 +246,30 @@
                         android:layout_toRightOf="@+id/user_ssn_approve"
                         android:text="Ssn/ein"
                         android:textAllCaps="true"
-                        android:textColor="@color/colorPrimaryDark" />
+                        android:textColor="@color/profile_text"
+                        android:textStyle="bold" />
 
                     <ImageView
                         android:id="@+id/ssn_arrow"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:src="@drawable/ic_arrow_right_144dp" />
+                        android:src="@drawable/ic_upload_24dp"
+                        android:visibility="gone"/>
                 </RelativeLayout>
             </android.support.v7.widget.CardView>
+
+            <Button
+                android:id="@+id/approve_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Become Approved For Selling"
+                android:padding="10dp"
+                android:textAllCaps="true"
+                android:gravity="center"
+                android:textColor="@color/colorPrimaryDark"
+                android:background="@drawable/button_background"/>
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
@@ -356,7 +380,7 @@
                             android:layout_alignParentLeft="true"
                             android:layout_gravity="right"
                             android:text="Profile Info"
-                            android:textAllCaps="false"
+                            android:textAllCaps="true"
                             android:textColor="@color/profile_text"
                             android:textStyle="bold" />
 

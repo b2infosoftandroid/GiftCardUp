@@ -22,24 +22,11 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <Button
-                android:id="@+id/ssn_ein_approved_for_sell"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_fill_background"
-                android:padding="@dimen/button_margin_left"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/approved_for_sell"
-                android:textAllCaps="true"
-                android:textColor="@color/button_foreground"
-                android:visibility="gone" />
-
             <LinearLayout
                 android:id="@+id/approve_for_selling_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
+                android:orientation="vertical">
 
                 <ImageView
                     android:id="@+id/ssn_ein_identification_image"
@@ -141,95 +128,6 @@
                         android:textAllCaps="true"
                         android:textColor="@color/button_foreground" />
                 </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/approve_status_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:orientation="horizontal">
-                    <Button
-                        android:id="@+id/verified_email"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/button_fill_background"
-                        android:padding="@dimen/button_margin_left"
-                        android:text="EMAIL"
-                        android:textAllCaps="true"
-                        android:clickable="false"
-                        android:textColor="@color/button_foreground" />
-                    <TextView
-                        android:id="@+id/verified_email_status"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/verification_font"
-                        android:padding="5dp"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentEnd="true" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/verified_identity"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/button_fill_background"
-                        android:padding="@dimen/button_margin_left"
-                        android:text="IDENTITY"
-                        android:textAllCaps="true"
-                        android:clickable="false"
-                        android:textColor="@color/button_foreground" />
-
-                    <TextView
-                        android:id="@+id/verified_identity_status"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentEnd="true"
-                        android:padding="5dp"
-                        />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:orientation="horizontal">
-                    <Button
-                        android:id="@+id/verified_ssn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/button_fill_background"
-                        android:padding="@dimen/button_margin_left"
-                        android:text="SSN/ID"
-                        android:textAllCaps="true"
-                        android:clickable="false"
-                        android:textColor="@color/button_foreground" />
-
-                    <TextView
-                        android:id="@+id/verified_ssn_status"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="5dp"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentEnd="true"
-                        />
-                </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

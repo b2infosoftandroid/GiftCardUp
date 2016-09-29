@@ -9,6 +9,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -26,6 +27,7 @@ import com.b2infosoft.giftcardup.app.Format;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
+import com.b2infosoft.giftcardup.custom.AlertBox;
 import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.model.Approve;
 import com.b2infosoft.giftcardup.model.ContactInformation;
@@ -50,13 +52,14 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
     private Urls urls;
     private Config config;
     private Format format;
+    AlertBox alertBox;
     private DMRRequest dmrRequest;
     Progress progress;
 
     CollapsingToolbarLayout toolbarLayout;
     ImageView profile_image,arrow1,arrow2,arrow3,identity,bank,ssn,arrow4,image_approve_mail;
     TextView member_science,total_sold,total_saving,mail,mobile,address;
-    Button resend;
+    Button resend,cardView;
     private final int PICK_IMAGE_REQUEST = 1;
     private Map<Integer,Integer> approveMap;
     private Uri filePath;
@@ -68,6 +71,7 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         urls = Urls.getInstance();
         config = Config.getInstance();
         format = Format.getInstance();
+        alertBox = new AlertBox(this);
         dmrRequest = DMRRequest.getInstance(this,TAG);
         approveMap = new HashMap<>();
         approveMap.put(0,R.drawable.ic_u_pending);
@@ -100,11 +104,9 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         bank = (ImageView)findViewById(R.id.user_bank_approve);
         ssn = (ImageView)findViewById(R.id.user_ssn_approve);
         arrow1 = (ImageView)findViewById(R.id.identification_arrow);
-        arrow1.setOnClickListener(this);
         arrow2 = (ImageView)findViewById(R.id.bank_arrow);
         arrow2.setOnClickListener(this);
         arrow3 = (ImageView)findViewById(R.id.ssn_arrow);
-        arrow3.setOnClickListener(this);
         arrow4 = (ImageView)findViewById(R.id.info_arrow);
         arrow4.setOnClickListener(this);
         total_saving = (TextView)findViewById(R.id.total_saving);
@@ -114,6 +116,7 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         address = (TextView)findViewById(R.id.profile_short_address);
         resend = (Button)findViewById(R.id.resend_btn);
         resend.setOnClickListener(this);
+        cardView = (Button) findViewById(R.id.approve_card);
        // member_science = (TextView)findViewById(R.id.profile_member);
         if (active.isLogin()) {
             mail.setText(user.getEmail());
@@ -125,6 +128,7 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
        // member_science.setText("Member Since : ".concat(format.getDate(user.getJoinDate())));
          fetchContactInfo();
         checkVerifiedStatus();
+        getApproveForSelling();
 
     }
 
@@ -136,8 +140,14 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.action_edit){
-            showFileChooser();
+        switch (item.getItemId()){
+            case android.R.id.home:
+                //NavUtils.navigateUpFromSameTask(this);
+                this.onBackPressed();
+                finish();
+                return true;
+            case R.id.action_edit:
+                showFileChooser();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -147,6 +157,12 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
             address.setText(information.getAddressFull(this));
     }
 
+    private void getApproveForSelling() {
+        Map<String, String> map = new HashMap<>();
+        map.put(tags.USER_ACTION, tags.CHECK_APPROVE_FOR_SELLING);
+        map.put(tags.USER_ID, active.getUser().getUserId() + "");
+        dmrRequest.doPost(urls.getUserInfo(), map, this);
+    }
 
     private void setIcons(Approve approve){
            identity.setImageResource(approveMap.get(approve.getIdentification()));
@@ -155,8 +171,31 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         int mail = approve.getEmail();
         if(mail == 1){
             image_approve_mail.setVisibility(View.VISIBLE);
+            cardView.setOnClickListener(this);
         }else{
             resend.setVisibility(View.VISIBLE);
+            cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                   alertBox.setTitle("Alert");
+                    alertBox.setMessage("Verify Email");
+                    alertBox.show();
+                }
+            });
+        }
+        int identity = approve.getIdentification();
+        if(identity != 0 && identity != 1){
+            arrow1.setVisibility(View.VISIBLE);
+            arrow1.setOnClickListener(this);
+        }else{
+            arrow1.setVisibility(View.GONE);
+        }
+        int ssn = approve.getSsn();
+        if(ssn != 0 && ssn != 1){
+            arrow3.setVisibility(View.VISIBLE);
+            arrow3.setOnClickListener(this);
+        }else{
+            arrow3.setVisibility(View.GONE);
         }
     }
 
@@ -223,19 +262,23 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.identification_arrow:
-                  startActivity(new Intent(this, ProfileIdentification.class));
+                startActivity(new Intent(this, AddIdentity.class));
                 break;
             case R.id.bank_arrow:
                 startActivity(new Intent(this, ProfileBankDetails.class));
                 break;
             case R.id.ssn_arrow:
-                startActivity(new Intent(this, ProfileSsnEin.class));
+                startActivity(new Intent(this, AddSSN.class));
                 break;
             case R.id.info_arrow:
                 startActivity(new Intent(this, ProfileIdentification.class));
                 break;
             case R.id.resend_btn:
                 Toast.makeText(this,"Coming Soon...",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.approve_card:
+                startActivity(new Intent(this, ProfileSsnEin.class));
+                finish();
                 break;
             default:
 
@@ -254,6 +297,13 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         try {
             if (jsonObject.has(tags.SUCCESS)) {
                 if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                    if (jsonObject.has(tags.CHECK_APPROVE_FOR_SELLING)) {
+                        if (jsonObject.getInt(tags.CHECK_APPROVE_FOR_SELLING) == tags.PASS) {
+                            cardView.setVisibility(View.GONE);
+                        } else if (jsonObject.getInt(tags.CHECK_APPROVE_FOR_SELLING) == tags.FAIL) {
+                            cardView.setVisibility(View.VISIBLE);
+                        }
+                    }
                     if(jsonObject.has(tags.USER_ALL_APPROVE_INFO)){
                         setIcons(Approve.fromJSON(jsonObject.getJSONObject(tags.USER_ALL_APPROVE_INFO)));
                     }
