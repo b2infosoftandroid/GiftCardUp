@@ -24,7 +24,9 @@ public class Order {
     private int readStatus;
     private String transactionId;
     private int mainOrderId;
-
+    private String price;
+    private String value;
+    private int approveStatus;
     public String getCardName() {
         return cardName;
     }
@@ -121,6 +123,36 @@ public class Order {
         this.mainOrderId = mainOrderId;
     }
 
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    /**
+     * 3,6 => Completed,
+     * 7 => Under Investigation,
+     * 8 => Investigated
+     * @return int
+     */
+    public int getApproveStatus() {
+        return approveStatus;
+    }
+
+    public void setApproveStatus(int approveStatus) {
+        this.approveStatus = approveStatus;
+    }
+
     public static Order fromJSON(JSONObject object) {
         Order order = new Order();
         Tags tags = Tags.getInstance();
@@ -160,6 +192,15 @@ public class Order {
             }
             if (object.has(tags.MAIN_ORDER_ID)) {
                 order.setMainOrderId(object.getInt(tags.MAIN_ORDER_ID));
+            }
+            if (object.has(tags.GIFT_CARD_CARD_VALUE)) {
+                order.setValue(object.getString(tags.GIFT_CARD_CARD_VALUE));
+            }
+            if (object.has(tags.GIFT_CARD_CARD_PRICE)) {
+                order.setPrice(object.getString(tags.GIFT_CARD_CARD_PRICE));
+            }
+            if (object.has(tags.GIFT_CARD_APPROVE_STATUS)) {
+                order.setApproveStatus(object.getInt(tags.GIFT_CARD_APPROVE_STATUS));
             }
         } catch (JSONException e) {
             e.printStackTrace();

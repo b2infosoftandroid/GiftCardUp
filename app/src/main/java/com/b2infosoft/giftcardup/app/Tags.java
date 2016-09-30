@@ -3,9 +3,9 @@ package com.b2infosoft.giftcardup.app;
 /**
  * Created by rajesh on 8/10/2016.
  */
+
 public class Tags {
     private static Tags ourInstance = new Tags();
-
     public static Tags getInstance() {
         return ourInstance;
     }
