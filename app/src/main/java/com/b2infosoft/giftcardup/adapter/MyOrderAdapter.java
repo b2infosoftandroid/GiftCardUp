@@ -5,13 +5,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +27,7 @@ import com.b2infosoft.giftcardup.app.Format;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
+import com.b2infosoft.giftcardup.custom.AlertBox;
 import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.model.CartSummary;
 import com.b2infosoft.giftcardup.model.EmptyBrand;
@@ -141,8 +145,17 @@ public class MyOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 public void onClick(View v) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setTitle("Dispute Gift Card");
-                    EditText ed1 = new EditText(context);
+                    final EditText ed1 = new EditText(context);
                     ed1.setLines(5);
+                    ed1.setGravity(Gravity.START);
+                    ed1.setPadding(16,16,16,16);
+                    ed1.setHint("Add Order Review");
+                    ed1.setBackground(context.getResources().getDrawable(R.drawable.layout_border));
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.MATCH_PARENT);
+                    lp.setMargins(20,10,20,0);
+                    ed1.setLayoutParams(lp);
+                    builder.setView(ed1);
                     builder.setPositiveButton("Send Review", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -150,8 +163,8 @@ public class MyOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             final Map<String, String> map = new HashMap<>();
                             map.put(tags.USER_ACTION, tags.CARD_DISPUTE_REVIEW);
                             map.put(tags.USER_ID, active.getUser().getUserId());
-                            map.put(tags.GIFT_ID, active.getUser().getUserId());
-                            map.put(tags.REVIEW, active.getUser().getUserId());
+                            map.put(tags.GIFT_ID, String.valueOf(card.getGiftCardId()));
+                            map.put(tags.REVIEW, ed1.getText().toString());
 
                             dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
                                 @Override
@@ -160,15 +173,10 @@ public class MyOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                     try {
                                         if (jsonObject.has(tags.SUCCESS)) {
                                             if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
-                                                if (jsonObject.has(tags.GIFT_CARDS)) {
-                                                    JSONArray array = jsonObject.getJSONArray(tags.GIFT_CARDS);
-                                                    cart.removeAll();
-                                                    for (int i = 0; i < array.length(); i++) {
-                                                        cart.addCartItem(GiftCard.fromJSON(array.getJSONObject(i)));
-                                                    }
-                                                    cardInfoList.remove(card);
-                                                }
-                                            } else if (jsonObject.getInt(tags.SUCCESS) == tags.SUSPEND) {
+                                                AlertBox box = new AlertBox(context);
+                                                box.setMessage("Successful");
+                                                box.show();
+                                            } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
 
                                             } else {
 
