@@ -32,6 +32,7 @@ import com.b2infosoft.giftcardup.fragments.AvailableFund;
 import com.b2infosoft.giftcardup.fragments.BulkListing;
 import com.b2infosoft.giftcardup.fragments.Dashboard;
 import com.b2infosoft.giftcardup.fragments.MyListing;
+import com.b2infosoft.giftcardup.fragments.MyOrder;
 import com.b2infosoft.giftcardup.fragments.RecommendBrands;
 import com.b2infosoft.giftcardup.fragments.ReferralRewards;
 import com.b2infosoft.giftcardup.fragments.SellCards;
@@ -459,7 +460,8 @@ public class Main extends GiftCardUp {
                     startActivity(new Intent(Main.this, MyProfile.class));
                     break;
                 case R.id.menu_item_my_orders:
-
+                    replaceFragment(new MyOrder());
+                    setTitle("My Orders");
                     break;
                 case R.id.menu_item_my_cart:
                     startActivity(new Intent(Main.this, ShoppingCart.class));

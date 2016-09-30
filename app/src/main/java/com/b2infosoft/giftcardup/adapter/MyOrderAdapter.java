@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,8 +26,10 @@ import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.model.CartSummary;
+import com.b2infosoft.giftcardup.model.EmptyBrand;
 import com.b2infosoft.giftcardup.model.EmptyCart;
 import com.b2infosoft.giftcardup.model.GiftCard;
+import com.b2infosoft.giftcardup.model.Order;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 import com.b2infosoft.giftcardup.volly.LruBitmapCache;
@@ -53,9 +56,9 @@ public class MyOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private Config config;
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_EMPTY = 1;
-    Button button;
+    String str;
 
-    public MyOrderAdapter(Context context, List<Object> cardInfoList, Button button) {
+    public MyOrderAdapter(Context context, List<Object> cardInfoList) {
         this.context = context;
         this.cardInfoList = cardInfoList;
         format = Format.getInstance();
@@ -66,7 +69,6 @@ public class MyOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         dmrRequest = DMRRequest.getInstance(context, TAG);
         progress = new Progress(context);
         cart = (Cart) context.getApplicationContext();
-        this.button = button;
     }
 
     public class CardHolder extends RecyclerView.ViewHolder {
@@ -80,13 +82,13 @@ public class MyOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public CardHolder(View view) {
             super(view);
             image = (ImageView) view.findViewById(R.id.card_image);
-            action = (Button) view.findViewById(R.id.action_delete);
-            name = (TextView) view.findViewById(R.id.card_name);
-            card_id = (TextView) view.findViewById(R.id.card_type);
+            action = (Button) view.findViewById(R.id.card_dispute_btn);
+            name = (TextView) view.findViewById(R.id.card);
+            card_id = (TextView) view.findViewById(R.id.card_id);
             value = (TextView) view.findViewById(R.id.card_value);
             price = (TextView) view.findViewById(R.id.card_price);
-            delivery = (TextView) view.findViewById(R.id.card_saving);
-            status = (TextView) view.findViewById(R.id.card_saving);
+            delivery = (TextView) view.findViewById(R.id.card_delivery);
+            status = (TextView) view.findViewById(R.id.card_status);
         }
     }
 
@@ -111,35 +113,47 @@ public class MyOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemViewType(int position) {
-        return cardInfoList.get(position) instanceof EmptyCart ? VIEW_TYPE_EMPTY : VIEW_TYPE_ITEM;
+        return cardInfoList.get(position) instanceof EmptyBrand ? VIEW_TYPE_EMPTY : VIEW_TYPE_ITEM;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof CardHolder) {
-            final GiftCard card = (GiftCard) cardInfoList.get(position);
+            final Order card = (Order) cardInfoList.get(position);
             final CardHolder cardHolder = (CardHolder) holder;
-            LruBitmapCache.loadCacheImage(context, cardHolder.image, config.getGiftCardImageAddress().concat(card.getCardImage()), "");
+
+            LruBitmapCache.loadCacheImage(context, cardHolder.image, config.getGiftCardImageAddress().concat(card.getCardImg()), "");
             cardHolder.name.setText(card.getCardName());
-            cardHolder.value.setText("$" + card.getCardPrice());
-            cardHolder.price.setText("$" + card.getCardValue());
+            cardHolder.card_id.setText(String.valueOf(card.getMainOrderId()));
+            cardHolder.delivery.setText(card.getOrderDate());
+            if(card.getApproveStatus() == 7){
+               str = "Under Investigation";
+            }else if(card.getApproveStatus() == 3 ||card.getApproveStatus() == 6){
+                str = "Completed";
+            }else if(card.getApproveStatus() == 8){
+                str = "Investigated";
+            }
+            cardHolder.status.setText(str);
+            cardHolder.value.setText("$" + card.getValue());
+            cardHolder.price.setText("$" + card.getPrice());
             cardHolder.action.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setTitle("Alert");
-                    builder.setMessage("Sure to delete ?");
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    builder.setTitle("Dispute Gift Card");
+                    EditText ed1 = new EditText(context);
+                    ed1.setLines(5);
+                    builder.setPositiveButton("Send Review", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
                             progress.show();
                             final Map<String, String> map = new HashMap<>();
-                            map.put(tags.USER_ACTION, tags.REMOVE_CART_ITEM_GIFT_CARD);
+                            map.put(tags.USER_ACTION, tags.CARD_DISPUTE_REVIEW);
                             map.put(tags.USER_ID, active.getUser().getUserId());
-                            map.put(tags.GIFT_CARD_GIFT_CARD_ID, card.getGiftCardID() + "");
+                            map.put(tags.GIFT_ID, active.getUser().getUserId());
+                            map.put(tags.REVIEW, active.getUser().getUserId());
 
-                            dmrRequest.doPost(urls.getCartInfo(), map, new DMRResult() {
+                            dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
                                 @Override
                                 public void onSuccess(JSONObject jsonObject) {
                                     progress.dismiss();
@@ -153,7 +167,6 @@ public class MyOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                                         cart.addCartItem(GiftCard.fromJSON(array.getJSONObject(i)));
                                                     }
                                                     cardInfoList.remove(card);
-                                                    isLastCard();
                                                 }
                                             } else if (jsonObject.getInt(tags.SUCCESS) == tags.SUSPEND) {
 
@@ -176,7 +189,7 @@ public class MyOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             });
                         }
                     });
-                    builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    builder.setNegativeButton("CLOSE", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -195,12 +208,4 @@ public class MyOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return cardInfoList == null ? 0 : cardInfoList.size();
     }
 
-    private void isLastCard() {
-        if (cardInfoList.size() == 1) {
-            cardInfoList.clear();
-            cardInfoList.add(new EmptyCart());
-            button.setVisibility(View.GONE);
-        }
-        MyOrderAdapter.super.notifyDataSetChanged();
-    }
 }

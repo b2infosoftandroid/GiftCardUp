@@ -84,6 +84,7 @@ public class Tags {
     public final String FB_PROFILE_UPDATE = "fb_profile_update";
     public final String PAY_WITH_AVAILABLE_FUND = "pay_with_available_fund";
     public final String MY_ORDERS_ALL = "my_orders_all";
+    public final String CARD_DISPUTE_REVIEW = "card_dispute_review";
 
     /*  CART PROCESSING  */
     public final String LEFT_TIME = "left_time";
@@ -328,7 +329,9 @@ public class Tags {
     public final String COMMISSION = "commission";
 
     /*         MY ORDER             */
+    public final String GIFT_ID = "gift_id";
     public final String ORDER_ID = "order_id";
+    public final String REVIEW = "review";
     public final String MAIL_TYPE = "mail_type";
     public final String MAIL_CLASS_PRICE = "mail_class_price";
     public final String ORDER_DATE = "order_date";

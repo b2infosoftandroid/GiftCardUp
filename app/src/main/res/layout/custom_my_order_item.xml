@@ -11,24 +11,25 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp">
+                android:layout_height="150dp"
+                android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@+id/view"
                     android:orientation="vertical"
                     android:padding="10dp">
 
                     <TextView
                         android:id="@+id/card_id"
-                        android:layout_width="wrap_content"
+                        android:layout_width="110dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:background="@drawable/layout_border"
-                        android:padding="5dp"
+                        android:padding="2dp"
+                        android:gravity="center"
                         android:text="00001"
                         android:textAllCaps="true"
                         android:textSize="@dimen/activity_horizontal_margin"
@@ -50,21 +51,18 @@
                         android:text="TISCON"
                         android:textAllCaps="true"
                         android:textSize="@dimen/activity_horizontal_margin"
-                        android:textStyle="bold|italic" />
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <View
                     android:id="@+id/view"
                     android:layout_width="1dp"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
                     android:background="@color/divider" />
 
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/view"
-                    android:gravity="center_horizontal|center_vertical"
                     android:orientation="vertical"
                     android:padding="10dp">
 
@@ -124,6 +122,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:text="Delivered On:"
+                            android:layout_toLeftOf="@+id/card_delivery"
                             android:textAllCaps="true"
                             android:textStyle="bold" />
 
@@ -143,6 +142,7 @@
                         android:layout_marginTop="5dp">
 
                         <TextView
+                            android:id="@+id/textview"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
@@ -155,12 +155,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
-                            android:text=""
+                            android:text="under investigatedgdfrtgdtrfghhhththh"
                             android:textAllCaps="true"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:gravity="end"
+                            android:layout_toEndOf="@+id/textview" />
                     </RelativeLayout>
                 </LinearLayout>
-            </RelativeLayout>
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"

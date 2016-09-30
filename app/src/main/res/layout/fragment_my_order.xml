@@ -1,8 +1,7 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.b2infosoft.giftcardup.fragments.MyOrder">
 
     <android.support.v7.widget.RecyclerView
@@ -14,5 +13,46 @@
         android:paddingRight="2dp"
         android:paddingTop="@dimen/activity_horizontal_margin">
     </android.support.v7.widget.RecyclerView>
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone">
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/empty_warning"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:alpha="0.3"
+                android:src="@drawable/ic_warning_144dp" />
+
+            <TextView
+                android:id="@+id/empty_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:alpha="0.4"
+                android:text="Sorry"
+                android:textAllCaps="true"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/brand_empty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:alpha="0.4"
+                android:text="Data Not Available"
+                android:textAllCaps="true"
+                android:textStyle="italic" />
+        </LinearLayout>
+    </FrameLayout>
+</FrameLayout>
