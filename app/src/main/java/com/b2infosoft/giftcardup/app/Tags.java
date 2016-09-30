@@ -83,7 +83,7 @@ public class Tags {
     public final String FB_LOGIN_USER = "fb_login_user";
     public final String FB_PROFILE_UPDATE = "fb_profile_update";
     public final String PAY_WITH_AVAILABLE_FUND = "pay_with_available_fund";
-
+    public final String MY_ORDERS_ALL = "my_orders_all";
 
     /*  CART PROCESSING  */
     public final String LEFT_TIME = "left_time";
@@ -326,4 +326,12 @@ public class Tags {
     public final String TOTAL_PRICE = "total_price";
     public final String TOTAL_ITEM = "total_item";
     public final String COMMISSION = "commission";
+
+    /*         MY ORDER             */
+    public final String ORDER_ID = "order_id";
+    public final String MAIL_TYPE = "mail_type";
+    public final String MAIL_CLASS_PRICE = "mail_class_price";
+    public final String ORDER_DATE = "order_date";
+    public final String TRANSACTION_ID = "transaction_id";
+    public final String MAIN_ORDER_ID = "main_order_id";
 }

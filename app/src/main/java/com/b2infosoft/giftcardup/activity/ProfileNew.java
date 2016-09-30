@@ -45,7 +45,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProfileNew extends AppCompatActivity implements View.OnClickListener,DMRResult{
+public class ProfileNew extends AppCompatActivity implements View.OnClickListener, DMRResult {
     final private static String TAG = ProfileNew.class.getName();
     private Active active;
     private Tags tags;
@@ -57,11 +57,11 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
     Progress progress;
 
     CollapsingToolbarLayout toolbarLayout;
-    ImageView profile_image,arrow1,arrow2,arrow3,identity,bank,ssn,arrow4,image_approve_mail;
-    TextView member_science,total_sold,total_saving,mail,mobile,address;
-    Button resend,cardView;
+    ImageView profile_image, arrow1, arrow2, arrow3, identity, bank, ssn, arrow4, image_approve_mail;
+    TextView member_science, total_sold, total_saving, mail, mobile, address, total_available_fund;
+    Button resend, cardView;
     private final int PICK_IMAGE_REQUEST = 1;
-    private Map<Integer,Integer> approveMap;
+    private Map<Integer, Integer> approveMap;
     private Uri filePath;
     private Bitmap bitmap;
 
@@ -72,14 +72,14 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         config = Config.getInstance();
         format = Format.getInstance();
         alertBox = new AlertBox(this);
-        dmrRequest = DMRRequest.getInstance(this,TAG);
+        dmrRequest = DMRRequest.getInstance(this, TAG);
         approveMap = new HashMap<>();
-        approveMap.put(0,R.drawable.ic_u_pending);
-        approveMap.put(1,R.drawable.ic_u_approved);
-        approveMap.put(2,R.drawable.ic_u_rejected);
-        approveMap.put(3,R.drawable.ic_u_expire);
-        approveMap.put(4,R.drawable.ic_u_suspend);
-        approveMap.put(9,R.drawable.ic_u_not_submitted);
+        approveMap.put(0, R.drawable.ic_u_pending);
+        approveMap.put(1, R.drawable.ic_u_approved);
+        approveMap.put(2, R.drawable.ic_u_rejected);
+        approveMap.put(3, R.drawable.ic_u_expire);
+        approveMap.put(4, R.drawable.ic_u_suspend);
+        approveMap.put(9, R.drawable.ic_u_not_submitted);
 
     }
 
@@ -95,52 +95,53 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
 
         //getSupportActionBar().setSubtitle("Member Since : ".concat(format.getDate(user.getJoinDate())));
 
-        toolbarLayout = (CollapsingToolbarLayout)findViewById(R.id.toolbar_layout);
-        toolbarLayout.setTitle(user.getFirstName()+" "+user.getLastName());
+        toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        toolbarLayout.setTitle(user.getFirstName() + " " + user.getLastName());
 
-        profile_image = (ImageView)findViewById(R.id.profile_user_image);
-        image_approve_mail = (ImageView)findViewById(R.id.image_view);
-        identity = (ImageView)findViewById(R.id.user_identity_approve);
-        bank = (ImageView)findViewById(R.id.user_bank_approve);
-        ssn = (ImageView)findViewById(R.id.user_ssn_approve);
-        arrow1 = (ImageView)findViewById(R.id.identification_arrow);
-        arrow2 = (ImageView)findViewById(R.id.bank_arrow);
+        profile_image = (ImageView) findViewById(R.id.profile_user_image);
+        image_approve_mail = (ImageView) findViewById(R.id.image_view);
+        identity = (ImageView) findViewById(R.id.user_identity_approve);
+        bank = (ImageView) findViewById(R.id.user_bank_approve);
+        ssn = (ImageView) findViewById(R.id.user_ssn_approve);
+        arrow1 = (ImageView) findViewById(R.id.identification_arrow);
+        arrow2 = (ImageView) findViewById(R.id.bank_arrow);
         arrow2.setOnClickListener(this);
-        arrow3 = (ImageView)findViewById(R.id.ssn_arrow);
-        arrow4 = (ImageView)findViewById(R.id.info_arrow);
+        arrow3 = (ImageView) findViewById(R.id.ssn_arrow);
+        arrow4 = (ImageView) findViewById(R.id.info_arrow);
         arrow4.setOnClickListener(this);
-        total_saving = (TextView)findViewById(R.id.total_saving);
-        total_sold = (TextView)findViewById(R.id.total_sold);
-        mail = (TextView)findViewById(R.id.profile_short_mail);
-        mobile = (TextView)findViewById(R.id.profile_short_phone);
-        address = (TextView)findViewById(R.id.profile_short_address);
-        resend = (Button)findViewById(R.id.resend_btn);
+        total_available_fund = (TextView) findViewById(R.id.total_available_fund);
+        total_saving = (TextView) findViewById(R.id.total_saving);
+        total_sold = (TextView) findViewById(R.id.total_sold);
+        mail = (TextView) findViewById(R.id.profile_short_mail);
+        mobile = (TextView) findViewById(R.id.profile_short_phone);
+        address = (TextView) findViewById(R.id.profile_short_address);
+        resend = (Button) findViewById(R.id.resend_btn);
         resend.setOnClickListener(this);
         cardView = (Button) findViewById(R.id.approve_card);
-       // member_science = (TextView)findViewById(R.id.profile_member);
+        // member_science = (TextView)findViewById(R.id.profile_member);
         if (active.isLogin()) {
             mail.setText(user.getEmail());
         }
 
         LruBitmapCache.loadCacheImageProfile(this, profile_image, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
-        total_saving.setText("$"+user.getTotalSave());
-        total_sold.setText("$"+user.getTotalSold());
-       // member_science.setText("Member Since : ".concat(format.getDate(user.getJoinDate())));
-         fetchContactInfo();
+        total_saving.setText("$" + user.getTotalSave());
+        total_sold.setText("$" + user.getTotalSold());
+        // member_science.setText("Member Since : ".concat(format.getDate(user.getJoinDate())));
+        checkAvailableBalance();
+        fetchContactInfo();
         checkVerifiedStatus();
         getApproveForSelling();
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_profile_new,menu);
+        getMenuInflater().inflate(R.menu.menu_profile_new, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 //NavUtils.navigateUpFromSameTask(this);
                 this.onBackPressed();
@@ -153,8 +154,8 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
     }
 
     private void setProfile(ContactInformation information) {
-            mobile.setText(information.getPhoneNumber());
-            address.setText(information.getAddressFull(this));
+        mobile.setText(information.getPhoneNumber());
+        address.setText(information.getAddressFull(this));
     }
 
     private void getApproveForSelling() {
@@ -164,37 +165,37 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         dmrRequest.doPost(urls.getUserInfo(), map, this);
     }
 
-    private void setIcons(Approve approve){
-           identity.setImageResource(approveMap.get(approve.getIdentification()));
-           bank.setImageResource(approveMap.get(approve.getBank()));
-           ssn.setImageResource(approveMap.get(approve.getSsn()));
+    private void setIcons(Approve approve) {
+        identity.setImageResource(approveMap.get(approve.getIdentification()));
+        bank.setImageResource(approveMap.get(approve.getBank()));
+        ssn.setImageResource(approveMap.get(approve.getSsn()));
         int mail = approve.getEmail();
-        if(mail == 1){
+        if (mail == 1) {
             image_approve_mail.setVisibility(View.VISIBLE);
             cardView.setOnClickListener(this);
-        }else{
+        } else {
             resend.setVisibility(View.VISIBLE);
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   alertBox.setTitle("Alert");
+                    alertBox.setTitle("Alert");
                     alertBox.setMessage("Verify Email");
                     alertBox.show();
                 }
             });
         }
         int identity = approve.getIdentification();
-        if(identity != 0 && identity != 1){
+        if (identity != 0 && identity != 1) {
             arrow1.setVisibility(View.VISIBLE);
             arrow1.setOnClickListener(this);
-        }else{
+        } else {
             arrow1.setVisibility(View.GONE);
         }
         int ssn = approve.getSsn();
-        if(ssn != 0 && ssn != 1){
+        if (ssn != 0 && ssn != 1) {
             arrow3.setVisibility(View.VISIBLE);
             arrow3.setOnClickListener(this);
-        }else{
+        } else {
             arrow3.setVisibility(View.GONE);
         }
     }
@@ -215,7 +216,6 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), filePath);
                 if (profile_image != null)
                     profile_image.setImageBitmap(bitmap);
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -223,7 +223,7 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         new updateImage().execute();
     }
 
-    private class updateImage extends AsyncTask<String,String ,String> {
+    private class updateImage extends AsyncTask<String, String, String> {
 
         @Override
         protected void onPreExecute() {
@@ -248,7 +248,7 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
                 multipart.addFormField(tags.USER_ACTION, tags.UPDATE_PROFILE_PIC);
                 multipart.addFormField(tags.USER_ID, active.getUser().getUserId() + "");
                 multipart.addFilePartBitmap(tags.PROFILE_NAME, "bank_void_image.png", bitmap);
-                multipart.addFormField(tags.PROFILE_OLD_NAME,user.getImage() );
+                multipart.addFormField(tags.PROFILE_OLD_NAME, user.getImage());
                 return multipart.finishString();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -274,7 +274,7 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
                 startActivity(new Intent(this, ProfileIdentification.class));
                 break;
             case R.id.resend_btn:
-                Toast.makeText(this,"Coming Soon...",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Coming Soon...", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.approve_card:
                 startActivity(new Intent(this, ProfileSsnEin.class));
@@ -304,12 +304,15 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
                             cardView.setVisibility(View.VISIBLE);
                         }
                     }
-                    if(jsonObject.has(tags.USER_ALL_APPROVE_INFO)){
+                    if (jsonObject.has(tags.USER_ALL_APPROVE_INFO)) {
                         setIcons(Approve.fromJSON(jsonObject.getJSONObject(tags.USER_ALL_APPROVE_INFO)));
                     }
                     if (jsonObject.has(tags.USER_CONTACT_INFORMATION)) {
                         ContactInformation information = ContactInformation.fromJSON(jsonObject.getJSONObject(tags.USER_CONTACT_INFORMATION));
                         setProfile(information);
+                    }
+                    if (jsonObject.has(tags.AVAILABLE_FUND_BALANCE)) {
+                        updateAvailableFund((float) jsonObject.getDouble(tags.AVAILABLE_FUND_BALANCE));
                     }
                 } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
 
@@ -325,6 +328,17 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
     public void onError(VolleyError volleyError) {
         volleyError.printStackTrace();
         Log.e(TAG, volleyError.getMessage());
+    }
+
+    private void checkAvailableBalance() {
+        Map<String, String> map = new HashMap<>();
+        map.put(tags.USER_ACTION, tags.AVAILABLE_FUND_BALANCE);
+        map.put(tags.USER_ID, active.getUser().getUserId());
+        dmrRequest.doPost(urls.getUserInfo(), map, this);
+    }
+
+    private void updateAvailableFund(float fund) {
+        total_available_fund.setText("$" + fund);
     }
 
     private void fetchContactInfo() {
