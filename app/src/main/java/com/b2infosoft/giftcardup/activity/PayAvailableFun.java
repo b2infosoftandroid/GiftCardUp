@@ -17,6 +17,7 @@ import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.model.OrderSummery;
+import com.b2infosoft.giftcardup.model.UserBalance;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 
@@ -127,7 +128,9 @@ public class PayAvailableFun extends AppCompatActivity implements View.OnClickLi
             if (jsonObject.has(tags.SUCCESS)) {
                 if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
                     if (jsonObject.has(tags.AVAILABLE_FUND_BALANCE)) {
-                        updateUI((float) jsonObject.getDouble(tags.AVAILABLE_FUND_BALANCE));
+                        //updateUI((float) jsonObject.getDouble(tags.AVAILABLE_FUND_BALANCE));
+                        UserBalance balance = UserBalance.fromJSON(jsonObject.getJSONObject(tags.AVAILABLE_FUND_BALANCE));
+                        updateUI(balance.getAvailable_fund());
                     }
                 }
             }

@@ -11,31 +11,31 @@ import org.json.JSONObject;
  * Created by Microsoft on 10/1/2016.
  */
 public class UserBalance {
-    String available_fund;
-    String total_saving;
-    String total_sold;
+    float available_fund;
+    float total_saving;
+    float total_sold;
 
-    public String getAvailable_fund() {
+    public float getAvailable_fund() {
         return available_fund;
     }
 
-    public void setAvailable_fund(String available_fund) {
+    public void setAvailable_fund(float available_fund) {
         this.available_fund = available_fund;
     }
 
-    public String getTotal_saving() {
+    public float getTotal_saving() {
         return total_saving;
     }
 
-    public void setTotal_saving(String total_saving) {
+    public void setTotal_saving(float total_saving) {
         this.total_saving = total_saving;
     }
 
-    public String getTotal_sold() {
+    public float getTotal_sold() {
         return total_sold;
     }
 
-    public void setTotal_sold(String total_sold) {
+    public void setTotal_sold(float total_sold) {
         this.total_sold = total_sold;
     }
 
@@ -44,13 +44,13 @@ public class UserBalance {
         Tags tags = Tags.getInstance();
         try {
             if (object.has(tags.BALANCE)) {
-                balance.setAvailable_fund(object.getString(tags.BALANCE));
+                balance.setAvailable_fund((float) object.getDouble(tags.BALANCE));
             }
             if (object.has(tags.TOTAL_SAVE)) {
-                balance.setTotal_saving(object.getString(tags.TOTAL_SAVE));
+                balance.setTotal_saving((float) object.getDouble(tags.TOTAL_SAVE));
             }
             if (object.has(tags.TOTAL_SOLD)) {
-                balance.setTotal_sold(object.getString(tags.TOTAL_SOLD));
+                balance.setTotal_sold((float) object.getDouble(tags.TOTAL_SOLD));
             }
         } catch (JSONException e) {
             e.printStackTrace();

@@ -313,7 +313,6 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
                         setProfile(information);
                     }
                     if (jsonObject.has(tags.AVAILABLE_FUND_BALANCE)) {
-                        Log.d("balance",jsonObject.toString());
                         updateFund(UserBalance.fromJSON(jsonObject.getJSONObject(tags.AVAILABLE_FUND_BALANCE)));
                     }
                 } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
