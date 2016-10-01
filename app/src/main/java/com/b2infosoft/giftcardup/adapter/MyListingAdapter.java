@@ -172,11 +172,13 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             final CardHolder cardHolder = (CardHolder) holder;
             String url = config.getGiftCardImageAddress();
             if (card.getCardImage() == null || (!card.getCardImage().contains(".")) || card.getCardImage().length() == 0) {
-                url = url.concat(card.getCardCompanyImage());
+                if (card.getCardCompanyImage() != null && !card.getCardCompanyImage().equalsIgnoreCase("null")) {
+                    url = url.concat(card.getCardCompanyImage());
+                }
             } else {
                 url = url.concat(card.getCardImage());
             }
-            Log.d("urls",url);
+            Log.d("urls", url);
             LruBitmapCache.loadCacheImage(context, cardHolder.cardImage, url, "");
             /* E-Card */
             if (card.getCardType() == 2) {

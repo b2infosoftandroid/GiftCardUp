@@ -105,7 +105,7 @@ public class SellCards extends Fragment implements DMRResult {
         get_offer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkBlank();
+                    checkBlank();
             }
         });
         accept_offer.setOnClickListener(new View.OnClickListener() {
@@ -271,6 +271,7 @@ public class SellCards extends Fragment implements DMRResult {
         payout.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT, 1f));
         tr1.addView(payout);
+
 
        // imageAction = new ImageView(getContext());
        // imageAction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_remove_24dp));
