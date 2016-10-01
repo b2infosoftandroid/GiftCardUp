@@ -6,6 +6,7 @@ package com.b2infosoft.giftcardup.app;
 
 public class Tags {
     private static Tags ourInstance = new Tags();
+
     public static Tags getInstance() {
         return ourInstance;
     }
@@ -19,6 +20,7 @@ public class Tags {
     public final String PAYMENT_WITH_AVAILABLE_FUND = "Available Fund";
     public final String PAYMENT_WITH_CARD = "Card";
 
+    public final String CURRENCEY = "usd";
 
     /////////////   GLOBAL TAGS   ////////////
     public final String SUCCESS = "success";
@@ -83,6 +85,7 @@ public class Tags {
     public final String FB_LOGIN_USER = "fb_login_user";
     public final String FB_PROFILE_UPDATE = "fb_profile_update";
     public final String PAY_WITH_AVAILABLE_FUND = "pay_with_available_fund";
+    public final String PAY_WITH_CARD = "pay_with_card";
     public final String MY_ORDERS_ALL = "my_orders_all";
     public final String CARD_DISPUTE_REVIEW = "card_dispute_review";
 
@@ -338,4 +341,12 @@ public class Tags {
     public final String ORDER_DATE = "order_date";
     public final String TRANSACTION_ID = "transaction_id";
     public final String MAIN_ORDER_ID = "main_order_id";
+
+    ///////////////   CARD ///////////////////
+    public final String CARD_NUMBER = "number";
+    public final String CARD_EXP_MONTH = "exp_month";
+    public final String CARD_EXP_YEAR = "exp_year";
+    public final String CARD_CVC_CHECK = "cvc_check";
+    public final String CARD_CURRENCY = "currency";
+
 }

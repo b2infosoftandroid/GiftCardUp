@@ -1,9 +1,5 @@
 package com.b2infosoft.giftcardup.activity;
 
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,43 +11,46 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.api.interfaces.PaymentForm;
 import com.b2infosoft.giftcardup.app.Tags;
+import com.b2infosoft.giftcardup.app.Urls;
+import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.credential.KeyDetails;
 import com.b2infosoft.giftcardup.custom.AlertBox;
 import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.model.OrderSummery;
+import com.b2infosoft.giftcardup.volly.DMRRequest;
+import com.b2infosoft.giftcardup.volly.DMRResult;
 import com.stripe.android.Stripe;
 import com.stripe.android.TokenCallback;
 import com.stripe.android.model.Card;
 import com.stripe.android.model.Token;
-import com.stripe.exception.APIConnectionException;
-import com.stripe.exception.APIException;
-import com.stripe.exception.AuthenticationException;
-import com.stripe.exception.CardException;
-import com.stripe.exception.InvalidRequestException;
-import com.stripe.model.Charge;
-import com.stripe.model.Order;
-import com.stripe.model.Product;
-import com.stripe.model.ProductCollection;
-import com.stripe.net.RequestOptions;
 
-import java.security.Key;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
-public class PayCreditDebit extends AppCompatActivity implements PaymentForm {
+public class PayCreditDebit extends AppCompatActivity implements PaymentForm, DMRResult {
     public static final String TAG = PayCreditDebit.class.getName();
     private Tags tags;
+    private Active active;
+    private Urls urls;
     private OrderSummery orderSummery;
     EditText cardNumber, cvcNumber;
     Spinner monthNumber, yearNumber;
     Button action;
     Progress progress;
+    DMRRequest dmrRequest;
 
     private void init() {
         tags = Tags.getInstance();
+        urls = Urls.getInstance();
+        active = Active.getInstance(this);
+        dmrRequest = DMRRequest.getInstance(this, TAG);
         progress = new Progress(this);
     }
 
@@ -109,17 +108,7 @@ public class PayCreditDebit extends AppCompatActivity implements PaymentForm {
             cvcNumber.requestFocus();
             return;
         }
-
         validCard();
-    /*
-        Intent intent = new Intent(getApplicationContext(), PlaceOrder.class);
-        intent.putExtra("Method", "Credit/Debit Card");
-        intent.putExtra("Card", card);
-        intent.putExtra("CVC", cvc);
-        intent.putExtra("Month", monthNumber.getSelectedItemPosition());
-        intent.putExtra("Date", yearNumber.getSelectedItem().toString());
-        startActivity(intent);
-        */
     }
 
     private void initUI() {
@@ -128,7 +117,6 @@ public class PayCreditDebit extends AppCompatActivity implements PaymentForm {
 
     private void validCard() {
         Card card = new Card(getCardNumber(), getExpMonth(), getExpYear(), getCvc());
-        //card.setCurrency(getCurrency());
         boolean validation = card.validateCard();
         if (validation) {
             progress.show();
@@ -137,18 +125,8 @@ public class PayCreditDebit extends AppCompatActivity implements PaymentForm {
                     KeyDetails.PUBLISHABLE_KEY,
                     new TokenCallback() {
                         public void onSuccess(Token token) {
-                            //getTokenList().addToList(token);
                             progress.dismiss();
-                            Log.d("TOKEN NUMBER", token.getId());
-                            AlertDialog.Builder builder = new AlertDialog.Builder(PayCreditDebit.this);
-                            builder.setMessage(token.getId());
-                            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    new madePayment().execute();
-                                }
-                            });
-                            builder.create().show();
+                            orderPlace();
                         }
 
                         public void onError(Exception error) {
@@ -178,57 +156,31 @@ public class PayCreditDebit extends AppCompatActivity implements PaymentForm {
         }
     }
 
-    private class madePayment extends AsyncTask<Void,Void,Void>{
-        Charge charge;
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            Toast.makeText(getApplicationContext(),"Card Charged : " + charge.getCreated() + "\nPaid : " +charge.getPaid(),
-                    Toast.LENGTH_LONG).show();
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            try {
-                final HashMap<String,Object> map = new HashMap<>();
-                map.put("amount","400");
-                map.put("currency","usd");
-                //map.put("card",token);
-
-                com.stripe.Stripe.apiKey = KeyDetails.SECRET_KEY;
-                charge = Charge.create(map);
-                Log.d("KeyCharge",charge.getId());
-            }catch (AuthenticationException |APIConnectionException | InvalidRequestException | CardException | APIException e){
-                e.printStackTrace();
-                Log.e(TAG,e.getMessage());
-            }
-
-            return null;
+    private void orderPlace() {
+        if (orderSummery != null) {
+            Map<String, String> map = new HashMap<>();
+            map.put(tags.USER_ACTION, tags.PAY_WITH_CARD);
+            map.put(tags.USER_ID, active.getUser().getUserId());
+            map.put(tags.ITEM_DATA, orderSummery.getItemData());
+            map.put(tags.ITEM_ID, orderSummery.getItemId());
+            map.put(tags.TOTAL_PRICE,Math.round(orderSummery.getBalance()*100) + "");
+            map.put(tags.TOTAL_ITEM, orderSummery.getTotalItem() + "");
+            map.put(tags.COMMISSION, orderSummery.getCommission() + "");
+            map.put(tags.CARD_NUMBER, getCardNumber());
+            map.put(tags.CARD_EXP_MONTH, getExpMonth() + "");
+            map.put(tags.CARD_EXP_YEAR, getExpYear() + "");
+            map.put(tags.CARD_CVC_CHECK, getCvc());
+            map.put(tags.CARD_CURRENCY, getCurrency());
+            progress.show();
+            dmrRequest.doPost(urls.getPayment(), map, this);
+        } else {
+            AlertBox box = new AlertBox(this);
+            box.setTitle("Alert");
+            box.setMessage("Invalid Order");
+            box.show();
         }
     }
 
-    private void Next() {
-        RequestOptions requestOptions = RequestOptions.builder().setApiKey(KeyDetails.PUBLISHABLE_KEY).build();
-    }
-    private ProductCollection getAllProducts(){
-        Map<String,Object> map = new HashMap<>();
-        map.put("id",1);
-        map.put("name",1);
-        map.put("caption",1);
-        map.put("description",1);
-        map.put("images",1);
-        map.put("url",1);
-        map.put("shippable",1);
-
-        ProductCollection collection = new ProductCollection();
-        
-        return collection;
-    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -243,6 +195,38 @@ public class PayCreditDebit extends AppCompatActivity implements PaymentForm {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+    @Override
+    public void onSuccess(JSONObject jsonObject) {
+        progress.dismiss();
+        Log.d("DATA", jsonObject.toString());
+        try {
+            if (jsonObject.has(tags.SUCCESS)) {
+                if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                    orderSummery = null;
+                    AlertBox box = new AlertBox(this);
+                    box.setTitle("Alert");
+                    box.setMessage("Your Order Successfully Complete.\n Please Check My Order");
+                    box.show();
+                } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
+                    AlertBox box = new AlertBox(this);
+                    box.setTitle("Alert");
+                    box.setMessage("Something went wrong. Try Again");
+                    box.show();
+                }
+            }
+        } catch (JSONException error) {
+            error.printStackTrace();
+            Log.e(TAG, error.getLocalizedMessage());
+        }
+    }
+
+    @Override
+    public void onError(VolleyError volleyError) {
+        volleyError.printStackTrace();
+        Log.e(TAG, volleyError.getLocalizedMessage());
+        progress.dismiss();
     }
 
     @Override
@@ -267,7 +251,7 @@ public class PayCreditDebit extends AppCompatActivity implements PaymentForm {
 
     @Override
     public String getCurrency() {
-        return KeyDetails.CURRENCY_UNSPECIFIED;
+        return tags.CURRENCEY;
     }
 
     private Integer getInteger(Spinner spinner) {

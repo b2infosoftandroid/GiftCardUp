@@ -187,6 +187,7 @@ public class PlaceOrder extends AppCompatActivity implements DMRResult {
 
     @Override
     public void onSuccess(JSONObject jsonObject) {
+        Log.d("DATA",jsonObject.toString()) ;
         try {
             if (jsonObject.has(tags.SUCCESS)) {
                 if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
