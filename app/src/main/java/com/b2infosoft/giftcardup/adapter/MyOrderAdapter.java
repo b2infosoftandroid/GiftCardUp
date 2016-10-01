@@ -132,10 +132,12 @@ public class MyOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             cardHolder.delivery.setText(card.getOrderDate());
             if(card.getApproveStatus() == 7){
                str = "Under Investigation";
+                cardHolder.action.setVisibility(View.GONE);
             }else if(card.getApproveStatus() == 3 ||card.getApproveStatus() == 6){
                 str = "Completed";
             }else if(card.getApproveStatus() == 8){
                 str = "Investigated";
+                cardHolder.action.setVisibility(View.GONE);
             }
             cardHolder.status.setText(str);
             cardHolder.value.setText("$" + card.getValue());
@@ -176,6 +178,8 @@ public class MyOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                                 AlertBox box = new AlertBox(context);
                                                 box.setMessage("Successful");
                                                 box.show();
+                                                card.setApproveStatus(7);
+                                                MyOrderAdapter.super.notifyDataSetChanged();
                                             } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
 
                                             } else {
