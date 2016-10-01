@@ -60,6 +60,7 @@ public class CustomRequest extends Request<JSONObject> {
 
     @Override
     protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+        if (response.data.length > 10000) setShouldCache(false);
         try {
             String jsonString = new String(response.data,
                     HttpHeaderParser.parseCharset(response.headers));

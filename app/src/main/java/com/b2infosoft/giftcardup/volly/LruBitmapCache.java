@@ -76,6 +76,7 @@ public class LruBitmapCache extends LruCache<String, Bitmap>
             }
         } else {
             cache.invalidate(imageUrl, true);
+            cache.clear();
             ImageRequest request = new ImageRequest(imageUrl,
                     new Response.Listener<Bitmap>() {
                         @Override
@@ -107,6 +108,7 @@ public class LruBitmapCache extends LruCache<String, Bitmap>
             }
         } else {
             cache.invalidate(imageUrl, true);
+            cache.clear();
             ImageRequest request = new ImageRequest(imageUrl,
                     new Response.Listener<Bitmap>() {
                         @Override
@@ -139,6 +141,7 @@ public class LruBitmapCache extends LruCache<String, Bitmap>
             }
         } else {
             cache.invalidate(imageUrl, true);
+            cache.clear();
             ImageRequest request = new ImageRequest(imageUrl,
                     new Response.Listener<Bitmap>() {
                         @Override
@@ -170,6 +173,7 @@ public class LruBitmapCache extends LruCache<String, Bitmap>
             }
         } else {
             cache.invalidate(imageUrl, true);
+            cache.clear();
             ImageRequest request = new ImageRequest(imageUrl,
                     new Response.Listener<Bitmap>() {
                         @Override
