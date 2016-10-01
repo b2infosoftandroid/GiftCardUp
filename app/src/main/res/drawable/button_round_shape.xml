@@ -4,8 +4,8 @@
     <solid android:color="@color/button_foreground" />
     <stroke
         android:color="@color/button_foreground" />
-    <corners android:bottomRightRadius="190dp"
-        android:bottomLeftRadius="180dp"
-        android:topRightRadius="180dp"
-        android:topLeftRadius="180dp"/>
+    <corners android:bottomRightRadius="20dp"
+        android:bottomLeftRadius="20dp"
+        android:topRightRadius="20dp"
+        android:topLeftRadius="20dp"/>
 </shape>
