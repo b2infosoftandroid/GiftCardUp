@@ -134,6 +134,7 @@ public class MyListing extends Fragment implements View.OnClickListener {
             adapter.removeAllItem();
         }
         loadMore = 0;
+        isLoading = false;
         loadCards();
     }
 
