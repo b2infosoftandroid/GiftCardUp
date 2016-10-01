@@ -228,12 +228,12 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progress.show();
+            //progress.show();
         }
 
         @Override
         protected void onPostExecute(String s) {
-            progress.dismiss();
+           // progress.dismiss();
             super.onPostExecute(s);
         }
 
