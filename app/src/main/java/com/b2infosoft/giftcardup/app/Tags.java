@@ -195,6 +195,7 @@ public class Tags {
     public final String TOTAL_SAVE = "total_save";
     public final String TOTAL_SOLD = "total_sold";
     public final String CARD_ID = "card_id";
+    public final String BALANCE = "balance";
 
 
     /////////////  ID  ////////////////

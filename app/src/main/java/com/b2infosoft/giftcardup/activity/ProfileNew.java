@@ -32,12 +32,14 @@ import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.model.Approve;
 import com.b2infosoft.giftcardup.model.ContactInformation;
 import com.b2infosoft.giftcardup.model.User;
+import com.b2infosoft.giftcardup.model.UserBalance;
 import com.b2infosoft.giftcardup.urlconnection.MultipartUtility;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 import com.b2infosoft.giftcardup.volly.LruBitmapCache;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -124,13 +126,12 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         }
 
         LruBitmapCache.loadCacheImageProfile(this, profile_image, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
-        total_saving.setText("$" + user.getTotalSave());
-        total_sold.setText("$" + user.getTotalSold());
         // member_science.setText("Member Since : ".concat(format.getDate(user.getJoinDate())));
+        getApproveForSelling();
         checkAvailableBalance();
         fetchContactInfo();
         checkVerifiedStatus();
-        getApproveForSelling();
+
     }
 
     @Override
@@ -145,7 +146,6 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
             case android.R.id.home:
                 //NavUtils.navigateUpFromSameTask(this);
                 this.onBackPressed();
-                finish();
                 return true;
             case R.id.action_edit:
                 showFileChooser();
@@ -228,12 +228,12 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            //progress.show();
+            progress.show();
         }
 
         @Override
         protected void onPostExecute(String s) {
-            //progress.dismiss();
+            progress.dismiss();
             super.onPostExecute(s);
         }
 
@@ -298,6 +298,7 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
             if (jsonObject.has(tags.SUCCESS)) {
                 if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
                     if (jsonObject.has(tags.CHECK_APPROVE_FOR_SELLING)) {
+                        Log.d("approveStat",jsonObject.toString());
                         if (jsonObject.getInt(tags.CHECK_APPROVE_FOR_SELLING) == tags.PASS) {
                             cardView.setVisibility(View.GONE);
                         } else if (jsonObject.getInt(tags.CHECK_APPROVE_FOR_SELLING) == tags.FAIL) {
@@ -312,7 +313,8 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
                         setProfile(information);
                     }
                     if (jsonObject.has(tags.AVAILABLE_FUND_BALANCE)) {
-                        updateAvailableFund((float) jsonObject.getDouble(tags.AVAILABLE_FUND_BALANCE));
+                        Log.d("balance",jsonObject.toString());
+                        updateFund(UserBalance.fromJSON(jsonObject.getJSONObject(tags.AVAILABLE_FUND_BALANCE)));
                     }
                 } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
 
@@ -337,8 +339,10 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         dmrRequest.doPost(urls.getUserInfo(), map, this);
     }
 
-    private void updateAvailableFund(float fund) {
-        total_available_fund.setText("$" + fund);
+    private void updateFund(UserBalance fund) {
+        total_available_fund.setText("$" + fund.getAvailable_fund());
+        total_saving.setText("$" + fund.getTotal_saving());
+        total_sold.setText("$" + fund.getTotal_sold());
     }
 
     private void fetchContactInfo() {
