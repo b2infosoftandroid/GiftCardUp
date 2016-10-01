@@ -81,7 +81,7 @@ public class PayAvailableFun extends AppCompatActivity implements View.OnClickLi
         dmrRequest.doPost(urls.getUserInfo(), map, this);
     }
 
-    private void updateUI(float available) {
+    private void updateUI(double available) {
         available_fund.setText("$" + available);
         balance.setText("$" + orderSummery.getBalance());
 

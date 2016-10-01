@@ -11,11 +11,11 @@ import org.json.JSONObject;
  * Created by Microsoft on 10/1/2016.
  */
 public class UserBalance {
-    float available_fund;
-    float total_saving;
-    float total_sold;
+    double available_fund;
+    String total_saving;
+    String total_sold;
 
-    public float getAvailable_fund() {
+    public double getAvailable_fund() {
         return available_fund;
     }
 
@@ -23,19 +23,19 @@ public class UserBalance {
         this.available_fund = available_fund;
     }
 
-    public float getTotal_saving() {
+    public String getTotal_saving() {
         return total_saving;
     }
 
-    public void setTotal_saving(float total_saving) {
+    public void setTotal_saving(String total_saving) {
         this.total_saving = total_saving;
     }
 
-    public float getTotal_sold() {
+    public String getTotal_sold() {
         return total_sold;
     }
 
-    public void setTotal_sold(float total_sold) {
+    public void setTotal_sold(String total_sold) {
         this.total_sold = total_sold;
     }
 
@@ -47,10 +47,10 @@ public class UserBalance {
                 balance.setAvailable_fund((float) object.getDouble(tags.BALANCE));
             }
             if (object.has(tags.TOTAL_SAVE)) {
-                balance.setTotal_saving((float) object.getDouble(tags.TOTAL_SAVE));
+                balance.setTotal_saving( object.getString(tags.TOTAL_SAVE));
             }
             if (object.has(tags.TOTAL_SOLD)) {
-                balance.setTotal_sold((float) object.getDouble(tags.TOTAL_SOLD));
+                balance.setTotal_sold(object.getString(tags.TOTAL_SOLD));
             }
         } catch (JSONException e) {
             e.printStackTrace();

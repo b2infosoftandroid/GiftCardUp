@@ -39,9 +39,12 @@ import com.b2infosoft.giftcardup.fragments.SellCards;
 import com.b2infosoft.giftcardup.fragments.ShippingCenter;
 import com.b2infosoft.giftcardup.fragments.SpeedySell;
 import com.b2infosoft.giftcardup.fragments.WithdrawalHistory;
+import com.b2infosoft.giftcardup.model.Approve;
 import com.b2infosoft.giftcardup.model.CompanyCategory;
+import com.b2infosoft.giftcardup.model.ContactInformation;
 import com.b2infosoft.giftcardup.model.GiftCard;
 import com.b2infosoft.giftcardup.model.User;
+import com.b2infosoft.giftcardup.model.UserBalance;
 import com.b2infosoft.giftcardup.services.MyServices;
 import com.b2infosoft.giftcardup.utils.Utils1;
 import com.b2infosoft.giftcardup.utils.Utils2;
@@ -506,8 +509,36 @@ public class Main extends GiftCardUp {
         if (userIsLogin) {
             User user = active.getUser();
             user_profile_name.setText(user.getFirstName() + " " + user.getLastName());
-            user_total_saving.setText("$" + user.getTotalSave());
-            user_total_sold.setText("$" + user.getTotalSold());
+            Map<String, String> map = new HashMap<>();
+            map.put(tags.USER_ACTION, tags.AVAILABLE_FUND_BALANCE);
+            map.put(tags.USER_ID, active.getUser().getUserId());
+            dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
+                @Override
+                public void onSuccess(JSONObject jsonObject) {
+                    try {
+                        if (jsonObject.has(tags.SUCCESS)) {
+                            if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                                if (jsonObject.has(tags.AVAILABLE_FUND_BALANCE)) {
+                                    UserBalance balance = UserBalance.fromJSON(jsonObject.getJSONObject(tags.AVAILABLE_FUND_BALANCE));
+                                     user_total_saving.setText("$" + balance.getTotal_saving());
+                                     user_total_sold.setText("$" + balance.getTotal_sold());
+                                }
+                            } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
+
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+
+                @Override
+                public void onError(VolleyError volleyError) {
+                    volleyError.printStackTrace();
+                    Log.e(TAG, volleyError.getMessage());
+                }
+            });
             LruBitmapCache.loadCacheImageProfile(this, user_profile_icon, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
             setMenuItems(user.getUserType());
         } else {

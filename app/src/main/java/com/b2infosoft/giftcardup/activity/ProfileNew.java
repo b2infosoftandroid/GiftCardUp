@@ -342,6 +342,8 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         total_available_fund.setText("$" + fund.getAvailable_fund());
         total_saving.setText("$" + fund.getTotal_saving());
         total_sold.setText("$" + fund.getTotal_sold());
+        String str = fund.getTotal_sold();
+        Log.d("sold",str + "");
     }
 
     private void fetchContactInfo() {
