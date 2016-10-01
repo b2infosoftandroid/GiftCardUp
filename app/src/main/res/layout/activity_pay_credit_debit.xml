@@ -63,7 +63,7 @@
         android:padding="10dp">
             <Spinner
                 android:id="@+id/month_spinner"
-                android:layout_width="70dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/layout_border"
                 android:entries="@array/month"
@@ -71,7 +71,7 @@
 
             <Spinner
                 android:id="@+id/date_spinner"
-                android:layout_width="70dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/layout_border"
