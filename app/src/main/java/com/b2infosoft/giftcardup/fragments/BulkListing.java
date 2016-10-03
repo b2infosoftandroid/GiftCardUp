@@ -114,7 +114,7 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
             }
         });
         cardType = (ImageView) mView.findViewById(R.id.cardType);
-        textView = (TextView)mView.findViewById(R.id.e_card_img_text);
+        textView = (TextView) mView.findViewById(R.id.e_card_img_text);
         serial_number = (EditText) mView.findViewById(R.id.serial_number);
         card_pin = (EditText) mView.findViewById(R.id.card_pin);
         card_balance = (EditText) mView.findViewById(R.id.card_balance);
@@ -161,7 +161,7 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
                     getEarning();
                     asking_price.addTextChangedListener(this);
                 }
-            }else{
+            } else {
                 your_earning.setText(null);
             }
         } else if (editable == selling_percentage.getEditableText()) {
@@ -182,7 +182,7 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
                     getEarning();
                     asking_price.addTextChangedListener(this);
                 }
-            }else{
+            } else {
                 your_earning.setText(null);
             }
         } else if (editable == asking_price.getEditableText()) {
@@ -203,7 +203,7 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
                     getEarning();
                     selling_percentage.addTextChangedListener(this);
                 }
-            }else{
+            } else {
                 your_earning.setText(null);
             }
         }
@@ -261,7 +261,7 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
                                 JSONArray jsonArray = jsonObject.getJSONArray(tags.COMPANY_BRANDS);
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     merchant = Merchant.fromJSON(jsonArray.getJSONObject(i));
-                                    hashMap.put(merchant.getCompanyID(),merchant);
+                                    hashMap.put(merchant.getCompanyID(), merchant);
                                 }
                             }
                             refreshMerchant();
@@ -276,7 +276,8 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
             @Override
             public void onError(VolleyError volleyError) {
                 volleyError.printStackTrace();
-                Log.e(TAG, volleyError.getMessage());
+                if (volleyError.getMessage() != null)
+                    Log.e(TAG, volleyError.getMessage());
             }
         });
     }
@@ -318,7 +319,8 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
             @Override
             public void onError(VolleyError volleyError) {
                 volleyError.printStackTrace();
-                Log.e(TAG, volleyError.getMessage());
+                if (volleyError.getMessage() != null)
+                    Log.e(TAG, volleyError.getMessage());
             }
         });
     }
@@ -451,8 +453,8 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
     public void onSuccess(JSONObject jsonObject) {
         progress.dismiss();
         try {
-            if(jsonObject.has(tags.SUCCESS)){
-                if(jsonObject.getInt(tags.SUCCESS) == tags.PASS){
+            if (jsonObject.has(tags.SUCCESS)) {
+                if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("Alert");
                     builder.setMessage("Your Card is Successfully Added");
@@ -470,7 +472,7 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
                             builder1.setNegativeButton("No", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                        replaceFragment(new MyListing());
+                                    replaceFragment(new MyListing());
                                 }
                             });
                             builder1.create().show();
@@ -479,7 +481,7 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
                     builder.create().show();
                 }
             }
-        }catch (JSONException e){
+        } catch (JSONException e) {
 
         }
     }
@@ -488,7 +490,8 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
     public void onError(VolleyError volleyError) {
         progress.dismiss();
         volleyError.printStackTrace();
-        Log.e(TAG, volleyError.getMessage());
+        if (volleyError.getMessage() != null)
+            Log.e(TAG, volleyError.getMessage());
     }
 
     @Override

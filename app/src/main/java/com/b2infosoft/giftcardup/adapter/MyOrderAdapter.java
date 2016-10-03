@@ -79,9 +79,9 @@ public class MyOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         ImageView image;
         Button action;
-        TextView name,card_id;
-        TextView value,delivery;
-        TextView price,status;
+        TextView name, card_id;
+        TextView value, delivery;
+        TextView price, status;
 
         public CardHolder(View view) {
             super(view);
@@ -130,12 +130,12 @@ public class MyOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             cardHolder.name.setText(card.getCardName());
             cardHolder.card_id.setText(String.valueOf(card.getMainOrderId()));
             cardHolder.delivery.setText(card.getOrderDate());
-            if(card.getApproveStatus() == 7){
-               str = "Under Investigation";
+            if (card.getApproveStatus() == 7) {
+                str = "Under Investigation";
                 cardHolder.action.setVisibility(View.GONE);
-            }else if(card.getApproveStatus() == 3 ||card.getApproveStatus() == 6){
+            } else if (card.getApproveStatus() == 3 || card.getApproveStatus() == 6) {
                 str = "Completed";
-            }else if(card.getApproveStatus() == 8){
+            } else if (card.getApproveStatus() == 8) {
                 str = "Investigated";
                 cardHolder.action.setVisibility(View.GONE);
             }
@@ -150,12 +150,12 @@ public class MyOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     final EditText ed1 = new EditText(context);
                     ed1.setLines(5);
                     ed1.setGravity(Gravity.START);
-                    ed1.setPadding(16,16,16,16);
+                    ed1.setPadding(16, 16, 16, 16);
                     ed1.setHint("Add Order Review");
                     ed1.setBackground(context.getResources().getDrawable(R.drawable.layout_border));
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                             LinearLayout.LayoutParams.MATCH_PARENT);
-                    lp.setMargins(20,10,20,0);
+                    lp.setMargins(20, 10, 20, 0);
                     ed1.setLayoutParams(lp);
                     builder.setView(ed1);
                     builder.setPositiveButton("Send Review", new DialogInterface.OnClickListener() {
@@ -195,7 +195,8 @@ public class MyOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                 @Override
                                 public void onError(VolleyError volleyError) {
                                     volleyError.printStackTrace();
-                                    Log.e(TAG, volleyError.getMessage());
+                                    if (volleyError.getMessage() != null)
+                                        Log.e(TAG, volleyError.getMessage());
                                     progress.dismiss();
                                 }
                             });

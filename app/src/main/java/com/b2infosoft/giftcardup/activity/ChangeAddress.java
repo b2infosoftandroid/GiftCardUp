@@ -37,11 +37,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-public class ChangeAddress extends AppCompatActivity{
+public class ChangeAddress extends AppCompatActivity {
     private final String TAG = ChangeAddress.class.getName();
-    EditText address,city,zipCode,suiteNo,mobile,company;
+    EditText address, city, zipCode, suiteNo, mobile, company;
     AppCompatSpinner spinner;
-    Button update,cancel;
+    Button update, cancel;
     Tags tags;
     Urls urls;
     DBHelper dbHelper;
@@ -50,14 +50,14 @@ public class ChangeAddress extends AppCompatActivity{
     AlertDialog.Builder builder;
     DMRRequest dmrRequest;
 
-    private void init(){
+    private void init() {
         tags = Tags.getInstance();
         urls = Urls.getInstance();
         dbHelper = new DBHelper(getApplicationContext());
         active = Active.getInstance(getApplicationContext());
         progress = new Progress(this);
         builder = new AlertDialog.Builder(this);
-        dmrRequest = DMRRequest.getInstance(getApplicationContext(),TAG);
+        dmrRequest = DMRRequest.getInstance(getApplicationContext(), TAG);
     }
 
 
@@ -68,15 +68,15 @@ public class ChangeAddress extends AppCompatActivity{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         init();
-        address = (EditText)findViewById(R.id.address);
-        company = (EditText)findViewById(R.id.address_company);
-        mobile = (EditText)findViewById(R.id.address_phone_no);
-        city = (EditText)findViewById(R.id.address_city);
-        zipCode = (EditText)findViewById(R.id.address_zip_code);
-        suiteNo = (EditText)findViewById(R.id.address_suite_no);
-        spinner = (AppCompatSpinner)findViewById(R.id.address_state_spinner);
-        update = (Button)findViewById(R.id.address_update_btn);
-        cancel = (Button)findViewById(R.id.address_cancel_btn);
+        address = (EditText) findViewById(R.id.address);
+        company = (EditText) findViewById(R.id.address_company);
+        mobile = (EditText) findViewById(R.id.address_phone_no);
+        city = (EditText) findViewById(R.id.address_city);
+        zipCode = (EditText) findViewById(R.id.address_zip_code);
+        suiteNo = (EditText) findViewById(R.id.address_suite_no);
+        spinner = (AppCompatSpinner) findViewById(R.id.address_state_spinner);
+        update = (Button) findViewById(R.id.address_update_btn);
+        cancel = (Button) findViewById(R.id.address_cancel_btn);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,14 +86,14 @@ public class ChangeAddress extends AppCompatActivity{
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    updateAddress();
+                updateAddress();
             }
         });
 
         loadInfo();
     }
 
-    private void setData(ContactInformation information){
+    private void setData(ContactInformation information) {
         address.setText(information.getAddress());
         mobile.setText(information.getPhoneNumber());
         city.setText(information.getCity());
@@ -103,7 +103,7 @@ public class ChangeAddress extends AppCompatActivity{
         setState(information.getState());
     }
 
-    private void setState(String abbreviation){
+    private void setState(String abbreviation) {
         List<String> states = new ArrayList<>();
         states.add("SELECT STATE");
         for (String state : dbHelper.getStateMap().keySet()) {
@@ -113,17 +113,18 @@ public class ChangeAddress extends AppCompatActivity{
         spinner.setAdapter(adapter);
         State state = dbHelper.getStateByAbbreviation(abbreviation);
         SpinnerAdapter arrayAdapter = spinner.getAdapter();
-        for(int i = 0;i<arrayAdapter.getCount();i++) {
+        for (int i = 0; i < arrayAdapter.getCount(); i++) {
             String item = arrayAdapter.getItem(i).toString();
-            if(item.equalsIgnoreCase(state.getName())){
+            if (item.equalsIgnoreCase(state.getName())) {
                 spinner.setSelection(i);
                 break;
             }
         }
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 //NavUtils.navigateUpFromSameTask(this);
                 this.onBackPressed();
@@ -132,57 +133,58 @@ public class ChangeAddress extends AppCompatActivity{
         return super.onOptionsItemSelected(item);
     }
 
-    private void loadInfo(){
-        HashMap<String,String> hashMap = new HashMap<>();
-        hashMap.put(tags.USER_ACTION,tags.USER_CONTACT_INFORMATION);
-        hashMap.put(tags.USER_ID,active.getUser().getUserId());
+    private void loadInfo() {
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put(tags.USER_ACTION, tags.USER_CONTACT_INFORMATION);
+        hashMap.put(tags.USER_ID, active.getUser().getUserId());
         dmrRequest.doPost(urls.getUserInfo(), hashMap, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
                 try {
-                    if(jsonObject.has(tags.SUCCESS)){
-                        if(jsonObject.getInt(tags.SUCCESS) == tags.PASS){
-                            if(jsonObject.has(tags.USER_CONTACT_INFORMATION)){
+                    if (jsonObject.has(tags.SUCCESS)) {
+                        if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                            if (jsonObject.has(tags.USER_CONTACT_INFORMATION)) {
                                 ContactInformation info = ContactInformation.fromJSON(jsonObject.getJSONObject(tags.USER_CONTACT_INFORMATION));
                                 setData(info);
                             }
                         }
 
                     }
-                }catch (JSONException e){
+                } catch (JSONException e) {
                     e.printStackTrace();
-                    Log.d(TAG,e.getMessage());
+                    Log.d(TAG, e.getMessage());
                 }
             }
 
             @Override
             public void onError(VolleyError volleyError) {
                 volleyError.printStackTrace();
-                Log.d(TAG,volleyError.getMessage());
+                if (volleyError.getMessage() != null)
+                    Log.e(TAG, volleyError.getMessage());
             }
         });
     }
 
 
-    private void updateAddress(){
-        String address1  = address.getText().toString();
-        String add_city  = city.getText().toString();
-        String add_zip  = zipCode.getText().toString();
-        String add_suite  = suiteNo.getText().toString();
-        String add_cmpny  = company.getText().toString();
-        String add_phone  = mobile.getText().toString();
+    private void updateAddress() {
+        String address1 = address.getText().toString();
+        String add_city = city.getText().toString();
+        String add_zip = zipCode.getText().toString();
+        String add_suite = suiteNo.getText().toString();
+        String add_cmpny = company.getText().toString();
+        String add_phone = mobile.getText().toString();
         State state = dbHelper.getStateByName(spinner.getSelectedItem().toString());
 
-        HashMap<String,String> map = new HashMap<>();
-        map.put(tags.USER_ACTION,tags.UPDATE_ADDRESS);
-        map.put(tags.USER_ID,active.getUser().getUserId());
-        map.put(tags.CONTACT_INFO_CITY,add_city);
-        map.put(tags.CONTACT_INFO_ZIP_CODE,add_zip);
-        map.put(tags.CONTACT_INFO_STATE,state.getAbbreviation());
-        map.put(tags.CONTACT_INFO_COMPANY_NAME,add_cmpny);
-        map.put(tags.CONTACT_INFO_PHONE_NUMBER,add_phone);
-        map.put(tags.ADDRESS,address1);
-        map.put(tags.CONTACT_INFO_SUITE_NUMBER,add_suite);
+        HashMap<String, String> map = new HashMap<>();
+        map.put(tags.USER_ACTION, tags.UPDATE_ADDRESS);
+        map.put(tags.USER_ID, active.getUser().getUserId());
+        map.put(tags.CONTACT_INFO_CITY, add_city);
+        map.put(tags.CONTACT_INFO_ZIP_CODE, add_zip);
+        map.put(tags.CONTACT_INFO_STATE, state.getAbbreviation());
+        map.put(tags.CONTACT_INFO_COMPANY_NAME, add_cmpny);
+        map.put(tags.CONTACT_INFO_PHONE_NUMBER, add_phone);
+        map.put(tags.ADDRESS, address1);
+        map.put(tags.CONTACT_INFO_SUITE_NUMBER, add_suite);
         progress.show();
         dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
             @Override
@@ -203,7 +205,7 @@ public class ChangeAddress extends AppCompatActivity{
                             });
                             builder.create().show();
 
-                        }else if(jsonObject.getInt(tags.SUCCESS) == tags.FAIL){
+                        } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
                             builder.setTitle("Alert");
                             builder.setMessage("Try Again");
                             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -215,16 +217,17 @@ public class ChangeAddress extends AppCompatActivity{
                             builder.create().show();
                         }
                     }
-                }catch (JSONException e){
+                } catch (JSONException e) {
                     e.printStackTrace();
-                    Log.d(TAG,e.getMessage());
+                    Log.d(TAG, e.getMessage());
                 }
             }
 
             @Override
             public void onError(VolleyError volleyError) {
-                 volleyError.printStackTrace();
-                Log.d(TAG,volleyError.getMessage());
+                volleyError.printStackTrace();
+                if (volleyError.getMessage() != null)
+                    Log.e(TAG, volleyError.getMessage());
             }
         });
     }

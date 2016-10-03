@@ -177,7 +177,7 @@ public class ShoppingCart extends AppCompatActivity implements View.OnClickListe
         dmrRequest.doPost(urls.getCartInfo(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
-               // Log.d("cartData",jsonObject.toString());
+                // Log.d("cartData",jsonObject.toString());
                 try {
                     if (jsonObject.has(tags.SUCCESS)) {
                         if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
@@ -203,7 +203,8 @@ public class ShoppingCart extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onError(VolleyError volleyError) {
                 volleyError.printStackTrace();
-                Log.e(TAG, volleyError.getMessage());
+                if (volleyError.getMessage() != null)
+                    Log.e(TAG, volleyError.getMessage());
             }
         });
     }

@@ -103,7 +103,7 @@ public class EditGiftCard extends AppCompatActivity implements TextWatcher, View
         save = (Button) findViewById(R.id.save);
         save.setOnClickListener(this);
 
-       // mAskingPrice = findViewById(R.id.view_asking_price);
+        // mAskingPrice = findViewById(R.id.view_asking_price);
     }
 
     private void setOldData(GiftCard oldData) {
@@ -124,14 +124,14 @@ public class EditGiftCard extends AppCompatActivity implements TextWatcher, View
             /* Set Data when Card type is not Quick Sell (Speedy Shell) */
             asking_price.setText(format.getStringFloat(oldData.getCardValue()));
         }
-        if(oldData.getStatusType()==2) {
+        if (oldData.getStatusType() == 2) {
             your_earning.setText(format.getStringFloat(oldData.getCardValue()));
-        }else{
+        } else {
             your_earning.setText(format.getStringFloat(oldData.getYourEarning()));
         }
         if (oldData.getStatusType() == 2) {
             selling_percentage.setEnabled(false);
-           // mAskingPrice.setVisibility(View.GONE);
+            // mAskingPrice.setVisibility(View.GONE);
         } else {
             selling_percentage.setEnabled(true);
             //mAskingPrice.setVisibility(View.VISIBLE);
@@ -202,7 +202,7 @@ public class EditGiftCard extends AppCompatActivity implements TextWatcher, View
                     float percentage = Float.parseFloat(per);
                     float earning = percentage * sell / 100;
                     your_earning.setText(format.getStringFloat(earning));
-                }else{
+                } else {
                     your_earning.setText(null);
                 }
             } else {
@@ -252,7 +252,7 @@ public class EditGiftCard extends AppCompatActivity implements TextWatcher, View
                         asking_price.addTextChangedListener(this);
                     }
                 }
-            }else{
+            } else {
                 your_earning.setText(null);
             }
         } else if (editable == asking_price.getEditableText()) {
@@ -276,7 +276,7 @@ public class EditGiftCard extends AppCompatActivity implements TextWatcher, View
                         selling_percentage.addTextChangedListener(this);
                     }
                 }
-            }else{
+            } else {
                 your_earning.setText(null);
             }
         }
@@ -320,7 +320,8 @@ public class EditGiftCard extends AppCompatActivity implements TextWatcher, View
             @Override
             public void onError(VolleyError volleyError) {
                 volleyError.printStackTrace();
-                Log.e(TAG, volleyError.getMessage());
+                if (volleyError.getMessage() != null)
+                    Log.e(TAG, volleyError.getMessage());
             }
         });
     }
@@ -380,7 +381,6 @@ public class EditGiftCard extends AppCompatActivity implements TextWatcher, View
         }
 
 
-
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.EDIT_GIFT_CARD);
         map.put(tags.USER_ID, active.getUser().getUserId() + "");
@@ -391,9 +391,9 @@ public class EditGiftCard extends AppCompatActivity implements TextWatcher, View
         map.put(tags.GIFT_CARD_SERIAL_NUMBER, serial_no);
         map.put(tags.GIFT_CARD_CARD_PIN, pin);
         map.put(tags.GIFT_CARD_CARD_VALUE, balance);
-        if(giftCard.getStatusType()==2) {
+        if (giftCard.getStatusType() == 2) {
             map.put(tags.GIFT_CARD_CARD_PRICE, earning);
-        }else{
+        } else {
             map.put(tags.GIFT_CARD_CARD_PRICE, ask_price);
             map.put(tags.GIFT_CARD_SHIPPING_AND_COMMISSION_CHARGE, shipping_charge);
         }
@@ -434,7 +434,8 @@ public class EditGiftCard extends AppCompatActivity implements TextWatcher, View
     public void onError(VolleyError volleyError) {
         progress.dismiss();
         volleyError.printStackTrace();
-        Log.e(TAG, volleyError.getMessage());
+        if (volleyError.getMessage() != null)
+            Log.e(TAG, volleyError.getMessage());
     }
 
     private void showToast(String message) {

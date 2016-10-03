@@ -46,17 +46,17 @@ public class CompanyCard extends AppCompatActivity {
     CompanyCardAdapter adapter;
     List<GiftCard> cardList;
     boolean isLoading = false;
-    boolean isMore  = false;
+    boolean isMore = false;
     int loadMore = 0;
     private CompanyBrand companyBrand;
 
-    private void init(){
-        tags =Tags.getInstance();
+    private void init() {
+        tags = Tags.getInstance();
         dmrRequest = DMRRequest.getInstance(this, TAG);
         urls = Urls.getInstance();
         active = Active.getInstance(this);
         cardList = new ArrayList<>();
-        cart = (Cart)getApplicationContext();
+        cart = (Cart) getApplicationContext();
     }
 
     @Override
@@ -65,17 +65,17 @@ public class CompanyCard extends AppCompatActivity {
         setContentView(R.layout.activity_company_card);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         init();
-        if(getIntent().hasExtra(tags.COMPANY_BRAND)){
-            companyBrand =(CompanyBrand) getIntent().getExtras().getSerializable(tags.COMPANY_BRAND);
+        if (getIntent().hasExtra(tags.COMPANY_BRAND)) {
+            companyBrand = (CompanyBrand) getIntent().getExtras().getSerializable(tags.COMPANY_BRAND);
         }
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new CompanyCardAdapter(this, cardList, recyclerView,companyBrand);
+        adapter = new CompanyCardAdapter(this, cardList, recyclerView, companyBrand);
         recyclerView.setAdapter(adapter);
         adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                if(isMore) {
+                if (isMore) {
                     cardList.add(null);
                     adapter.notifyItemInserted(cardList.size() - 1);
                     isLoading = true;
@@ -99,8 +99,9 @@ public class CompanyCard extends AppCompatActivity {
         loadAvailableCartItems();
         invalidateOptionsMenu();
     }
+
     private void loadAvailableCartItems() {
-        if(active.getUser()==null)
+        if (active.getUser() == null)
             return;
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.CHECK_CART_ITEMS);
@@ -132,7 +133,8 @@ public class CompanyCard extends AppCompatActivity {
             @Override
             public void onError(VolleyError volleyError) {
                 volleyError.printStackTrace();
-                Log.e(TAG, volleyError.getMessage());
+                if (volleyError.getMessage() != null)
+                    Log.e(TAG, volleyError.getMessage());
             }
         });
     }
@@ -154,12 +156,12 @@ public class CompanyCard extends AppCompatActivity {
         // Update LayerDrawable's BadgeDrawable
         Utils1.setBadgeCount(this, icon1, cart.getCartItemCount());
         return true;
-        
+
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 //NavUtils.navigateUpFromSameTask(this);
                 this.onBackPressed();
@@ -185,11 +187,12 @@ public class CompanyCard extends AppCompatActivity {
         adapter.setLoaded();
         //setPaginate();
     }
+
     private void loadCards() {
         Map<String, String> map = new HashMap<>();
-        map.put(tags.USER_ACTION,tags.COMPANY_ID_BRAND);
-        map.put(tags.COMPANY_ID,String.valueOf(companyBrand.getCompanyID()));
-        map.put(tags.LOAD_MORE,String.valueOf(loadMore));
+        map.put(tags.USER_ACTION, tags.COMPANY_ID_BRAND);
+        map.put(tags.COMPANY_ID, String.valueOf(companyBrand.getCompanyID()));
+        map.put(tags.LOAD_MORE, String.valueOf(loadMore));
         dmrRequest.doPost(urls.getGiftCardInfo(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
@@ -197,7 +200,7 @@ public class CompanyCard extends AppCompatActivity {
                     if (jsonObject.has(tags.SUCCESS)) {
                         if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
                             List<GiftCard> cards = new ArrayList<GiftCard>();
-                            if(jsonObject.has(tags.GIFT_CARDS)) {
+                            if (jsonObject.has(tags.GIFT_CARDS)) {
                                 JSONArray jsonArray = jsonObject.getJSONArray(tags.GIFT_CARDS);
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     GiftCard card = new GiftCard();
@@ -212,22 +215,23 @@ public class CompanyCard extends AppCompatActivity {
 
                         }
                     }
-                    if(jsonObject.has(tags.IS_MORE)){
+                    if (jsonObject.has(tags.IS_MORE)) {
                         isMore = jsonObject.getBoolean(tags.IS_MORE);
-                        if(isMore){
-                            loadMore+=tags.DEFAULT_LOADING_DATA;
+                        if (isMore) {
+                            loadMore += tags.DEFAULT_LOADING_DATA;
                         }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Log.e(TAG,e.getMessage());
+                    Log.e(TAG, e.getMessage());
                 }
             }
 
             @Override
             public void onError(VolleyError volleyError) {
                 volleyError.printStackTrace();
-                Log.e(TAG,volleyError.getMessage());
+                if (volleyError.getMessage() != null)
+                    Log.e(TAG, volleyError.getMessage());
             }
         });
     }

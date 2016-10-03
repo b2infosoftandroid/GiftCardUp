@@ -136,13 +136,15 @@ public class PayAvailableFun extends AppCompatActivity implements View.OnClickLi
             }
         } catch (JSONException error) {
             error.printStackTrace();
-            Log.e(TAG, error.getLocalizedMessage());
+            if (error.getMessage() != null)
+                Log.e(TAG, error.getLocalizedMessage());
         }
     }
 
     @Override
     public void onError(VolleyError volleyError) {
         volleyError.printStackTrace();
-        Log.e(TAG, volleyError.getLocalizedMessage());
+        if (volleyError.getMessage() != null)
+            Log.e(TAG, volleyError.getMessage());
     }
 }

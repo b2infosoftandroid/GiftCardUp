@@ -124,8 +124,10 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         if (active.isLogin()) {
             mail.setText(user.getEmail());
         }
-
-        LruBitmapCache.loadCacheImageProfile(this, profile_image, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
+        if(user.getImage().length()>0&&user.getImage().contains(".")) {
+            LruBitmapCache.loadCacheImageProfile(this, profile_image, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
+        }
+        //LruBitmapCache.loadCacheImageProfile(this, profile_image, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
         // member_science.setText("Member Since : ".concat(format.getDate(user.getJoinDate())));
         getApproveForSelling();
         checkAvailableBalance();
@@ -328,7 +330,8 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
     @Override
     public void onError(VolleyError volleyError) {
         volleyError.printStackTrace();
-        Log.e(TAG, volleyError.getMessage());
+        if (volleyError.getMessage() != null)
+            Log.e(TAG,volleyError.getMessage());
     }
 
     private void checkAvailableBalance() {

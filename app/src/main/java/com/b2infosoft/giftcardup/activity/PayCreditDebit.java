@@ -128,11 +128,13 @@ public class PayCreditDebit extends AppCompatActivity implements PaymentForm, DM
                             orderPlace();
                         }
 
-                        public void onError(Exception error) {
+                        public void onError(Exception volleyError) {
                             progress.dismiss();
-                            Log.e(TAG, error.getLocalizedMessage());
+                            volleyError.printStackTrace();
+                            if (volleyError.getMessage() != null)
+                                Log.e(TAG, volleyError.getMessage());
                             AlertBox box = new AlertBox(PayCreditDebit.this);
-                            box.setMessage(error.getLocalizedMessage());
+                            box.setMessage(volleyError.getLocalizedMessage());
                             box.show();
                         }
                     });
@@ -162,7 +164,7 @@ public class PayCreditDebit extends AppCompatActivity implements PaymentForm, DM
             map.put(tags.USER_ID, active.getUser().getUserId());
             map.put(tags.ITEM_DATA, orderSummery.getItemData());
             map.put(tags.ITEM_ID, orderSummery.getItemId());
-            map.put(tags.TOTAL_PRICE,Math.round(orderSummery.getBalance()*100) + "");
+            map.put(tags.TOTAL_PRICE, Math.round(orderSummery.getBalance() * 100) + "");
             map.put(tags.TOTAL_ITEM, orderSummery.getTotalItem() + "");
             map.put(tags.COMMISSION, orderSummery.getCommission() + "");
             map.put(tags.CARD_NUMBER, getCardNumber());
@@ -224,7 +226,8 @@ public class PayCreditDebit extends AppCompatActivity implements PaymentForm, DM
     @Override
     public void onError(VolleyError volleyError) {
         volleyError.printStackTrace();
-        Log.e(TAG, volleyError.getLocalizedMessage());
+        if (volleyError.getMessage() != null)
+            Log.e(TAG, volleyError.getMessage());
         progress.dismiss();
     }
 

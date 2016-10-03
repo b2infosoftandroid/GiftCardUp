@@ -2,6 +2,7 @@ package com.b2infosoft.giftcardup.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -94,7 +95,9 @@ public class ForgotPassword extends AppCompatActivity implements DMRResult{
 
     @Override
     public void onError(VolleyError volleyError) {
-
+        volleyError.printStackTrace();
+        if (volleyError.getMessage() != null)
+            Log.e(TAG, volleyError.getMessage());
     }
 
     @Override

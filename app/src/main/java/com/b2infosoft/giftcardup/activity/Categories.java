@@ -160,7 +160,9 @@ public class Categories extends AppCompatActivity {
 
             @Override
             public void onError(VolleyError volleyError) {
-
+                volleyError.printStackTrace();
+                if (volleyError.getMessage() != null)
+                    Log.e(TAG,volleyError.getMessage());
             }
         });
     }

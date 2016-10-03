@@ -330,7 +330,9 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                         @Override
                         public void onError(VolleyError volleyError) {
-
+                            volleyError.printStackTrace();
+                            if (volleyError.getMessage() != null)
+                                Log.e(TAG,volleyError.getMessage());
                         }
                     });
                 }

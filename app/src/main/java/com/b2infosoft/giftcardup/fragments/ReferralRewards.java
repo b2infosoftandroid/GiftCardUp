@@ -118,6 +118,7 @@ public class ReferralRewards extends Fragment implements View.OnClickListener,DM
     public void onError(VolleyError volleyError) {
         progress.dismiss();
         volleyError.printStackTrace();
-        Log.e(TAG, volleyError.getMessage());
+        if (volleyError.getMessage() != null)
+            Log.e(TAG,volleyError.getMessage());
     }
 }

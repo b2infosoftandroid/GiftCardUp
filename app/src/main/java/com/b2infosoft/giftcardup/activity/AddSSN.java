@@ -132,7 +132,9 @@ public class AddSSN extends AppCompatActivity  implements DMRResult{
 
     @Override
     public void onError(VolleyError volleyError) {
-
+        volleyError.printStackTrace();
+        if (volleyError.getMessage() != null)
+            Log.e(TAG,volleyError.getMessage());
     }
 
     private void viewBlank(){

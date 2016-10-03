@@ -152,10 +152,12 @@ public class MyProfile extends AppCompatActivity implements Identification.OnFra
         member_science.setText("Member Since: ".concat(format.getDate(user.getJoinDate())));
         total_saving.setText("$"+user.getTotalSave());
         total_sold.setText("$"+user.getTotalSold());
-        profile_user_name.setText(user.getFirstName()+" "+user.getLastName());
+        profile_user_name.setText(user.getFirstName() + " " + user.getLastName());
 
-        LruBitmapCache.loadCacheImageProfile(this, profile_image, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
-
+        //LruBitmapCache.loadCacheImageProfile(this, profile_image, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
+        if(user.getImage().length()>0&&user.getImage().contains(".")) {
+            LruBitmapCache.loadCacheImageProfile(this, profile_image, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
+        }
 
     }
 
@@ -289,7 +291,8 @@ public class MyProfile extends AppCompatActivity implements Identification.OnFra
     @Override
     public void onError(VolleyError volleyError) {
         volleyError.printStackTrace();
-        Log.e(TAG, volleyError.getMessage());
+        if (volleyError.getMessage() != null)
+            Log.e(TAG,volleyError.getMessage());
     }
 
     @Override

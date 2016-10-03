@@ -132,6 +132,7 @@ public class Splash extends AppCompatActivity implements DMRResult {
     @Override
     public void onError(VolleyError volleyError) {
         volleyError.printStackTrace();
-        Log.e(TAG, volleyError.getMessage());
+        if (volleyError.getMessage() != null)
+            Log.e(TAG,volleyError.getMessage());
     }
 }

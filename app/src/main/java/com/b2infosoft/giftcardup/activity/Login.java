@@ -133,9 +133,10 @@ public class Login extends AppCompatActivity implements DMRResult {
             }
 
             @Override
-            public void onError(FacebookException error) {
-                error.printStackTrace();
-                Log.d("Error ", error.getMessage());
+            public void onError(FacebookException volleyError) {
+                volleyError.printStackTrace();
+                if (volleyError.getMessage() != null)
+                    Log.e(TAG, volleyError.getMessage());
             }
         });
         loginButtonFB.setOnClickListener(new View.OnClickListener() {
@@ -203,9 +204,9 @@ public class Login extends AppCompatActivity implements DMRResult {
                                         loginSuccess();
                                     }
                                 } else if (jsonObject.getInt(tags.USER_TYPE) == tags.NEW_USER) {
-                                    Log.d("WORK","IN");
+                                    Log.d("WORK", "IN");
                                     if (jsonObject.has(tags.USER_ID)) {
-                                        Log.d("WORK","IN 1");
+                                        Log.d("WORK", "IN 1");
                                         Intent intent = new Intent(Login.this, FBUserUpdate.class);
                                         intent.putExtra(tags.USER_ID, jsonObject.getString(tags.USER_ID));
                                         startActivity(intent);
@@ -224,7 +225,8 @@ public class Login extends AppCompatActivity implements DMRResult {
             @Override
             public void onError(VolleyError volleyError) {
                 volleyError.printStackTrace();
-                Log.e(TAG, volleyError.getMessage());
+                if (volleyError.getMessage() != null)
+                    Log.e(TAG, volleyError.getMessage());
             }
         });
     }
@@ -271,7 +273,8 @@ public class Login extends AppCompatActivity implements DMRResult {
     @Override
     public void onError(VolleyError volleyError) {
         volleyError.printStackTrace();
-        Log.e(TAG, volleyError.getMessage());
+        if (volleyError.getMessage() != null)
+            Log.e(TAG, volleyError.getMessage());
     }
 
     @Override

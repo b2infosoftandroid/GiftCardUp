@@ -102,17 +102,17 @@ public class WithdrawalHistoryRecyclerViewAdapter extends RecyclerView.Adapter<R
             status = (TextView) view.findViewById(R.id.withdrawal_history_status);
             request_id = (Button) view.findViewById(R.id.withdrawal_history_req_id_btn);
 
-            layout = (LinearLayout)view.findViewById(R.id.layout_2);
+            layout = (LinearLayout) view.findViewById(R.id.layout_2);
 
             request_id = (Button) view.findViewById(R.id.withdrawal_history_req_id_btn);
             request_id.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     count = count + 1;
-                    if(count % 2 != 0) {
+                    if (count % 2 != 0) {
                         request_id.setText("");
                         layout.setVisibility(View.VISIBLE);
-                    }else {
+                    } else {
                         request_id.setText("");
                         layout.setVisibility(View.GONE);
                     }
@@ -160,8 +160,7 @@ public class WithdrawalHistoryRecyclerViewAdapter extends RecyclerView.Adapter<R
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        if (holder instanceof CardHolder)
-        {
+        if (holder instanceof CardHolder) {
             final GetWithdrawHistory card = (GetWithdrawHistory) cardInfoList.get(position);
             final CardHolder cardHolder = (CardHolder) holder;
 
@@ -180,7 +179,7 @@ public class WithdrawalHistoryRecyclerViewAdapter extends RecyclerView.Adapter<R
                     dialog.setTitle("Available Funds");
                     dialog.setContentView(R.layout.custom_dialog_history);
 
-                   final RecyclerView  recyclerView = (RecyclerView) dialog.findViewById(R.id.recycler_view);
+                    final RecyclerView recyclerView = (RecyclerView) dialog.findViewById(R.id.recycler_view);
                     recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     Map<String, String> map = new HashMap<>();
                     map.put(tags.USER_ACTION, tags.WITHDRAWAL_HISTORY_VIEW);
@@ -214,7 +213,8 @@ public class WithdrawalHistoryRecyclerViewAdapter extends RecyclerView.Adapter<R
                         @Override
                         public void onError(VolleyError volleyError) {
                             volleyError.printStackTrace();
-                            Log.e(TAG, volleyError.getMessage());
+                            if (volleyError.getMessage() != null)
+                                Log.e(TAG, volleyError.getMessage());
                         }
 
                     });
@@ -241,7 +241,8 @@ public class WithdrawalHistoryRecyclerViewAdapter extends RecyclerView.Adapter<R
     public void showToast(String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
-    public void removeAllItem(){
+
+    public void removeAllItem() {
         cardInfoList.clear();
         notifyDataSetChanged();
     }

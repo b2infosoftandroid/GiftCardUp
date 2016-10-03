@@ -263,7 +263,8 @@ public class Main extends GiftCardUp {
             public void onError(VolleyError volleyError) {
                 checkedFB = false;
                 volleyError.printStackTrace();
-                Log.e(TAG, volleyError.getMessage());
+                if (volleyError.getMessage() != null)
+                    Log.e(TAG, volleyError.getMessage());
             }
         });
     }
@@ -299,7 +300,8 @@ public class Main extends GiftCardUp {
             @Override
             public void onError(VolleyError volleyError) {
                 volleyError.printStackTrace();
-                Log.e(TAG, volleyError.getMessage());
+                if (volleyError.getMessage() != null)
+                    Log.e(TAG, volleyError.getMessage());
             }
         });
     }
@@ -520,8 +522,8 @@ public class Main extends GiftCardUp {
                             if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
                                 if (jsonObject.has(tags.AVAILABLE_FUND_BALANCE)) {
                                     UserBalance balance = UserBalance.fromJSON(jsonObject.getJSONObject(tags.AVAILABLE_FUND_BALANCE));
-                                     user_total_saving.setText("$" + balance.getTotal_saving());
-                                     user_total_sold.setText("$" + balance.getTotal_sold());
+                                    user_total_saving.setText("$" + balance.getTotal_saving());
+                                    user_total_sold.setText("$" + balance.getTotal_sold());
                                 }
                             } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
 
@@ -536,10 +538,13 @@ public class Main extends GiftCardUp {
                 @Override
                 public void onError(VolleyError volleyError) {
                     volleyError.printStackTrace();
-                    Log.e(TAG, volleyError.getMessage());
+                    if (volleyError.getMessage() != null)
+                        Log.e(TAG, volleyError.getMessage());
                 }
             });
-            LruBitmapCache.loadCacheImageProfile(this, user_profile_icon, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
+            if (user.getImage().length() > 0 && user.getImage().contains(".")) {
+                LruBitmapCache.loadCacheImageProfile(this, user_profile_icon, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
+            }
             setMenuItems(user.getUserType());
         } else {
             setMenuItems(0);

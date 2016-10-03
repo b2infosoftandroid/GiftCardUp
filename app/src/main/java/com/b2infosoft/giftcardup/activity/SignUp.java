@@ -284,8 +284,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
     @Override
     public void onError(VolleyError volleyError) {
         volleyError.printStackTrace();
-        Log.d(TAG, volleyError.getMessage());
-        Log.d("failed", "success");
+        if (volleyError.getMessage() != null)
+            Log.e(TAG,volleyError.getMessage());
     }
 
 

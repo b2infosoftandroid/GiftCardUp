@@ -244,7 +244,8 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                             @Override
                             public void onError(VolleyError volleyError) {
                                 volleyError.printStackTrace();
-                                Log.e(TAG, volleyError.getMessage());
+                                if (volleyError.getMessage() != null)
+                                    Log.e(TAG,volleyError.getMessage());
                             }
                         });
                     } else if (cardAction.equalsIgnoreCase("remove to cart")) {
@@ -282,7 +283,8 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                             @Override
                             public void onError(VolleyError volleyError) {
                                 volleyError.printStackTrace();
-                                Log.e(TAG, volleyError.getMessage());
+                                if (volleyError.getMessage() != null)
+                                    Log.e(TAG,volleyError.getMessage());
                             }
                         });
                     }
@@ -331,7 +333,8 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                             @Override
                             public void onError(VolleyError volleyError) {
                                 volleyError.printStackTrace();
-                                Log.e(TAG, volleyError.getMessage());
+                                if (volleyError.getMessage() != null)
+                                    Log.e(TAG,volleyError.getMessage());
                             }
                         });
                     }

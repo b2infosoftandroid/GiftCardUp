@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.app.Tags;
@@ -201,7 +202,7 @@ public class FBUserUpdate extends AppCompatActivity implements DMRResult {
 
     @Override
     public void onSuccess(JSONObject jsonObject) {
-        Log.d("RESPONSE",jsonObject.toString());
+        Log.d("RESPONSE", jsonObject.toString());
         try {
             if (jsonObject.has(tags.SUCCESS)) {
                 if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
@@ -217,7 +218,7 @@ public class FBUserUpdate extends AppCompatActivity implements DMRResult {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
-                                startActivity(new Intent(FBUserUpdate.this,Main.class));
+                                startActivity(new Intent(FBUserUpdate.this, Main.class));
                                 FBUserUpdate.this.finish();
                             }
                         });
@@ -240,6 +241,7 @@ public class FBUserUpdate extends AppCompatActivity implements DMRResult {
     @Override
     public void onError(VolleyError volleyError) {
         volleyError.printStackTrace();
-        Log.e(TAG, volleyError.getMessage());
+        if (volleyError.getMessage() != null)
+            Log.e(TAG, volleyError.getMessage());
     }
 }

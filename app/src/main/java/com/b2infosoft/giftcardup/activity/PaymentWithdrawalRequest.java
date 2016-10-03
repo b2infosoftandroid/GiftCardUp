@@ -130,11 +130,11 @@ public class PaymentWithdrawalRequest extends AppCompatActivity {
                             //int value = banks.length;
                             //Log.d("value",value + "");
                             for (int i = 0; i < banks.length; i++) {
-                                if(i==0){
+                                if (i == 0) {
                                     banks[i] = "Select Your Bank";
                                     continue;
                                 }
-                                banks[i] = info.get(i-1).getName();
+                                banks[i] = info.get(i - 1).getName();
                             }
                             spinner2.setAdapter(new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_dropdown_item, banks));
                         }
@@ -148,7 +148,8 @@ public class PaymentWithdrawalRequest extends AppCompatActivity {
             @Override
             public void onError(VolleyError volleyError) {
                 volleyError.printStackTrace();
-                Log.e(TAG, volleyError.getMessage());
+                if (volleyError.getMessage() != null)
+                    Log.e(TAG, volleyError.getMessage());
             }
 
         });
@@ -160,37 +161,37 @@ public class PaymentWithdrawalRequest extends AppCompatActivity {
         String ids = withdrawal.getPaymentIDs();
         String amount = withdrawal.getTotalAmount();
         String bankId = "";
-        if(ach.isSelected()) {
+        if (ach.isSelected()) {
             if (spinner2.getSelectedItemPosition() == 0) {
                 selectedTextView.setError("Please Fill Bank");
                 spinner2.requestFocus();
                 return;
             }
             String bankName = spinner2.getSelectedItem().toString();
-            List<BankInfo>  infoList =    withdrawal.getBankInfoList();
-            for (BankInfo info1:infoList){
-                if(info1.getName().equalsIgnoreCase(bankName)){
-                    bankId = info1.getId()+"";
+            List<BankInfo> infoList = withdrawal.getBankInfoList();
+            for (BankInfo info1 : infoList) {
+                if (info1.getName().equalsIgnoreCase(bankName)) {
+                    bankId = info1.getId() + "";
                     break;
                 }
             }
         }
 
         int btnId = radioGroup.getCheckedRadioButtonId();
-        if(btnId == R.id.withdraw_req_ach){
-            method ="ACH";
-        }else if(btnId == R.id.withdraw_req_paypal){
-            method ="Paypal";
-        }else if(btnId == R.id.withdraw_req_cheque){
-            method ="Cheque";
+        if (btnId == R.id.withdraw_req_ach) {
+            method = "ACH";
+        } else if (btnId == R.id.withdraw_req_paypal) {
+            method = "Paypal";
+        } else if (btnId == R.id.withdraw_req_cheque) {
+            method = "Cheque";
         }
-        Log.d("withdrawal",method);
+        Log.d("withdrawal", method);
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.SEND_WITHDRAWAL_REQUEST);
         map.put(tags.USER_ID, active.getUser().getUserId() + "");
         map.put(tags.WITHDRAWAL_PAYMENT_METHOD, method);
         map.put(tags.WITHDRAWAL_PAYMENT_ID, ids);
-        if(ach.isSelected()) {
+        if (ach.isSelected()) {
             map.put(tags.WITHDRAWAL_BANK_ID, bankId);
         }
         map.put(tags.WITHDRAWAL_AMOUNT, amount);
@@ -201,7 +202,7 @@ public class PaymentWithdrawalRequest extends AppCompatActivity {
                 try {
                     if (jsonObject.has(tags.SUCCESS)) {
                         if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
-                            Toast.makeText(getBaseContext(),"success",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getBaseContext(), "success", Toast.LENGTH_SHORT).show();
                             finish();
                         }
                     }
@@ -214,7 +215,8 @@ public class PaymentWithdrawalRequest extends AppCompatActivity {
             @Override
             public void onError(VolleyError volleyError) {
                 volleyError.printStackTrace();
-                Log.e(TAG, volleyError.getMessage());
+                if (volleyError.getMessage() != null)
+                    Log.e(TAG, volleyError.getMessage());
             }
 
         });

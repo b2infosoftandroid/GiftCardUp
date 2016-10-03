@@ -220,7 +220,9 @@ public class Dashboard extends Fragment {
 
             @Override
             public void onError(VolleyError volleyError) {
-
+                volleyError.printStackTrace();
+                if (volleyError.getMessage() != null)
+                    Log.e(TAG,volleyError.getMessage());
             }
         });
     }

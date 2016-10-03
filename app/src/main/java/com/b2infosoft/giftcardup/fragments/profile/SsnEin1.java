@@ -284,7 +284,8 @@ public class SsnEin1 extends Fragment implements CanScrollVerticallyDelegate, DM
     @Override
     public void onError(VolleyError volleyError) {
         volleyError.printStackTrace();
-        Log.e(TAG, volleyError.getMessage());
+        if (volleyError.getMessage() != null)
+            Log.e(TAG,volleyError.getMessage());
     }
 
     public void onButtonPressed(Uri uri) {

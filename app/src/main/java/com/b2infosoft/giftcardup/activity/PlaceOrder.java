@@ -154,7 +154,9 @@ public class PlaceOrder extends AppCompatActivity implements DMRResult {
 
                 @Override
                 public void onError(VolleyError volleyError) {
-
+                    volleyError.printStackTrace();
+                    if (volleyError.getMessage() != null)
+                        Log.e(TAG,volleyError.getMessage());
                 }
             });
         }
@@ -187,7 +189,6 @@ public class PlaceOrder extends AppCompatActivity implements DMRResult {
 
     @Override
     public void onSuccess(JSONObject jsonObject) {
-        Log.d("DATA",jsonObject.toString()) ;
         try {
             if (jsonObject.has(tags.SUCCESS)) {
                 if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
@@ -209,6 +210,7 @@ public class PlaceOrder extends AppCompatActivity implements DMRResult {
     @Override
     public void onError(VolleyError volleyError) {
         volleyError.printStackTrace();
-        Log.e(TAG, volleyError.getLocalizedMessage());
+        if (volleyError.getMessage() != null)
+            Log.e(TAG,volleyError.getMessage());
     }
 }

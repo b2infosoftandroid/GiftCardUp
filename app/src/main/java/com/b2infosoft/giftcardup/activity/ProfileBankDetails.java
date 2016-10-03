@@ -109,7 +109,8 @@ public class ProfileBankDetails extends AppCompatActivity {
             @Override
             public void onError(VolleyError volleyError) {
                 volleyError.printStackTrace();
-                Log.e(TAG, volleyError.getMessage());
+                if (volleyError.getMessage() != null)
+                    Log.e(TAG,volleyError.getMessage());
             }
         });
     }

@@ -105,7 +105,7 @@ public class SellCards extends Fragment implements DMRResult {
         get_offer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    checkBlank();
+                checkBlank();
             }
         });
         accept_offer.setOnClickListener(new View.OnClickListener() {
@@ -114,9 +114,9 @@ public class SellCards extends Fragment implements DMRResult {
                 Merchant info = new Merchant();
                 SpeedySell frag = new SpeedySell();
                 Bundle bundle = new Bundle();
-                bundle.putString("card",merchant.getText().toString());
-                bundle.putString("bal",value.getText().toString());
-                bundle.putString("sellPercent",info.getSellingPercentage());
+                bundle.putString("card", merchant.getText().toString());
+                bundle.putString("bal", value.getText().toString());
+                bundle.putString("sellPercent", info.getSellingPercentage());
                 frag.setArguments(bundle);
                 replaceFragment(frag);
             }
@@ -131,7 +131,7 @@ public class SellCards extends Fragment implements DMRResult {
         dmrRequest.doPost(urls.getAppAction(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
-                 Log.d("merchant",jsonObject.toString());
+                Log.d("merchant", jsonObject.toString());
                 try {
                     if (jsonObject.has(tags.SUCCESS)) {
                         if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
@@ -157,7 +157,8 @@ public class SellCards extends Fragment implements DMRResult {
             @Override
             public void onError(VolleyError volleyError) {
                 volleyError.printStackTrace();
-                Log.e(TAG, volleyError.getMessage());
+                if (volleyError.getMessage() != null)
+                    Log.e(TAG, volleyError.getMessage());
             }
         });
     }
@@ -232,8 +233,8 @@ public class SellCards extends Fragment implements DMRResult {
         //action.setText("ACTION");
         //action.setTextColor(getResources().getColor(R.color.button_foreground));
         //action.setPadding(15, 30, 0, 30);
-       // action.setTypeface(null, Typeface.BOLD);
-       // tr_head.addView(action);
+        // action.setTypeface(null, Typeface.BOLD);
+        // tr_head.addView(action);
         tableLayout.addView(tr_head);
     }
 
@@ -273,34 +274,34 @@ public class SellCards extends Fragment implements DMRResult {
         tr1.addView(payout);
 
 
-       // imageAction = new ImageView(getContext());
-       // imageAction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_remove_24dp));
-       // imageAction.setOnClickListener(new View.OnClickListener() {
-       //     @Override
+        // imageAction = new ImageView(getContext());
+        // imageAction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_remove_24dp));
+        // imageAction.setOnClickListener(new View.OnClickListener() {
+        //     @Override
         //    public void onClick(View v) {
-       //         offerQueue.remove(offer);
-         //       checkAllOffer();
-       //     }
-       // });
-       // imageAction.setPadding(15, 30, 0, 30);
-       // imageAction.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
+        //         offerQueue.remove(offer);
+        //       checkAllOffer();
+        //     }
+        // });
+        // imageAction.setPadding(15, 30, 0, 30);
+        // imageAction.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
         //        TableRow.LayoutParams.WRAP_CONTENT, 1f));
-       // tr1.addView(imageAction);
+        // tr1.addView(imageAction);
         tr1.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 count = count + 1;
-                if(count % 2 != 0) {
+                if (count % 2 != 0) {
                     TableRow tr = (TableRow) v;
                     imageView1 = new ImageView(getContext());
                     imageView1.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_delete_24dp));
                     imageView1.setOnClickListener(new View.OnClickListener() {
-                             @Override
-                            public void onClick(View v) {
-                                 offerQueue.remove(offer);
-                               checkAllOffer();
-                             }
-                         });
+                        @Override
+                        public void onClick(View v) {
+                            offerQueue.remove(offer);
+                            checkAllOffer();
+                        }
+                    });
                     imageView1.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER));
                     imageView1.setPadding(15, 30, 15, 30);
                     imageView1.setBackgroundColor(getResources().getColor(R.color.edit_text_text));
@@ -313,8 +314,7 @@ public class SellCards extends Fragment implements DMRResult {
                     imageView.setBackgroundColor(getResources().getColor(R.color.edit_text_text));
                     //ImageView imageView = (ImageView)tr.getChildAt(8);
                     tr.addView(imageView);
-                }
-                else {
+                } else {
                     imageView1.setVisibility(View.GONE);
                     imageView.setVisibility(View.GONE);
                 }
@@ -374,6 +374,7 @@ public class SellCards extends Fragment implements DMRResult {
         transaction.addToBackStack(null);
         transaction.commit();
     }
+
     @Override
     public void onSuccess(JSONObject jsonObject) {
         try {
@@ -398,7 +399,8 @@ public class SellCards extends Fragment implements DMRResult {
     @Override
     public void onError(VolleyError volleyError) {
         volleyError.printStackTrace();
-        Log.e(TAG, volleyError.getMessage());
+        if (volleyError.getMessage() != null)
+            Log.e(TAG, volleyError.getMessage());
     }
 
 
@@ -407,7 +409,7 @@ public class SellCards extends Fragment implements DMRResult {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p/>
+     * <p>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.

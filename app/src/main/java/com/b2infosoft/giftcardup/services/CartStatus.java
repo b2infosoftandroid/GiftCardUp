@@ -1,4 +1,5 @@
 package com.b2infosoft.giftcardup.services;
+
 import android.app.Service;
 import android.content.AsyncQueryHandler;
 import android.content.Intent;
@@ -54,15 +55,17 @@ public class CartStatus extends Service {
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            if(active.getUser()==null)
+            if (active.getUser() == null) {
+                CartStatus.this.stopSelf();
                 return;
-
+            }
             Map<String, String> map = new HashMap<>();
             map.put(tags.USER_ACTION, tags.CHECK_CART_STATUS);
             map.put(tags.USER_ID, active.getUser().getUserId() + "");
             dmrRequest.doPost(urls.getCartInfo(), map, new DMRResult() {
                 @Override
                 public void onSuccess(JSONObject jsonObject) {
+                    Log.d("CART_INFO_BACKGROUND",jsonObject.toString());
                     try {
                         Intent intent1 = new Intent(ShoppingCart.TAG);
                         if (jsonObject.has(tags.SUCCESS)) {
@@ -94,7 +97,8 @@ public class CartStatus extends Service {
                 @Override
                 public void onError(VolleyError volleyError) {
                     volleyError.printStackTrace();
-                    Log.e(TAG, volleyError.getMessage());
+                    if (volleyError.getMessage() != null)
+                        Log.e(TAG, volleyError.getMessage());
                 }
             });
             if (handler != null) {

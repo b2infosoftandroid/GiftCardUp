@@ -108,9 +108,10 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public class Empty extends RecyclerView.ViewHolder {
         Button goShop;
+
         public Empty(View view) {
             super(view);
-            goShop = (Button)view.findViewById(R.id.action_shop);
+            goShop = (Button) view.findViewById(R.id.action_shop);
         }
     }
 
@@ -194,7 +195,8 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                 @Override
                                 public void onError(VolleyError volleyError) {
                                     volleyError.printStackTrace();
-                                    Log.e(TAG, volleyError.getMessage());
+                                    if (volleyError.getMessage() != null)
+                                        Log.e(TAG, volleyError.getMessage());
                                     progress.dismiss();
                                 }
                             });
@@ -216,7 +218,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             cardHolder.price.setText("$" + card.getValue());
             cardHolder.saving.setText("$" + card.getSaving());
         } else if (holder instanceof Empty) {
-           final Empty cardHolder = (Empty)holder;
+            final Empty cardHolder = (Empty) holder;
             cardHolder.goShop.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
