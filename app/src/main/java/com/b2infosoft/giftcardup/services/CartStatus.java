@@ -1,7 +1,6 @@
 package com.b2infosoft.giftcardup.services;
 
 import android.app.Service;
-import android.content.AsyncQueryHandler;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
@@ -9,15 +8,12 @@ import android.util.Log;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.activity.ShoppingCart;
-import com.b2infosoft.giftcardup.app.Cart;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
-import com.b2infosoft.giftcardup.model.GiftCard;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -33,6 +29,7 @@ public class CartStatus extends Service {
     private Handler handler = new Handler();
 
     public CartStatus() {
+
     }
 
     @Override
