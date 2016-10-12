@@ -137,8 +137,7 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         if (active.isLogin()) {
             User user = active.getUser();
             mail.setText(user.getEmail());
-            //toolbarLayout.setTitle(user.getFirstName() + " " + user.getLastName()+","+user.getUserId());
-            toolbarLayout.setTitle(user.getFirstName() + ", " + user.getUserId());
+            toolbarLayout.setTitle(user.getFirstName() + " " + user.getLastName()+","+user.getUserId());
             if (user.getImage().length() > 0 && user.getImage().contains(".")) {
                 LruBitmapCache.loadCacheImageProfile(this, profile_image, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
             }

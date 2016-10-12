@@ -20,7 +20,7 @@ public class Tags {
     public final String PAYMENT_WITH_AVAILABLE_FUND = "Available Fund";
     public final String PAYMENT_WITH_CARD = "Card";
 
-    public final String CURRENCEY = "usd";
+    public final String CURRENCY = "usd";
 
     /////////////   GLOBAL TAGS   ////////////
     public final String SUCCESS = "success";
@@ -31,6 +31,11 @@ public class Tags {
     public final String CATEGORIES_ID = "categories_id";
     public final String SELECTED_TAB = "selected_tab";
     public final String REFERRAL_CODE = "referral_code";
+    public final String SELECTED_FRAGMENTS = "selected_fragments";
+
+
+    /////////////////  FRAGMENTS NAME  //////////
+    public final String FRAGMENT_MY_ORDERS = "fragment_my_order";
 
     public final int SUSPEND = 2;
     public final int PASS = 1;

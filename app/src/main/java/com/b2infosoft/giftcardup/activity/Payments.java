@@ -38,6 +38,7 @@ public class Payments extends AppCompatActivity implements View.OnClickListener 
         available_fund = (RadioButton) findViewById(R.id.available_fund);
         credit_debit = (RadioButton) findViewById(R.id.credit_debit);
         paypal = (RadioButton) findViewById(R.id.paypal);
+        paypal.setVisibility(View.GONE);
         action_continue = (Button) findViewById(R.id.action_continue);
         action_continue.setOnClickListener(this);
     }

@@ -1,5 +1,6 @@
 package com.b2infosoft.giftcardup.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -97,7 +98,7 @@ public class AddIdentity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         MyProfile.setSelectedTabIndex(1);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == this.RESULT_OK && data != null && data.getData() != null) {
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
             filePath = data.getData();
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), filePath);

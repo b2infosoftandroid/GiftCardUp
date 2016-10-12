@@ -132,28 +132,36 @@
         </activity>
         <activity
             android:name=".activity.PayAvailableFun"
-            android:label="Payment">
+            android:label="Payment"
+            android:windowSoftInputMode="adjustResize"
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.Payments" />
         </activity>
         <activity
             android:name=".activity.PayCreditDebit"
-            android:label="Payment">
+            android:label="Payment"
+            android:windowSoftInputMode="adjustResize"
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.Payments" />
         </activity>
         <activity
             android:name=".activity.PayPayPal"
-            android:label="Payment">
+            android:label="Payment"
+            android:windowSoftInputMode="adjustResize"
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.Payments" />
         </activity>
         <activity
             android:name=".activity.PlaceOrder"
-            android:label="Place Order" />
+            android:label="Place Order"
+            android:windowSoftInputMode="adjustResize"
+            />
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -175,7 +183,9 @@
         <activity
             android:name=".activity.ProfileNew"
             android:label="@string/title_activity_profile_new"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize"
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.Main" />

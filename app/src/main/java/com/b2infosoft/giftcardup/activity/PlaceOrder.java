@@ -1,6 +1,7 @@
 package com.b2infosoft.giftcardup.activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -57,11 +58,6 @@ public class PlaceOrder extends AppCompatActivity implements DMRResult {
         init();
         if (getIntent().hasExtra(tags.ORDER_SUMMERY)) {
             orderSummery = (OrderSummery) getIntent().getExtras().getSerializable(tags.ORDER_SUMMERY);
-            Log.d("MY ORDERS", orderSummery.getItemData());
-            Log.d("MY ID", orderSummery.getItemId());
-            Log.d("TOTAL PRICE", orderSummery.getBalance() + "");
-            Log.d("ITEM COUNT", orderSummery.getTotalItem() + "");
-            Log.d("COmmission", orderSummery.getCommission() + "");
         }
         name = (TextView) findViewById(R.id.name);
         address = (TextView) findViewById(R.id.address);
@@ -193,12 +189,26 @@ public class PlaceOrder extends AppCompatActivity implements DMRResult {
             if (jsonObject.has(tags.SUCCESS)) {
                 if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
                     orderSummery = null;
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Alert");
+                    builder.setMessage("Your Order Successfully Complete. Please Check My Order");
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(PlaceOrder.this,Main.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.putExtra(tags.SELECTED_FRAGMENTS, tags.FRAGMENT_MY_ORDERS);
+                            startActivity(intent);
+                            dialog.dismiss();
+                            finish();
+                        }
+                    });
+                    builder.create().show();
+                } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
                     AlertBox box = new AlertBox(this);
                     box.setTitle("Alert");
-                    box.setMessage("Your Order Successfully Complete.\n Please Check My Order");
+                    box.setMessage("Something went wrong. Try Again");
                     box.show();
-                } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
-
                 }
             }
         } catch (JSONException error) {

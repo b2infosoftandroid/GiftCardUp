@@ -1,5 +1,8 @@
 package com.b2infosoft.giftcardup.activity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -201,15 +204,25 @@ public class PayCreditDebit extends AppCompatActivity implements PaymentForm, DM
     @Override
     public void onSuccess(JSONObject jsonObject) {
         progress.dismiss();
-        Log.d("DATA", jsonObject.toString());
         try {
             if (jsonObject.has(tags.SUCCESS)) {
                 if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
                     orderSummery = null;
-                    AlertBox box = new AlertBox(this);
-                    box.setTitle("Alert");
-                    box.setMessage("Your Order Successfully Complete.\n Please Check My Order");
-                    box.show();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Alert");
+                    builder.setMessage("Your Order Successfully Complete. Please Check My Order");
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(PayCreditDebit.this, Main.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.putExtra(tags.SELECTED_FRAGMENTS, tags.FRAGMENT_MY_ORDERS);
+                            startActivity(intent);
+                            dialog.dismiss();
+                            finish();
+                        }
+                    });
+                    builder.create().show();
                 } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
                     AlertBox box = new AlertBox(this);
                     box.setTitle("Alert");
@@ -253,7 +266,7 @@ public class PayCreditDebit extends AppCompatActivity implements PaymentForm, DM
 
     @Override
     public String getCurrency() {
-        return tags.CURRENCEY;
+        return tags.CURRENCY;
     }
 
     private Integer getInteger(Spinner spinner) {

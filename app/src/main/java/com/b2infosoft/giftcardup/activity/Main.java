@@ -126,10 +126,7 @@ public class Main extends GiftCardUp implements DMRResult {
         navigationViewRight.setNavigationItemSelectedListener(new MenuSelect());
         navigationViewLeft = (NavigationView) findViewById(R.id.nav_view_left);
         navigationViewLeft.setNavigationItemSelectedListener(new MenuSelect());
-
         headerView = LayoutInflater.from(this).inflate(R.layout.nav_header_main, navigationViewRight, false);
-
-
         isLoginLayout = headerView.findViewById(R.id.layout_user_is_login);
         isLogoutLayout = headerView.findViewById(R.id.layout_user_is_log_out);
         user_profile_icon = (CircularImageView) headerView.findViewById(R.id.user_profile_icon);
@@ -148,8 +145,14 @@ public class Main extends GiftCardUp implements DMRResult {
         setNavigationMenu();
         updateMenuItemLeft(dbHelper.getCategories());
         replaceFragment(new Dashboard_1());
-        if (active.getUser() != null)
+        if (active.isLogin()) {
+            if(getIntent().hasExtra(tags.SELECTED_FRAGMENTS)){
+                if(getIntent().getStringExtra(tags.SELECTED_FRAGMENTS).equals(tags.FRAGMENT_MY_ORDERS)){
+                    replaceFragment(new MyOrder());
+                }
+            }
             loadAvailableCartItems();
+        }
         checkFBLogin();
         checkNotificationUnRead();
     }

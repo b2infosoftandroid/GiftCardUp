@@ -56,7 +56,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:background="@drawable/layout_border"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone"
+                >
 
                 <TextView
                     android:id="@+id/e_card_img_text"

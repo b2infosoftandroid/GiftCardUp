@@ -343,11 +343,14 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
 //                Toast.makeText(getContext(),merchant.getCardType(),Toast.LENGTH_SHORT).show();
                 if (merchant.getCardType() == 2) {
                     ///  E-CARD
+                    brand_name.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.ic_check_24dp), null);
                     textView.setVisibility(View.GONE);
                     cardType.setImageDrawable(getResources().getDrawable(R.drawable.ic_check_24dp));
+
                 } else if (merchant.getCardType() == 1) {
                     /// PHYSICAL CARD
                     cardType.setImageDrawable(null);
+                    brand_name.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, null, null);
                 }
                 serial_number.requestFocus();
                 selling_percentage.setText(format.getStringFloat(merchant.getSellingPercentage()));

@@ -91,8 +91,10 @@ public class PayAvailableFun extends AppCompatActivity implements View.OnClickLi
         remaining.setText("$" + (available - orderSummery.getBalance()));
 
         if (available - orderSummery.getBalance() < 0) {
+            action_continue.setClickable(false);
             less_amount.setVisibility(View.VISIBLE);
         } else {
+            action_continue.setClickable(true);
             less_amount.setVisibility(View.GONE);
         }
     }
