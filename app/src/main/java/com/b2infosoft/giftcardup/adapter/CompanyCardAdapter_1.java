@@ -17,33 +17,26 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageRequest;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.activity.CompanyCard;
+import com.b2infosoft.giftcardup.activity.CompanyCard_1;
 import com.b2infosoft.giftcardup.activity.Login;
-import com.b2infosoft.giftcardup.activity.Main;
 import com.b2infosoft.giftcardup.activity.ShoppingCart;
 import com.b2infosoft.giftcardup.app.Cart;
 import com.b2infosoft.giftcardup.app.Config;
 import com.b2infosoft.giftcardup.app.Format;
-import com.b2infosoft.giftcardup.app.Notify;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
-import com.b2infosoft.giftcardup.app.Validation;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.listener.OnLoadMoreListener;
 import com.b2infosoft.giftcardup.model.CompanyBrand;
 import com.b2infosoft.giftcardup.model.GiftCard;
-import com.b2infosoft.giftcardup.services.CartStatus;
 import com.b2infosoft.giftcardup.services.MyServices;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 import com.b2infosoft.giftcardup.volly.LruBitmapCache;
-import com.b2infosoft.giftcardup.volly.MySingleton;
-import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,8 +46,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private final String TAG = CompanyCardAdapter.class.getName();
+public class CompanyCardAdapter_1 extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private final String TAG = CompanyCardAdapter_1.class.getName();
     private Urls urls;
     private Tags tags;
     private Active active;
@@ -63,47 +56,23 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private Progress progress;
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
-    private boolean isLoading;
-    private int visibleThreshold = 5;
-    private int lastVisibleItem, totalItemCount;
-    private OnLoadMoreListener mOnLoadMoreListener;
     private Context context;
     private List<GiftCard> cardInfoList;
     private Config config;
     private CompanyBrand companyBrand;
 
-    public CompanyCardAdapter(Context context, List<GiftCard> cardInfoList, RecyclerView recyclerView, CompanyBrand companyBrand) {
+    public CompanyCardAdapter_1(Context context, List<GiftCard> cardInfoList, CompanyBrand companyBrand) {
         this.context = context;
         this.cardInfoList = cardInfoList;
         config = Config.getInstance();
         this.companyBrand = companyBrand;
         tags = Tags.getInstance();
-        final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                totalItemCount = linearLayoutManager.getItemCount();
-                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
-
-                if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
-                    if (mOnLoadMoreListener != null) {
-                        mOnLoadMoreListener.onLoadMore();
-                    }
-                    isLoading = true;
-                }
-            }
-        });
         dmrRequest = DMRRequest.getInstance(context, TAG);
         urls = Urls.getInstance();
         tags = Tags.getInstance();
         active = Active.getInstance(context);
         format = Format.getInstance();
         progress = new Progress(context);
-    }
-
-    public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
-        this.mOnLoadMoreListener = mOnLoadMoreListener;
     }
 
     public class CardHolder extends RecyclerView.ViewHolder {
@@ -168,21 +137,15 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == VIEW_TYPE_ITEM) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_card_item_company, parent, false);
             return new CardHolder(view);
-        } else if (viewType == VIEW_TYPE_LOADING) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_loading_item, parent, false);
-            return new LoadingHolder(view);
-        }
-        return null;
     }
-
+    /*
     @Override
     public int getItemViewType(int position) {
         return cardInfoList.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
     }
-
+    */
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof CardHolder) {
@@ -226,12 +189,12 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                             }
                                             showMessage("Successfully Added to Cart");
                                             cardHolder.add_to_cart.setText("Remove from cart");
-                                            ((CompanyCard) context).invalidateOptionsMenu();
+                                            ((CompanyCard_1) context).invalidateOptionsMenu();
                                             MyServices.startLeftCartTimeService(context);
                                         } else if (jsonObject.getInt(tags.SUCCESS) == tags.SUSPEND) {
                                             showMessage("You have to attempt more three times. So you can add item in cart after three hours.");
                                         } else {
-
+                                            
                                         }
                                     }
                                 } catch (JSONException e) {
@@ -340,7 +303,7 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             });
             //count++;
             final String url = config.getGiftCardImageAddress().concat(companyBrand.getImage());
-            LruBitmapCache.loadCacheImage(context, cardHolder.imageUrl, url, CompanyCardAdapter.class.getName());
+            LruBitmapCache.loadCacheImage(context, cardHolder.imageUrl, url, CompanyCardAdapter_1.class.getName());
         } else if (holder instanceof LoadingHolder) {
             LoadingHolder loadingHolder = (LoadingHolder) holder;
             loadingHolder.progressBar.setIndeterminate(true);
@@ -351,12 +314,17 @@ public class CompanyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public int getItemCount() {
         return cardInfoList == null ? 0 : cardInfoList.size();
     }
-
-    public void setLoaded() {
-        isLoading = false;
+    public void clear() {
+        cardInfoList.clear();
+        this.notifyDataSetChanged();
     }
 
     private void showMessage(String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
+    public void add(List<GiftCard> items) {
+        int previousDataSize = this.cardInfoList.size();
+        this.cardInfoList.addAll(items);
+        notifyItemRangeInserted(previousDataSize, items.size());
     }
 }

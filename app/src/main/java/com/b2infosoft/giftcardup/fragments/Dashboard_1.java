@@ -1,29 +1,28 @@
 package com.b2infosoft.giftcardup.fragments;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.Spinner;
+import android.widget.Button;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
-import com.b2infosoft.giftcardup.adapter.MyListingAdapter;
+import com.b2infosoft.giftcardup.adapter.CardAdapter_1;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
-import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.model.CompanyBrand;
-import com.b2infosoft.giftcardup.model.GiftCard;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 import com.paginate.Paginate;
@@ -37,27 +36,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class MyListing extends Fragment implements View.OnClickListener, Paginate.Callbacks {
-    private final static String TAG = MyListing.class.getName();
+public class Dashboard_1 extends Fragment implements Paginate.Callbacks {
+    private static final String TAG = Dashboard_1.class.getName();
     private Urls urls;
     private Tags tags;
     private Active active;
     DMRRequest dmrRequest;
-    private Progress progress;
-    View mView;
     RecyclerView recyclerView;
-    View data_available_view;
-    MyListingAdapter adapter;
+    CardAdapter_1 adapter;
+    Button actionButton;
     List<Object> cardList;
-    boolean isFilter = false;
-    EditText search;
-    Spinner type;
-    ImageButton action_search;
-    CompanyBrand brand;
-
+    private OnFragmentDashboard mListener;
+    private View data_available_view;
     /*    PAGINATION START      */
     boolean isLoading = false;
     boolean isMore = false;
@@ -70,7 +60,7 @@ public class MyListing extends Fragment implements View.OnClickListener, Paginat
     /*    PAGINATION END        */
 
 
-    public MyListing() {
+    public Dashboard_1() {
 
     }
 
@@ -79,7 +69,6 @@ public class MyListing extends Fragment implements View.OnClickListener, Paginat
         urls = Urls.getInstance();
         tags = Tags.getInstance();
         active = Active.getInstance(getActivity());
-        progress = new Progress(getActivity());
         cardList = new ArrayList<>();
         handler = new Handler();
     }
@@ -96,7 +85,7 @@ public class MyListing extends Fragment implements View.OnClickListener, Paginat
     }
 
     private void setMyAdapter(List<Object> items) {
-        adapter = new MyListingAdapter(getActivity(), items);
+        adapter = new CardAdapter_1(getActivity(), items);
         recyclerView.setAdapter(adapter);
         paginate = Paginate.with(recyclerView, this)
                 .setLoadingTriggerThreshold(threshold)
@@ -127,7 +116,7 @@ public class MyListing extends Fragment implements View.OnClickListener, Paginat
     @Override
     public boolean hasLoadedAllItems() {
         //return page == totalPages; // If all pages are loaded return true
-        return false;
+        return !isMore;
     }
 
     private Runnable fakeCallback = new Runnable() {
@@ -138,66 +127,65 @@ public class MyListing extends Fragment implements View.OnClickListener, Paginat
         }
     };
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         init();
-        mView = inflater.inflate(R.layout.fragment_my_listing, container, false);
-        data_available_view = mView.findViewById(R.id.frame);
-        recyclerView = (RecyclerView) mView.findViewById(R.id.recycler_view);
+        View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        actionButton = (Button) view.findViewById(R.id.floating_btn);
+        actionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String[] items = {"ALL", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
+                        "U", "V", "W", "X", "Y", "Z"};
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        actionButton.setText(items[which]);
+                        adapter.clear();
+                        loadMore = 0;
+                        isLoading = false;
+                        loadCards();
+                    }
+                });
+                builder.create().show();
+            }
+        });
+        data_available_view = view.findViewById(R.id.frame);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         setupPagination();
         loadCards();
-        search = (EditText) mView.findViewById(R.id.search);
-        type = (Spinner) mView.findViewById(R.id.type);
-        action_search = (ImageButton) mView.findViewById(R.id.action_search);
-        action_search.setOnClickListener(this);
-        return mView;
+        return view;
     }
 
-    @Override
-    public void onClick(View v) {
-        if (R.id.action_search == v.getId()) {
-            filter_search();
+    /*
+        private void setDataInRecycleView(final List<CompanyBrand> cards) {
+            if (isLoading) {
+                cardList.remove(cardList.size() - 1);
+                adapter.notifyItemRemoved(cardList.size());
+                isLoading = false;
+            }
+            //Log.d("search",cards.size() + "");
+            if (cards.size() > 0)
+                cardList.addAll(cards);
+            if (cardList.size() == 0) {
+                cardList.add(new EmptyBrand());
+            }
+            adapter.notifyDataSetChanged();
         }
-    }
-
-    private void filter_search() {
-        isFilter = false;
-        String search_keyword = search.getText().toString();
-        int position = type.getSelectedItemPosition();
-        search.setError(null);
-        if (TextUtils.isEmpty(search_keyword)) {
-            search.setError("Enter Keyword");
-            search.requestFocus();
-            return;
-        }
-        if (position == 0) {
-            return;
-        }
-        isFilter = true;
-        if (adapter.getItemCount() > 0) {
-            adapter.removeAllItem();
-        }
-        loadMore = 0;
-        isLoading = false;
-        loadCards();
-    }
-
+    */
     private synchronized void loadCards() {
-        if (!active.isLogin()) {
-            return;
-        }
         if (isLoading()) {
             return;
         }
-
+        String s = actionButton.getText().toString();
         Map<String, String> map = new HashMap<>();
-        map.put(tags.USER_ACTION, tags.GET_GIFT_CARD_BY_USER_ID);
-        map.put(tags.USER_ID, active.getUser().getUserId() + "");
+        map.put(tags.USER_ACTION, tags.COMPANY_ALL_BRAND);
         map.put(tags.LOAD_MORE, String.valueOf(loadMore));
-        if (isFilter) {
-            map.put(tags.KEYWORD_TYPE, type.getSelectedItem().toString());
-            map.put(tags.KEYWORD_SEARCH, search.getText().toString());
+        if (!s.equalsIgnoreCase("ALL")) {
+            map.put(tags.SORT_BY, s);
         }
         isLoading = true;
         data_available_view.setVisibility(View.GONE);
@@ -208,19 +196,15 @@ public class MyListing extends Fragment implements View.OnClickListener, Paginat
                 try {
                     if (jsonObject.has(tags.SUCCESS)) {
                         if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
-                            data_available_view.setVisibility(View.GONE);
                             List<Object> cards = new ArrayList<>();
                             if (jsonObject.has(tags.GIFT_CARDS)) {
                                 JSONArray jsonArray = jsonObject.getJSONArray(tags.GIFT_CARDS);
                                 for (int i = 0; i < jsonArray.length(); i++) {
-                                    GiftCard card = new GiftCard();
-                                    cards.add(card.fromJSON(jsonArray.getJSONObject(i)));
+                                    CompanyBrand brand = new CompanyBrand();
+                                    cards.add(brand.fromJSON(jsonArray.getJSONObject(i)));
                                 }
-                                //setDataInRecycleView(cards);
-                                addData(cards);
                             }
                             if (jsonObject.has(tags.IS_MORE)) {
-                                data_available_view.setVisibility(View.GONE);
                                 isMore = jsonObject.getBoolean(tags.IS_MORE);
                                 if (isMore) {
                                     loadMore += tags.DEFAULT_LOADING_DATA;
@@ -228,20 +212,26 @@ public class MyListing extends Fragment implements View.OnClickListener, Paginat
                                     loadMore += cards.size();
                                 }
                             }
+                            addData(cards);
+                            //setDataInRecycleView(cards);
                         } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
-                            if (adapter.getItemCount() == 0)
-                                data_available_view.setVisibility(View.VISIBLE);
-                            else
-                                data_available_view.setVisibility(View.GONE);
+
+                        } else {
+
                         }
-                    }/*
-                    if (jsonObject.has(tags.IS_MORE)) {
+                    }
+                    if (adapter.getItemCount() == 0)
+                        data_available_view.setVisibility(View.VISIBLE);
+                    else
                         data_available_view.setVisibility(View.GONE);
+                    /*
+                    if (jsonObject.has(tags.IS_MORE)) {
                         isMore = jsonObject.getBoolean(tags.IS_MORE);
                         if (isMore) {
                             loadMore += tags.DEFAULT_LOADING_DATA;
                         }
-                    }*/
+                    }
+                    */
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.e(TAG, e.getMessage());
@@ -257,20 +247,31 @@ public class MyListing extends Fragment implements View.OnClickListener, Paginat
             }
         });
     }
-    /*
-    private void setDataInRecycleView(final List<GiftCard> cards) {
-        if (isLoading) {
-            cardList.remove(cardList.size() - 1);
-            adapter.notifyItemRemoved(cardList.size());
-            isLoading = false;
+
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onDashboard(uri);
         }
-        if (cards.size() > 0)
-            cardList.addAll(cards);
-        if (cardList.size() == 0) {
-            cardList.add(new EmptyBrand());
-        }
-        adapter.notifyDataSetChanged();
-        adapter.setLoaded();
     }
-    */
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentDashboard) {
+            mListener = (OnFragmentDashboard) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentDashboard");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    public interface OnFragmentDashboard {
+        void onDashboard(Uri uri);
+    }
 }

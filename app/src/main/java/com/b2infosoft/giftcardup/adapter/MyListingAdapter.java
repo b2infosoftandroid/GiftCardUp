@@ -5,14 +5,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -27,8 +24,6 @@ import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.AlertBox;
-import com.b2infosoft.giftcardup.listener.OnLoadMoreListener;
-import com.b2infosoft.giftcardup.model.CompanyBrand;
 import com.b2infosoft.giftcardup.model.EmptyBrand;
 import com.b2infosoft.giftcardup.model.GiftCard;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
@@ -47,10 +42,6 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
     private final int VIEW_TYPE_EMPTY = 2;
-    private boolean isLoading;
-    private int visibleThreshold = 5;
-    private int lastVisibleItem, totalItemCount;
-    private OnLoadMoreListener mOnLoadMoreListener;
     private Context context;
     private List<Object> cardInfoList;
     private Config config;
@@ -59,7 +50,7 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private Urls urls;
     private Active active;
 
-    public MyListingAdapter(Context context, List<Object> cardInfoList, RecyclerView recyclerView) {
+    public MyListingAdapter(Context context, List<Object> cardInfoList) {
         this.context = context;
         this.cardInfoList = cardInfoList;
         config = Config.getInstance();
@@ -67,27 +58,7 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         dmrRequest = DMRRequest.getInstance(context, TAG);
         urls = Urls.getInstance();
         active = Active.getInstance(context);
-        final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                totalItemCount = linearLayoutManager.getItemCount();
-                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
-                if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
-                    if (mOnLoadMoreListener != null) {
-                        mOnLoadMoreListener.onLoadMore();
-                    }
-                    isLoading = true;
-                }
-            }
-        });
     }
-
-    public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
-        this.mOnLoadMoreListener = mOnLoadMoreListener;
-    }
-
     public class CardHolder extends RecyclerView.ViewHolder {
         TextView giftCard;
         ImageView cardType, cardImage;
@@ -370,14 +341,14 @@ public class MyListingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         return cardInfoList == null ? 0 : cardInfoList.size();
     }
 
-    public void setLoaded() {
-        isLoading = false;
-    }
-
     public void showToast(String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
-
+    public void add(List<Object> items) {
+        int previousDataSize = this.cardInfoList.size();
+        this.cardInfoList.addAll(items);
+        notifyItemRangeInserted(previousDataSize, items.size());
+    }
     public void removeAllItem() {
         cardInfoList.clear();
         notifyDataSetChanged();

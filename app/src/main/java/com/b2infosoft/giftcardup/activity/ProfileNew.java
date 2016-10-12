@@ -7,9 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -17,10 +15,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.app.Config;
 import com.b2infosoft.giftcardup.app.Format;
@@ -29,6 +32,7 @@ import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.AlertBox;
 import com.b2infosoft.giftcardup.custom.Progress;
+import com.b2infosoft.giftcardup.fragments.Profile;
 import com.b2infosoft.giftcardup.model.Approve;
 import com.b2infosoft.giftcardup.model.ContactInformation;
 import com.b2infosoft.giftcardup.model.User;
@@ -37,9 +41,8 @@ import com.b2infosoft.giftcardup.urlconnection.MultipartUtility;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 import com.b2infosoft.giftcardup.volly.LruBitmapCache;
-import com.google.gson.Gson;
+import com.b2infosoft.giftcardup.volly.MySingleton;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -57,7 +60,7 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
     AlertBox alertBox;
     private DMRRequest dmrRequest;
     Progress progress;
-
+    ProgressBar profile_progress_bar;
     CollapsingToolbarLayout toolbarLayout;
     ImageView profile_image, arrow1, arrow2, arrow3, identity, bank, ssn, arrow4, image_approve_mail;
     TextView member_science, total_sold, total_saving, mail, mobile, address, total_available_fund;
@@ -74,6 +77,7 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         config = Config.getInstance();
         format = Format.getInstance();
         alertBox = new AlertBox(this);
+        progress = new Progress(this);
         dmrRequest = DMRRequest.getInstance(this, TAG);
         approveMap = new HashMap<>();
         approveMap.put(0, R.drawable.ic_u_pending);
@@ -82,7 +86,6 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         approveMap.put(3, R.drawable.ic_u_expire);
         approveMap.put(4, R.drawable.ic_u_suspend);
         approveMap.put(9, R.drawable.ic_u_not_submitted);
-
     }
 
     @Override
@@ -93,14 +96,13 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        User user = active.getUser();
 
         //getSupportActionBar().setSubtitle("Member Since : ".concat(format.getDate(user.getJoinDate())));
 
         toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-        toolbarLayout.setTitle(user.getFirstName() + " " + user.getLastName());
 
         profile_image = (ImageView) findViewById(R.id.profile_user_image);
+        profile_progress_bar = (ProgressBar) findViewById(R.id.profile_progress_bar);
         image_approve_mail = (ImageView) findViewById(R.id.image_view);
         identity = (ImageView) findViewById(R.id.user_identity_approve);
         bank = (ImageView) findViewById(R.id.user_bank_approve);
@@ -121,19 +123,26 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         resend.setOnClickListener(this);
         cardView = (Button) findViewById(R.id.approve_card);
         // member_science = (TextView)findViewById(R.id.profile_member);
-        if (active.isLogin()) {
-            mail.setText(user.getEmail());
-        }
-        if(user.getImage().length()>0&&user.getImage().contains(".")) {
-            LruBitmapCache.loadCacheImageProfile(this, profile_image, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
-        }
+
         //LruBitmapCache.loadCacheImageProfile(this, profile_image, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
         // member_science.setText("Member Since : ".concat(format.getDate(user.getJoinDate())));
+        updateInformationUser();
         getApproveForSelling();
         checkAvailableBalance();
         fetchContactInfo();
         checkVerifiedStatus();
+    }
 
+    private void updateInformationUser() {
+        if (active.isLogin()) {
+            User user = active.getUser();
+            mail.setText(user.getEmail());
+            //toolbarLayout.setTitle(user.getFirstName() + " " + user.getLastName()+","+user.getUserId());
+            toolbarLayout.setTitle(user.getFirstName() + ", " + user.getUserId());
+            if (user.getImage().length() > 0 && user.getImage().contains(".")) {
+                LruBitmapCache.loadCacheImageProfile(this, profile_image, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
+            }
+        }
     }
 
     @Override
@@ -215,28 +224,54 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == this.RESULT_OK && data != null && data.getData() != null) {
             filePath = data.getData();
             try {
-                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), filePath);
+                //bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), filePath);
+                /*
                 if (profile_image != null)
                     profile_image.setImageBitmap(bitmap);
+                */
+                Bitmap selectedProfile = MediaStore.Images.Media.getBitmap(this.getContentResolver(), filePath);
+                if (selectedProfile != null) {
+                    new UpdateProfile(selectedProfile).execute();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        new updateImage().execute();
     }
 
-    private class updateImage extends AsyncTask<String, String, String> {
+    public Bitmap scaleDown(Bitmap realImage, float maxImageSize, boolean filter) {
+        float ratio = Math.min(
+                (float) maxImageSize / realImage.getWidth(),
+                (float) maxImageSize / realImage.getHeight());
+        int width = Math.round((float) ratio * realImage.getWidth());
+        int height = Math.round((float) ratio * realImage.getHeight());
+        Bitmap newBitmap = Bitmap.createScaledBitmap(realImage, width,
+                height, filter);
+        return newBitmap;
+    }
+
+    private class UpdateProfile extends AsyncTask<String, String, String> {
+
+        private Bitmap selectedProfile;
+
+        public UpdateProfile(Bitmap selectedProfile) {
+            this.selectedProfile = scaleDown(selectedProfile, 480.0f, true);
+        }
 
         @Override
         protected void onPreExecute() {
+            profile_progress_bar.setVisibility(View.VISIBLE);
+            profile_image.setAlpha(.5f);
             super.onPreExecute();
-            //progress.show();
         }
 
         @Override
         protected void onPostExecute(String s) {
-           // progress.dismiss();
             super.onPostExecute(s);
+            profile_progress_bar.setVisibility(View.GONE);
+            profile_image.setAlpha(1.0f);
+            //Toast.makeText(ProfileNew.this, "Successfully Profile Update", Toast.LENGTH_SHORT).show();
+            fetchUserInfo();
         }
 
         @Override
@@ -248,8 +283,8 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
                 multipart.addHeaderField("User-Agent", "CodeJava");
                 multipart.addHeaderField("Test-Header", "Header-Value");
                 multipart.addFormField(tags.USER_ACTION, tags.UPDATE_PROFILE_PIC);
-                multipart.addFormField(tags.USER_ID, active.getUser().getUserId() + "");
-                multipart.addFilePartBitmap(tags.PROFILE_NAME, "bank_void_image.png", bitmap);
+                multipart.addFormField(tags.USER_ID, active.getUser().getUserId());
+                multipart.addFilePartBitmap(tags.PROFILE_NAME, "bank_void_image.png", selectedProfile);
                 multipart.addFormField(tags.PROFILE_OLD_NAME, user.getImage());
                 return multipart.finishString();
             } catch (Exception e) {
@@ -276,7 +311,8 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
                 startActivity(new Intent(this, ProfileIdentification.class));
                 break;
             case R.id.resend_btn:
-                Toast.makeText(this, "Coming Soon...", Toast.LENGTH_SHORT).show();
+                resendEmail();
+//                Toast.makeText(this, "Coming Soon...", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.approve_card:
                 startActivity(new Intent(this, ProfileSsnEin.class));
@@ -300,7 +336,6 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
             if (jsonObject.has(tags.SUCCESS)) {
                 if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
                     if (jsonObject.has(tags.CHECK_APPROVE_FOR_SELLING)) {
-                        Log.d("approveStat",jsonObject.toString());
                         if (jsonObject.getInt(tags.CHECK_APPROVE_FOR_SELLING) == tags.PASS) {
                             cardView.setVisibility(View.GONE);
                         } else if (jsonObject.getInt(tags.CHECK_APPROVE_FOR_SELLING) == tags.FAIL) {
@@ -317,6 +352,14 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
                     if (jsonObject.has(tags.AVAILABLE_FUND_BALANCE)) {
                         updateFund(UserBalance.fromJSON(jsonObject.getJSONObject(tags.AVAILABLE_FUND_BALANCE)));
                     }
+                    if (jsonObject.has(tags.USER_INFO)) {
+                        JSONObject object = jsonObject.getJSONObject(tags.USER_INFO);
+                        User user = User.fromJSON(object);
+                        if (active != null) {
+                            active.setUser(user);
+                            updateInformationUser();
+                        }
+                    }
                 } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
 
                 }
@@ -331,7 +374,7 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
     public void onError(VolleyError volleyError) {
         volleyError.printStackTrace();
         if (volleyError.getMessage() != null)
-            Log.e(TAG,volleyError.getMessage());
+            Log.e(TAG, volleyError.getMessage());
     }
 
     private void checkAvailableBalance() {
@@ -345,8 +388,6 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         total_available_fund.setText("$" + fund.getAvailable_fund());
         total_saving.setText("$" + fund.getTotal_saving());
         total_sold.setText("$" + fund.getTotal_sold());
-        String str = fund.getTotal_sold();
-        Log.d("sold",str + "");
     }
 
     private void fetchContactInfo() {
@@ -356,8 +397,60 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
             /* LOADING USER DETAILS */
             Map<String, String> map1 = new HashMap<>();
             map1.put(tags.USER_ACTION, tags.USER_CONTACT_INFORMATION);
-            map1.put(tags.USER_ID, user.getUserId() + "");
+            map1.put(tags.USER_ID, user.getUserId());
             dmrRequest.doPost(urls.getUserInfo(), map1, this);
         }
+    }
+
+    private void fetchUserInfo() {
+        /*LOADING USER PROFILE*/
+        if (active.isLogin()) {
+            Map<String, String> map1 = new HashMap<>();
+            map1.put(tags.USER_ACTION, tags.USER_INFO);
+            map1.put(tags.USER_ID, active.getUser().getUserId());
+            dmrRequest.doPost(urls.getUserInfo(), map1, this);
+        }
+    }
+
+    private void resendEmail() {
+        progress.show();
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, urls.getUserInfo(),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        progress.dismiss();
+                        try {
+                            JSONObject object = new JSONObject(response);
+                            if(object.has(tags.SUCCESS)){
+                                AlertBox box = new AlertBox(ProfileNew.this);
+                                if(object.getInt(tags.SUCCESS)==tags.PASS){
+                                    box.setMessage("Successfully send Confirmation email. Please Check Your E-Mail and Verified.");
+                                }else{
+                                    box.setMessage("Oops... Something went wrong. Please Try Again");
+                                }
+                                box.show();
+                            }
+                        }catch (JSONException e){
+                            e.printStackTrace();
+                            Log.d(TAG,e.getMessage());
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        progress.dismiss();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put(tags.USER_ACTION, tags.RESEND_VERIFICATION_EMAIL);
+                params.put(tags.USER_ID, active.getUser().getUserId());
+                return params;
+            }
+        };
+        MySingleton singleton = MySingleton.getInstance(this);
+        singleton.getRequestQueue().add(stringRequest);
     }
 }

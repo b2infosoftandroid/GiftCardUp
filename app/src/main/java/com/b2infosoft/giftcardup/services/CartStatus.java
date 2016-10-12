@@ -62,7 +62,7 @@ public class CartStatus extends Service {
             dmrRequest.doPost(urls.getCartInfo(), map, new DMRResult() {
                 @Override
                 public void onSuccess(JSONObject jsonObject) {
-                    Log.d("CART_INFO_BACKGROUND",jsonObject.toString());
+                    Log.d("CART_INFO_BACKGROUND", jsonObject.toString());
                     try {
                         Intent intent1 = new Intent(ShoppingCart.TAG);
                         if (jsonObject.has(tags.SUCCESS)) {
@@ -72,6 +72,9 @@ public class CartStatus extends Service {
                                         intent1.putExtra(tags.LEFT_TIME, jsonObject.getString(tags.LEFT_TIME));
                                         CartStatus.this.sendBroadcast(intent1);
                                     }
+                                } else {
+                                    CartStatus.this.sendBroadcast(intent1);
+                                    CartStatus.this.stopSelf();
                                 }
                                 if (jsonObject.has(tags.STATUS)) {
                                     if (jsonObject.getInt(tags.STATUS) == tags.FAIL) {

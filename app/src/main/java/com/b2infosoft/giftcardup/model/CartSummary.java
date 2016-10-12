@@ -27,6 +27,9 @@ public class CartSummary {
             if (v.length() == 0) {
                 v = "0";
             }
+            if(v.contains(",")){
+                v = v.replaceAll(",","");
+            }
             try {
                 value += Float.parseFloat(v);
             } catch (NumberFormatException ex) {
@@ -45,6 +48,9 @@ public class CartSummary {
             String p = giftCard.getCardPrice();
             if (p.length() == 0) {
                 p = "0";
+            }
+            if(p.contains(",")){
+                p = p.replaceAll(",","");
             }
             try {
                 price += Float.parseFloat(p);

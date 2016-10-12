@@ -86,7 +86,7 @@ public class Splash extends AppCompatActivity implements DMRResult {
         if (active.isLogin()) {
             Map<String, String> map1 = new HashMap<>();
             map1.put(tags.USER_ACTION, tags.USER_INFO);
-            map1.put(tags.USER_ID, active.getUser().getUserId() + "");
+            map1.put(tags.USER_ID, active.getUser().getUserId());
             dmrRequest.doPost(urls.getUserInfo(), map1, this);
         }
 

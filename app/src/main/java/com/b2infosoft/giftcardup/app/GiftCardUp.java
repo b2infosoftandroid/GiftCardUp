@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.b2infosoft.giftcardup.fragments.Dashboard;
+import com.b2infosoft.giftcardup.fragments.Dashboard_1;
 import com.b2infosoft.giftcardup.fragments.SellCards;
 import com.b2infosoft.giftcardup.fragments.SpeedySell;
 import com.b2infosoft.giftcardup.fragments.TinderWork;
@@ -15,7 +16,7 @@ import com.b2infosoft.giftcardup.fragments.profile.SsnEin;
 /**
  * Created by rajesh on 9/14/2016.
  */
-abstract public class GiftCardUp extends AppCompatActivity implements View.OnClickListener, BankInformation.OnFragmentBankInformation, Identification.OnFragmentIdentification, SsnEin.OnFragmentSsnEin, TinderWork.OnFragmentDashboard1, Dashboard.OnFragmentDashboard, SellCards.OnFragmentSellCards, SpeedySell.OnFragmentSpeedyCell {
+abstract public class GiftCardUp extends AppCompatActivity implements View.OnClickListener, BankInformation.OnFragmentBankInformation, Identification.OnFragmentIdentification, SsnEin.OnFragmentSsnEin, TinderWork.OnFragmentDashboard1, Dashboard.OnFragmentDashboard,Dashboard_1.OnFragmentDashboard, SellCards.OnFragmentSellCards, SpeedySell.OnFragmentSpeedyCell {
     @Override
     public void onClick(View v) {
 

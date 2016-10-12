@@ -31,6 +31,7 @@ import com.b2infosoft.giftcardup.database.DBHelper;
 import com.b2infosoft.giftcardup.fragments.AvailableFund;
 import com.b2infosoft.giftcardup.fragments.BulkListing;
 import com.b2infosoft.giftcardup.fragments.Dashboard;
+import com.b2infosoft.giftcardup.fragments.Dashboard_1;
 import com.b2infosoft.giftcardup.fragments.MyListing;
 import com.b2infosoft.giftcardup.fragments.MyOrder;
 import com.b2infosoft.giftcardup.fragments.RecommendBrands;
@@ -39,9 +40,7 @@ import com.b2infosoft.giftcardup.fragments.SellCards;
 import com.b2infosoft.giftcardup.fragments.ShippingCenter;
 import com.b2infosoft.giftcardup.fragments.SpeedySell;
 import com.b2infosoft.giftcardup.fragments.WithdrawalHistory;
-import com.b2infosoft.giftcardup.model.Approve;
 import com.b2infosoft.giftcardup.model.CompanyCategory;
-import com.b2infosoft.giftcardup.model.ContactInformation;
 import com.b2infosoft.giftcardup.model.GiftCard;
 import com.b2infosoft.giftcardup.model.User;
 import com.b2infosoft.giftcardup.model.UserBalance;
@@ -69,7 +68,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class Main extends GiftCardUp {
+public class Main extends GiftCardUp implements DMRResult {
     private final static String TAG = Main.class.getName();
     private Cart cart;
     DMRRequest dmrRequest;
@@ -84,7 +83,7 @@ public class Main extends GiftCardUp {
     CircularImageView user_profile_icon;
     TextView user_profile_name, user_total_sold, user_total_saving;
     DrawerLayout drawer;
-
+    private int unReadNotifications = 0;
     /* FACEBOOK INTEGRATION */
     CallbackManager callbackManager;
 
@@ -148,10 +147,11 @@ public class Main extends GiftCardUp {
         });
         setNavigationMenu();
         updateMenuItemLeft(dbHelper.getCategories());
-        replaceFragment(new Dashboard());
+        replaceFragment(new Dashboard_1());
         if (active.getUser() != null)
             loadAvailableCartItems();
         checkFBLogin();
+        checkNotificationUnRead();
     }
 
     boolean checkedFB = false;
@@ -200,7 +200,7 @@ public class Main extends GiftCardUp {
             menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    Intent intent = new Intent(Main.this, Categories.class);
+                    Intent intent = new Intent(Main.this, Categories_1.class);
                     intent.putExtra(tags.CATEGORIES, category);
                     startActivity(intent);
                     return false;
@@ -218,6 +218,7 @@ public class Main extends GiftCardUp {
         super.onStart();
         checkBackgroundServices();
         setNavigationMenu();
+        checkNotificationUnRead();
     }
 
     @Override
@@ -315,6 +316,7 @@ public class Main extends GiftCardUp {
         checkBackgroundServices();
         setNavigationMenu();
         checkFBLogin();
+        checkNotificationUnRead();
     }
 
     @Override
@@ -326,6 +328,7 @@ public class Main extends GiftCardUp {
         checkBackgroundServices();
         setNavigationMenu();
         checkFBLogin();
+        checkNotificationUnRead();
     }
 
     @Override
@@ -356,7 +359,7 @@ public class Main extends GiftCardUp {
         LayerDrawable icon = (LayerDrawable) item.getIcon();
 
         // Update LayerDrawable's BadgeDrawable
-        Utils2.setBadgeCount(this, icon, 2);
+        Utils2.setBadgeCount(this, icon, unReadNotifications);
 
         MenuItem item1 = menu.findItem(R.id.action_cart_item);
         LayerDrawable icon1 = (LayerDrawable) item1.getIcon();
@@ -366,7 +369,6 @@ public class Main extends GiftCardUp {
 
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -379,7 +381,7 @@ public class Main extends GiftCardUp {
                 startActivity(new Intent(this, ShoppingCart.class));
                 return true;
             case R.id.action_notifications:
-
+                startActivity(new Intent(this, NotificationActivity.class));
                 return true;
             case R.id.action_profile:
                 if (drawer != null) {
@@ -401,7 +403,8 @@ public class Main extends GiftCardUp {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.user_profile_icon:
-                startActivity(new Intent(Main.this, MyProfile.class));
+                //startActivity(new Intent(Main.this, MyProfile.class));
+                startActivity(new Intent(Main.this, ProfileNew.class));
                 break;
             default:
                 break;
@@ -413,6 +416,41 @@ public class Main extends GiftCardUp {
         }
     }
 
+    private void checkNotificationUnRead() {
+        if (active.isLogin()) {
+            Map<String, String> map = new HashMap<>();
+            map.put(tags.USER_ACTION, tags.GET_NOTIFICATIONS_UN_READ);
+            map.put(tags.USER_ID, active.getUser().getUserId());
+            dmrRequest.doPost(urls.getAppAction(), map, this);
+        }
+    }
+
+    @Override
+    public void onSuccess(JSONObject jsonObject) {
+        try {
+            if (jsonObject.has(tags.SUCCESS)) {
+                if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                    if (jsonObject.has(tags.GET_NOTIFICATIONS_UN_READ)) {
+                        unReadNotifications = jsonObject.getInt(tags.GET_NOTIFICATIONS_UN_READ);
+                        invalidateOptionsMenu();
+                    }
+                } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
+
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(TAG, e.getMessage());
+        }
+    }
+
+    @Override
+    public void onError(VolleyError volleyError) {
+        volleyError.printStackTrace();
+        if (volleyError.getMessage() != null)
+            Log.e(TAG, volleyError.getMessage());
+    }
+
 
     private class MenuSelect implements NavigationView.OnNavigationItemSelectedListener {
         @Override
@@ -422,7 +460,7 @@ public class Main extends GiftCardUp {
 
             switch (id) {
                 case R.id.menu_item_dashboard_left:
-                    replaceFragment(new Dashboard());
+                    replaceFragment(new Dashboard_1());
                     setTitle("Dashboard");
                     break;
                 case R.id.menu_item_sell_gift_cards:
@@ -462,7 +500,8 @@ public class Main extends GiftCardUp {
                     setTitle("Referral Rewards");
                     break;
                 case R.id.menu_item_my_account:
-                    startActivity(new Intent(Main.this, MyProfile.class));
+//                    startActivity(new Intent(Main.this, MyProfile.class));
+                    startActivity(new Intent(Main.this,ProfileNew.class));
                     break;
                 case R.id.menu_item_my_orders:
                     replaceFragment(new MyOrder());
@@ -475,7 +514,7 @@ public class Main extends GiftCardUp {
                     active.setLogOut();
                     LoginManager.getInstance().logOut();
                     setNavigationMenu();
-                    replaceFragment(new Dashboard());
+                    replaceFragment(new Dashboard_1());
                     break;
                 case R.id.menu_item_login:
                     startActivity(new Intent(Main.this, Login.class));
@@ -494,7 +533,7 @@ public class Main extends GiftCardUp {
     private void replaceFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.main_content, fragment);
-        if (fragment instanceof Dashboard) {
+        if (fragment instanceof Dashboard_1) {
 
         } else {
             transaction.addToBackStack(null);

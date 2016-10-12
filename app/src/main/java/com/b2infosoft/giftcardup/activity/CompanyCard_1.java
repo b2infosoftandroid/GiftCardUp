@@ -2,19 +2,22 @@ package com.b2infosoft.giftcardup.activity;
 
 import android.content.Intent;
 import android.graphics.drawable.LayerDrawable;
-import android.support.v4.view.GravityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.adapter.CompanyCardAdapter;
+import com.b2infosoft.giftcardup.adapter.CompanyCardAdapter_1;
 import com.b2infosoft.giftcardup.app.Cart;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
@@ -26,6 +29,7 @@ import com.b2infosoft.giftcardup.utils.Utils1;
 import com.b2infosoft.giftcardup.utils.Utils2;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
+import com.paginate.Paginate;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,20 +40,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CompanyCard extends AppCompatActivity {
+public class CompanyCard_1 extends AppCompatActivity implements DMRResult, Paginate.Callbacks {
     private Cart cart;
-    private static final String TAG = CompanyCard.class.getName();
+    private static final String TAG = CompanyCard_1.class.getName();
     private Urls urls;
     private Tags tags;
     private Active active;
     DMRRequest dmrRequest;
     RecyclerView recyclerView;
-    CompanyCardAdapter adapter;
+    CompanyCardAdapter_1 adapter;
     List<GiftCard> cardList;
+    private CompanyBrand companyBrand;
+    private int unReadNotifications = 0;
+    private View data_available_view;
+    /*    PAGINATION START      */
     boolean isLoading = false;
     boolean isMore = false;
     int loadMore = 0;
-    private CompanyBrand companyBrand;
+    private int threshold = 4;
+    private boolean addLoadingRow = true;
+    private long networkDelay = 2000;
+    private Handler handler;
+    private Paginate paginate;
+    /*    PAGINATION END        */
 
     private void init() {
         tags = Tags.getInstance();
@@ -58,7 +71,62 @@ public class CompanyCard extends AppCompatActivity {
         active = Active.getInstance(this);
         cardList = new ArrayList<>();
         cart = (Cart) getApplicationContext();
+        handler = new Handler();
     }
+
+    private void setupPagination() {
+        if (paginate != null) {
+            paginate.unbind();
+        }
+        handler.removeCallbacks(fakeCallback);
+        int layoutOrientation = OrientationHelper.VERTICAL;
+        RecyclerView.LayoutManager layoutManager = layoutManager = new LinearLayoutManager(this, layoutOrientation, false);
+        recyclerView.setLayoutManager(layoutManager);
+        setMyAdapter(new ArrayList<GiftCard>());
+    }
+
+    private void setMyAdapter(List<GiftCard> items) {
+        adapter = new CompanyCardAdapter_1(this, items, companyBrand);
+        recyclerView.setAdapter(adapter);
+        paginate = Paginate.with(recyclerView, this)
+                .setLoadingTriggerThreshold(threshold)
+                .addLoadingListItem(addLoadingRow)
+                .build();
+    }
+
+    private void addData(final List<GiftCard> items) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.add(items);
+            }
+        });
+    }
+
+    @Override
+    public synchronized void onLoadMore() {
+        // Fake asynchronous loading that will generate page of random data after some delay
+        handler.postDelayed(fakeCallback, networkDelay);
+    }
+
+    @Override
+    public synchronized boolean isLoading() {
+        return isLoading; // Return boolean weather data is already loading or not
+    }
+
+    @Override
+    public boolean hasLoadedAllItems() {
+        //return page == totalPages; // If all pages are loaded return true
+        return !isMore;
+    }
+
+    private Runnable fakeCallback = new Runnable() {
+        @Override
+        public void run() {
+            paginate.setHasMoreDataToLoad(isLoading());
+            loadCards();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,22 +137,10 @@ public class CompanyCard extends AppCompatActivity {
         if (getIntent().hasExtra(tags.COMPANY_BRAND)) {
             companyBrand = (CompanyBrand) getIntent().getExtras().getSerializable(tags.COMPANY_BRAND);
         }
+        data_available_view = findViewById(R.id.frame);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new CompanyCardAdapter(this, cardList, recyclerView, companyBrand);
-        recyclerView.setAdapter(adapter);
-        adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore() {
-                if (isMore) {
-                    cardList.add(null);
-                    adapter.notifyItemInserted(cardList.size() - 1);
-                    isLoading = true;
-                    loadCards();
-                }
-            }
-        });
-        Toast.makeText(this,"FIRST",Toast.LENGTH_SHORT).show();
+        setupPagination();
+        checkNotificationUnRead();
         loadCards();
     }
 
@@ -107,7 +163,7 @@ public class CompanyCard extends AppCompatActivity {
             return;
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.CHECK_CART_ITEMS);
-        map.put(tags.USER_ID, active.getUser().getUserId() + "");
+        map.put(tags.USER_ID, active.getUser().getUserId());
         dmrRequest.doPost(urls.getCartInfo(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
@@ -150,7 +206,7 @@ public class CompanyCard extends AppCompatActivity {
         LayerDrawable icon = (LayerDrawable) item.getIcon();
 
         // Update LayerDrawable's BadgeDrawable
-        Utils2.setBadgeCount(this, icon, 2);
+        Utils2.setBadgeCount(this, icon, unReadNotifications);
 
         MenuItem item1 = menu.findItem(R.id.action_cart_item);
         LayerDrawable icon1 = (LayerDrawable) item1.getIcon();
@@ -162,22 +218,39 @@ public class CompanyCard extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 //NavUtils.navigateUpFromSameTask(this);
                 this.onBackPressed();
+                finish();
                 return true;
             case R.id.action_cart_item:
                 startActivity(new Intent(this, ShoppingCart.class));
                 return true;
             case R.id.action_notifications:
-
+                startActivity(new Intent(this, NotificationActivity.class));
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    private void checkNotificationUnRead() {
+        if (active.isLogin()) {
+            Map<String, String> map = new HashMap<>();
+            map.put(tags.USER_ACTION, tags.GET_NOTIFICATIONS_UN_READ);
+            map.put(tags.USER_ID, active.getUser().getUserId());
+            dmrRequest.doPost(urls.getAppAction(), map, this);
+        }
+    }
+
+    /*
     private void setDataInRecycleView(final List<GiftCard> cards) {
         if (isLoading) {
             cardList.remove(cardList.size() - 1);
@@ -189,15 +262,22 @@ public class CompanyCard extends AppCompatActivity {
         adapter.setLoaded();
         //setPaginate();
     }
+    */
 
-    private void loadCards() {
+    private synchronized void loadCards() {
+        if (isLoading()) {
+            return;
+        }
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.COMPANY_ID_BRAND);
         map.put(tags.COMPANY_ID, String.valueOf(companyBrand.getCompanyID()));
         map.put(tags.LOAD_MORE, String.valueOf(loadMore));
+        isLoading = true;
+        data_available_view.setVisibility(View.GONE);
         dmrRequest.doPost(urls.getGiftCardInfo(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
+                isLoading = false;
                 try {
                     if (jsonObject.has(tags.SUCCESS)) {
                         if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
@@ -209,20 +289,36 @@ public class CompanyCard extends AppCompatActivity {
                                     cards.add(card.fromJSON(jsonArray.getJSONObject(i)));
                                     //Log.d(TAG,jsonArray.getJSONObject(i).toString());
                                 }
-                                setDataInRecycleView(cards);
+                                //setDataInRecycleView(cards);
                             }
-                        } else if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+
+                            if (jsonObject.has(tags.IS_MORE)) {
+                                isMore = jsonObject.getBoolean(tags.IS_MORE);
+                                if (isMore) {
+                                    loadMore += tags.DEFAULT_LOADING_DATA;
+                                } else {
+                                    loadMore += cards.size();
+                                }
+                            }
+                            addData(cards);
+                        } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
 
                         } else {
 
                         }
                     }
+                    if (adapter.getItemCount() == 0)
+                        data_available_view.setVisibility(View.VISIBLE);
+                    else
+                        data_available_view.setVisibility(View.GONE);
+                    /*
                     if (jsonObject.has(tags.IS_MORE)) {
                         isMore = jsonObject.getBoolean(tags.IS_MORE);
                         if (isMore) {
                             loadMore += tags.DEFAULT_LOADING_DATA;
                         }
                     }
+                    */
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.e(TAG, e.getMessage());
@@ -231,10 +327,37 @@ public class CompanyCard extends AppCompatActivity {
 
             @Override
             public void onError(VolleyError volleyError) {
+                isLoading = false;
                 volleyError.printStackTrace();
                 if (volleyError.getMessage() != null)
                     Log.e(TAG, volleyError.getMessage());
             }
         });
+    }
+
+    @Override
+    public void onSuccess(JSONObject jsonObject) {
+        try {
+            if (jsonObject.has(tags.SUCCESS)) {
+                if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                    if (jsonObject.has(tags.GET_NOTIFICATIONS_UN_READ)) {
+                        unReadNotifications = jsonObject.getInt(tags.GET_NOTIFICATIONS_UN_READ);
+                        invalidateOptionsMenu();
+                    }
+                } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
+
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(TAG, e.getMessage());
+        }
+    }
+
+    @Override
+    public void onError(VolleyError volleyError) {
+        volleyError.printStackTrace();
+        if (volleyError.getMessage() != null)
+            Log.e(TAG, volleyError.getMessage());
     }
 }

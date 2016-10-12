@@ -13,7 +13,6 @@ import android.widget.FrameLayout;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
-import com.b2infosoft.giftcardup.adapter.MyListingAdapter;
 import com.b2infosoft.giftcardup.adapter.ShipmentCardRecyclerViewAdapter;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;

@@ -111,12 +111,14 @@ public class SellCards extends Fragment implements DMRResult {
         accept_offer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Merchant info = new Merchant();
                 SpeedySell frag = new SpeedySell();
                 Bundle bundle = new Bundle();
-                bundle.putString("card", merchant.getText().toString());
-                bundle.putString("bal", value.getText().toString());
-                bundle.putString("sellPercent", info.getSellingPercentage());
+                if (offerQueue.size() > 0) {
+                    for (GetOffer offer : offerQueue) {
+                        bundle.putSerializable(tags.GET_OFFER, offer);
+                        break;
+                    }
+                }
                 frag.setArguments(bundle);
                 replaceFragment(frag);
             }
@@ -131,7 +133,6 @@ public class SellCards extends Fragment implements DMRResult {
         dmrRequest.doPost(urls.getAppAction(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
-                Log.d("merchant", jsonObject.toString());
                 try {
                     if (jsonObject.has(tags.SUCCESS)) {
                         if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
@@ -344,7 +345,6 @@ public class SellCards extends Fragment implements DMRResult {
         tableLayout.addView(trLast);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onSellCards(uri);
@@ -381,6 +381,7 @@ public class SellCards extends Fragment implements DMRResult {
             if (jsonObject.has(tags.SUCCESS)) {
                 if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
                     if (jsonObject.has(tags.GET_OFFER)) {
+                        offerQueue = new LinkedList<>();
                         GetOffer getOffer = new GetOffer();
                         GetOffer offer = getOffer.fromJSON(jsonObject.getJSONObject(tags.GET_OFFER));
                         offerQueue.add(offer);
@@ -409,7 +410,7 @@ public class SellCards extends Fragment implements DMRResult {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.

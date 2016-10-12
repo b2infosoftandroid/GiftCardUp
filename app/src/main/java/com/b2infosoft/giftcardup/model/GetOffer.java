@@ -7,10 +7,12 @@ import com.b2infosoft.giftcardup.app.Tags;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by rajesh on 8/24/2016.
  */
-public class GetOffer {
+public class GetOffer implements Serializable {
     private int companyPercentage;
     private int cardOffer;
     private int cardOwnerBalance;

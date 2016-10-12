@@ -1,12 +1,9 @@
 package com.b2infosoft.giftcardup.activity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -18,8 +15,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,8 +43,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,6 +60,7 @@ public class MyProfile extends AppCompatActivity implements Identification.OnFra
     static private ViewPager viewPager;
     private ViewPagerAdapter adapter;
     CircularImageView profile_image;
+    ProgressBar profile_progress_bar;
     private Uri filePath;
     private Bitmap bitmap,oldFileName;
 
@@ -183,7 +177,7 @@ public class MyProfile extends AppCompatActivity implements Identification.OnFra
                 e.printStackTrace();
             }
         }
-        new updateImage().execute();
+        new UpdateProfile().execute();
     }
 
     private void setUpViewPager(ViewPager pager) {
@@ -310,7 +304,7 @@ public class MyProfile extends AppCompatActivity implements Identification.OnFra
 
     }
 
-    private class updateImage extends AsyncTask<String,String ,String>{
+    private class UpdateProfile extends AsyncTask<String,String ,String>{
 
         @Override
         protected void onPreExecute() {

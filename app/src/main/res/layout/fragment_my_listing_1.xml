@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.b2infosoft.giftcardup.fragments.MyListing">
-
+    
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
@@ -55,52 +56,7 @@
                     android:src="@drawable/ic_search_24dp" />
             </RelativeLayout>
         </LinearLayout>
-        <android.support.v7.widget.CardView
-            xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/frame"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            card_view:cardCornerRadius="0dp"
-            card_view:cardUseCompatPadding="true"
-            android:visibility="gone"
-            >
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
 
-                <ImageView
-                    android:id="@+id/card_item_imgae"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:src="@drawable/ic_warning_144dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="vertical">
-                    <TextView
-                        android:id="@+id/card_item_company_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Sorry"
-                        android:textSize="22dp"
-                        android:textAllCaps="true"
-                        android:textColor="@color/buy_card_company"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Data Not Available"
-                        android:textAllCaps="true"
-                        android:textColor="@color/buy_card_save_up_to" />
-                </LinearLayout>
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
@@ -108,12 +64,9 @@
             android:paddingBottom="10dp"
             android:paddingLeft="2dp"
             android:paddingRight="2dp"
-            android:paddingTop="@dimen/activity_horizontal_margin">
-
-        </android.support.v7.widget.RecyclerView>
+            android:paddingTop="@dimen/activity_horizontal_margin"></android.support.v7.widget.RecyclerView>
     </LinearLayout>
 
-<!--
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/frame"
         android:layout_width="match_parent"
@@ -155,5 +108,5 @@
                 android:textAllCaps="true"
                 android:textStyle="italic" />
         </LinearLayout>
-        -->
-</LinearLayout>
+    </FrameLayout>
+</FrameLayout>

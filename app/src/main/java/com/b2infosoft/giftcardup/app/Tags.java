@@ -39,7 +39,7 @@ public class Tags {
     public final int NEW_USER = 4;
     public final int PASSWORD_NOT_UPDATE = 5;
 
-    public final int DEFAULT_LOADING_DATA = 10;
+    public final int DEFAULT_LOADING_DATA = 6;
 
     //////////////  USER ACTIONS    //////////////
     public final String USER_ACTION = "user_action";
@@ -88,6 +88,10 @@ public class Tags {
     public final String PAY_WITH_CARD = "pay_with_card";
     public final String MY_ORDERS_ALL = "my_orders_all";
     public final String CARD_DISPUTE_REVIEW = "card_dispute_review";
+    public final String GET_NOTIFICATIONS = "get_notifications";
+    public final String GET_NOTIFICATIONS_UN_READ = "get_notifications_un_read";
+    public final String SET_NOTIFICATIONS_READ = "set_notifications_read";
+    public final String RESEND_VERIFICATION_EMAIL = "resend_verification_mail";
 
     /*  CART PROCESSING  */
     public final String LEFT_TIME = "left_time";
@@ -348,5 +352,16 @@ public class Tags {
     public final String CARD_EXP_YEAR = "exp_year";
     public final String CARD_CVC_CHECK = "cvc_check";
     public final String CARD_CURRENCY = "currency";
+
+    /////////////  NOTIFICATION  ///////////////
+    public final String SENDER_NAME = "sender_name";
+    public final String SENDER_ID = "sender_id";
+    public final String RECEIVER_ID = "receiver_id";
+    public final String DATE = "date";
+    public final String TIME_AGO = "time_ago";
+
+    /////////////  MERCHANT  ////////
+    public final String MERCHANT = "merchant";
+
 
 }

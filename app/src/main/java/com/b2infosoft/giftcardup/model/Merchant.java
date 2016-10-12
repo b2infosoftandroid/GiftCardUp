@@ -7,10 +7,12 @@ import com.b2infosoft.giftcardup.app.Tags;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by rajesh on 8/25/2016.
  */
-public class Merchant {
+public class Merchant implements Serializable{
     private String companyID;
     private String companyName;
     private int cardType;

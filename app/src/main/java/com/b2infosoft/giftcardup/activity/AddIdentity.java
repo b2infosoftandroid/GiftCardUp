@@ -127,7 +127,6 @@ public class AddIdentity extends AppCompatActivity {
         cursor.moveToFirst();
         String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
         cursor.close();
-
         return path;
     }
 

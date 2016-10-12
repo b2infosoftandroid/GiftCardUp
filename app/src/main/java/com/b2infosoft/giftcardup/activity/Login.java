@@ -15,6 +15,7 @@ import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.AlertBox;
+import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.model.User;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
@@ -45,6 +46,7 @@ public class Login extends AppCompatActivity implements DMRResult {
     private Tags tags;
     private Active active;
     DMRRequest dmrRequest;
+    private Progress progress;
     EditText userName, userPassword;
     Button login_button;
     TextView forgot_password, sign_up;
@@ -64,7 +66,7 @@ public class Login extends AppCompatActivity implements DMRResult {
         if (active.isLogin()) {
             loginSuccess();
         }
-
+        progress=new Progress(this);
         dmrRequest = DMRRequest.getInstance(this, TAG);
         userName = (EditText) findViewById(R.id.username_login);
         userPassword = (EditText) findViewById(R.id.password_login);
@@ -83,6 +85,7 @@ public class Login extends AppCompatActivity implements DMRResult {
                 startActivity(new Intent(Login.this, SignUp.class));
             }
         });
+
         forgot_password.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,7 +98,6 @@ public class Login extends AppCompatActivity implements DMRResult {
     private void initFB() {
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
-
         callbackManager = CallbackManager.Factory.create();
         loginButtonFB = (LoginButton) findViewById(R.id.login_button_fb);
         loginButtonFB.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
@@ -183,7 +185,7 @@ public class Login extends AppCompatActivity implements DMRResult {
         map.put(tags.USER_ACTION, tags.USER_LOGIN);
         map.put(tags.USER_ID, uName);
         map.put(tags.PASSWORD, uPass);
-
+        progress.show();
         dmrRequest.doPost(urls.getUserInfo(), map, this);
     }
 
@@ -233,6 +235,7 @@ public class Login extends AppCompatActivity implements DMRResult {
 
     @Override
     public void onSuccess(JSONObject jsonObject) {
+        progress.dismiss();
         try {
             if (jsonObject.has(tags.SUCCESS)) {
                 int success = jsonObject.getInt(tags.SUCCESS);
@@ -263,6 +266,11 @@ public class Login extends AppCompatActivity implements DMRResult {
                     box.setMessage(message);
                     box.show();
                 }
+            }else{
+                AlertBox box = new AlertBox(this);
+                box.setTitle("Alert");
+                box.setMessage("Something went wrong :"+jsonObject);
+                box.show();
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -272,6 +280,7 @@ public class Login extends AppCompatActivity implements DMRResult {
 
     @Override
     public void onError(VolleyError volleyError) {
+        progress.dismiss();
         volleyError.printStackTrace();
         if (volleyError.getMessage() != null)
             Log.e(TAG, volleyError.getMessage());

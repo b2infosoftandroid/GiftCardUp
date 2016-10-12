@@ -96,6 +96,7 @@ public class AddSSN extends AppCompatActivity  implements DMRResult{
             case android.R.id.home:
                 //NavUtils.navigateUpFromSameTask(this);
                 this.onBackPressed();
+                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);

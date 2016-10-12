@@ -32,6 +32,7 @@ import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.filters.EditTextMaxFloat;
+import com.b2infosoft.giftcardup.model.GetOffer;
 import com.b2infosoft.giftcardup.model.Merchant;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
@@ -44,7 +45,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SpeedySell extends Fragment implements TextWatcher, View.OnClickListener ,DMRResult{
+public class SpeedySell extends Fragment implements TextWatcher, View.OnClickListener, DMRResult {
 
     private final String TAG = SpeedySell.class.getName();
 
@@ -66,8 +67,6 @@ public class SpeedySell extends Fragment implements TextWatcher, View.OnClickLis
     private final String ERROR_MESSAGE_ASKING_PRICE = "Must be less than Balance";
     private final String ERROR_MESSAGE_SELLING_PERCENTAGE = "Must be 0.0 < 100.00 %";
     private Merchant merchant;
-
-
 
     private View mView;
 
@@ -115,7 +114,6 @@ public class SpeedySell extends Fragment implements TextWatcher, View.OnClickLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         init();
         mView = inflater.inflate(R.layout.fragment_speedy_sell, container, false);
-        Bundle bundle = this.getArguments();
 
         brand_name = (AutoCompleteTextView) mView.findViewById(R.id.brand_name);
         brand_name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -129,7 +127,7 @@ public class SpeedySell extends Fragment implements TextWatcher, View.OnClickLis
             }
         });
         card_balance = (EditText) mView.findViewById(R.id.card_balance);
-        textView = (TextView)mView.findViewById(R.id.e_card_img_text);
+        textView = (TextView) mView.findViewById(R.id.e_card_img_text);
         card_balance.addTextChangedListener(this);
         cardType = (ImageView) mView.findViewById(R.id.cardType);
         serial_number = (EditText) mView.findViewById(R.id.serial_number);
@@ -142,25 +140,16 @@ public class SpeedySell extends Fragment implements TextWatcher, View.OnClickLis
         cancel.setOnClickListener(this);
         save = (Button) mView.findViewById(R.id.save);
         save.setOnClickListener(this);
-
-        if(bundle != null) {
-            String str1 = bundle.getString("card");
-            if(str1.equalsIgnoreCase("tata")){
-                //textView.setText("Physical");
-            }
-            String str2 = bundle.getString("bal");
-            String str3 = bundle.getString("sellPercent");
-            brand_name.setText(str1);
-            card_balance.setText(str2);
-            selling_percentage.setText(str3);
-            enableData(true);
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            GetOffer getOffer = (GetOffer) bundle.getSerializable(tags.GET_OFFER);
+            setOffer(getOffer);
         }
-
         loadMerchants();
         return mView;
     }
 
-    private void enableData(boolean b){
+    private void enableData(boolean b) {
         serial_number.setEnabled(b);
         card_pin.setEnabled(b);
         card_balance.setEnabled(b);
@@ -199,7 +188,7 @@ public class SpeedySell extends Fragment implements TextWatcher, View.OnClickLis
             public void onError(VolleyError volleyError) {
                 volleyError.printStackTrace();
                 if (volleyError.getMessage() != null)
-                    Log.e(TAG,volleyError.getMessage());
+                    Log.e(TAG, volleyError.getMessage());
             }
         });
     }
@@ -216,23 +205,48 @@ public class SpeedySell extends Fragment implements TextWatcher, View.OnClickLis
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Merchant merchant = hashMap.get(getCompanyID(brand_name.getAdapter().getItem(position) + ""));
-                itemSelected = true;
-                enableCardForm(itemSelected);
-                brand_name.setText(merchant.getCompanyName());
-//                Toast.makeText(getContext(),merchant.getCardType(),Toast.LENGTH_SHORT).show();
-                if (merchant.getCardType() == 2) {
-                    ///  E-CARD
-                    textView.setVisibility(View.GONE);
-                    cardType.setImageDrawable(getResources().getDrawable(R.drawable.ic_check_24dp));
-                } else if (merchant.getCardType() == 1) {
-                    /// PHYSICAL CARD
-                    cardType.setImageDrawable(null);
-                }
-                serial_number.requestFocus();
-                selling_percentage.setText(format.getStringFloat(merchant.getSellingPercentage()));
+                setMerchant(merchant);
             }
         });
         // chipLayout.setAdapter(adapter);
+    }
+
+    private void setMerchant(Merchant merchant) {
+        itemSelected = true;
+        enableCardForm(itemSelected);
+        brand_name.setText(merchant.getCompanyName());
+//                Toast.makeText(getContext(),merchant.getCardType(),Toast.LENGTH_SHORT).show();
+        if (merchant.getCardType() == 2) {
+            ///  E-CARD
+            textView.setVisibility(View.GONE);
+            brand_name.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.ic_check_24dp), null);
+            //cardType.setImageDrawable(getResources().getDrawable(R.drawable.ic_check_24dp));
+        } else if (merchant.getCardType() == 1) {
+            /// PHYSICAL CARD
+            brand_name.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, null, null);
+            cardType.setImageDrawable(null);
+        }
+        serial_number.requestFocus();
+        selling_percentage.setText(format.getStringFloat(merchant.getSellingPercentage()));
+    }
+    private void setOffer(GetOffer getOffer) {
+        itemSelected = true;
+        enableCardForm(itemSelected);
+        brand_name.setText(getOffer.getCompanyName());
+//                Toast.makeText(getContext(),getOffer.getCardType(),Toast.LENGTH_SHORT).show();
+        if (getOffer.getCardType() == 2) {
+            ///  E-CARD
+            textView.setVisibility(View.GONE);
+            brand_name.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.ic_check_24dp), null);
+            //cardType.setImageDrawable(getResources().getDrawable(R.drawable.ic_check_24dp));
+        } else if (getOffer.getCardType() == 1) {
+            /// PHYSICAL CARD
+            brand_name.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, null, null);
+            cardType.setImageDrawable(null);
+        }
+        serial_number.requestFocus();
+        selling_percentage.setText(format.getStringFloat(getOffer.getCompanyPercentage()));
+        card_balance.setText(format.getStringFloat(getOffer.getCardBalance()));
     }
 
     private void enableCardForm(boolean isMerchant) {
@@ -305,11 +319,12 @@ public class SpeedySell extends Fragment implements TextWatcher, View.OnClickLis
                     float price = bal * sell / 100;
                     your_earning.setText(format.getStringFloat(price));
                 }
-            }else{
+            } else {
                 your_earning.setText(null);
             }
         }
     }
+
     private void addSpeedyGiftCard() {
         String company_id = merchant.getCompanyID();
         String card_name = brand_name.getText().toString();
@@ -366,8 +381,8 @@ public class SpeedySell extends Fragment implements TextWatcher, View.OnClickLis
     public void onSuccess(JSONObject jsonObject) {
         progress.dismiss();
         try {
-            if(jsonObject.has(tags.SUCCESS)){
-                if(jsonObject.getInt(tags.SUCCESS) == tags.PASS){
+            if (jsonObject.has(tags.SUCCESS)) {
+                if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("Alert");
                     builder.setMessage("Your Card is Successfully Added");
@@ -394,7 +409,7 @@ public class SpeedySell extends Fragment implements TextWatcher, View.OnClickLis
                     builder.create().show();
                 }
             }
-        }catch (JSONException e){
+        } catch (JSONException e) {
 
         }
     }
@@ -404,7 +419,7 @@ public class SpeedySell extends Fragment implements TextWatcher, View.OnClickLis
         progress.dismiss();
         volleyError.printStackTrace();
         if (volleyError.getMessage() != null)
-            Log.e(TAG,volleyError.getMessage());
+            Log.e(TAG, volleyError.getMessage());
     }
 
     @Override
@@ -419,9 +434,11 @@ public class SpeedySell extends Fragment implements TextWatcher, View.OnClickLis
             default:
         }
     }
+
     private void showToast(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
+
     public interface OnFragmentSpeedyCell {
         void onSpeedyCell(Uri uri);
     }

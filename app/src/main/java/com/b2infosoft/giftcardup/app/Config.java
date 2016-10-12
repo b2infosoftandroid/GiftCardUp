@@ -3,6 +3,7 @@ package com.b2infosoft.giftcardup.app;
 /**
  * Created by rajesh on 7/24/2016.
  */
+
 public class Config {
     private final String SITE_URL = "giftcardup.com";
 
@@ -10,7 +11,7 @@ public class Config {
     public final String GIFT_CARD_IMAGE_FOLDER ="images/upload/";
     public final String USER_PROFILE_IMAGE_FOLDER ="img/avatar/";
     private final String REFERRAL_ADDRESS = "http://giftcardup.com/signup.php?ref=";
-    private final Boolean isLive = true;
+    private final Boolean isLive = false;
     private static Config ourInstance = new Config();
     public static Config getInstance() {
         return ourInstance;
@@ -38,7 +39,8 @@ public class Config {
             return "http://".concat(SITE_URL).concat("/giftcard_services/");
         }else{
             //return "http://".concat(SERVER_IP).concat("/giftcard2/giftcard_services/");
-            return "http://".concat(SERVER_IP).concat("/rajesh/giftcard_services/");
+            //return "http://".concat(SERVER_IP).concat("/rajesh/giftcard_services/");
+            return "http://".concat(SERVER_IP).concat("/giftcard2/giftcard_services/");
         }
     }
     public String getReferralAddress(){
