@@ -24,10 +24,13 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.app.Alert;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
+import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.model.GetOffer;
 import com.b2infosoft.giftcardup.model.Merchant;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 
@@ -42,20 +45,22 @@ import java.util.Queue;
 
 public class SellCards extends Fragment implements DMRResult {
     private final String TAG = SellCards.class.getName();
-    Tags tags;
-    Urls urls;
-    DMRRequest dmrRequest;
-    AutoCompleteTextView merchant;
-    EditText value;
-    ImageView imageView, imageView1;
-    int count;
-    Button get_offer, accept_offer;
-    TableLayout tableLayout;
-    LinearLayout linearLayout;
-    TextView name, payout, action;
-    ImageView imageAction;
-    Queue<GetOffer> offerQueue = new LinkedList<>();
-    Map<String, String> hashMap = new HashMap<>();
+    private Active active;
+    private Alert alert;
+    private Tags tags;
+    private Urls urls;
+    private DMRRequest dmrRequest;
+    private AutoCompleteTextView merchant;
+    private EditText value;
+    private ImageView imageView, imageView1;
+    private int count;
+    private Button get_offer, accept_offer;
+    private TableLayout tableLayout;
+    private LinearLayout linearLayout;
+    private TextView name, payout, action;
+    private ImageView imageAction;
+    private Queue<GetOffer> offerQueue = new LinkedList<>();
+    private Map<String, String> hashMap = new HashMap<>();
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -85,14 +90,18 @@ public class SellCards extends Fragment implements DMRResult {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
+    private void init(){
+        active = Active.getInstance(getActivity());
+        urls = Urls.getInstance();
+        tags = Tags.getInstance();
+        dmrRequest = DMRRequest.getInstance(getContext(), TAG);
+        alert = Alert.getInstance(getActivity());
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        urls = Urls.getInstance();
-        tags = Tags.getInstance();
-        dmrRequest = DMRRequest.getInstance(getContext(), TAG);
+        init();
         View view = inflater.inflate(R.layout.fragment_sell_cards, container, false);
         merchant = (AutoCompleteTextView) view.findViewById(R.id.sell_gift_card_merchant);
         value = (EditText) view.findViewById(R.id.sell_gift_card_value);
@@ -111,6 +120,10 @@ public class SellCards extends Fragment implements DMRResult {
         accept_offer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!active.isLogin()){
+                    alert.showSnack(true,"You're Not Login, Please Login First");
+                    return;
+                }
                 SpeedySell frag = new SpeedySell();
                 Bundle bundle = new Bundle();
                 if (offerQueue.size() > 0) {
@@ -121,6 +134,7 @@ public class SellCards extends Fragment implements DMRResult {
                 }
                 frag.setArguments(bundle);
                 replaceFragment(frag);
+                getActivity().setTitle("Speedy Sell");
             }
         });
         loadMerchants();
@@ -128,6 +142,7 @@ public class SellCards extends Fragment implements DMRResult {
     }
 
     private void loadMerchants() {
+
         final Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.COMPANY_BRANDS);
         dmrRequest.doPost(urls.getAppAction(), map, new DMRResult() {
@@ -201,6 +216,10 @@ public class SellCards extends Fragment implements DMRResult {
         if (value.length() == 0) {
             value.setError("Please Enter Value");
             value.requestFocus();
+            return;
+        }
+        if(!isConnected()){
+            alert.showSnackIsConnected(isConnected());
             return;
         }
         Map<String, String> map = new HashMap<>();
@@ -417,5 +436,8 @@ public class SellCards extends Fragment implements DMRResult {
      */
     public interface OnFragmentSellCards {
         void onSellCards(Uri uri);
+    }
+    private boolean isConnected() {
+        return ConnectivityReceiver.isConnected();
     }
 }

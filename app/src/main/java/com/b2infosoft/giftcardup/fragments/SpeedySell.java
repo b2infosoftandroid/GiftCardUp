@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.app.Alert;
 import com.b2infosoft.giftcardup.app.Format;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
@@ -34,6 +35,7 @@ import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.filters.EditTextMaxFloat;
 import com.b2infosoft.giftcardup.model.GetOffer;
 import com.b2infosoft.giftcardup.model.Merchant;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 import com.libaml.android.view.chip.ChipLayout;
@@ -48,7 +50,7 @@ import java.util.Map;
 public class SpeedySell extends Fragment implements TextWatcher, View.OnClickListener, DMRResult {
 
     private final String TAG = SpeedySell.class.getName();
-
+    private Alert alert;
     private Urls urls;
     private Tags tags;
     private Active active;
@@ -57,7 +59,6 @@ public class SpeedySell extends Fragment implements TextWatcher, View.OnClickLis
     Map<String, Merchant> hashMap;
     private Progress progress;
 
-    ChipLayout chipLayout;
     AutoCompleteTextView brand_name;
     ImageView cardType;
     TextView textView;
@@ -90,6 +91,7 @@ public class SpeedySell extends Fragment implements TextWatcher, View.OnClickLis
         format = Format.getInstance();
         hashMap = new HashMap<>();
         progress = new Progress(getActivity());
+        alert = Alert.getInstance(getActivity());
     }
 
     public static SpeedySell newInstance(String param1, String param2) {
@@ -157,6 +159,10 @@ public class SpeedySell extends Fragment implements TextWatcher, View.OnClickLis
     }
 
     private void loadMerchants() {
+        if(!isConnected()){
+            alert.showSnackIsConnected(isConnected());
+            return;
+        }
         final Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.COMPANY_BRANDS);
         dmrRequest.doPost(urls.getAppAction(), map, new DMRResult() {
@@ -363,9 +369,16 @@ public class SpeedySell extends Fragment implements TextWatcher, View.OnClickLis
             return;
         }
 
+        if (!active.isLogin()) {
+            return;
+        }
+        if(!isConnected()){
+            alert.showSnackIsConnected(isConnected());
+            return;
+        }
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.ADD_SPEEDY_GIFT_CARD);
-        map.put(tags.USER_ID, active.getUser().getUserId() + "");
+        map.put(tags.USER_ID, active.getUser().getUserId());
         map.put(tags.COMPANY_ID, company_id);
         map.put(tags.GIFT_CARD_CARD_NAME, card_name);
         map.put(tags.GIFT_CARD_SERIAL_NUMBER, serial_no);
@@ -452,5 +465,8 @@ public class SpeedySell extends Fragment implements TextWatcher, View.OnClickLis
             transaction.addToBackStack(null);
         }
         transaction.commit();
+    }
+    private boolean isConnected() {
+        return ConnectivityReceiver.isConnected();
     }
 }

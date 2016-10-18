@@ -13,12 +13,14 @@ import android.widget.EditText;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.app.Alert;
 import com.b2infosoft.giftcardup.app.Format;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.app.Validation;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.Progress;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 
@@ -33,6 +35,7 @@ import java.util.Map;
  */
 public class RecommendBrands extends Fragment implements View.OnClickListener,DMRResult {
     private final static String TAG = RecommendBrands.class.getName();
+    private Alert alert;
     private Urls urls;
     private Tags tags;
     private Active active;
@@ -58,6 +61,7 @@ public class RecommendBrands extends Fragment implements View.OnClickListener,DM
         format = Format.getInstance();
         validation = Validation.getInstance();
         progress = new Progress(getActivity());
+        alert = Alert.getInstance(getActivity());
     }
 
     @Override
@@ -107,9 +111,17 @@ public class RecommendBrands extends Fragment implements View.OnClickListener,DM
             return;
         }
 
+        if (!active.isLogin()) {
+            return;
+        }
+        if(!isConnected()){
+            alert.showSnackIsConnected(isConnected());
+            return;
+        }
+
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.ADD_COMPANY_BRANDS);
-        map.put(tags.USER_ID, active.getUser().getUserId() + "");
+        map.put(tags.USER_ID, active.getUser().getUserId());
         map.put(tags.COMPANY_NAME, comp_name);
         map.put(tags.COMPANY_BRAND_WEBSITE_LINK, web_link);
         map.put(tags.PHONE_NUMBER, phone);
@@ -147,4 +159,9 @@ public class RecommendBrands extends Fragment implements View.OnClickListener,DM
         phone_number.setText(null);
         phone_number.setError(null);
     }
+
+    private boolean isConnected() {
+        return ConnectivityReceiver.isConnected();
+    }
+
 }

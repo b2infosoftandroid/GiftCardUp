@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.app.Alert;
 import com.b2infosoft.giftcardup.app.Format;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
@@ -35,6 +36,7 @@ import com.b2infosoft.giftcardup.filters.EditTextMaxFloat;
 import com.b2infosoft.giftcardup.filters.EditTextMaxInteger;
 import com.b2infosoft.giftcardup.model.GetOffer;
 import com.b2infosoft.giftcardup.model.Merchant;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 import com.libaml.android.view.chip.ChipLayout;
@@ -57,6 +59,7 @@ import java.util.TooManyListenersException;
  * A simple {@link Fragment} subclass.
  */
 public class BulkListing extends Fragment implements DMRResult, View.OnClickListener, TextWatcher, View.OnFocusChangeListener {
+    private Alert alert;
     private final static String TAG = BulkListing.class.getName();
     private Urls urls;
     private Tags tags;
@@ -65,10 +68,8 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
     DMRRequest dmrRequest;
     Map<String, Merchant> hashMap;
     private Progress progress;
+    float price;
     View mView;
-    float price, sell;
-    int whoHasFocus = 0;
-    ChipLayout chipLayout;
     AutoCompleteTextView brand_name;
     ImageView cardType;
     TextView textView;
@@ -85,6 +86,7 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
     }
 
     private void init() {
+        alert = Alert.getInstance(getActivity());
         dmrRequest = DMRRequest.getInstance(getActivity(), TAG);
         urls = Urls.getInstance();
         tags = Tags.getInstance();
@@ -246,6 +248,10 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
     }
 
     private void loadMerchants() {
+        if(!isConnected()){
+            alert.showSnackIsConnected(isConnected());
+            return;
+        }
         final Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.COMPANY_BRANDS);
         dmrRequest.doPost(urls.getAppAction(), map, new DMRResult() {
@@ -283,6 +289,10 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
     }
 
     private void getEarning() {
+        if(!isConnected()){
+            alert.showSnackIsConnected(isConnected());
+            return;
+        }
         dmrRequest.cancelAll();
         String card_name = brand_name.getText().toString();
         String company_id = getCompanyID(card_name);
@@ -292,7 +302,6 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
         map.put(tags.USER_ID, active.getUser().getUserId() + "");
         map.put(tags.COMPANY_ID, company_id);
         map.put(tags.GIFT_CARD_VALUE, price);
-
         dmrRequest.doPost(urls.getGiftCardInfo(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
@@ -435,9 +444,16 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
             return;
         }
 
+        if(!active.isLogin()){
+            return;
+        }
+        if(!isConnected()){
+            alert.showSnackIsConnected(isConnected());
+            return;
+        }
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.ADD_GIFT_CARD);
-        map.put(tags.USER_ID, active.getUser().getUserId() + "");
+        map.put(tags.USER_ID, active.getUser().getUserId());
         map.put(tags.COMPANY_ID, company_id);
         map.put(tags.GIFT_CARD_CARD_NAME, card_name);
         map.put(tags.GIFT_CARD_SERIAL_NUMBER, serial_no);
@@ -533,5 +549,8 @@ public class BulkListing extends Fragment implements DMRResult, View.OnClickList
             transaction.addToBackStack(null);
         }
         transaction.commit();
+    }
+    private boolean isConnected() {
+        return ConnectivityReceiver.isConnected();
     }
 }

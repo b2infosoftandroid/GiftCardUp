@@ -101,7 +101,6 @@ public class AvailableFund extends Fragment {
         dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
-                Log.d("history", jsonObject.toString());
                 try {
                     if (jsonObject.has(tags.SUCCESS)) {
                         if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
@@ -149,7 +148,6 @@ public class AvailableFund extends Fragment {
             adapter.notifyItemRemoved(cardList.size());
             isLoading = false;
         }
-        Log.d("search", cards.size() + "");
         if (cards.size() > 0)
             cardList.addAll(cards);
         if (cardList.size() == 0) {

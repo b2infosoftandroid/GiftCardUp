@@ -16,6 +16,7 @@ import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.adapter.MyOrderAdapter;
 import com.b2infosoft.giftcardup.adapter.ShipmentCardRecyclerViewAdapter;
+import com.b2infosoft.giftcardup.app.Alert;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
@@ -23,6 +24,7 @@ import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.model.EmptyBrand;
 import com.b2infosoft.giftcardup.model.GiftCard;
 import com.b2infosoft.giftcardup.model.Order;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 
@@ -37,6 +39,7 @@ import java.util.Map;
 
 public class MyOrder extends Fragment {
     private static final String TAG = MyOrder.class.getName();
+    private Alert alert;
     private Urls urls;
     private Tags tags;
     private Active active;
@@ -59,6 +62,7 @@ public class MyOrder extends Fragment {
         active = Active.getInstance(getActivity());
         progress = new Progress(getActivity());
         cardList = new ArrayList<>();
+        alert = Alert.getInstance(getActivity());
     }
 
     @Override
@@ -76,13 +80,19 @@ public class MyOrder extends Fragment {
     }
 
     private void loadCards() {
+        if (!active.isLogin()) {
+            return;
+        }
+        if(!isConnected()){
+            alert.showSnackIsConnected(isConnected());
+            return;
+        }
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.MY_ORDERS_ALL);
-        map.put(tags.USER_ID, active.getUser().getUserId() + "");
+        map.put(tags.USER_ID, active.getUser().getUserId());
         dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
-                Log.d("orders", jsonObject.toString());
                 try {
                     if (jsonObject.has(tags.SUCCESS)) {
                         if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
@@ -109,7 +119,7 @@ public class MyOrder extends Fragment {
             public void onError(VolleyError volleyError) {
                 volleyError.printStackTrace();
                 if (volleyError.getMessage() != null)
-                    Log.e(TAG,volleyError.getMessage());
+                    Log.e(TAG, volleyError.getMessage());
             }
         });
     }
@@ -121,5 +131,8 @@ public class MyOrder extends Fragment {
             cardList.add(new EmptyBrand());
         }
         adapter.notifyDataSetChanged();
+    }
+    private boolean isConnected() {
+        return ConnectivityReceiver.isConnected();
     }
 }

@@ -17,11 +17,13 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.app.Alert;
 import com.b2infosoft.giftcardup.app.Format;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.Progress;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 
@@ -33,6 +35,7 @@ import org.json.JSONObject;
  */
 public class ReferralRewards extends Fragment implements View.OnClickListener,DMRResult{
     private final static String TAG = RecommendBrands.class.getName();
+    private Alert alert;
     private Urls urls;
     private Tags tags;
     private Active active;
@@ -54,6 +57,7 @@ public class ReferralRewards extends Fragment implements View.OnClickListener,DM
         active = Active.getInstance(getActivity());
         format = Format.getInstance();
         progress = new Progress(getActivity());
+        alert = Alert.getInstance(getActivity());
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,6 +79,7 @@ public class ReferralRewards extends Fragment implements View.OnClickListener,DM
                 return true;
             }
         });
+
         action_referral = (Button) mView.findViewById(R.id.action_refer);
         action_referral.setOnClickListener(this);
         return mView;
@@ -120,5 +125,8 @@ public class ReferralRewards extends Fragment implements View.OnClickListener,DM
         volleyError.printStackTrace();
         if (volleyError.getMessage() != null)
             Log.e(TAG,volleyError.getMessage());
+    }
+    private boolean isConnected() {
+        return ConnectivityReceiver.isConnected();
     }
 }

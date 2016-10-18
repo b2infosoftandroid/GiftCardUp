@@ -10,7 +10,7 @@ public class Config {
     public final String GIFT_CARD_IMAGE_FOLDER ="images/upload/";
     public final String USER_PROFILE_IMAGE_FOLDER ="img/avatar/";
     private final String REFERRAL_ADDRESS = "http://giftcardup.com/signup.php?ref=";
-    private final Boolean isLive = false;
+    private final Boolean isLive = true;
     private static Config ourInstance = new Config();
     public static Config getInstance() {
         return ourInstance;

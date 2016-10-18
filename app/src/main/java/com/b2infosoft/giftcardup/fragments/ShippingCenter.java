@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.adapter.ShipmentCardRecyclerViewAdapter;
+import com.b2infosoft.giftcardup.app.Alert;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
@@ -21,6 +22,7 @@ import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.listener.OnLoadMoreListener;
 import com.b2infosoft.giftcardup.model.EmptyBrand;
 import com.b2infosoft.giftcardup.model.GiftCard;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 
@@ -38,6 +40,7 @@ import java.util.Map;
  */
 public class ShippingCenter extends Fragment {
     private final static String TAG = ShippingCenter.class.getName();
+    private Alert alert;
     private Urls urls;
     private Tags tags;
     private Active active;
@@ -62,6 +65,7 @@ public class ShippingCenter extends Fragment {
         active = Active.getInstance(getActivity());
         progress = new Progress(getActivity());
         cardList = new ArrayList<>();
+        alert = Alert.getInstance(getActivity());
     }
 
     @Override
@@ -70,7 +74,7 @@ public class ShippingCenter extends Fragment {
         // Inflate the layout for this fragment
         init();
         View view = inflater.inflate(R.layout.fragment_shipping_center, container, false);
-        frameLayout = (FrameLayout)view.findViewById(R.id.frame);
+        frameLayout = (FrameLayout) view.findViewById(R.id.frame);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new ShipmentCardRecyclerViewAdapter(getContext(), cardList, recyclerView);
@@ -91,9 +95,16 @@ public class ShippingCenter extends Fragment {
     }
 
     private void loadCards() {
+        if (!active.isLogin()) {
+            return;
+        }
+        if(!isConnected()){
+            alert.showSnackIsConnected(isConnected());
+            return;
+        }
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.GET_PENDING_SHIPMENT_CARDS);
-        map.put(tags.USER_ID, active.getUser().getUserId() + "");
+        map.put(tags.USER_ID, active.getUser().getUserId());
         map.put(tags.LOAD_MORE, String.valueOf(loadMore));
         dmrRequest.doPost(urls.getGiftCardInfo(), map, new DMRResult() {
             @Override
@@ -131,7 +142,7 @@ public class ShippingCenter extends Fragment {
             public void onError(VolleyError volleyError) {
                 volleyError.printStackTrace();
                 if (volleyError.getMessage() != null)
-                    Log.e(TAG,volleyError.getMessage());
+                    Log.e(TAG, volleyError.getMessage());
             }
         });
     }
@@ -149,5 +160,9 @@ public class ShippingCenter extends Fragment {
         }
         adapter.notifyDataSetChanged();
         adapter.setLoaded();
+    }
+
+    private boolean isConnected() {
+        return ConnectivityReceiver.isConnected();
     }
 }

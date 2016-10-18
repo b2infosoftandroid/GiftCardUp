@@ -60,7 +60,10 @@ public class CustomRequest extends Request<JSONObject> {
         headers.put("Content-Type", "application/json; charset=utf-8");
         return headers;
         */
-        return super.getHeaders();
+        HashMap<String, String> headers = new HashMap<String, String>();
+        //headers.put("Content-Type", "application/json; charset=utf-8");
+        return headers;
+        //return super.getHeaders();
     }
 
     @Override

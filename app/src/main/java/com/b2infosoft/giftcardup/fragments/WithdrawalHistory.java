@@ -16,6 +16,7 @@ import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.adapter.ShipmentCardRecyclerViewAdapter;
 import com.b2infosoft.giftcardup.adapter.WithdrawalHistoryRecyclerViewAdapter;
+import com.b2infosoft.giftcardup.app.Alert;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
@@ -24,6 +25,7 @@ import com.b2infosoft.giftcardup.listener.OnLoadMoreListener;
 import com.b2infosoft.giftcardup.model.EmptyBrand;
 import com.b2infosoft.giftcardup.model.GetWithdrawHistory;
 import com.b2infosoft.giftcardup.model.GiftCard;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 
@@ -39,6 +41,7 @@ import java.util.Map;
 
 public class WithdrawalHistory extends Fragment {
     private final static String TAG = WithdrawalHistory.class.getName();
+    private Alert alert;
     private Urls urls;
     private Tags tags;
     private Active active;
@@ -64,6 +67,7 @@ public class WithdrawalHistory extends Fragment {
         active = Active.getInstance(getActivity());
         progress = new Progress(getActivity());
         cardList = new ArrayList<>();
+        alert = Alert.getInstance(getActivity());
     }
 
     @Override
@@ -92,9 +96,16 @@ public class WithdrawalHistory extends Fragment {
     }
 
     private void loadCards() {
+        if (!active.isLogin()) {
+            return;
+        }
+        if(!isConnected()){
+            alert.showSnackIsConnected(isConnected());
+            return;
+        }
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.WITHDRAWAL_HISTORY);
-        map.put(tags.USER_ID, active.getUser().getUserId() + "");
+        map.put(tags.USER_ID, active.getUser().getUserId());
         dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
@@ -131,7 +142,7 @@ public class WithdrawalHistory extends Fragment {
             public void onError(VolleyError volleyError) {
                 volleyError.printStackTrace();
                 if (volleyError.getMessage() != null)
-                    Log.e(TAG,volleyError.getMessage());
+                    Log.e(TAG, volleyError.getMessage());
             }
         });
     }
@@ -142,7 +153,6 @@ public class WithdrawalHistory extends Fragment {
             adapter.notifyItemRemoved(cardList.size());
             isLoading = false;
         }
-        Log.d("find",cards.size() + "");
         if (cards.size() > 0)
             cardList.addAll(cards);
         if (cardList.size() == 0) {
@@ -151,5 +161,7 @@ public class WithdrawalHistory extends Fragment {
         adapter.notifyDataSetChanged();
         adapter.setLoaded();
     }
-
+    private boolean isConnected() {
+        return ConnectivityReceiver.isConnected();
+    }
 }
