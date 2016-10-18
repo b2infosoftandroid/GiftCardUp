@@ -21,7 +21,8 @@ import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.activity.ChangeAddress;
 import com.b2infosoft.giftcardup.activity.Payments;
-import com.b2infosoft.giftcardup.app.Cart;
+import com.b2infosoft.giftcardup.app.GiftCardApp;
+import com.b2infosoft.giftcardup.model.Cart;
 import com.b2infosoft.giftcardup.app.Config;
 import com.b2infosoft.giftcardup.app.Format;
 import com.b2infosoft.giftcardup.app.Tags;
@@ -42,12 +43,12 @@ import com.b2infosoft.giftcardup.volly.LruBitmapCache;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
+    private GiftCardApp app;
     private Cart cart;
     private final String TAG = CheckOutAdapter.class.getName();
     private Urls urls;
@@ -80,7 +81,8 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         active = Active.getInstance(context);
         dmrRequest = DMRRequest.getInstance(context, TAG);
         progress = new Progress(context);
-        cart = (Cart) context.getApplicationContext();
+        app  = (GiftCardApp)context.getApplicationContext();
+        cart = app.getCart();
         dbHelper = new DBHelper(context);
         this.action_continue = action_continue;
         this.action_continue.setOnClickListener(this);

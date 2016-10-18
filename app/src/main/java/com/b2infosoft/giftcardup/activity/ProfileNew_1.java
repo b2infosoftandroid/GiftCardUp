@@ -1,12 +1,12 @@
 package com.b2infosoft.giftcardup.activity;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,7 +18,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -32,8 +31,8 @@ import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.AlertBox;
+import com.b2infosoft.giftcardup.custom.HeaderView;
 import com.b2infosoft.giftcardup.custom.Progress;
-import com.b2infosoft.giftcardup.fragments.Profile;
 import com.b2infosoft.giftcardup.model.Approve;
 import com.b2infosoft.giftcardup.model.ContactInformation;
 import com.b2infosoft.giftcardup.model.User;
@@ -51,8 +50,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProfileNew extends AppCompatActivity implements View.OnClickListener, DMRResult {
-    final private static String TAG = ProfileNew.class.getName();
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
+public class ProfileNew_1 extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener, View.OnClickListener, DMRResult {
+    final private static String TAG = ProfileNew_1.class.getName();
     private Active active;
     private Tags tags;
     private Urls urls;
@@ -71,6 +73,22 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
     private Uri filePath;
     private Bitmap bitmap;
 
+    @Bind(R.id.app_bar)
+    protected AppBarLayout appBarLayout;
+
+    @Bind(R.id.toolbar)
+    protected Toolbar toolbar;
+
+    @Bind(R.id.toolbar_header_view)
+    protected HeaderView toolbarHeaderView;
+
+    @Bind(R.id.float_header_view)
+    protected HeaderView floatHeaderView;
+
+    private boolean isHideToolbarView = false;
+
+    private String title ="";
+    private String member_since="";
     private void init() {
         active = Active.getInstance(this);
         tags = Tags.getInstance();
@@ -93,12 +111,14 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         init();
-        setContentView(R.layout.activity_profile_new);
+        setContentView(R.layout.activity_profile_new_1);
+        ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(null);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         //getSupportActionBar().setSubtitle("Member Since : ".concat(format.getDate(user.getJoinDate())));
-
         toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         profile_image = (ImageView) findViewById(R.id.profile_user_image);
         profile_progress_bar = (ProgressBar) findViewById(R.id.profile_progress_bar);
@@ -122,7 +142,6 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         resend.setOnClickListener(this);
         cardView = (Button) findViewById(R.id.approve_card);
         // member_science = (TextView)findViewById(R.id.profile_member);
-
         //LruBitmapCache.loadCacheImageProfile(this, profile_image, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
         // member_science.setText("Member Since : ".concat(format.getDate(user.getJoinDate())));
         updateInformationUser();
@@ -130,6 +149,26 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
         checkAvailableBalance();
         fetchContactInfo();
         checkVerifiedStatus();
+        initUi();
+    }
+    private void initUi() {
+        appBarLayout.addOnOffsetChangedListener(this);
+        toolbarHeaderView.bindTo(title, member_since);
+        floatHeaderView.bindTo(title, member_since);
+    }
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int offset) {
+        int maxScroll = appBarLayout.getTotalScrollRange();
+        float percentage = (float) Math.abs(offset) / (float) maxScroll;
+
+        if (percentage == 1f && isHideToolbarView) {
+            toolbarHeaderView.setVisibility(View.VISIBLE);
+            isHideToolbarView = !isHideToolbarView;
+
+        } else if (percentage < 1f && !isHideToolbarView) {
+            toolbarHeaderView.setVisibility(View.GONE);
+            isHideToolbarView = !isHideToolbarView;
+        }
     }
 
     private void updateInformationUser() {
@@ -137,6 +176,8 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
             User user = active.getUser();
             mail.setText(user.getEmail());
             toolbarLayout.setTitle(user.getFirstName() + " " + user.getLastName());
+            title =  user.getFirstName() + " " + user.getLastName();
+            member_since = "Member Since: "+format.getDate(user.getJoinDate());
             if (user.getImage().length() > 0 && user.getImage().contains(".")) {
                 LruBitmapCache.loadCacheImageProfile(this, profile_image, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
             }
@@ -419,18 +460,18 @@ public class ProfileNew extends AppCompatActivity implements View.OnClickListene
                         progress.dismiss();
                         try {
                             JSONObject object = new JSONObject(response);
-                            if(object.has(tags.SUCCESS)){
-                                AlertBox box = new AlertBox(ProfileNew.this);
-                                if(object.getInt(tags.SUCCESS)==tags.PASS){
+                            if (object.has(tags.SUCCESS)) {
+                                AlertBox box = new AlertBox(ProfileNew_1.this);
+                                if (object.getInt(tags.SUCCESS) == tags.PASS) {
                                     box.setMessage("Successfully send Confirmation email. Please Check Your E-Mail and Verified.");
-                                }else{
+                                } else {
                                     box.setMessage("Oops... Something went wrong. Please Try Again");
                                 }
                                 box.show();
                             }
-                        }catch (JSONException e){
+                        } catch (JSONException e) {
                             e.printStackTrace();
-                            Log.d(TAG,e.getMessage());
+                            Log.d(TAG, e.getMessage());
                         }
                     }
                 },

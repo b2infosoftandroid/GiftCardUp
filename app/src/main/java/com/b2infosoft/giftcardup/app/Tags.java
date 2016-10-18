@@ -43,8 +43,10 @@ public class Tags {
     public final int EXISTING_USER = 3;
     public final int NEW_USER = 4;
     public final int PASSWORD_NOT_UPDATE = 5;
-
     public final int DEFAULT_LOADING_DATA = 6;
+    public final int INVALID_EMAIL = 7;
+    public final String ONE_TIME_PASSWORD   =  "one_time_password";
+    public final String OTP_ID   =  "otp_id";
 
     //////////////  USER ACTIONS    //////////////
     public final String USER_ACTION = "user_action";
@@ -97,6 +99,9 @@ public class Tags {
     public final String GET_NOTIFICATIONS_UN_READ = "get_notifications_un_read";
     public final String SET_NOTIFICATIONS_READ = "set_notifications_read";
     public final String RESEND_VERIFICATION_EMAIL = "resend_verification_mail";
+    public final String FORGOT_PASSWORD_REQUEST = "forgot_password_request";
+    public final String CHANGE_PASSWORD = "chagne_password";
+
 
     /*  CART PROCESSING  */
     public final String LEFT_TIME = "left_time";

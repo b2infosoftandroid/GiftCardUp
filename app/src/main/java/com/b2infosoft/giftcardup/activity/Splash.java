@@ -16,6 +16,7 @@ import com.b2infosoft.giftcardup.model.CompanyCategory;
 import com.b2infosoft.giftcardup.model.ControlPanel;
 import com.b2infosoft.giftcardup.model.State;
 import com.b2infosoft.giftcardup.model.User;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 
@@ -66,7 +67,9 @@ public class Splash extends AppCompatActivity implements DMRResult {
     }
 
     private void loadDefaultData() {
-
+        if(!isConnected()){
+            return;
+        }
         /*LOADING ALL CATEGORIES*/
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.COMPANY_CATEGORY_ALL);
@@ -94,7 +97,6 @@ public class Splash extends AppCompatActivity implements DMRResult {
 
     @Override
     public void onSuccess(JSONObject jsonObject) {
-        Log.d("SPLASH DATA", jsonObject.toString());
         try {
             if (jsonObject.has(tags.SUCCESS)) {
                 if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
@@ -134,5 +136,9 @@ public class Splash extends AppCompatActivity implements DMRResult {
         volleyError.printStackTrace();
         if (volleyError.getMessage() != null)
             Log.e(TAG,volleyError.getMessage());
+    }
+    // Method to manually check connection status
+    private boolean isConnected() {
+        return ConnectivityReceiver.isConnected();
     }
 }

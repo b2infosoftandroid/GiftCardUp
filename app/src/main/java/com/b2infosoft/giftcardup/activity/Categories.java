@@ -1,5 +1,6 @@
 package com.b2infosoft.giftcardup.activity;
 
+import android.content.Intent;
 import android.graphics.drawable.LayerDrawable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +14,8 @@ import android.view.MenuItem;
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.adapter.CardAdapter;
-import com.b2infosoft.giftcardup.app.Cart;
+import com.b2infosoft.giftcardup.app.GiftCardApp;
+import com.b2infosoft.giftcardup.model.Cart;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
@@ -36,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Categories extends AppCompatActivity {
+    private GiftCardApp app;
     private Cart cart;
     private static final String TAG = Categories.class.getName();
     private Urls urls;
@@ -56,7 +59,8 @@ public class Categories extends AppCompatActivity {
         setContentView(R.layout.activity_categories);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         tags = Tags.getInstance();
-        cart = (Cart) getApplicationContext();
+        app  = (GiftCardApp)getApplicationContext();
+        cart = app.getCart();
 
         if (getIntent().hasExtra(tags.CATEGORIES)) {
             category = (CompanyCategory) getIntent().getExtras().getSerializable(tags.CATEGORIES);
@@ -92,6 +96,11 @@ public class Categories extends AppCompatActivity {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
+            case R.id.action_cart_item:
+                startActivity(new Intent(this, ShoppingCart.class));
+                return true;
+            case R.id.action_notifications:
+                startActivity(new Intent(this, NotificationActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
@@ -126,7 +135,6 @@ public class Categories extends AppCompatActivity {
         dmrRequest.doPost(urls.getGiftCardInfo(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
-                Log.d("show", jsonObject.toString());
                 try {
                     if (jsonObject.has(tags.SUCCESS)) {
                         if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {

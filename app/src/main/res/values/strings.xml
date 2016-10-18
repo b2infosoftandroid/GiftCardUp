@@ -25,6 +25,10 @@
     <string name="menu_dashboard">BUY GIFT CARDS</string>
     <string name="menu_dashboard_sell">SELL GIFT CARDS</string>
 
+    <!--  NETWORK STATUS      -->
+    <string name="is_connected">Good! Connected to Internet</string>
+    <string name="is_disconnected">Sorry! Not connected to internet</string>
+
 
     <!-- Sign Up -->
     <string name="sign_up_name_first">First Name</string>

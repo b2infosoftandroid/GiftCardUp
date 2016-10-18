@@ -1,4 +1,4 @@
-package com.b2infosoft.giftcardup.app;
+package com.b2infosoft.giftcardup.model;
 
 import android.app.Application;
 
@@ -10,7 +10,8 @@ import java.util.List;
 /**
  * Created by rajesh on 9/14/2016.
  */
-public class Cart extends Application {
+public class Cart{
+
     private List<GiftCard> giftCardList = new ArrayList<>();
 
     public int getCartItemCount() {
@@ -29,7 +30,8 @@ public class Cart extends Application {
         return giftCardList;
     }
 
-    public void removeAll(){
+    public void removeAll() {
         giftCardList.clear();
     }
+
 }

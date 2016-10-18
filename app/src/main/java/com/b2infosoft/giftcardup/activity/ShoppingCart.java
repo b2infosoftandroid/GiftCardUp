@@ -19,16 +19,14 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.adapter.CartAdapter;
-import com.b2infosoft.giftcardup.adapter.CheckOutAdapter;
-import com.b2infosoft.giftcardup.app.Cart;
+import com.b2infosoft.giftcardup.app.GiftCardApp;
+import com.b2infosoft.giftcardup.model.Cart;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
-import com.b2infosoft.giftcardup.app.Validation;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.model.CartSummary;
 import com.b2infosoft.giftcardup.model.EmptyCart;
 import com.b2infosoft.giftcardup.model.GiftCard;
-import com.b2infosoft.giftcardup.services.CartStatus;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 
@@ -51,7 +49,7 @@ public class ShoppingCart extends AppCompatActivity implements View.OnClickListe
     CartAdapter adapter;
     List<GiftCard> cardList;
     Cart cart;
-
+    private GiftCardApp app;
     /* UI COMPONENTS */
     Button action_checkout;
     MenuItem left_time;
@@ -76,7 +74,8 @@ public class ShoppingCart extends AppCompatActivity implements View.OnClickListe
         urls = Urls.getInstance();
         active = Active.getInstance(this);
         cardList = new ArrayList<>();
-        cart = (Cart) getApplicationContext();
+        app = (GiftCardApp)getApplicationContext();
+        cart = app.getCart();
     }
 
     @Override
@@ -187,9 +186,11 @@ public class ShoppingCart extends AppCompatActivity implements View.OnClickListe
                                 for (int i = 0; i < array.length(); i++) {
                                     cart.addCartItem(GiftCard.fromJSON(array.getJSONObject(i)));
                                 }
+                                app.setCart(cart);
                             }
                         } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
                             cart.removeAll();
+                            app.setCart(cart);
                         }
                     }
                     invalidateOptionsMenu();

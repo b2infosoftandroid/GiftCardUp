@@ -1,6 +1,8 @@
 package com.b2infosoft.giftcardup.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -78,6 +80,29 @@ public class Login extends AppCompatActivity implements DMRResult {
             }
         });
         forgot_password = (TextView) findViewById(R.id.forgot_password_text);
+/*
+        forgot_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+                builder.setTitle("Forgot Password");
+                builder.setMessage("Do you want to forgot password?");
+                builder.setPositiveButton("Forgot", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.create().show();
+            }
+        });
+        */
         sign_up = (TextView) findViewById(R.id.sign_up_text);
         sign_up.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,6 +117,7 @@ public class Login extends AppCompatActivity implements DMRResult {
                 startActivity(new Intent(Login.this, ForgotPassword.class));
             }
         });
+
         initFB();
     }
 
@@ -164,7 +190,6 @@ public class Login extends AppCompatActivity implements DMRResult {
     }
 
     private void attemptLogin() {
-
         String uName = userName.getText().toString();
         String uPass = userPassword.getText().toString();
         userName.setError(null);
@@ -188,7 +213,12 @@ public class Login extends AppCompatActivity implements DMRResult {
         progress.show();
         dmrRequest.doPost(urls.getUserInfo(), map, this);
     }
-
+    private void forgotPasswordRequest(){
+        Map<String, String> map = new HashMap<>();
+        map.put(tags.USER_ACTION, tags.FORGOT_PASSWORD_REQUEST);
+        map.put(tags.USER_ID, "");
+        dmrRequest.doPost(urls.getUserInfo(), map, this);
+    }
     private void integrateWithFB(Map<String, String> map) {
         dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
             @Override
@@ -206,9 +236,7 @@ public class Login extends AppCompatActivity implements DMRResult {
                                         loginSuccess();
                                     }
                                 } else if (jsonObject.getInt(tags.USER_TYPE) == tags.NEW_USER) {
-                                    Log.d("WORK", "IN");
                                     if (jsonObject.has(tags.USER_ID)) {
-                                        Log.d("WORK", "IN 1");
                                         Intent intent = new Intent(Login.this, FBUserUpdate.class);
                                         intent.putExtra(tags.USER_ID, jsonObject.getString(tags.USER_ID));
                                         startActivity(intent);

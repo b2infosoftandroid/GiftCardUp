@@ -1,9 +1,11 @@
 package com.b2infosoft.giftcardup.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -20,7 +22,8 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
-import com.b2infosoft.giftcardup.app.Cart;
+import com.b2infosoft.giftcardup.app.GiftCardApp;
+import com.b2infosoft.giftcardup.model.Cart;
 import com.b2infosoft.giftcardup.app.Config;
 import com.b2infosoft.giftcardup.app.GiftCardUp;
 import com.b2infosoft.giftcardup.app.Notify;
@@ -30,7 +33,6 @@ import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.database.DBHelper;
 import com.b2infosoft.giftcardup.fragments.AvailableFund;
 import com.b2infosoft.giftcardup.fragments.BulkListing;
-import com.b2infosoft.giftcardup.fragments.Dashboard;
 import com.b2infosoft.giftcardup.fragments.Dashboard_1;
 import com.b2infosoft.giftcardup.fragments.MyListing;
 import com.b2infosoft.giftcardup.fragments.MyOrder;
@@ -44,6 +46,7 @@ import com.b2infosoft.giftcardup.model.CompanyCategory;
 import com.b2infosoft.giftcardup.model.GiftCard;
 import com.b2infosoft.giftcardup.model.User;
 import com.b2infosoft.giftcardup.model.UserBalance;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.services.MyServices;
 import com.b2infosoft.giftcardup.utils.Utils1;
 import com.b2infosoft.giftcardup.utils.Utils2;
@@ -68,8 +71,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class Main extends GiftCardUp implements DMRResult {
+public class Main extends GiftCardUp implements DMRResult,ConnectivityReceiver.ConnectivityReceiverListener {
     private final static String TAG = Main.class.getName();
+    private GiftCardApp app;
     private Cart cart;
     DMRRequest dmrRequest;
     Config config;
@@ -95,6 +99,7 @@ public class Main extends GiftCardUp implements DMRResult {
         notify = Notify.getInstance();
         config = Config.getInstance();
         dbHelper = new DBHelper(this);
+        app = (GiftCardApp) getApplicationContext();
     }
 
     public boolean isLoggedIn() {
@@ -110,8 +115,8 @@ public class Main extends GiftCardUp implements DMRResult {
         callbackManager = CallbackManager.Factory.create();
 
         setContentView(R.layout.activity_main);
-        cart = (Cart) getApplicationContext();
         init();
+        cart = app.getCart();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -139,15 +144,15 @@ public class Main extends GiftCardUp implements DMRResult {
             @Override
             public void onClick(View v) {
                 //startActivity(new Intent(Main.this, MyProfile.class));
-                startActivity(new Intent(Main.this, ProfileNew.class));
+                startActivity(new Intent(Main.this, ProfileNew_1.class));
             }
         });
         setNavigationMenu();
         updateMenuItemLeft(dbHelper.getCategories());
         replaceFragment(new Dashboard_1());
         if (active.isLogin()) {
-            if(getIntent().hasExtra(tags.SELECTED_FRAGMENTS)){
-                if(getIntent().getStringExtra(tags.SELECTED_FRAGMENTS).equals(tags.FRAGMENT_MY_ORDERS)){
+            if (getIntent().hasExtra(tags.SELECTED_FRAGMENTS)) {
+                if (getIntent().getStringExtra(tags.SELECTED_FRAGMENTS).equals(tags.FRAGMENT_MY_ORDERS)) {
                     replaceFragment(new MyOrder());
                 }
             }
@@ -165,6 +170,9 @@ public class Main extends GiftCardUp implements DMRResult {
                 if (checkedFB)
                     return;
                 checkedFB = true;
+                if(!isConnected()){
+                    return;
+                }
                 GraphRequest graphRequest = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
@@ -231,6 +239,10 @@ public class Main extends GiftCardUp implements DMRResult {
     }
 
     private void integrateWithFB(Map<String, String> map) {
+        if(!isConnected()){
+            return;
+        }
+
         dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
@@ -274,9 +286,12 @@ public class Main extends GiftCardUp implements DMRResult {
     }
 
     private void loadAvailableCartItems() {
+        if(!isConnected()){
+            return;
+        }
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.CHECK_CART_ITEMS);
-        map.put(tags.USER_ID, active.getUser().getUserId() + "");
+        map.put(tags.USER_ID, active.getUser().getUserId());
         dmrRequest.doPost(urls.getCartInfo(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
@@ -289,9 +304,11 @@ public class Main extends GiftCardUp implements DMRResult {
                                 for (int i = 0; i < array.length(); i++) {
                                     cart.addCartItem(GiftCard.fromJSON(array.getJSONObject(i)));
                                 }
+                                app.setCart(cart);
                             }
                         } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
                             cart.removeAll();
+                            app.setCart(cart);
                         }
                     }
                     invalidateOptionsMenu();
@@ -327,6 +344,10 @@ public class Main extends GiftCardUp implements DMRResult {
         super.onResume();
         if (active.getUser() != null)
             loadAvailableCartItems();
+
+        // register connection status listener
+        GiftCardApp.getInstance().setConnectivityListener(this);
+
         invalidateOptionsMenu();
         checkBackgroundServices();
         setNavigationMenu();
@@ -366,7 +387,8 @@ public class Main extends GiftCardUp implements DMRResult {
 
         MenuItem item1 = menu.findItem(R.id.action_cart_item);
         LayerDrawable icon1 = (LayerDrawable) item1.getIcon();
-
+        if (app != null)
+            cart = app.getCart();
         // Update LayerDrawable's BadgeDrawable
         Utils1.setBadgeCount(this, icon1, cart.getCartItemCount());
 
@@ -407,7 +429,10 @@ public class Main extends GiftCardUp implements DMRResult {
         switch (v.getId()) {
             case R.id.user_profile_icon:
                 //startActivity(new Intent(Main.this, MyProfile.class));
-                startActivity(new Intent(Main.this, ProfileNew.class));
+                //startActivity(new Intent(Main.this, ProfileNew.class));
+                if (active.isLogin()) {
+                    startActivity(new Intent(Main.this, ProfileNew_1.class));
+                }
                 break;
             default:
                 break;
@@ -421,6 +446,9 @@ public class Main extends GiftCardUp implements DMRResult {
 
     private void checkNotificationUnRead() {
         if (active.isLogin()) {
+            if(!isConnected()){
+                return;
+            }
             Map<String, String> map = new HashMap<>();
             map.put(tags.USER_ACTION, tags.GET_NOTIFICATIONS_UN_READ);
             map.put(tags.USER_ID, active.getUser().getUserId());
@@ -504,7 +532,7 @@ public class Main extends GiftCardUp implements DMRResult {
                     break;
                 case R.id.menu_item_my_account:
 //                    startActivity(new Intent(Main.this, MyProfile.class));
-                    startActivity(new Intent(Main.this,ProfileNew.class));
+                    startActivity(new Intent(Main.this, ProfileNew.class));
                     break;
                 case R.id.menu_item_my_orders:
                     replaceFragment(new MyOrder());
@@ -614,5 +642,31 @@ public class Main extends GiftCardUp implements DMRResult {
 
     private void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        showSnack(isConnected);
+    }
+    // Method to manually check connection status
+    private boolean isConnected() {
+         return ConnectivityReceiver.isConnected();
+    }
+    // Showing the status in Snackbar
+    private void showSnack(boolean isConnected) {
+        String message;
+        int color;
+        if (isConnected) {
+            message = "Good! Connected to Internet";
+            color = Color.WHITE;
+        } else {
+            message = "Sorry! Not connected to internet";
+            color = Color.RED;
+        }
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.toolbar), message, Snackbar.LENGTH_LONG);
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(color);
+        snackbar.show();
     }
 }

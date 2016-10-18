@@ -19,6 +19,7 @@ import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.activity.PaymentWithdrawalRequest;
 import com.b2infosoft.giftcardup.adapter.AvailableFundRecyclerViewAdapter;
 import com.b2infosoft.giftcardup.adapter.WithdrawalHistoryRecyclerViewAdapter;
+import com.b2infosoft.giftcardup.app.Alert;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
@@ -26,6 +27,7 @@ import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.listener.OnLoadMoreListener;
 import com.b2infosoft.giftcardup.model.EmptyBrand;
 import com.b2infosoft.giftcardup.model.GetWithdrawHistory;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 
@@ -42,6 +44,7 @@ import java.util.Map;
 public class AvailableFund extends Fragment {
 
     private final static String TAG = WithdrawalHistory.class.getName();
+    private Alert alert;
     private Urls urls;
     private Tags tags;
     private Active active;
@@ -59,6 +62,7 @@ public class AvailableFund extends Fragment {
     }
 
     private void init() {
+        alert = Alert.getInstance(getActivity());
         dmrRequest = DMRRequest.getInstance(getActivity(), TAG);
         urls = Urls.getInstance();
         tags = Tags.getInstance();
@@ -84,9 +88,16 @@ public class AvailableFund extends Fragment {
     }
 
     private void loadCards() {
+        if(!active.isLogin()){
+            return;
+        }
+        if(!isConnected()){
+            alert.showSnackIsConnected(isConnected());
+            return;
+        }
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.AVAILABLE_FUND);
-        map.put(tags.USER_ID, active.getUser().getUserId() + "");
+        map.put(tags.USER_ID, active.getUser().getUserId());
         dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
@@ -114,7 +125,7 @@ public class AvailableFund extends Fragment {
                                 setDataInRecycleView(cards);
                             }
                         } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
-                                frameLayout.setVisibility(View.VISIBLE);
+                            frameLayout.setVisibility(View.VISIBLE);
                         }
                     }
                 } catch (JSONException e) {
@@ -127,7 +138,7 @@ public class AvailableFund extends Fragment {
             public void onError(VolleyError volleyError) {
                 volleyError.printStackTrace();
                 if (volleyError.getMessage() != null)
-                    Log.e(TAG,volleyError.getMessage());
+                    Log.e(TAG, volleyError.getMessage());
             }
         });
     }
@@ -138,13 +149,17 @@ public class AvailableFund extends Fragment {
             adapter.notifyItemRemoved(cardList.size());
             isLoading = false;
         }
-        Log.d("search",cards.size() + "");
+        Log.d("search", cards.size() + "");
         if (cards.size() > 0)
             cardList.addAll(cards);
         if (cardList.size() == 0) {
             cardList.add(new EmptyBrand());
         }
         adapter.notifyDataSetChanged();
+    }
+    // Method to manually check connection status
+    private boolean isConnected() {
+        return ConnectivityReceiver.isConnected();
     }
 
 }

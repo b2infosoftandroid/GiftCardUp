@@ -11,6 +11,7 @@
     tools:showIn="@layout/activity_profile_new">
 
     <android.support.v7.widget.CardView
+        android:id="@+id/balance_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         card_view:cardCornerRadius="0dp"
@@ -127,7 +128,7 @@
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="none">
@@ -458,5 +459,5 @@
                 </LinearLayout>
             </android.support.v7.widget.CardView>
         </LinearLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

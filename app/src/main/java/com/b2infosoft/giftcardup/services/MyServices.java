@@ -15,7 +15,7 @@ public class MyServices {
         if (!Validation.isServiceRunning(context, CartStatus.class.getName())) {
             context.startService(new Intent(context, CartStatus.class));
         } else {
-            showMessage(context);
+            //showMessage(context);
         }
     }
     private static void showMessage(Context context) {

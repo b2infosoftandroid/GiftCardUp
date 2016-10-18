@@ -17,13 +17,13 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.activity.Main;
-import com.b2infosoft.giftcardup.app.Cart;
+import com.b2infosoft.giftcardup.app.GiftCardApp;
+import com.b2infosoft.giftcardup.model.Cart;
 import com.b2infosoft.giftcardup.app.Config;
 import com.b2infosoft.giftcardup.app.Format;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
-import com.b2infosoft.giftcardup.custom.AlertBox;
 import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.model.CartSummary;
 import com.b2infosoft.giftcardup.model.EmptyCart;
@@ -41,12 +41,13 @@ import java.util.List;
 import java.util.Map;
 
 public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private GiftCardApp app;
     private Cart cart;
     private final String TAG = CartAdapter.class.getName();
     private Urls urls;
     private Tags tags;
     private Active active;
-    DMRRequest dmrRequest;
+    private DMRRequest dmrRequest;
     private Progress progress;
     private Context context;
     private Format format;
@@ -55,7 +56,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final int VIEW_CART_ITEM = 0;
     private final int VIEW_CART_SUMMARY = 1;
     private final int VIEW_CART_EMPTY = 2;
-    Button button;
+    private Button button;
 
     public CartAdapter(Context context, List<Object> cardInfoList, Button button) {
         this.context = context;
@@ -67,7 +68,8 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         active = Active.getInstance(context);
         dmrRequest = DMRRequest.getInstance(context, TAG);
         progress = new Progress(context);
-        cart = (Cart) context.getApplicationContext();
+        app = (GiftCardApp) context.getApplicationContext();
+        cart = app.getCart();
         this.button = button;
     }
 
@@ -176,6 +178,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                                     for (int i = 0; i < array.length(); i++) {
                                                         cart.addCartItem(GiftCard.fromJSON(array.getJSONObject(i)));
                                                     }
+                                                    app.setCart(cart);
                                                     showMessage("Successfully remove to Cart ");
                                                     cardInfoList.remove(card);
                                                     isLastCard();

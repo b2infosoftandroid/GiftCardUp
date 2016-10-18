@@ -12,7 +12,8 @@ import android.widget.Button;
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.adapter.CheckOutAdapter;
-import com.b2infosoft.giftcardup.app.Cart;
+import com.b2infosoft.giftcardup.app.GiftCardApp;
+import com.b2infosoft.giftcardup.model.Cart;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
@@ -36,6 +37,7 @@ import java.util.Map;
 
 public class CheckOut extends AppCompatActivity implements DMRResult {
     public static final String TAG = CheckOut.class.getName();
+    private GiftCardApp app;
     private Urls urls;
     private Tags tags;
     private Active active;
@@ -53,7 +55,8 @@ public class CheckOut extends AppCompatActivity implements DMRResult {
         urls = Urls.getInstance();
         active = Active.getInstance(this);
         cardList = new ArrayList<>();
-        cart = (Cart) getApplicationContext();
+        app  = (GiftCardApp)getApplicationContext();
+        cart = app.getCart();
         dbHelper = new DBHelper(this);
         controlPanel = dbHelper.getControlPanel();
     }

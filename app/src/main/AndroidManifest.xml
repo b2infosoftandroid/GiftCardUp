@@ -3,9 +3,10 @@
     package="com.b2infosoft.giftcardup">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".app.Cart"
+        android:name=".app.GiftCardApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -102,15 +103,6 @@
             android:label="PaymentWithdrawalRequest"
             android:windowSoftInputMode="adjustResize" />
 
-        <receiver
-            android:name=".recevier.MyReceiver"
-            android:enabled="true"
-            android:exported="true" />
-
-        <service
-            android:name=".services.CartStatus"
-            android:enabled="true"
-            android:exported="true" />
 
         <activity
             android:name=".activity.CheckOut"
@@ -133,8 +125,7 @@
         <activity
             android:name=".activity.PayAvailableFun"
             android:label="Payment"
-            android:windowSoftInputMode="adjustResize"
-            >
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.Payments" />
@@ -142,8 +133,7 @@
         <activity
             android:name=".activity.PayCreditDebit"
             android:label="Payment"
-            android:windowSoftInputMode="adjustResize"
-            >
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.Payments" />
@@ -151,8 +141,7 @@
         <activity
             android:name=".activity.PayPayPal"
             android:label="Payment"
-            android:windowSoftInputMode="adjustResize"
-            >
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.Payments" />
@@ -160,8 +149,7 @@
         <activity
             android:name=".activity.PlaceOrder"
             android:label="Place Order"
-            android:windowSoftInputMode="adjustResize"
-            />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -184,8 +172,15 @@
             android:name=".activity.ProfileNew"
             android:label="@string/title_activity_profile_new"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize"
-            >
+            android:windowSoftInputMode="adjustResize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.Main" />
+        </activity>
+        <activity
+            android:name=".activity.ProfileNew_1"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.Main" />
@@ -206,11 +201,39 @@
         <activity android:name=".activity.UpdateAccountInfo1" />
         <activity
             android:name=".activity.NotificationActivity"
-            android:label="Notifications"
-            >
+            android:label="Notifications">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.Main" />
         </activity>
+        <activity android:name=".activity.OtpConfirm">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.ForgotPassword" />
+        </activity>
+        <activity android:name=".activity.PasswordChange">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.Login" />
+        </activity>
+
+
+        <receiver
+            android:name=".recevier.MyReceiver"
+            android:enabled="true"
+            android:exported="true" />
+        <receiver
+            android:name=".services.ConnectivityReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".services.CartStatus"
+            android:enabled="true"
+            android:exported="true" />
     </application>
+
 </manifest>

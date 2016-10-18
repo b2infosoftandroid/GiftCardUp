@@ -2,9 +2,11 @@ package com.b2infosoft.giftcardup.fragments;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,14 +17,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.adapter.CardAdapter_1;
+import com.b2infosoft.giftcardup.app.Alert;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.model.CompanyBrand;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 import com.paginate.Paginate;
@@ -38,6 +43,7 @@ import java.util.Map;
 
 public class Dashboard_1 extends Fragment implements Paginate.Callbacks {
     private static final String TAG = Dashboard_1.class.getName();
+    private Alert alert;
     private Urls urls;
     private Tags tags;
     private Active active;
@@ -48,6 +54,7 @@ public class Dashboard_1 extends Fragment implements Paginate.Callbacks {
     List<Object> cardList;
     private OnFragmentDashboard mListener;
     private View data_available_view;
+
     /*    PAGINATION START      */
     boolean isLoading = false;
     boolean isMore = false;
@@ -65,6 +72,7 @@ public class Dashboard_1 extends Fragment implements Paginate.Callbacks {
     }
 
     private void init() {
+        alert = Alert.getInstance(getActivity());
         dmrRequest = DMRRequest.getInstance(getActivity(), TAG);
         urls = Urls.getInstance();
         tags = Tags.getInstance();
@@ -127,7 +135,6 @@ public class Dashboard_1 extends Fragment implements Paginate.Callbacks {
         }
     };
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -178,6 +185,10 @@ public class Dashboard_1 extends Fragment implements Paginate.Callbacks {
     */
     private synchronized void loadCards() {
         if (isLoading()) {
+            return;
+        }
+        if(!isConnected()){
+            alert.showSnackIsConnected(isConnected());
             return;
         }
         String s = actionButton.getText().toString();
@@ -274,4 +285,9 @@ public class Dashboard_1 extends Fragment implements Paginate.Callbacks {
     public interface OnFragmentDashboard {
         void onDashboard(Uri uri);
     }
+    // Method to manually check connection status
+    private boolean isConnected() {
+        return ConnectivityReceiver.isConnected();
+    }
+
 }

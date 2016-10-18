@@ -2,7 +2,6 @@ package com.b2infosoft.giftcardup.activity;
 
 import android.content.Intent;
 import android.graphics.drawable.LayerDrawable;
-import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,7 +14,8 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.adapter.CompanyCardAdapter;
-import com.b2infosoft.giftcardup.app.Cart;
+import com.b2infosoft.giftcardup.app.GiftCardApp;
+import com.b2infosoft.giftcardup.model.Cart;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CompanyCard extends AppCompatActivity {
+    private GiftCardApp app;
     private Cart cart;
     private static final String TAG = CompanyCard.class.getName();
     private Urls urls;
@@ -57,7 +58,8 @@ public class CompanyCard extends AppCompatActivity {
         urls = Urls.getInstance();
         active = Active.getInstance(this);
         cardList = new ArrayList<>();
-        cart = (Cart) getApplicationContext();
+        app = (GiftCardApp) getApplicationContext();
+        cart = app.getCart();
     }
 
     @Override
@@ -84,7 +86,7 @@ public class CompanyCard extends AppCompatActivity {
                 }
             }
         });
-        Toast.makeText(this,"FIRST",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "FIRST", Toast.LENGTH_SHORT).show();
         loadCards();
     }
 
@@ -120,9 +122,11 @@ public class CompanyCard extends AppCompatActivity {
                                 for (int i = 0; i < array.length(); i++) {
                                     cart.addCartItem(GiftCard.fromJSON(array.getJSONObject(i)));
                                 }
+                                app.setCart(cart);
                             }
                         } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
                             cart.removeAll();
+                            app.setCart(cart);
                         }
                     }
                     invalidateOptionsMenu();
@@ -154,11 +158,12 @@ public class CompanyCard extends AppCompatActivity {
 
         MenuItem item1 = menu.findItem(R.id.action_cart_item);
         LayerDrawable icon1 = (LayerDrawable) item1.getIcon();
+        if (app != null)
+            cart = app.getCart();
 
         // Update LayerDrawable's BadgeDrawable
         Utils1.setBadgeCount(this, icon1, cart.getCartItemCount());
         return true;
-
     }
 
     @Override

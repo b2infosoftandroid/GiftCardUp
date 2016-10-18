@@ -63,4 +63,11 @@
     <dimen name="header_height">250dp</dimen>
     <dimen name="min_header_height">250dp</dimen>
 
+    <dimen name="header_view_start_margin_left">10dp</dimen>
+    <dimen name="header_view_end_margin_left">10dp</dimen>
+    <dimen name="header_view_start_margin_bottom">10dp</dimen>
+    <dimen name="header_view_end_margin_right">10dp</dimen>
+    <dimen name="header_view_end_text_size">18sp</dimen>
+    <dimen name="header_view_start_text_size">36sp</dimen>
+
 </resources>

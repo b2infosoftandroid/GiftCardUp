@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,14 +22,14 @@ import com.b2infosoft.giftcardup.activity.CompanyCard;
 import com.b2infosoft.giftcardup.activity.CompanyCard_1;
 import com.b2infosoft.giftcardup.activity.Login;
 import com.b2infosoft.giftcardup.activity.ShoppingCart;
-import com.b2infosoft.giftcardup.app.Cart;
+import com.b2infosoft.giftcardup.app.GiftCardApp;
+import com.b2infosoft.giftcardup.model.Cart;
 import com.b2infosoft.giftcardup.app.Config;
 import com.b2infosoft.giftcardup.app.Format;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.Progress;
-import com.b2infosoft.giftcardup.listener.OnLoadMoreListener;
 import com.b2infosoft.giftcardup.model.CompanyBrand;
 import com.b2infosoft.giftcardup.model.GiftCard;
 import com.b2infosoft.giftcardup.services.MyServices;
@@ -60,7 +59,7 @@ public class CompanyCardAdapter_1 extends RecyclerView.Adapter<RecyclerView.View
     private List<GiftCard> cardInfoList;
     private Config config;
     private CompanyBrand companyBrand;
-
+    private GiftCardApp app;
     public CompanyCardAdapter_1(Context context, List<GiftCard> cardInfoList, CompanyBrand companyBrand) {
         this.context = context;
         this.cardInfoList = cardInfoList;
@@ -73,6 +72,7 @@ public class CompanyCardAdapter_1 extends RecyclerView.Adapter<RecyclerView.View
         active = Active.getInstance(context);
         format = Format.getInstance();
         progress = new Progress(context);
+        app = (GiftCardApp)context.getApplicationContext();
     }
 
     public class CardHolder extends RecyclerView.ViewHolder {
@@ -164,13 +164,13 @@ public class CompanyCardAdapter_1 extends RecyclerView.Adapter<RecyclerView.View
             cardHolder.add_to_cart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final Cart cart = (Cart) context.getApplicationContext();
+                    final Cart cart = app.getCart();
                     String cardAction = cardHolder.add_to_cart.getText().toString();
                     if(!active.isLogin()){
                         context.startActivity(new Intent(context, Login.class));
                         return;
                     }
-                    if (cardAction.equalsIgnoreCase("Add to cart")) {
+                    if (cardAction.equalsIgnoreCase("ADD")) {
                         final Map<String, String> map = new HashMap<>();
                         map.put(tags.USER_ACTION, tags.ADD_CART_ITEM_GIFT_CARD);
                         map.put(tags.USER_ID, active.getUser().getUserId());
@@ -188,7 +188,8 @@ public class CompanyCardAdapter_1 extends RecyclerView.Adapter<RecyclerView.View
                                                 cart.addCartItem(giftCard);
                                             }
                                             showMessage("Successfully Added to Cart");
-                                            cardHolder.add_to_cart.setText("Remove from cart");
+                                            cardHolder.add_to_cart.setText("REMOVE");
+                                            app.setCart(cart);
                                             ((CompanyCard_1) context).invalidateOptionsMenu();
                                             MyServices.startLeftCartTimeService(context);
                                         } else if (jsonObject.getInt(tags.SUCCESS) == tags.SUSPEND) {
@@ -210,7 +211,7 @@ public class CompanyCardAdapter_1 extends RecyclerView.Adapter<RecyclerView.View
                                     Log.e(TAG,volleyError.getMessage());
                             }
                         });
-                    } else if (cardAction.equalsIgnoreCase("remove to cart")) {
+                    } else if (cardAction.equalsIgnoreCase("REMOVE")) {
                         final Map<String, String> map = new HashMap<>();
                         map.put(tags.USER_ACTION, tags.REMOVE_CART_ITEM_GIFT_CARD);
                         map.put(tags.USER_ID, active.getUser().getUserId());
@@ -226,8 +227,9 @@ public class CompanyCardAdapter_1 extends RecyclerView.Adapter<RecyclerView.View
                                             for (int i = 0; i < array.length(); i++) {
                                                 cart.addCartItem(GiftCard.fromJSON(array.getJSONObject(i)));
                                             }
-                                            cardHolder.add_to_cart.setText("Add to cart");
+                                            cardHolder.add_to_cart.setText("ADD");
                                             showMessage("Successfully remove to Cart ");
+                                            app.setCart(cart);
                                             ((Activity) context).invalidateOptionsMenu();
                                             MyServices.startLeftCartTimeService(context);
                                         } else if (jsonObject.getInt(tags.SUCCESS) == tags.SUSPEND) {
@@ -255,7 +257,7 @@ public class CompanyCardAdapter_1 extends RecyclerView.Adapter<RecyclerView.View
             cardHolder.card_buy_now.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final Cart cart = (Cart) context.getApplicationContext();
+                    final Cart cart = app.getCart();
                     if(!active.isLogin()){
                         context.startActivity(new Intent(context, Login.class));
                         return;
@@ -277,6 +279,7 @@ public class CompanyCardAdapter_1 extends RecyclerView.Adapter<RecyclerView.View
                                                 cart.addCartItem(giftCard);
                                             }
                                             showMessage("Successfully Added to Cart");
+                                            app.setCart(cart);
                                             ((CompanyCard) context).invalidateOptionsMenu();
                                             MyServices.startLeftCartTimeService(context);
                                             context.startActivity(new Intent(context, ShoppingCart.class));

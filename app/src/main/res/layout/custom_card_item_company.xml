@@ -348,7 +348,8 @@
                         android:layout_height="wrap_content"
                         android:layout_toLeftOf="@+id/divider"
                         android:background="@drawable/button_empty_background"
-                        android:text="ADD TO CART"
+                        android:text="ADD"
+                        android:drawableLeft="@drawable/ic_cart_item_blue"
                         android:textColor="@color/app_background" />
 
                     <View

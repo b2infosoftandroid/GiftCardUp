@@ -1,5 +1,6 @@
 package com.b2infosoft.giftcardup.activity;
 
+import android.content.Intent;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,16 +16,14 @@ import android.view.View;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
-import com.b2infosoft.giftcardup.adapter.CardAdapter;
 import com.b2infosoft.giftcardup.adapter.CardAdapter_1;
-import com.b2infosoft.giftcardup.app.Cart;
+import com.b2infosoft.giftcardup.app.GiftCardApp;
+import com.b2infosoft.giftcardup.model.Cart;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
-import com.b2infosoft.giftcardup.listener.OnLoadMoreListener;
 import com.b2infosoft.giftcardup.model.CompanyBrand;
 import com.b2infosoft.giftcardup.model.CompanyCategory;
-import com.b2infosoft.giftcardup.model.EmptyBrand;
 import com.b2infosoft.giftcardup.utils.Utils1;
 import com.b2infosoft.giftcardup.utils.Utils2;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
@@ -40,7 +39,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Categories_1 extends AppCompatActivity implements DMRResult,Paginate.Callbacks{
+public class Categories_1 extends AppCompatActivity implements DMRResult, Paginate.Callbacks {
+    private GiftCardApp app;
     private Cart cart;
     private static final String TAG = Categories_1.class.getName();
     private Urls urls;
@@ -71,8 +71,10 @@ public class Categories_1 extends AppCompatActivity implements DMRResult,Paginat
         active = Active.getInstance(this);
         cardList = new ArrayList<>();
         handler = new Handler();
-        cart = (Cart) getApplicationContext();
+        app = (GiftCardApp) getApplicationContext();
+        cart = app.getCart();
     }
+
     private void setupPagination() {
         if (paginate != null) {
             paginate.unbind();
@@ -150,6 +152,11 @@ public class Categories_1 extends AppCompatActivity implements DMRResult,Paginat
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
+            case R.id.action_cart_item:
+                startActivity(new Intent(this, ShoppingCart.class));
+                return true;
+            case R.id.action_notifications:
+                startActivity(new Intent(this, NotificationActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
@@ -177,7 +184,7 @@ public class Categories_1 extends AppCompatActivity implements DMRResult,Paginat
     }
   */
 
-    private synchronized   void loadCards() {
+    private synchronized void loadCards() {
         if (isLoading()) {
             return;
         }
@@ -231,7 +238,7 @@ public class Categories_1 extends AppCompatActivity implements DMRResult,Paginat
                     }*/
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Log.e(TAG,e.getMessage());
+                    Log.e(TAG, e.getMessage());
                 }
             }
 
@@ -240,7 +247,7 @@ public class Categories_1 extends AppCompatActivity implements DMRResult,Paginat
                 isLoading = true;
                 volleyError.printStackTrace();
                 if (volleyError.getMessage() != null)
-                    Log.e(TAG,volleyError.getMessage());
+                    Log.e(TAG, volleyError.getMessage());
             }
         });
     }
@@ -263,6 +270,7 @@ public class Categories_1 extends AppCompatActivity implements DMRResult,Paginat
         Utils1.setBadgeCount(this, icon1, cart.getCartItemCount());
         return true;
     }
+
     private void checkNotificationUnRead() {
         if (active.isLogin()) {
             Map<String, String> map = new HashMap<>();
@@ -297,5 +305,4 @@ public class Categories_1 extends AppCompatActivity implements DMRResult,Paginat
         if (volleyError.getMessage() != null)
             Log.e(TAG, volleyError.getMessage());
     }
-
 }

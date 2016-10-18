@@ -12,17 +12,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
-import com.b2infosoft.giftcardup.adapter.CompanyCardAdapter;
 import com.b2infosoft.giftcardup.adapter.CompanyCardAdapter_1;
-import com.b2infosoft.giftcardup.app.Cart;
+import com.b2infosoft.giftcardup.app.GiftCardApp;
+import com.b2infosoft.giftcardup.model.Cart;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
-import com.b2infosoft.giftcardup.listener.OnLoadMoreListener;
 import com.b2infosoft.giftcardup.model.CompanyBrand;
 import com.b2infosoft.giftcardup.model.GiftCard;
 import com.b2infosoft.giftcardup.utils.Utils1;
@@ -41,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CompanyCard_1 extends AppCompatActivity implements DMRResult, Paginate.Callbacks {
+    private GiftCardApp app;
     private Cart cart;
     private static final String TAG = CompanyCard_1.class.getName();
     private Urls urls;
@@ -70,7 +69,8 @@ public class CompanyCard_1 extends AppCompatActivity implements DMRResult, Pagin
         urls = Urls.getInstance();
         active = Active.getInstance(this);
         cardList = new ArrayList<>();
-        cart = (Cart) getApplicationContext();
+        app = (GiftCardApp) getApplicationContext();
+        cart = app.getCart();
         handler = new Handler();
     }
 
@@ -176,9 +176,11 @@ public class CompanyCard_1 extends AppCompatActivity implements DMRResult, Pagin
                                 for (int i = 0; i < array.length(); i++) {
                                     cart.addCartItem(GiftCard.fromJSON(array.getJSONObject(i)));
                                 }
+                                app.setCart(cart);
                             }
                         } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
                             cart.removeAll();
+                            app.setCart(cart);
                         }
                     }
                     invalidateOptionsMenu();
@@ -210,7 +212,8 @@ public class CompanyCard_1 extends AppCompatActivity implements DMRResult, Pagin
 
         MenuItem item1 = menu.findItem(R.id.action_cart_item);
         LayerDrawable icon1 = (LayerDrawable) item1.getIcon();
-
+        if (app != null)
+            cart = app.getCart();
         // Update LayerDrawable's BadgeDrawable
         Utils1.setBadgeCount(this, icon1, cart.getCartItemCount());
         return true;

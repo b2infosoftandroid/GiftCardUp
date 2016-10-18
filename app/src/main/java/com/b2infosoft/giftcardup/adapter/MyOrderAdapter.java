@@ -2,10 +2,8 @@ package com.b2infosoft.giftcardup.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,12 +14,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
-import com.b2infosoft.giftcardup.activity.Main;
-import com.b2infosoft.giftcardup.app.Cart;
+import com.b2infosoft.giftcardup.app.GiftCardApp;
+import com.b2infosoft.giftcardup.model.Cart;
 import com.b2infosoft.giftcardup.app.Config;
 import com.b2infosoft.giftcardup.app.Format;
 import com.b2infosoft.giftcardup.app.Tags;
@@ -29,16 +26,12 @@ import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.AlertBox;
 import com.b2infosoft.giftcardup.custom.Progress;
-import com.b2infosoft.giftcardup.model.CartSummary;
 import com.b2infosoft.giftcardup.model.EmptyBrand;
-import com.b2infosoft.giftcardup.model.EmptyCart;
-import com.b2infosoft.giftcardup.model.GiftCard;
 import com.b2infosoft.giftcardup.model.Order;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 import com.b2infosoft.giftcardup.volly.LruBitmapCache;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -47,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 
 public class MyOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private GiftCardApp app;
     private Cart cart;
     private final String TAG = MyOrderAdapter.class.getName();
     private Urls urls;
@@ -72,7 +66,8 @@ public class MyOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         active = Active.getInstance(context);
         dmrRequest = DMRRequest.getInstance(context, TAG);
         progress = new Progress(context);
-        cart = (Cart) context.getApplicationContext();
+        app = (GiftCardApp) context.getApplicationContext();
+        cart = app.getCart();
     }
 
     public class CardHolder extends RecyclerView.ViewHolder {
