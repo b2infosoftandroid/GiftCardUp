@@ -28,6 +28,7 @@ import com.b2infosoft.giftcardup.custom.AlertBox;
 import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.filters.EditTextMaxFloat;
 import com.b2infosoft.giftcardup.model.GiftCard;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 import com.google.gson.Gson;
@@ -440,5 +441,8 @@ public class EditGiftCard extends AppCompatActivity implements TextWatcher, View
 
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+    private boolean isConnected() {
+         return ConnectivityReceiver.isConnected();
     }
 }

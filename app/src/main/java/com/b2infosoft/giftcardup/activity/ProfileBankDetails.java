@@ -17,6 +17,7 @@ import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.model.BankInfo;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 
@@ -113,5 +114,8 @@ public class ProfileBankDetails extends AppCompatActivity {
                     Log.e(TAG,volleyError.getMessage());
             }
         });
+    }
+    private boolean isConnected() {
+        return ConnectivityReceiver.isConnected();
     }
 }

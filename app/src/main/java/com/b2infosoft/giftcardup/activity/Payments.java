@@ -11,6 +11,7 @@ import android.widget.RadioButton;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.model.OrderSummery;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 
 public class Payments extends AppCompatActivity implements View.OnClickListener {
     private Tags tags;
@@ -81,5 +82,8 @@ public class Payments extends AppCompatActivity implements View.OnClickListener 
                 }
                 break;
         }
+    }
+    private boolean isConnected() {
+        return ConnectivityReceiver.isConnected();
     }
 }

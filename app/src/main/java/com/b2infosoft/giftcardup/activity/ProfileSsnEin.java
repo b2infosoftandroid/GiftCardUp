@@ -28,6 +28,7 @@ import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.AlertBox;
 import com.b2infosoft.giftcardup.model.Approve;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.urlconnection.MultipartUtility;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
@@ -248,5 +249,8 @@ public class ProfileSsnEin extends AppCompatActivity implements DMRResult {
             super.onPostExecute(s);
 
         }
+    }
+    private boolean isConnected() {
+        return ConnectivityReceiver.isConnected();
     }
 }

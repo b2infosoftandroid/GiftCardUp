@@ -33,6 +33,7 @@ import com.b2infosoft.giftcardup.fragments.profile.SsnEin;
 import com.b2infosoft.giftcardup.fragments.profile.SsnEin1;
 import com.b2infosoft.giftcardup.model.Approve;
 import com.b2infosoft.giftcardup.model.User;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.urlconnection.MultipartUtility;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
@@ -335,5 +336,8 @@ public class MyProfile extends AppCompatActivity implements Identification.OnFra
             }
             return "";
         }
+    }
+    private boolean isConnected() {
+         return ConnectivityReceiver.isConnected();
     }
 }

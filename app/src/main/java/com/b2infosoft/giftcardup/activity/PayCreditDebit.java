@@ -23,6 +23,7 @@ import com.b2infosoft.giftcardup.credential.KeyDetails;
 import com.b2infosoft.giftcardup.custom.AlertBox;
 import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.model.OrderSummery;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 import com.stripe.android.Stripe;
@@ -275,5 +276,8 @@ public class PayCreditDebit extends AppCompatActivity implements PaymentForm, DM
         } catch (NumberFormatException e) {
             return 0;
         }
+    }
+    private boolean isConnected() {
+        return ConnectivityReceiver.isConnected();
     }
 }

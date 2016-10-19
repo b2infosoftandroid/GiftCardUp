@@ -20,6 +20,7 @@ import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.AlertBox;
 import com.b2infosoft.giftcardup.model.User;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 
@@ -29,7 +30,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AddSSN extends AppCompatActivity  implements DMRResult{
+public class AddSSN extends AppCompatActivity implements DMRResult {
     private final static String TAG = AddSSN.class.getName();
     private Active active;
     private Tags tags;
@@ -38,35 +39,37 @@ public class AddSSN extends AppCompatActivity  implements DMRResult{
     private Intent intent;
 
     private EditText ssn_ein_no;
-    private RadioButton id_type_ssn,id_type_ein;
+    private RadioButton id_type_ssn, id_type_ein;
     private RadioGroup radioGroup;
-    private Button cancel,save;
+    private Button cancel, save;
+
     private void init() {
         tags = Tags.getInstance();
         active = Active.getInstance(getApplicationContext());
         urls = Urls.getInstance();
-        dmrRequest = DMRRequest.getInstance(this,TAG);
+        dmrRequest = DMRRequest.getInstance(this, TAG);
         intent = new Intent(this, MyProfile.class);
         intent.putExtra(tags.SELECTED_TAB, 2);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         init();
         setContentView(R.layout.activity_add_ssn);
-        ssn_ein_no = (EditText)findViewById(R.id.ssn_ein_no);
-        radioGroup = (RadioGroup)findViewById(R.id.radio_group);
-        id_type_ssn = (RadioButton)findViewById(R.id.id_type_ssn);
-        id_type_ein = (RadioButton)findViewById(R.id.id_type_ein);
-        cancel = (Button)findViewById(R.id.bank_cancel_btn);
+        ssn_ein_no = (EditText) findViewById(R.id.ssn_ein_no);
+        radioGroup = (RadioGroup) findViewById(R.id.radio_group);
+        id_type_ssn = (RadioButton) findViewById(R.id.id_type_ssn);
+        id_type_ein = (RadioButton) findViewById(R.id.id_type_ein);
+        cancel = (Button) findViewById(R.id.bank_cancel_btn);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                   finish();
+                finish();
             }
         });
-        save = (Button)findViewById(R.id.bank_save_btn);
+        save = (Button) findViewById(R.id.bank_save_btn);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,13 +81,13 @@ public class AddSSN extends AppCompatActivity  implements DMRResult{
                     idType = "EIN";
                 }
 
-                Map<String,String> map = new HashMap<String, String>();
-                map.put(tags.USER_ACTION,tags.ADD_IDENTIFICATION_SSN);
+                Map<String, String> map = new HashMap<String, String>();
+                map.put(tags.USER_ACTION, tags.ADD_IDENTIFICATION_SSN);
                 map.put(tags.USER_ID, active.getUser().getUserId() + "");
                 map.put(tags.SSN_EIN, ssnName);
                 map.put(tags.ID_TYPE, idType);
 
-                dmrRequest.doPost(urls.getUserInfo(),map,AddSSN.this);
+                dmrRequest.doPost(urls.getUserInfo(), map, AddSSN.this);
 
             }
         });
@@ -92,7 +95,7 @@ public class AddSSN extends AppCompatActivity  implements DMRResult{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 //NavUtils.navigateUpFromSameTask(this);
                 this.onBackPressed();
@@ -115,8 +118,8 @@ public class AddSSN extends AppCompatActivity  implements DMRResult{
                     viewBlank();
 
                 } else if (success == tags.FAIL) {
-                    String message = "" ;
-                    if(jsonObject.has(tags.MESSAGE)){
+                    String message = "";
+                    if (jsonObject.has(tags.MESSAGE)) {
                         message = jsonObject.getString(tags.MESSAGE);
                     }
                     AlertBox box = new AlertBox(this);
@@ -135,11 +138,15 @@ public class AddSSN extends AppCompatActivity  implements DMRResult{
     public void onError(VolleyError volleyError) {
         volleyError.printStackTrace();
         if (volleyError.getMessage() != null)
-            Log.e(TAG,volleyError.getMessage());
+            Log.e(TAG, volleyError.getMessage());
     }
 
-    private void viewBlank(){
+    private void viewBlank() {
         ssn_ein_no.setText("");
         radioGroup.clearCheck();
+    }
+
+    private boolean isConnected() {
+        return ConnectivityReceiver.isConnected();
     }
 }

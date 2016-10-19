@@ -23,6 +23,7 @@ import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.model.CompanyBrand;
 import com.b2infosoft.giftcardup.model.GiftCard;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.utils.Utils1;
 import com.b2infosoft.giftcardup.utils.Utils2;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
@@ -362,5 +363,9 @@ public class CompanyCard_1 extends AppCompatActivity implements DMRResult, Pagin
         volleyError.printStackTrace();
         if (volleyError.getMessage() != null)
             Log.e(TAG, volleyError.getMessage());
+    }
+
+    private boolean isConnected() {
+        return ConnectivityReceiver.isConnected();
     }
 }

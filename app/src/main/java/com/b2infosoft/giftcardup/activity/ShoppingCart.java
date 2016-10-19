@@ -27,6 +27,7 @@ import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.model.CartSummary;
 import com.b2infosoft.giftcardup.model.EmptyCart;
 import com.b2infosoft.giftcardup.model.GiftCard;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 
@@ -212,5 +213,8 @@ public class ShoppingCart extends AppCompatActivity implements View.OnClickListe
 
     private void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+    private boolean isConnected() {
+        return ConnectivityReceiver.isConnected();
     }
 }

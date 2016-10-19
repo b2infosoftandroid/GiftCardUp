@@ -24,6 +24,7 @@ import com.b2infosoft.giftcardup.model.ControlPanel;
 import com.b2infosoft.giftcardup.model.GiftCard;
 import com.b2infosoft.giftcardup.model.OrderSummery;
 import com.b2infosoft.giftcardup.model.User;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 
@@ -49,13 +50,14 @@ public class CheckOut extends AppCompatActivity implements DMRResult {
     DBHelper dbHelper;
     ControlPanel controlPanel;
     Button action_continue;
+
     private void init() {
         tags = Tags.getInstance();
         dmrRequest = DMRRequest.getInstance(this, TAG);
         urls = Urls.getInstance();
         active = Active.getInstance(this);
         cardList = new ArrayList<>();
-        app  = (GiftCardApp)getApplicationContext();
+        app = (GiftCardApp) getApplicationContext();
         cart = app.getCart();
         dbHelper = new DBHelper(this);
         controlPanel = dbHelper.getControlPanel();
@@ -68,7 +70,7 @@ public class CheckOut extends AppCompatActivity implements DMRResult {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         init();
-        action_continue = (Button)findViewById(R.id.action_continue);
+        action_continue = (Button) findViewById(R.id.action_continue);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         //  refreshShoppingCartItemList();
@@ -117,7 +119,7 @@ public class CheckOut extends AppCompatActivity implements DMRResult {
     public void onError(VolleyError volleyError) {
         volleyError.printStackTrace();
         if (volleyError.getMessage() != null)
-            Log.e(TAG,volleyError.getMessage());
+            Log.e(TAG, volleyError.getMessage());
     }
 
     private void refreshShoppingCartItemList(ContactInformation information) {
@@ -130,9 +132,13 @@ public class CheckOut extends AppCompatActivity implements DMRResult {
         OrderSummery orderSummery = new OrderSummery();
         orderSummery.setPrice(summary.getValue());
         orderSummery.setShipping(Float.parseFloat(controlPanel.getShippingCharge()));
-        orderSummery.setDefaultShipping(cart.getCartItemList(),"First Class", Float.parseFloat(controlPanel.getFirstClassPrice()));
+        orderSummery.setDefaultShipping(cart.getCartItemList(), "First Class", Float.parseFloat(controlPanel.getFirstClassPrice()));
         cartList.add(orderSummery);
-        adapter = new CheckOutAdapter(this, cartList,action_continue);
+        adapter = new CheckOutAdapter(this, cartList, action_continue);
         recyclerView.setAdapter(adapter);
+    }
+
+    private boolean isConnected() {
+        return ConnectivityReceiver.isConnected();
     }
 }

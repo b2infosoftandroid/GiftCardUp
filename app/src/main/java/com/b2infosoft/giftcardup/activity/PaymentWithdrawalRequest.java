@@ -22,6 +22,7 @@ import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.model.BankInfo;
 import com.b2infosoft.giftcardup.model.GetWithdrawHistory;
 import com.b2infosoft.giftcardup.model.Withdrawal;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 
@@ -221,5 +222,7 @@ public class PaymentWithdrawalRequest extends AppCompatActivity {
 
         });
     }
-
+    private boolean isConnected() {
+        return ConnectivityReceiver.isConnected();
+    }
 }

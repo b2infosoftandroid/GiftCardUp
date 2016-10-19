@@ -16,6 +16,7 @@ import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.model.Notification;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 import com.paginate.Paginate;
@@ -243,4 +244,7 @@ public class NotificationActivity extends AppCompatActivity implements Paginate.
             loadNotifications();
         }
     };
+    private boolean isConnected() {
+         return ConnectivityReceiver.isConnected();
+    }
 }

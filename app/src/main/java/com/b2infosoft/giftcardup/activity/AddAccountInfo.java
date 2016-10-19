@@ -18,14 +18,17 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.app.Alert;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.model.AddNewAccount;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.urlconnection.MultipartUtility;
 import java.io.IOException;
 public class AddAccountInfo extends AppCompatActivity {
     private final String TAG = AddAccountInfo.class.getName();
+    private Alert alert;
     private Tags tags;
     private Active active;
     private Urls urls;
@@ -48,6 +51,7 @@ public class AddAccountInfo extends AppCompatActivity {
         urls = Urls.getInstance();
         intent = new Intent(this, MyProfile.class);
         intent.putExtra(tags.SELECTED_TAB, 1);
+        alert = Alert.getInstance(this);
     }
 
     @Override
@@ -82,6 +86,13 @@ public class AddAccountInfo extends AppCompatActivity {
                 account.setBankAccountNo(bank_account);
                 account.setBankRountingNo(bank_routing);
                 account.setVoidImage(bitmap);
+                if(!active.isLogin()){
+                    return;
+                }
+                if(!isConnected()){
+                    alert.showSnackIsConnected(isConnected());
+                    return;
+                }
                 new AddBankAccount(account).execute();
             }
         });
@@ -180,7 +191,7 @@ public class AddAccountInfo extends AppCompatActivity {
 
                 multipart.addFormField(tags.USER_ACTION, tags.BANK_ACCOUNT_ADD);
                 multipart.addFormField(tags.BANK_NAME, newAccount.getBankName());
-                multipart.addFormField(tags.USER_ID, active.getUser().getUserId() + "");
+                multipart.addFormField(tags.USER_ID, active.getUser().getUserId());
                 multipart.addFormField(tags.BANK_ACCOUNT_NUMBER, newAccount.getBankAccountNo());
                 multipart.addFormField(tags.BANK_ROUTING_NUMBER, newAccount.getBankRountingNo());
                 if (newAccount.getVoidImage() != null) {
@@ -206,5 +217,8 @@ public class AddAccountInfo extends AppCompatActivity {
             finish();
             super.onPostExecute(s);
         }
+    }
+    private boolean isConnected() {
+         return ConnectivityReceiver.isConnected();
     }
 }

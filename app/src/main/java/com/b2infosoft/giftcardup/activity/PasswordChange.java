@@ -18,6 +18,7 @@ import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.app.Validation;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.AlertBox;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 
@@ -26,7 +27,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class PasswordChange extends AppCompatActivity implements View.OnClickListener ,DMRResult{
+public class PasswordChange extends AppCompatActivity implements View.OnClickListener, DMRResult {
     private static final String TAG = PasswordChange.class.getName();
     Active active;
     Validation validation;
@@ -80,10 +81,10 @@ public class PasswordChange extends AppCompatActivity implements View.OnClickLis
             password_confirm.requestFocus();
             return;
         }
-        HashMap<String,String> map = new HashMap<>();
-        map.put(tags.USER_ACTION,tags.CHANGE_PASSWORD);
-        map.put(tags.USER_ID,active.getValue(tags.OTP_ID));
-        map.put(tags.PASSWORD,mPassword);
+        HashMap<String, String> map = new HashMap<>();
+        map.put(tags.USER_ACTION, tags.CHANGE_PASSWORD);
+        map.put(tags.USER_ID, active.getValue(tags.OTP_ID));
+        map.put(tags.PASSWORD, mPassword);
         dmrRequest.doPost(urls.getUserInfo(), map, this);
     }
 
@@ -93,6 +94,7 @@ public class PasswordChange extends AppCompatActivity implements View.OnClickLis
             changePassword();
         }
     }
+
     @Override
     public void onSuccess(JSONObject jsonObject) {
         Log.d("checkuser", jsonObject.toString());
@@ -126,7 +128,7 @@ public class PasswordChange extends AppCompatActivity implements View.OnClickLis
     public void onError(VolleyError volleyError) {
         volleyError.printStackTrace();
         if (volleyError.getMessage() != null)
-            Log.e(TAG,volleyError.getMessage());
+            Log.e(TAG, volleyError.getMessage());
     }
 
     @Override
@@ -145,8 +147,13 @@ public class PasswordChange extends AppCompatActivity implements View.OnClickLis
         super.onBackPressed();
         this.finish();
     }
-    private void goLogin(){
+
+    private void goLogin() {
         startActivity(new Intent(this, Login.class));
         finish();
+    }
+
+    private boolean isConnected() {
+        return ConnectivityReceiver.isConnected();
     }
 }

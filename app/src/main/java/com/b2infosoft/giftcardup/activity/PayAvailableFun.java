@@ -18,6 +18,7 @@ import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.model.OrderSummery;
 import com.b2infosoft.giftcardup.model.UserBalance;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 
@@ -148,5 +149,8 @@ public class PayAvailableFun extends AppCompatActivity implements View.OnClickLi
         volleyError.printStackTrace();
         if (volleyError.getMessage() != null)
             Log.e(TAG, volleyError.getMessage());
+    }
+        private boolean isConnected() {
+         return ConnectivityReceiver.isConnected();
     }
 }

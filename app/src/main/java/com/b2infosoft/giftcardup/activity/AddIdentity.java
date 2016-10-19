@@ -22,6 +22,7 @@ import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.AlertBox;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.urlconnection.MultipartUtility;
 import java.io.IOException;
 
@@ -180,5 +181,8 @@ public class AddIdentity extends AppCompatActivity {
             alertBox.setMessage("Your Identity is Updated Successfully");
             alertBox.show();
         }
+    }
+    private boolean isConnected() {
+         return ConnectivityReceiver.isConnected();
     }
 }

@@ -21,6 +21,7 @@ import com.b2infosoft.giftcardup.custom.AlertBox;
 import com.b2infosoft.giftcardup.model.ContactInformation;
 import com.b2infosoft.giftcardup.model.OrderSummery;
 import com.b2infosoft.giftcardup.model.User;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 
@@ -222,5 +223,8 @@ public class PlaceOrder extends AppCompatActivity implements DMRResult {
         volleyError.printStackTrace();
         if (volleyError.getMessage() != null)
             Log.e(TAG,volleyError.getMessage());
+    }
+    private boolean isConnected() {
+        return ConnectivityReceiver.isConnected();
     }
 }

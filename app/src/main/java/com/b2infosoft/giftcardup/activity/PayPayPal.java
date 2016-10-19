@@ -10,6 +10,7 @@ import android.widget.Button;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.model.OrderSummery;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 
 public class PayPayPal extends AppCompatActivity {
     private Tags tags;
@@ -60,5 +61,8 @@ public class PayPayPal extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+    private boolean isConnected() {
+        return ConnectivityReceiver.isConnected();
     }
 }

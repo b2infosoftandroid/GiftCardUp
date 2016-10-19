@@ -25,6 +25,7 @@ import com.b2infosoft.giftcardup.custom.AlertBox;
 import com.b2infosoft.giftcardup.database.DBHelper;
 import com.b2infosoft.giftcardup.model.State;
 import com.b2infosoft.giftcardup.model.User;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 
@@ -243,5 +244,9 @@ public class FBUserUpdate extends AppCompatActivity implements DMRResult {
         volleyError.printStackTrace();
         if (volleyError.getMessage() != null)
             Log.e(TAG, volleyError.getMessage());
+    }
+
+    private boolean isConnected() {
+        return ConnectivityReceiver.isConnected();
     }
 }

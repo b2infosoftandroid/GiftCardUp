@@ -13,10 +13,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.adapter.CardAdapter_1;
+import com.b2infosoft.giftcardup.app.Alert;
 import com.b2infosoft.giftcardup.app.GiftCardApp;
 import com.b2infosoft.giftcardup.model.Cart;
 import com.b2infosoft.giftcardup.app.Tags;
@@ -24,6 +26,7 @@ import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.model.CompanyBrand;
 import com.b2infosoft.giftcardup.model.CompanyCategory;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.utils.Utils1;
 import com.b2infosoft.giftcardup.utils.Utils2;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
@@ -39,7 +42,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Categories_1 extends AppCompatActivity implements DMRResult, Paginate.Callbacks {
+public class Categories_1 extends AppCompatActivity implements DMRResult, Paginate.Callbacks,ConnectivityReceiver.ConnectivityReceiverListener {
+    private Alert alert;
     private GiftCardApp app;
     private Cart cart;
     private static final String TAG = Categories_1.class.getName();
@@ -47,6 +51,7 @@ public class Categories_1 extends AppCompatActivity implements DMRResult, Pagina
     private Tags tags;
     private Active active;
     DMRRequest dmrRequest;
+    View main_view;
     RecyclerView recyclerView;
     CardAdapter_1 adapter;
     List<Object> cardList;
@@ -73,6 +78,8 @@ public class Categories_1 extends AppCompatActivity implements DMRResult, Pagina
         handler = new Handler();
         app = (GiftCardApp) getApplicationContext();
         cart = app.getCart();
+        alert = Alert.getInstance(this);
+        main_view = findViewById(R.id.main_view);
     }
 
     private void setupPagination() {
@@ -165,7 +172,14 @@ public class Categories_1 extends AppCompatActivity implements DMRResult, Pagina
     public void onBackPressed() {
         super.onBackPressed();
     }
-/*
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // register connection status listener
+        GiftCardApp.getInstance().setConnectivityListener(this);
+    }
+    /*
     private void setDataInRecycleView(final List<CompanyBrand> cards) {
 
         if (isLoading) {
@@ -186,6 +200,10 @@ public class Categories_1 extends AppCompatActivity implements DMRResult, Pagina
 
     private synchronized void loadCards() {
         if (isLoading()) {
+            return;
+        }
+        if(!isConnected()){
+            alert.showSnackIsConnectedView(main_view, isConnected());
             return;
         }
         Map<String, String> map = new HashMap<>();
@@ -273,6 +291,10 @@ public class Categories_1 extends AppCompatActivity implements DMRResult, Pagina
 
     private void checkNotificationUnRead() {
         if (active.isLogin()) {
+            if(!isConnected()){
+                alert.showSnackIsConnectedView(main_view, isConnected());
+                return;
+            }
             Map<String, String> map = new HashMap<>();
             map.put(tags.USER_ACTION, tags.GET_NOTIFICATIONS_UN_READ);
             map.put(tags.USER_ID, active.getUser().getUserId());
@@ -304,5 +326,12 @@ public class Categories_1 extends AppCompatActivity implements DMRResult, Pagina
         volleyError.printStackTrace();
         if (volleyError.getMessage() != null)
             Log.e(TAG, volleyError.getMessage());
+    }
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        alert.showSnackIsConnectedView(main_view, isConnected);
+    }
+    private boolean isConnected() {
+         return ConnectivityReceiver.isConnected();
     }
 }

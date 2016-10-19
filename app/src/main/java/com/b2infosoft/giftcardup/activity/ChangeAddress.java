@@ -25,6 +25,7 @@ import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.database.DBHelper;
 import com.b2infosoft.giftcardup.model.ContactInformation;
 import com.b2infosoft.giftcardup.model.State;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 import com.google.gson.Gson;
@@ -231,5 +232,7 @@ public class ChangeAddress extends AppCompatActivity {
             }
         });
     }
-
+    private boolean isConnected() {
+         return ConnectivityReceiver.isConnected();
+    }
 }

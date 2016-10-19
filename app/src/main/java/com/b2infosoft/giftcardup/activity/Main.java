@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.app.Alert;
 import com.b2infosoft.giftcardup.app.GiftCardApp;
 import com.b2infosoft.giftcardup.model.Cart;
 import com.b2infosoft.giftcardup.app.Config;
@@ -73,6 +74,7 @@ import java.util.Map;
 
 public class Main extends GiftCardUp implements DMRResult,ConnectivityReceiver.ConnectivityReceiverListener {
     private final static String TAG = Main.class.getName();
+    private Alert alert;
     private GiftCardApp app;
     private Cart cart;
     DMRRequest dmrRequest;
@@ -100,6 +102,7 @@ public class Main extends GiftCardUp implements DMRResult,ConnectivityReceiver.C
         config = Config.getInstance();
         dbHelper = new DBHelper(this);
         app = (GiftCardApp) getApplicationContext();
+        alert = Alert.getInstance(this);
     }
 
     public boolean isLoggedIn() {
@@ -242,7 +245,6 @@ public class Main extends GiftCardUp implements DMRResult,ConnectivityReceiver.C
         if(!isConnected()){
             return;
         }
-
         dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
@@ -646,27 +648,10 @@ public class Main extends GiftCardUp implements DMRResult,ConnectivityReceiver.C
 
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
-        showSnack(isConnected);
+        alert.showSnackIsConnected(isConnected);
     }
     // Method to manually check connection status
     private boolean isConnected() {
          return ConnectivityReceiver.isConnected();
-    }
-    // Showing the status in Snackbar
-    private void showSnack(boolean isConnected) {
-        String message;
-        int color;
-        if (isConnected) {
-            message = "Good! Connected to Internet";
-            color = Color.WHITE;
-        } else {
-            message = "Sorry! Not connected to internet";
-            color = Color.RED;
-        }
-        Snackbar snackbar = Snackbar.make(findViewById(R.id.toolbar), message, Snackbar.LENGTH_LONG);
-        View sbView = snackbar.getView();
-        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-        textView.setTextColor(color);
-        snackbar.show();
     }
 }

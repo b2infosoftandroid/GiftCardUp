@@ -37,6 +37,7 @@ import com.b2infosoft.giftcardup.model.Approve;
 import com.b2infosoft.giftcardup.model.ContactInformation;
 import com.b2infosoft.giftcardup.model.User;
 import com.b2infosoft.giftcardup.model.UserBalance;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.urlconnection.MultipartUtility;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
@@ -491,5 +492,8 @@ public class ProfileNew_1 extends AppCompatActivity implements AppBarLayout.OnOf
         };
         MySingleton singleton = MySingleton.getInstance(this);
         singleton.getRequestQueue().add(stringRequest);
+    }
+    private boolean isConnected() {
+        return ConnectivityReceiver.isConnected();
     }
 }

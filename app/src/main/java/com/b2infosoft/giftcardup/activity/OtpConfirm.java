@@ -14,6 +14,7 @@ import android.widget.EditText;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.credential.Active;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 
 public class OtpConfirm extends AppCompatActivity {
     Active active;
@@ -89,7 +90,12 @@ public class OtpConfirm extends AppCompatActivity {
         super.onBackPressed();
         this.finish();
     }
-    private void goChangePassword(){
+
+    private void goChangePassword() {
         startActivity(new Intent(this, PasswordChange.class));
+    }
+
+    private boolean isConnected() {
+        return ConnectivityReceiver.isConnected();
     }
 }

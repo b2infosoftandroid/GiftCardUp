@@ -23,6 +23,7 @@ import com.b2infosoft.giftcardup.listener.OnLoadMoreListener;
 import com.b2infosoft.giftcardup.model.CompanyBrand;
 import com.b2infosoft.giftcardup.model.CompanyCategory;
 import com.b2infosoft.giftcardup.model.EmptyBrand;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.utils.Utils1;
 import com.b2infosoft.giftcardup.utils.Utils2;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
@@ -161,7 +162,7 @@ public class Categories extends AppCompatActivity {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Log.e(TAG,e.getMessage());
+                    Log.e(TAG, e.getMessage());
                 }
             }
 
@@ -169,7 +170,7 @@ public class Categories extends AppCompatActivity {
             public void onError(VolleyError volleyError) {
                 volleyError.printStackTrace();
                 if (volleyError.getMessage() != null)
-                    Log.e(TAG,volleyError.getMessage());
+                    Log.e(TAG, volleyError.getMessage());
             }
         });
     }
@@ -191,5 +192,8 @@ public class Categories extends AppCompatActivity {
         // Update LayerDrawable's BadgeDrawable
         Utils1.setBadgeCount(this, icon1, cart.getCartItemCount());
         return true;
+    }
+        private boolean isConnected() {
+         return ConnectivityReceiver.isConnected();
     }
 }

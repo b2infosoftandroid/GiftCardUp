@@ -18,16 +18,19 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.app.Alert;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.model.AddNewAccount;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.urlconnection.MultipartUtility;
 
 import java.io.IOException;
 
 public class AddAccountInfo1 extends AppCompatActivity {
     private final String TAG = AddAccountInfo1.class.getName();
+    private Alert alert;
     private Tags tags;
     private Active active;
     private Urls urls;
@@ -46,6 +49,7 @@ public class AddAccountInfo1 extends AppCompatActivity {
         tags = Tags.getInstance();
         active = Active.getInstance(getApplicationContext());
         urls = Urls.getInstance();
+        alert = Alert.getInstance(this);
     }
 
     @Override
@@ -80,6 +84,15 @@ public class AddAccountInfo1 extends AppCompatActivity {
                 account.setBankAccountNo(bank_account);
                 account.setBankRountingNo(bank_routing);
                 account.setVoidImage(bitmap);
+
+                if(!active.isLogin()){
+                    return;
+                }
+                if(!isConnected()){
+                    alert.showSnackIsConnected(isConnected());
+                    return;
+                }
+
                 new AddBankAccount(account).execute();
             }
         });
@@ -175,5 +188,8 @@ public class AddAccountInfo1 extends AppCompatActivity {
             startActivity(new Intent(AddAccountInfo1.this,ProfileBankDetails.class));
             super.onPostExecute(s);
         }
+    }
+    private boolean isConnected() {
+         return ConnectivityReceiver.isConnected();
     }
 }

@@ -24,6 +24,7 @@ import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.model.AddNewAccount;
 import com.b2infosoft.giftcardup.model.BankInfo;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.urlconnection.MultipartUtility;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 import com.b2infosoft.giftcardup.volly.LruBitmapCache;
@@ -229,5 +230,8 @@ public class UpdateAccountInfo extends AppCompatActivity {
             finish();
             super.onPostExecute(s);
         }
+    }
+    private boolean isConnected() {
+        return ConnectivityReceiver.isConnected();
     }
 }

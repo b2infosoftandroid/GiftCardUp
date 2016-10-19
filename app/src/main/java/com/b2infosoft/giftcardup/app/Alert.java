@@ -41,6 +41,24 @@ public class Alert {
         textView.setTextColor(color);
         snackbar.show();
     }
+    // Showing the status in Snackbar
+    public void showSnackIsConnectedView(View view, boolean isConnected) {
+        String message;
+        int color;
+        if (isConnected) {
+            message = activity.getResources().getString(R.string.is_connected);
+            color = Color.WHITE;
+        } else {
+            message = activity.getResources().getString(R.string.is_disconnected);
+            color = Color.RED;
+        }
+        Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(color);
+        snackbar.show();
+    }
+
     public void showSnack(boolean isConnected,String message) {
         int color;
         if (isConnected) {
