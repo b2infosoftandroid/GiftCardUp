@@ -1,24 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.b2infosoft.giftcardup.activity.CheckOut">
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        app:layoutManager="LinearLayoutManager"
-        android:layout_above="@+id/action_continue">
-    </android.support.v7.widget.RecyclerView>
-    <Button
-        android:id="@+id/action_continue"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:text="CONTINUE"
-        android:background="@drawable/button_background"
-        android:textColor="@color/app_background"
-         />
-</RelativeLayout>
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_above="@+id/action_continue"
+            app:layoutManager="LinearLayoutManager"></android.support.v7.widget.RecyclerView>
+
+        <Button
+            android:id="@+id/action_continue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/button_background"
+            android:text="CONTINUE"
+            android:textColor="@color/app_background" />
+    </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

@@ -12,15 +12,19 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.app.Alert;
+import com.b2infosoft.giftcardup.app.GiftCardApp;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 
-public class OtpConfirm extends AppCompatActivity {
+public class OtpConfirm extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
     Active active;
     Tags tags;
     private Button action_confirm;
     private EditText otp;
+    private Alert alert;
+    View main_view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +42,21 @@ public class OtpConfirm extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        GiftCardApp.getInstance().setConnectivityListener(this);
+    }
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        alert.showSnackIsConnectedView(main_view, isConnected);
+    }
+
     private void init() {
         active = Active.getInstance(this);
         tags = Tags.getInstance();
+        alert = Alert.getInstance(this);
+        main_view = findViewById(R.id.main_view);
     }
 
     private void confirm() {
@@ -94,6 +110,7 @@ public class OtpConfirm extends AppCompatActivity {
     private void goChangePassword() {
         startActivity(new Intent(this, PasswordChange.class));
     }
+
 
     private boolean isConnected() {
         return ConnectivityReceiver.isConnected();

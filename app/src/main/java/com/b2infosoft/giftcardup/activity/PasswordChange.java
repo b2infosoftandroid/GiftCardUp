@@ -13,6 +13,8 @@ import android.widget.EditText;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.app.Alert;
+import com.b2infosoft.giftcardup.app.GiftCardApp;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.app.Validation;
@@ -27,8 +29,10 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class PasswordChange extends AppCompatActivity implements View.OnClickListener, DMRResult {
+public class PasswordChange extends AppCompatActivity implements View.OnClickListener, DMRResult , ConnectivityReceiver.ConnectivityReceiverListener {
     private static final String TAG = PasswordChange.class.getName();
+    private Alert alert;
+    View main_view;
     Active active;
     Validation validation;
     Tags tags;
@@ -45,13 +49,23 @@ public class PasswordChange extends AppCompatActivity implements View.OnClickLis
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initUI();
     }
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        GiftCardApp.getInstance().setConnectivityListener(this);
+    }
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        alert.showSnackIsConnectedView(main_view, isConnected);
+    }
     private void init() {
         active = Active.getInstance(this);
         tags = Tags.getInstance();
         urls = Urls.getInstance();
         validation = Validation.getInstance();
         dmrRequest = DMRRequest.getInstance(this, TAG);
+        alert = Alert.getInstance(this);
+        main_view = findViewById(R.id.main_view);
     }
 
     private void initUI() {
@@ -79,6 +93,10 @@ public class PasswordChange extends AppCompatActivity implements View.OnClickLis
         if (!validation.isPasswordConfirm(mPassword, mPasswordConfirm)) {
             password_confirm.setError("Both Passwords are Different");
             password_confirm.requestFocus();
+            return;
+        }
+        if(!isConnected()){
+            alert.showSnackIsConnectedView(main_view,isConnected());
             return;
         }
         HashMap<String, String> map = new HashMap<>();

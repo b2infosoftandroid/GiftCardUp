@@ -1,5 +1,6 @@
 package com.b2infosoft.giftcardup.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.activity.Main;
+import com.b2infosoft.giftcardup.app.Alert;
 import com.b2infosoft.giftcardup.app.GiftCardApp;
 import com.b2infosoft.giftcardup.model.Cart;
 import com.b2infosoft.giftcardup.app.Config;
@@ -28,6 +30,7 @@ import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.model.CartSummary;
 import com.b2infosoft.giftcardup.model.EmptyCart;
 import com.b2infosoft.giftcardup.model.GiftCard;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 import com.b2infosoft.giftcardup.volly.LruBitmapCache;
@@ -57,7 +60,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final int VIEW_CART_SUMMARY = 1;
     private final int VIEW_CART_EMPTY = 2;
     private Button button;
-
+    private Alert alert;
     public CartAdapter(Context context, List<Object> cardInfoList, Button button) {
         this.context = context;
         this.cardInfoList = cardInfoList;
@@ -71,6 +74,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         app = (GiftCardApp) context.getApplicationContext();
         cart = app.getCart();
         this.button = button;
+        alert = Alert.getInstance((Activity) context);
     }
 
     public class CardHolder extends RecyclerView.ViewHolder {
@@ -159,12 +163,15 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
+                            if (!isConnected()) {
+                                alert.showSnackIsConnectedView(((Activity) context).findViewById(R.id.main_view), isConnected());
+                                return;
+                            }
                             progress.show();
                             final Map<String, String> map = new HashMap<>();
                             map.put(tags.USER_ACTION, tags.REMOVE_CART_ITEM_GIFT_CARD);
                             map.put(tags.USER_ID, active.getUser().getUserId());
                             map.put(tags.GIFT_CARD_GIFT_CARD_ID, card.getGiftCardID() + "");
-
                             dmrRequest.doPost(urls.getCartInfo(), map, new DMRResult() {
                                 @Override
                                 public void onSuccess(JSONObject jsonObject) {
@@ -247,5 +254,8 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             button.setVisibility(View.GONE);
         }
         CartAdapter.super.notifyDataSetChanged();
+    }
+    private boolean isConnected() {
+        return ConnectivityReceiver.isConnected();
     }
 }

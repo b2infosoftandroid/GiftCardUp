@@ -16,6 +16,8 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.api.interfaces.PaymentForm;
+import com.b2infosoft.giftcardup.app.Alert;
+import com.b2infosoft.giftcardup.app.GiftCardApp;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
@@ -37,7 +39,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PayCreditDebit extends AppCompatActivity implements PaymentForm, DMRResult {
+public class PayCreditDebit extends AppCompatActivity implements PaymentForm, DMRResult , ConnectivityReceiver.ConnectivityReceiverListener{
     public static final String TAG = PayCreditDebit.class.getName();
     private Tags tags;
     private Active active;
@@ -48,13 +50,16 @@ public class PayCreditDebit extends AppCompatActivity implements PaymentForm, DM
     Button action;
     Progress progress;
     DMRRequest dmrRequest;
-
+    private Alert alert;
+    View main_view;
     private void init() {
         tags = Tags.getInstance();
         urls = Urls.getInstance();
         active = Active.getInstance(this);
         dmrRequest = DMRRequest.getInstance(this, TAG);
         progress = new Progress(this);
+        alert = Alert.getInstance(this);
+        main_view = findViewById(R.id.main_view);
     }
 
     @Override
@@ -119,6 +124,13 @@ public class PayCreditDebit extends AppCompatActivity implements PaymentForm, DM
     }
 
     private void validCard() {
+        if(!active.isLogin()){
+            return;
+        }
+        if(!isConnected()){
+            alert.showSnackIsConnectedView(main_view, isConnected());
+            return;
+        }
         Card card = new Card(getCardNumber(), getExpMonth(), getExpYear(), getCvc());
         boolean validation = card.validateCard();
         if (validation) {
@@ -163,6 +175,13 @@ public class PayCreditDebit extends AppCompatActivity implements PaymentForm, DM
 
     private void orderPlace() {
         if (orderSummery != null) {
+            if(!active.isLogin()){
+                return;
+            }
+            if(!isConnected()){
+                alert.showSnackIsConnectedView(main_view,isConnected());
+                return;
+            }
             Map<String, String> map = new HashMap<>();
             map.put(tags.USER_ACTION, tags.PAY_WITH_CARD);
             map.put(tags.USER_ID, active.getUser().getUserId());
@@ -195,7 +214,16 @@ public class PayCreditDebit extends AppCompatActivity implements PaymentForm, DM
         }
         return super.onOptionsItemSelected(item);
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        GiftCardApp.getInstance().setConnectivityListener(this);
+    }
 
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        alert.showSnackIsConnectedView(main_view, isConnected);
+    }
     @Override
     public void onBackPressed() {
         super.onBackPressed();

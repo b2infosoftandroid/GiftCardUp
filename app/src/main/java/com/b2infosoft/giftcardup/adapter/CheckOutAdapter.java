@@ -1,5 +1,6 @@
 package com.b2infosoft.giftcardup.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +22,7 @@ import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.activity.ChangeAddress;
 import com.b2infosoft.giftcardup.activity.Payments;
+import com.b2infosoft.giftcardup.app.Alert;
 import com.b2infosoft.giftcardup.app.GiftCardApp;
 import com.b2infosoft.giftcardup.model.Cart;
 import com.b2infosoft.giftcardup.app.Config;
@@ -36,6 +38,7 @@ import com.b2infosoft.giftcardup.model.ControlPanel;
 import com.b2infosoft.giftcardup.model.GiftCard;
 import com.b2infosoft.giftcardup.model.OrderSummery;
 import com.b2infosoft.giftcardup.model.User;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
 import com.b2infosoft.giftcardup.volly.LruBitmapCache;
@@ -48,6 +51,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
+    private Alert alert;
     private GiftCardApp app;
     private Cart cart;
     private final String TAG = CheckOutAdapter.class.getName();
@@ -87,6 +91,7 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.action_continue = action_continue;
         this.action_continue.setOnClickListener(this);
         panel = dbHelper.getControlPanel();
+        alert = Alert.getInstance((Activity) context);
     }
 
     public class CardHolder extends RecyclerView.ViewHolder {
@@ -273,6 +278,10 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         order.promotion_code.requestFocus();
                         return;
                     }
+                    if (!isConnected()) {
+                        alert.showSnackIsConnectedView(((Activity) context).findViewById(R.id.main_view), isConnected());
+                        return;
+                    }
                     Map<String, String> map = new HashMap<String, String>();
                     map.put(tags.USER_ACTION, tags.PROMO_CODE_APPLY);
                     map.put(tags.USER_ID, active.getUser().getUserId());
@@ -384,5 +393,8 @@ public class CheckOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         Intent intent = new Intent(context, Payments.class);
         intent.putExtra(tags.ORDER_SUMMERY, orderSummery);
         context.startActivity(intent);
+    }
+    private boolean isConnected() {
+        return ConnectivityReceiver.isConnected();
     }
 }

@@ -8,14 +8,18 @@ import android.view.View;
 import android.widget.Button;
 
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.app.Alert;
+import com.b2infosoft.giftcardup.app.GiftCardApp;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.model.OrderSummery;
 import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 
-public class PayPayPal extends AppCompatActivity {
+public class PayPayPal extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
     private Tags tags;
     private OrderSummery orderSummery;
     Button action;
+    private Alert alert;
+    View main_view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,9 @@ public class PayPayPal extends AppCompatActivity {
 
     private void init() {
         tags = Tags.getInstance();
+        alert = Alert.getInstance(this);
+        main_view = findViewById(R.id.main_view);
+
     }
 
     private void initUI() {
@@ -58,10 +65,22 @@ public class PayPayPal extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        GiftCardApp.getInstance().setConnectivityListener(this);
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        alert.showSnackIsConnectedView(main_view, isConnected);
+    }
+
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
         finish();
     }
+
     private boolean isConnected() {
         return ConnectivityReceiver.isConnected();
     }

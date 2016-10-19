@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.app.Alert;
+import com.b2infosoft.giftcardup.app.GiftCardApp;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
@@ -28,7 +30,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PayAvailableFun extends AppCompatActivity implements View.OnClickListener, DMRResult {
+public class PayAvailableFun extends AppCompatActivity implements View.OnClickListener, DMRResult, ConnectivityReceiver.ConnectivityReceiverListener  {
     public static final String TAG = PayAvailableFun.class.getName();
     /* INITIAL REQUIREMENTS */
     private Tags tags;
@@ -36,7 +38,8 @@ public class PayAvailableFun extends AppCompatActivity implements View.OnClickLi
     private OrderSummery orderSummery;
     private DMRRequest dmrRequest;
     private Urls urls;
-
+    private Alert alert;
+    View main_view;
     /* UI VIEW */
     private TextView available_fund, balance, available_fund_1, balance_1, remaining;
     private RadioButton paypal;
@@ -61,6 +64,8 @@ public class PayAvailableFun extends AppCompatActivity implements View.OnClickLi
         tags = Tags.getInstance();
         dmrRequest = DMRRequest.getInstance(this, TAG);
         urls = Urls.getInstance();
+        alert = Alert.getInstance(this);
+        main_view = findViewById(R.id.main_view);
     }
 
     private void initUI() {
@@ -76,6 +81,13 @@ public class PayAvailableFun extends AppCompatActivity implements View.OnClickLi
     }
 
     private void checkAvailableBalance() {
+        if(!active.isLogin()){
+            return;
+        }
+        if(!isConnected()){
+            alert.showSnackIsConnectedView(main_view,isConnected());
+            return;
+        }
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.AVAILABLE_FUND_BALANCE);
         map.put(tags.USER_ID, active.getUser().getUserId());
@@ -109,7 +121,16 @@ public class PayAvailableFun extends AppCompatActivity implements View.OnClickLi
         }
         return super.onOptionsItemSelected(item);
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        GiftCardApp.getInstance().setConnectivityListener(this);
+    }
 
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        alert.showSnackIsConnectedView(main_view, isConnected);
+    }
     @Override
     public void onBackPressed() {
         super.onBackPressed();

@@ -9,16 +9,20 @@ import android.widget.Button;
 import android.widget.RadioButton;
 
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.app.Alert;
+import com.b2infosoft.giftcardup.app.GiftCardApp;
 import com.b2infosoft.giftcardup.app.Tags;
+import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.model.OrderSummery;
 import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 
-public class Payments extends AppCompatActivity implements View.OnClickListener {
+public class Payments extends AppCompatActivity implements View.OnClickListener , ConnectivityReceiver.ConnectivityReceiverListener {
     private Tags tags;
     RadioButton available_fund, credit_debit, paypal;
     Button action_continue;
     private OrderSummery orderSummery;
-
+    private Alert alert;
+    View main_view;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +37,8 @@ public class Payments extends AppCompatActivity implements View.OnClickListener 
 
     private void init() {
         tags = Tags.getInstance();
+        alert = Alert.getInstance(this);
+        main_view = findViewById(R.id.main_view);
     }
 
     private void initUI() {
@@ -42,6 +48,7 @@ public class Payments extends AppCompatActivity implements View.OnClickListener 
         paypal.setVisibility(View.GONE);
         action_continue = (Button) findViewById(R.id.action_continue);
         action_continue.setOnClickListener(this);
+
     }
 
     @Override
@@ -59,7 +66,16 @@ public class Payments extends AppCompatActivity implements View.OnClickListener 
         super.onBackPressed();
         finish();
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        GiftCardApp.getInstance().setConnectivityListener(this);
+    }
 
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        alert.showSnackIsConnectedView(main_view, isConnected);
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {

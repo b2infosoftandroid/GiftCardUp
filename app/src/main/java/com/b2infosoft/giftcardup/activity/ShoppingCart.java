@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.adapter.CartAdapter;
+import com.b2infosoft.giftcardup.app.Alert;
 import com.b2infosoft.giftcardup.app.GiftCardApp;
 import com.b2infosoft.giftcardup.model.Cart;
 import com.b2infosoft.giftcardup.app.Tags;
@@ -40,11 +41,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ShoppingCart extends AppCompatActivity implements View.OnClickListener {
+public class ShoppingCart extends AppCompatActivity implements View.OnClickListener, ConnectivityReceiver.ConnectivityReceiverListener {
     public static final String TAG = ShoppingCart.class.getName();
     private Urls urls;
     private Tags tags;
     private Active active;
+    private Alert alert;
+    View main_view;
     DMRRequest dmrRequest;
     RecyclerView recyclerView;
     CartAdapter adapter;
@@ -77,6 +80,8 @@ public class ShoppingCart extends AppCompatActivity implements View.OnClickListe
         cardList = new ArrayList<>();
         app = (GiftCardApp)getApplicationContext();
         cart = app.getCart();
+        alert = Alert.getInstance(this);
+        main_view = findViewById(R.id.main_view);
     }
 
     @Override
@@ -153,8 +158,13 @@ public class ShoppingCart extends AppCompatActivity implements View.OnClickListe
         loadAvailableCartItems();
         invalidateOptionsMenu();
         this.registerReceiver(broadcastReceiver, intentFilter);
+        GiftCardApp.getInstance().setConnectivityListener(this);
     }
 
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        alert.showSnackIsConnectedView(main_view, isConnected);
+    }
     @Override
     protected void onStart() {
         super.onStart();
@@ -169,11 +179,15 @@ public class ShoppingCart extends AppCompatActivity implements View.OnClickListe
     }
 
     private void loadAvailableCartItems() {
-        if (active.getUser() == null)
+        if (!active.isLogin())
             return;
+        if(!isConnected()){
+            alert.showSnackIsConnectedView(main_view,isConnected());
+            return;
+        }
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.CHECK_CART_ITEMS);
-        map.put(tags.USER_ID, active.getUser().getUserId() + "");
+        map.put(tags.USER_ID, active.getUser().getUserId());
         dmrRequest.doPost(urls.getCartInfo(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {

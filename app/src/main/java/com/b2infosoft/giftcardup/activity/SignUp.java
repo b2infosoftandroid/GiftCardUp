@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.app.Alert;
+import com.b2infosoft.giftcardup.app.GiftCardApp;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.app.Validation;
@@ -39,8 +41,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class SignUp extends AppCompatActivity implements View.OnClickListener, DMRResult {
-
+public class SignUp extends AppCompatActivity implements View.OnClickListener, DMRResult , ConnectivityReceiver.ConnectivityReceiverListener {
+    private Alert alert;
+    View main_view;
     private final String TAG = SignUp.class.getName();
     EditText f_name, l_name, email, mobile, password, password_confirm;
     EditText address, suite_no, city, state, zip_code, company_name;
@@ -63,6 +66,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
         urls = Urls.getInstance();
         dbHelper = new DBHelper(this);
         dmrRequest = DMRRequest.getInstance(this, TAG);
+        alert = Alert.getInstance(this);
+        main_view = findViewById(R.id.main_view);
         f_name = (EditText) findViewById(R.id.sign_up_name_first);
         l_name = (EditText) findViewById(R.id.sign_up_name_last);
         email = (EditText) findViewById(R.id.sign_up_email);
@@ -89,7 +94,15 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
         setState();
 
     }
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        GiftCardApp.getInstance().setConnectivityListener(this);
+    }
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        alert.showSnackIsConnectedView(main_view, isConnected);
+    }
     private void setState() {
         List<String> states = new ArrayList<>();
         states.add("SELECT STATE");
@@ -219,7 +232,10 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
             zip_code.requestFocus();
             return;
         }
-
+        if(!isConnected()){
+            alert.showSnackIsConnectedView(main_view,isConnected());
+            return;
+        }
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.USER_SIGNUP);
         map.put(tags.EMPLOYEE_ID, "1");
@@ -251,7 +267,6 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
 
     @Override
     public void onSuccess(JSONObject jsonObject) {
-        Log.d("checkuser", jsonObject.toString());
         try {
             if (jsonObject.has(tags.SUCCESS)) {
                 if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
@@ -264,17 +279,17 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
                         }
                     });
                     builder.create().show();
-
                 } else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
-
+                    AlertBox alertBox = new AlertBox(this);
+                    alertBox.setTitle("Alert");
+                    alertBox.setMessage("Something went wrong. Try Again");
+                    alertBox.show();
                 } else if (jsonObject.getInt(tags.SUCCESS) == tags.EXISTING_USER) {
                     AlertBox alertBox = new AlertBox(this);
                     alertBox.setTitle("Alert");
                     alertBox.setMessage("User Already Exist");
                     alertBox.show();
-
                 }
-
             }
         } catch (JSONException e) {
             e.printStackTrace();

@@ -1,33 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.b2infosoft.giftcardup.activity.ShoppingCart">
-    <LinearLayout
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical"
-        android:paddingTop="16dp"
-        android:paddingLeft="2dp"
-        android:paddingRight="2dp"
-        android:paddingBottom="2dp"
-        android:layout_above="@+id/action_checkout">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
+        android:layout_height="match_parent">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layoutManager="LinearLayoutManager">
-        </android.support.v7.widget.RecyclerView>
-    </LinearLayout>
-    <Button
-        android:id="@+id/action_checkout"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:background="@drawable/button_background"
-        android:layout_alignParentBottom="true"
-        android:text="CHECK OUT"
-        android:textColor="@color/app_background"
-        />
-</RelativeLayout>
+            android:layout_height="fill_parent"
+            android:layout_above="@+id/action_checkout"
+            android:orientation="vertical"
+            android:paddingBottom="2dp"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:paddingTop="16dp">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="LinearLayoutManager"></android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/action_checkout"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/button_background"
+            android:text="CHECK OUT"
+            android:textColor="@color/app_background" />
+    </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

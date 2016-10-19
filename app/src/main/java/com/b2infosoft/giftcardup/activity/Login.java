@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.app.Alert;
+import com.b2infosoft.giftcardup.app.GiftCardApp;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
@@ -43,8 +45,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Login extends AppCompatActivity implements DMRResult {
+public class Login extends AppCompatActivity implements DMRResult,ConnectivityReceiver.ConnectivityReceiverListener {
+
     private final static String TAG = Login.class.getName();
+    private Alert alert;
+    View main_view;
     private Urls urls;
     private Tags tags;
     private Active active;
@@ -65,7 +70,8 @@ public class Login extends AppCompatActivity implements DMRResult {
         urls = Urls.getInstance();
         tags = Tags.getInstance();
         active = Active.getInstance(this);
-
+        alert = Alert.getInstance(this);
+        main_view = findViewById(R.id.main_view);
         if (active.isLogin()) {
             loginSuccess();
         }
@@ -190,6 +196,12 @@ public class Login extends AppCompatActivity implements DMRResult {
         finish();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        GiftCardApp.getInstance().setConnectivityListener(this);
+    }
+
     private void attemptLogin() {
         String uName = userName.getText().toString();
         String uPass = userPassword.getText().toString();
@@ -206,7 +218,10 @@ public class Login extends AppCompatActivity implements DMRResult {
             userPassword.requestFocus();
             return;
         }
-
+        if(!isConnected()){
+            alert.showSnackIsConnectedView(main_view,isConnected());
+            return;
+        }
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.USER_LOGIN);
         map.put(tags.USER_ID, uName);
@@ -214,13 +229,11 @@ public class Login extends AppCompatActivity implements DMRResult {
         progress.show();
         dmrRequest.doPost(urls.getUserInfo(), map, this);
     }
-    private void forgotPasswordRequest(){
-        Map<String, String> map = new HashMap<>();
-        map.put(tags.USER_ACTION, tags.FORGOT_PASSWORD_REQUEST);
-        map.put(tags.USER_ID, "");
-        dmrRequest.doPost(urls.getUserInfo(), map, this);
-    }
     private void integrateWithFB(Map<String, String> map) {
+        if(!isConnected()){
+            alert.showSnackIsConnectedView(main_view,isConnected());
+            return;
+        }
         dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
@@ -320,6 +333,12 @@ public class Login extends AppCompatActivity implements DMRResult {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        alert.showSnackIsConnectedView(main_view, isConnected);
+    }
+
     private boolean isConnected() {
          return ConnectivityReceiver.isConnected();
     }

@@ -7,11 +7,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.adapter.CheckOutAdapter;
+import com.b2infosoft.giftcardup.app.Alert;
 import com.b2infosoft.giftcardup.app.GiftCardApp;
 import com.b2infosoft.giftcardup.model.Cart;
 import com.b2infosoft.giftcardup.app.Tags;
@@ -36,7 +38,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CheckOut extends AppCompatActivity implements DMRResult {
+public class CheckOut extends AppCompatActivity implements DMRResult , ConnectivityReceiver.ConnectivityReceiverListener{
+    private Alert alert;
+    View main_view;
     public static final String TAG = CheckOut.class.getName();
     private GiftCardApp app;
     private Urls urls;
@@ -61,6 +65,8 @@ public class CheckOut extends AppCompatActivity implements DMRResult {
         cart = app.getCart();
         dbHelper = new DBHelper(this);
         controlPanel = dbHelper.getControlPanel();
+        alert = Alert.getInstance(this);
+        main_view = findViewById(R.id.main_view);
     }
 
     @Override
@@ -86,14 +92,26 @@ public class CheckOut extends AppCompatActivity implements DMRResult {
         }
         return super.onOptionsItemSelected(item);
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        GiftCardApp.getInstance().setConnectivityListener(this);
+    }
 
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        alert.showSnackIsConnectedView(main_view, isConnected);
+    }
     private void fetchContactInfo() {
         if (active.isLogin()) {
-            User user = active.getUser();
+            if(!isConnected()){
+                alert.showSnackIsConnectedView(main_view,isConnected());
+                return;
+            }
             /* LOADING USER DETAILS */
             Map<String, String> map1 = new HashMap<>();
             map1.put(tags.USER_ACTION, tags.USER_CONTACT_INFORMATION);
-            map1.put(tags.USER_ID, user.getUserId() + "");
+            map1.put(tags.USER_ID, active.getUser().getUserId());
             dmrRequest.doPost(urls.getUserInfo(), map1, this);
         }
     }

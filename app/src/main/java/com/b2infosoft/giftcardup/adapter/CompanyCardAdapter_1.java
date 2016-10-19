@@ -22,6 +22,7 @@ import com.b2infosoft.giftcardup.activity.CompanyCard;
 import com.b2infosoft.giftcardup.activity.CompanyCard_1;
 import com.b2infosoft.giftcardup.activity.Login;
 import com.b2infosoft.giftcardup.activity.ShoppingCart;
+import com.b2infosoft.giftcardup.app.Alert;
 import com.b2infosoft.giftcardup.app.GiftCardApp;
 import com.b2infosoft.giftcardup.model.Cart;
 import com.b2infosoft.giftcardup.app.Config;
@@ -32,6 +33,7 @@ import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.Progress;
 import com.b2infosoft.giftcardup.model.CompanyBrand;
 import com.b2infosoft.giftcardup.model.GiftCard;
+import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.services.MyServices;
 import com.b2infosoft.giftcardup.volly.DMRRequest;
 import com.b2infosoft.giftcardup.volly.DMRResult;
@@ -47,6 +49,7 @@ import java.util.Map;
 
 public class CompanyCardAdapter_1 extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final String TAG = CompanyCardAdapter_1.class.getName();
+    private Alert alert;
     private Urls urls;
     private Tags tags;
     private Active active;
@@ -60,6 +63,7 @@ public class CompanyCardAdapter_1 extends RecyclerView.Adapter<RecyclerView.View
     private Config config;
     private CompanyBrand companyBrand;
     private GiftCardApp app;
+
     public CompanyCardAdapter_1(Context context, List<GiftCard> cardInfoList, CompanyBrand companyBrand) {
         this.context = context;
         this.cardInfoList = cardInfoList;
@@ -72,14 +76,15 @@ public class CompanyCardAdapter_1 extends RecyclerView.Adapter<RecyclerView.View
         active = Active.getInstance(context);
         format = Format.getInstance();
         progress = new Progress(context);
-        app = (GiftCardApp)context.getApplicationContext();
+        app = (GiftCardApp) context.getApplicationContext();
+        alert = Alert.getInstance((Activity) context);
     }
 
     public class CardHolder extends RecyclerView.ViewHolder {
         ImageView cardType;
         ImageView imageUrl;
-        TextView cardValue,name;
-        TextView cardOff,saving;
+        TextView cardValue, name;
+        TextView cardOff, saving;
         TextView cardPrice;
         Button buyNow, info;
         Button add_to_cart, card_buy_now;
@@ -113,10 +118,10 @@ public class CompanyCardAdapter_1 extends RecyclerView.Adapter<RecyclerView.View
                 @Override
                 public void onClick(View v) {
                     count = count + 1;
-                    if(count % 2 != 0) {
+                    if (count % 2 != 0) {
                         info.setText("- INFO");
                         linearLayout.setVisibility(View.VISIBLE);
-                    }else {
+                    } else {
                         info.setText("+ INFO");
                         linearLayout.setVisibility(View.GONE);
                     }
@@ -137,9 +142,10 @@ public class CompanyCardAdapter_1 extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_card_item_company, parent, false);
-            return new CardHolder(view);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_card_item_company, parent, false);
+        return new CardHolder(view);
     }
+
     /*
     @Override
     public int getItemViewType(int position) {
@@ -166,11 +172,15 @@ public class CompanyCardAdapter_1 extends RecyclerView.Adapter<RecyclerView.View
                 public void onClick(View v) {
                     final Cart cart = app.getCart();
                     String cardAction = cardHolder.add_to_cart.getText().toString();
-                    if(!active.isLogin()){
+                    if (!active.isLogin()) {
                         context.startActivity(new Intent(context, Login.class));
                         return;
                     }
                     if (cardAction.equalsIgnoreCase("ADD")) {
+                        if (!isConnected()) {
+                            alert.showSnackIsConnectedView(((Activity) context).findViewById(R.id.main_view), isConnected());
+                            return;
+                        }
                         final Map<String, String> map = new HashMap<>();
                         map.put(tags.USER_ACTION, tags.ADD_CART_ITEM_GIFT_CARD);
                         map.put(tags.USER_ID, active.getUser().getUserId());
@@ -195,7 +205,7 @@ public class CompanyCardAdapter_1 extends RecyclerView.Adapter<RecyclerView.View
                                         } else if (jsonObject.getInt(tags.SUCCESS) == tags.SUSPEND) {
                                             showMessage("You have to attempt more three times. So you can add item in cart after three hours.");
                                         } else {
-                                            
+
                                         }
                                     }
                                 } catch (JSONException e) {
@@ -208,10 +218,14 @@ public class CompanyCardAdapter_1 extends RecyclerView.Adapter<RecyclerView.View
                             public void onError(VolleyError volleyError) {
                                 volleyError.printStackTrace();
                                 if (volleyError.getMessage() != null)
-                                    Log.e(TAG,volleyError.getMessage());
+                                    Log.e(TAG, volleyError.getMessage());
                             }
                         });
                     } else if (cardAction.equalsIgnoreCase("REMOVE")) {
+                        if (!isConnected()) {
+                            alert.showSnackIsConnectedView(((Activity) context).findViewById(R.id.main_view), isConnected());
+                            return;
+                        }
                         final Map<String, String> map = new HashMap<>();
                         map.put(tags.USER_ACTION, tags.REMOVE_CART_ITEM_GIFT_CARD);
                         map.put(tags.USER_ID, active.getUser().getUserId());
@@ -248,7 +262,7 @@ public class CompanyCardAdapter_1 extends RecyclerView.Adapter<RecyclerView.View
                             public void onError(VolleyError volleyError) {
                                 volleyError.printStackTrace();
                                 if (volleyError.getMessage() != null)
-                                    Log.e(TAG,volleyError.getMessage());
+                                    Log.e(TAG, volleyError.getMessage());
                             }
                         });
                     }
@@ -258,51 +272,56 @@ public class CompanyCardAdapter_1 extends RecyclerView.Adapter<RecyclerView.View
                 @Override
                 public void onClick(View v) {
                     final Cart cart = app.getCart();
-                    if(!active.isLogin()){
+                    if (!active.isLogin()) {
                         context.startActivity(new Intent(context, Login.class));
                         return;
                     }
-                        final Map<String, String> map = new HashMap<>();
-                        map.put(tags.USER_ACTION, tags.ADD_CART_ITEM_GIFT_CARD);
-                        map.put(tags.USER_ID, active.getUser().getUserId());
-                        map.put(tags.GIFT_CARD_GIFT_CARD_ID, giftCard.getGiftCardID() + "");
-                        dmrRequest.doPost(urls.getCartInfo(), map, new DMRResult() {
-                            @Override
-                            public void onSuccess(JSONObject jsonObject) {
-                                try {
-                                    if (jsonObject.has(tags.SUCCESS)) {
-                                        if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
-                                            JSONArray array = jsonObject.getJSONArray(tags.GIFT_CARDS);
-                                            cart.removeAll();
-                                            for (int i = 0; i < array.length(); i++) {
-                                                GiftCard giftCard1 = GiftCard.fromJSON(array.getJSONObject(i));
-                                                cart.addCartItem(giftCard);
-                                            }
-                                            showMessage("Successfully Added to Cart");
-                                            app.setCart(cart);
-                                            ((CompanyCard) context).invalidateOptionsMenu();
-                                            MyServices.startLeftCartTimeService(context);
-                                            context.startActivity(new Intent(context, ShoppingCart.class));
-                                        } else if (jsonObject.getInt(tags.SUCCESS) == tags.SUSPEND) {
-                                            showMessage("You have to attempt more three times. So you can add item in cart after three hours.");
-                                        } else {
-
-                                        }
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                    Log.e(TAG, e.getMessage());
-                                }
-                            }
-
-                            @Override
-                            public void onError(VolleyError volleyError) {
-                                volleyError.printStackTrace();
-                                if (volleyError.getMessage() != null)
-                                    Log.e(TAG,volleyError.getMessage());
-                            }
-                        });
+                    if (!isConnected()){
+                        alert.showSnackIsConnectedView(((Activity) context).findViewById(R.id.main_view), isConnected());
+                        return;
                     }
+
+                    final Map<String, String> map = new HashMap<>();
+                    map.put(tags.USER_ACTION, tags.ADD_CART_ITEM_GIFT_CARD);
+                    map.put(tags.USER_ID, active.getUser().getUserId());
+                    map.put(tags.GIFT_CARD_GIFT_CARD_ID, giftCard.getGiftCardID() + "");
+                    dmrRequest.doPost(urls.getCartInfo(), map, new DMRResult() {
+                        @Override
+                        public void onSuccess(JSONObject jsonObject) {
+                            try {
+                                if (jsonObject.has(tags.SUCCESS)) {
+                                    if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
+                                        JSONArray array = jsonObject.getJSONArray(tags.GIFT_CARDS);
+                                        cart.removeAll();
+                                        for (int i = 0; i < array.length(); i++) {
+                                            GiftCard giftCard1 = GiftCard.fromJSON(array.getJSONObject(i));
+                                            cart.addCartItem(giftCard);
+                                        }
+                                        showMessage("Successfully Added to Cart");
+                                        app.setCart(cart);
+                                        ((CompanyCard) context).invalidateOptionsMenu();
+                                        MyServices.startLeftCartTimeService(context);
+                                        context.startActivity(new Intent(context, ShoppingCart.class));
+                                    } else if (jsonObject.getInt(tags.SUCCESS) == tags.SUSPEND) {
+                                        showMessage("You have to attempt more three times. So you can add item in cart after three hours.");
+                                    } else {
+
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Log.e(TAG, e.getMessage());
+                            }
+                        }
+
+                        @Override
+                        public void onError(VolleyError volleyError) {
+                            volleyError.printStackTrace();
+                            if (volleyError.getMessage() != null)
+                                Log.e(TAG, volleyError.getMessage());
+                        }
+                    });
+                }
             });
             //count++;
             final String url = config.getGiftCardImageAddress().concat(companyBrand.getImage());
@@ -317,6 +336,7 @@ public class CompanyCardAdapter_1 extends RecyclerView.Adapter<RecyclerView.View
     public int getItemCount() {
         return cardInfoList == null ? 0 : cardInfoList.size();
     }
+
     public void clear() {
         cardInfoList.clear();
         this.notifyDataSetChanged();
@@ -325,9 +345,14 @@ public class CompanyCardAdapter_1 extends RecyclerView.Adapter<RecyclerView.View
     private void showMessage(String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
+
     public void add(List<GiftCard> items) {
         int previousDataSize = this.cardInfoList.size();
         this.cardInfoList.addAll(items);
         notifyItemRangeInserted(previousDataSize, items.size());
+    }
+
+    private boolean isConnected() {
+        return ConnectivityReceiver.isConnected();
     }
 }

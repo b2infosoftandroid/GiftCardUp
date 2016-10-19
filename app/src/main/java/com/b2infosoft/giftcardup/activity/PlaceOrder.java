@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.app.Alert;
+import com.b2infosoft.giftcardup.app.GiftCardApp;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
@@ -31,7 +33,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PlaceOrder extends AppCompatActivity implements DMRResult {
+public class PlaceOrder extends AppCompatActivity implements DMRResult , ConnectivityReceiver.ConnectivityReceiverListener{
     private static final String TAG = PlaceOrder.class.getName();
     Tags tags;
     Active active;
@@ -42,13 +44,16 @@ public class PlaceOrder extends AppCompatActivity implements DMRResult {
     Button action_complete;
     LinearLayout linearLayout;
     private OrderSummery orderSummery;
-
+    private Alert alert;
+    View main_view;
     private void init() {
         tags = Tags.getInstance();
         active = Active.getInstance(this);
         urls = Urls.getInstance();
         user = active.getUser();
         dmrRequest = DMRRequest.getInstance(this, TAG);
+        alert = Alert.getInstance(this);
+        main_view = findViewById(R.id.main_view);
     }
 
     @Override
@@ -128,9 +133,13 @@ public class PlaceOrder extends AppCompatActivity implements DMRResult {
 
     private void fetchAddress() {
         if (active.isLogin()) {
+            if(!isConnected()){
+                alert.showSnackIsConnectedView(main_view,isConnected());
+                return;
+            }
             Map<String, String> map = new HashMap<>();
             map.put(tags.USER_ACTION, tags.USER_CONTACT_INFORMATION);
-            map.put(tags.USER_ID, user.getUserId() + "");
+            map.put(tags.USER_ID, user.getUserId());
             dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
                 @Override
                 public void onSuccess(JSONObject jsonObject) {
@@ -167,6 +176,10 @@ public class PlaceOrder extends AppCompatActivity implements DMRResult {
 
     private void orderPlace() {
         if (orderSummery != null) {
+            if(!isConnected()){
+                alert.showSnackIsConnectedView(main_view,isConnected());
+                return;
+            }
             Map<String, String> map = new HashMap<>();
             map.put(tags.USER_ACTION, tags.PAY_WITH_AVAILABLE_FUND);
             map.put(tags.USER_ID, active.getUser().getUserId());
@@ -183,7 +196,16 @@ public class PlaceOrder extends AppCompatActivity implements DMRResult {
             box.show();
         }
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        GiftCardApp.getInstance().setConnectivityListener(this);
+    }
 
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        alert.showSnackIsConnectedView(main_view, isConnected);
+    }
     @Override
     public void onSuccess(JSONObject jsonObject) {
         try {

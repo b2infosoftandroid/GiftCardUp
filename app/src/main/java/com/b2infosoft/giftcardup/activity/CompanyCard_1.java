@@ -16,6 +16,7 @@ import android.view.View;
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.adapter.CompanyCardAdapter_1;
+import com.b2infosoft.giftcardup.app.Alert;
 import com.b2infosoft.giftcardup.app.GiftCardApp;
 import com.b2infosoft.giftcardup.model.Cart;
 import com.b2infosoft.giftcardup.app.Tags;
@@ -39,7 +40,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CompanyCard_1 extends AppCompatActivity implements DMRResult, Paginate.Callbacks {
+public class CompanyCard_1 extends AppCompatActivity implements DMRResult, Paginate.Callbacks,ConnectivityReceiver.ConnectivityReceiverListener  {
+    private Alert alert;
+    View main_view;
     private GiftCardApp app;
     private Cart cart;
     private static final String TAG = CompanyCard_1.class.getName();
@@ -73,6 +76,8 @@ public class CompanyCard_1 extends AppCompatActivity implements DMRResult, Pagin
         app = (GiftCardApp) getApplicationContext();
         cart = app.getCart();
         handler = new Handler();
+        alert = Alert.getInstance(this);
+        main_view = findViewById(R.id.main_view);
     }
 
     private void setupPagination() {
@@ -155,13 +160,18 @@ public class CompanyCard_1 extends AppCompatActivity implements DMRResult, Pagin
     @Override
     protected void onResume() {
         super.onResume();
+        GiftCardApp.getInstance().setConnectivityListener(this);
         loadAvailableCartItems();
         invalidateOptionsMenu();
     }
 
     private void loadAvailableCartItems() {
-        if (active.getUser() == null)
+        if (!active.isLogin())
             return;
+        if(!isConnected()){
+            alert.showSnackIsConnectedView(main_view,isConnected());
+            return;
+        }
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.CHECK_CART_ITEMS);
         map.put(tags.USER_ID, active.getUser().getUserId());
@@ -247,6 +257,10 @@ public class CompanyCard_1 extends AppCompatActivity implements DMRResult, Pagin
 
     private void checkNotificationUnRead() {
         if (active.isLogin()) {
+            if(!isConnected()){
+                alert.showSnackIsConnectedView(main_view,isConnected());
+                return;
+            }
             Map<String, String> map = new HashMap<>();
             map.put(tags.USER_ACTION, tags.GET_NOTIFICATIONS_UN_READ);
             map.put(tags.USER_ID, active.getUser().getUserId());
@@ -270,6 +284,10 @@ public class CompanyCard_1 extends AppCompatActivity implements DMRResult, Pagin
 
     private synchronized void loadCards() {
         if (isLoading()) {
+            return;
+        }
+        if(!isConnected()){
+            alert.showSnackIsConnectedView(main_view,isConnected());
             return;
         }
         Map<String, String> map = new HashMap<>();
@@ -363,6 +381,11 @@ public class CompanyCard_1 extends AppCompatActivity implements DMRResult, Pagin
         volleyError.printStackTrace();
         if (volleyError.getMessage() != null)
             Log.e(TAG, volleyError.getMessage());
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        alert.showSnackIsConnectedView(main_view,isConnected);
     }
 
     private boolean isConnected() {

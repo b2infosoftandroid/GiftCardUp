@@ -13,6 +13,8 @@ import android.widget.EditText;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.app.Alert;
+import com.b2infosoft.giftcardup.app.GiftCardApp;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.app.Validation;
@@ -27,8 +29,10 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class ForgotPassword extends AppCompatActivity implements DMRResult {
+public class ForgotPassword extends AppCompatActivity implements DMRResult ,ConnectivityReceiver.ConnectivityReceiverListener{
     private static final String TAG = ForgotPassword.class.getName();
+    private Alert alert;
+    View main_view;
     Active active;
     Validation validation;
     Tags tags;
@@ -54,12 +58,20 @@ public class ForgotPassword extends AppCompatActivity implements DMRResult {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        GiftCardApp.getInstance().setConnectivityListener(this);
+    }
+
     private void init() {
         active = Active.getInstance(this);
         tags = Tags.getInstance();
         urls = Urls.getInstance();
         validation = Validation.getInstance();
         dmrRequest = DMRRequest.getInstance(this, TAG);
+        alert = Alert.getInstance(this);
+        main_view = findViewById(R.id.main_view);
     }
 
     private void checkBlank() {
@@ -70,7 +82,10 @@ public class ForgotPassword extends AppCompatActivity implements DMRResult {
             mail.requestFocus();
             return;
         }
-
+        if(!isConnected()){
+            alert.showSnackIsConnectedView(main_view,isConnected());
+            return;
+        }
         HashMap<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.FORGOT_PASSWORD_REQUEST);
         map.put(tags.USER_ID, email);
@@ -79,7 +94,6 @@ public class ForgotPassword extends AppCompatActivity implements DMRResult {
 
     @Override
     public void onSuccess(JSONObject jsonObject) {
-        Log.d("OTP", jsonObject.toString());
         AlertBox box = new AlertBox(this);
         box.setTitle("Alert");
         try {
@@ -139,6 +153,11 @@ public class ForgotPassword extends AppCompatActivity implements DMRResult {
 
     private void OTPConfirm() {
         startActivity(new Intent(this, OtpConfirm.class));
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        alert.showSnackIsConnectedView(main_view, isConnected);
     }
 
     private boolean isConnected() {
