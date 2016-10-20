@@ -1,12 +1,14 @@
 package com.b2infosoft.giftcardup.activity;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,16 +20,19 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.app.Alert;
+import com.b2infosoft.giftcardup.app.GiftCardApp;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.custom.AlertBox;
 import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.urlconnection.MultipartUtility;
+
 import java.io.IOException;
 
 
-public class AddIdentity extends AppCompatActivity {
+public class AddIdentity extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
     private final static String TAG = AddIdentity.class.getName();
     private Active active;
     private Tags tags;
@@ -40,6 +45,8 @@ public class AddIdentity extends AppCompatActivity {
     private Bitmap bitmap;
     private ImageView imageView;
     private Button choose, upload;
+    private Alert alert;
+    View main_view;
 
     private void init() {
         active = Active.getInstance(this);
@@ -47,6 +54,8 @@ public class AddIdentity extends AppCompatActivity {
         urls = Urls.getInstance();
         intent = new Intent(this, MyProfile.class);
         intent.putExtra(tags.SELECTED_TAB, 2);
+        alert = Alert.getInstance(this);
+        main_view = findViewById(R.id.main_view);
     }
 
     @Override
@@ -68,6 +77,12 @@ public class AddIdentity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (bitmap != null) {
+                    if (!active.isLogin())
+                        return;
+                    if (!isConnected()) {
+                        alert.showSnackIsConnectedView(main_view, isConnected());
+                        return;
+                    }
                     new UpdateIdentity(bitmap).execute();
                 } else {
                     Toast.makeText(AddIdentity.this, "Please Choose Identity", Toast.LENGTH_SHORT).show();
@@ -78,7 +93,7 @@ public class AddIdentity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 //NavUtils.navigateUpFromSameTask(this);
                 this.onBackPressed();
@@ -98,7 +113,7 @@ public class AddIdentity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        MyProfile.setSelectedTabIndex(1);
+        //MyProfile.setSelectedTabIndex(1);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
             filePath = data.getData();
             try {
@@ -112,7 +127,6 @@ public class AddIdentity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-        //replaceFragment();
     }
 
     //method to get the file path from uri
@@ -175,14 +189,29 @@ public class AddIdentity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            Log.d(TAG,s);
             super.onPostExecute(s);
-            AlertBox alertBox = new AlertBox(getApplicationContext());
+            Toast.makeText(getBaseContext(),"Successfully Added",Toast.LENGTH_SHORT).show();
+            /*
+            AlertBox alertBox = new AlertBox(AddIdentity.this.getApplicationContext());
             alertBox.setMessage("Your Identity is Updated Successfully");
             alertBox.show();
+           */
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // register connection status listener
+        GiftCardApp.getInstance().setConnectivityListener(this);
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        alert.showSnackIsConnectedView(main_view, isConnected);
+    }
+
     private boolean isConnected() {
-         return ConnectivityReceiver.isConnected();
+        return ConnectivityReceiver.isConnected();
     }
 }

@@ -19,16 +19,20 @@ import android.widget.Toast;
 
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.app.Alert;
+import com.b2infosoft.giftcardup.app.GiftCardApp;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
 import com.b2infosoft.giftcardup.model.AddNewAccount;
 import com.b2infosoft.giftcardup.services.ConnectivityReceiver;
 import com.b2infosoft.giftcardup.urlconnection.MultipartUtility;
+
 import java.io.IOException;
-public class AddAccountInfo extends AppCompatActivity {
+
+public class AddAccountInfo extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
     private final String TAG = AddAccountInfo.class.getName();
     private Alert alert;
+    View main_view;
     private Tags tags;
     private Active active;
     private Urls urls;
@@ -52,6 +56,7 @@ public class AddAccountInfo extends AppCompatActivity {
         intent = new Intent(this, MyProfile.class);
         intent.putExtra(tags.SELECTED_TAB, 1);
         alert = Alert.getInstance(this);
+        main_view = findViewById(R.id.main_view);
     }
 
     @Override
@@ -59,7 +64,7 @@ public class AddAccountInfo extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         init();
         setContentView(R.layout.activity_add_account_info);
-        if(getSupportActionBar()!=null) {
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         name = (EditText) findViewById(R.id.bank_name);
@@ -86,11 +91,10 @@ public class AddAccountInfo extends AppCompatActivity {
                 account.setBankAccountNo(bank_account);
                 account.setBankRountingNo(bank_routing);
                 account.setVoidImage(bitmap);
-                if(!active.isLogin()){
+                if (!active.isLogin())
                     return;
-                }
-                if(!isConnected()){
-                    alert.showSnackIsConnected(isConnected());
+                if (!isConnected()) {
+                    alert.showSnackIsConnectedView(main_view, isConnected());
                     return;
                 }
                 new AddBankAccount(account).execute();
@@ -109,6 +113,18 @@ public class AddAccountInfo extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // register connection status listener
+        GiftCardApp.getInstance().setConnectivityListener(this);
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        alert.showSnackIsConnectedView(main_view, isConnected);
     }
 
     @Override
@@ -218,7 +234,8 @@ public class AddAccountInfo extends AppCompatActivity {
             super.onPostExecute(s);
         }
     }
+
     private boolean isConnected() {
-         return ConnectivityReceiver.isConnected();
+        return ConnectivityReceiver.isConnected();
     }
 }

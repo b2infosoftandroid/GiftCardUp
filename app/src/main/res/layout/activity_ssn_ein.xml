@@ -1,134 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".activity.ProfileSsnEin">
-    <ScrollView
-        android:id="@+id/scroll_view_step_one"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none"
-        android:visibility="visible">
+    tools:context="com.b2infosoft.giftcardup.activity.ProfileSsnEin">
 
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
+
+        <ScrollView
+            android:id="@+id/scroll_view_step_one"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:scrollbars="none"
+            android:visibility="visible">
 
             <LinearLayout
-                android:id="@+id/approve_for_selling_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/ssn_ein_identification_image"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    />
-
-                <Button
-                    android:id="@+id/ssn_ein_identification_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:background="@drawable/button_fill_background"
-                    android:padding="@dimen/button_margin_left"
-                    android:text="@string/ssn_ein_identification_pic"
-                    android:textAllCaps="true"
-                    android:textColor="@color/button_foreground" />
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/activity_horizontal_margin"
-                    android:textColorHint="@color/edit_text_hint_text">
-
-                    <EditText
-                        android:id="@+id/ssn_ein_no"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/enter_ssn_ein"
-                        android:inputType="text"
-                        android:textAllCaps="true"
-                        android:textColor="@color/edit_text_text" />
-                </android.support.design.widget.TextInputLayout>
-
                 <LinearLayout
+                    android:id="@+id/approve_for_selling_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/edit_text_margin_top"
                     android:orientation="vertical">
 
-                    <TextView
+                    <ImageView
+                        android:id="@+id/ssn_ein_identification_image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:text="@string/ssn_ein_id_type"
-                        android:textAllCaps="true" />
+                        android:layout_gravity="center" />
 
-                    <RadioGroup
-                        android:id="@+id/radio_group"
+                    <Button
+                        android:id="@+id/ssn_ein_identification_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/button_fill_background"
+                        android:padding="@dimen/button_margin_left"
+                        android:text="@string/ssn_ein_identification_pic"
+                        android:textAllCaps="true"
+                        android:textColor="@color/button_foreground" />
+
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/activity_horizontal_margin"
-                        android:orientation="horizontal">
+                        android:textColorHint="@color/edit_text_hint_text">
 
-                        <RadioButton
-                            android:id="@+id/id_type_ssn"
+                        <EditText
+                            android:id="@+id/ssn_ein_no"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/enter_ssn_ein"
+                            android:inputType="text"
+                            android:textAllCaps="true"
+                            android:textColor="@color/edit_text_text" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/edit_text_margin_top"
+                        android:orientation="vertical">
+
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/id_type_ssn"
-                            android:textColor="@color/edit_text_text" />
+                            android:layout_marginLeft="10dp"
+                            android:text="@string/ssn_ein_id_type"
+                            android:textAllCaps="true" />
 
-                        <RadioButton
-                            android:id="@+id/id_type_ein"
+                        <RadioGroup
+                            android:id="@+id/radio_group"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/activity_horizontal_margin"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/id_type_ssn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/id_type_ssn"
+                                android:textColor="@color/edit_text_text" />
+
+                            <RadioButton
+                                android:id="@+id/id_type_ein"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/radio_button_margin_left"
+                                android:text="@string/id_type_ein"
+                                android:textColor="@color/edit_text_text" />
+                        </RadioGroup>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/button_margin_top"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/button_margin_left">
+
+                        <Button
+                            android:id="@+id/bank_cancel_btn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/radio_button_margin_left"
-                            android:text="@string/id_type_ein"
-                            android:textColor="@color/edit_text_text" />
-                    </RadioGroup>
-                </LinearLayout>
+                            android:background="@drawable/button_fill_background"
+                            android:padding="@dimen/button_margin_left"
+                            android:text="@string/bank_info_cancel_btn"
+                            android:textAllCaps="true"
+                            android:textColor="@color/button_foreground" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/button_margin_top"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/button_margin_left">
-
-                    <Button
-                        android:id="@+id/bank_cancel_btn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/button_fill_background"
-                        android:padding="@dimen/button_margin_left"
-                        android:text="@string/bank_info_cancel_btn"
-                        android:textAllCaps="true"
-                        android:textColor="@color/button_foreground" />
-
-                    <Button
-                        android:id="@+id/bank_save_btn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/button_margin_left"
-                        android:background="@drawable/button_fill_background"
-                        android:padding="@dimen/button_margin_left"
-                        android:text="@string/bank_info_save_btn"
-                        android:textAllCaps="true"
-                        android:textColor="@color/button_foreground" />
+                        <Button
+                            android:id="@+id/bank_save_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/button_margin_left"
+                            android:background="@drawable/button_fill_background"
+                            android:padding="@dimen/button_margin_left"
+                            android:text="@string/bank_info_save_btn"
+                            android:textAllCaps="true"
+                            android:textColor="@color/button_foreground" />
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

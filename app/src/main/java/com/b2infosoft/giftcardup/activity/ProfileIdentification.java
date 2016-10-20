@@ -14,6 +14,8 @@ import android.widget.SpinnerAdapter;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.app.Alert;
+import com.b2infosoft.giftcardup.app.GiftCardApp;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
@@ -36,7 +38,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class ProfileIdentification extends AppCompatActivity implements DMRResult{
+public class ProfileIdentification extends AppCompatActivity implements DMRResult, ConnectivityReceiver.ConnectivityReceiverListener {
     private final String TAG = ProfileIdentification.class.getName();
     private Active active;
     private Tags tags;
@@ -47,7 +49,8 @@ public class ProfileIdentification extends AppCompatActivity implements DMRResul
     EditText f_name, l_name, email, mobile, city, zip_code, cmpny_name, paypal_id, address, suite_no;
     Button b2;
     private AppCompatSpinner appCompatSpinner;
-
+    private Alert alert;
+    View main_view;
     private void init() {
         active = Active.getInstance(this);
         tags = Tags.getInstance();
@@ -55,6 +58,8 @@ public class ProfileIdentification extends AppCompatActivity implements DMRResul
         urls = Urls.getInstance();
         dbHelper = new DBHelper(this);
         box = new AlertBox(this);
+        alert = Alert.getInstance(this);
+        main_view = findViewById(R.id.main_view);
     }
 
     @Override
@@ -107,7 +112,17 @@ public class ProfileIdentification extends AppCompatActivity implements DMRResul
         getMenuInflater().inflate(R.menu.menu_identification,menu);
         return super.onCreateOptionsMenu(menu);
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // register connection status listener
+        GiftCardApp.getInstance().setConnectivityListener(this);
+    }
 
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        alert.showSnackIsConnectedView(main_view, isConnected);
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -123,15 +138,17 @@ public class ProfileIdentification extends AppCompatActivity implements DMRResul
     }
 
     private void fetchContactInfo() {
-        if (active.isLogin()) {
-            User user = active.getUser();
-
+            if(!active.isLogin())
+                return;
+            if(!isConnected()){
+                alert.showSnackIsConnectedView(main_view,isConnected());
+                return;
+            }
             /* LOADING USER DETAILS */
             Map<String, String> map1 = new HashMap<>();
             map1.put(tags.USER_ACTION, tags.USER_CONTACT_INFORMATION);
-            map1.put(tags.USER_ID, user.getUserId() + "");
+            map1.put(tags.USER_ID, active.getUser().getUserId());
             dmrRequest.doPost(urls.getUserInfo(), map1, this);
-        }
     }
 
     private void enableProfile(boolean isUpdate) {
@@ -160,7 +177,12 @@ public class ProfileIdentification extends AppCompatActivity implements DMRResul
 
 
     private void updateProfile(){
-
+        if(!active.isLogin())
+            return;
+        if(!isConnected()){
+            alert.showSnackIsConnectedView(main_view,isConnected());
+            return;
+        }
         State state =dbHelper.getStateByName(appCompatSpinner.getSelectedItem().toString());
         User user = active.getUser();
         Map<String,String> map = new HashMap<>();
@@ -175,7 +197,7 @@ public class ProfileIdentification extends AppCompatActivity implements DMRResul
         map.put(tags.PAY_PAL_ID,paypal_id.getText().toString());
         map.put(tags.CITY,city.getText().toString());
         map.put(tags.EMPLOYEE_ID,user.getEmployeeId() + "");
-        map.put(tags.USER_ID,user.getUserId() + "");
+        map.put(tags.USER_ID,user.getUserId());
         map.put(tags.STATE,state.getAbbreviation());
         dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
             @Override
@@ -188,11 +210,13 @@ public class ProfileIdentification extends AppCompatActivity implements DMRResul
                             enableProfile(false);
 
                         }else if (jsonObject.getInt(tags.SUCCESS) == tags.FAIL) {
-
+                            box.setMessage("Something went wrong. Try Again");
+                            box.show();
                         }
                     }
                 }catch (JSONException e){
-
+                    box.setMessage("Something went wrong. Try Again");
+                    box.show();
                 }
             }
 

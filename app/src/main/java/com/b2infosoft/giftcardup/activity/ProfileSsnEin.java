@@ -23,6 +23,8 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.app.Alert;
+import com.b2infosoft.giftcardup.app.GiftCardApp;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
@@ -40,8 +42,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProfileSsnEin extends AppCompatActivity implements DMRResult {
-
+public class ProfileSsnEin extends AppCompatActivity implements DMRResult , ConnectivityReceiver.ConnectivityReceiverListener {
+    private Alert alert;
+    View main_view;
     private final String TAG = ProfileSsnEin.class.getName();
     private Active active;
     private Tags tags;
@@ -66,6 +69,8 @@ public class ProfileSsnEin extends AppCompatActivity implements DMRResult {
         urls = Urls.getInstance();
         dmrRequest = DMRRequest.getInstance(this, TAG);
         dialog = new AlertDialog.Builder(this);
+        alert = Alert.getInstance(this);
+        main_view = findViewById(R.id.main_view);
     }
 
     @Override
@@ -101,7 +106,13 @@ public class ProfileSsnEin extends AppCompatActivity implements DMRResult {
                     idType = "EIN";
                 }
                 if (bitmap == null) {
-                    Toast.makeText(getApplicationContext(), "Please Select ProfileIdentification Image", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please Select Profile Identification Image", Toast.LENGTH_SHORT).show();
+                }
+                if(!active.isLogin())
+                    return;
+                if(!isConnected()){
+                    alert.showSnackIsConnectedView(main_view,isConnected());
+                    return;
                 }
                 new AddInformation(bitmap, ssnName, idType).execute();
             }
@@ -124,7 +135,17 @@ public class ProfileSsnEin extends AppCompatActivity implements DMRResult {
         }
         return super.onOptionsItemSelected(item);
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // register connection status listener
+        GiftCardApp.getInstance().setConnectivityListener(this);
+    }
 
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        alert.showSnackIsConnectedView(main_view, isConnected);
+    }
     @Override
     public void onSuccess(JSONObject jsonObject) {
         try {
@@ -219,7 +240,7 @@ public class ProfileSsnEin extends AppCompatActivity implements DMRResult {
 
         @Override
         protected void onPostExecute(String s) {
-            Log.d("OUTPUT", s);
+
             try {
                 JSONObject jsonObject = new JSONObject(s);
                 if (jsonObject.has(tags.SUCCESS)) {

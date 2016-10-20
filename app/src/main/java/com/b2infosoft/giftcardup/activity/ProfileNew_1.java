@@ -1,5 +1,4 @@
 package com.b2infosoft.giftcardup.activity;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -18,15 +17,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.app.Alert;
 import com.b2infosoft.giftcardup.app.Config;
 import com.b2infosoft.giftcardup.app.Format;
+import com.b2infosoft.giftcardup.app.GiftCardApp;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
@@ -54,7 +54,7 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ProfileNew_1 extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener, View.OnClickListener, DMRResult {
+public class ProfileNew_1 extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener, View.OnClickListener, DMRResult, ConnectivityReceiver.ConnectivityReceiverListener {
     final private static String TAG = ProfileNew_1.class.getName();
     private Active active;
     private Tags tags;
@@ -73,6 +73,7 @@ public class ProfileNew_1 extends AppCompatActivity implements AppBarLayout.OnOf
     private Map<Integer, Integer> approveMap;
     private Uri filePath;
     private Bitmap bitmap;
+    private Alert alert;
 
     @Bind(R.id.app_bar)
     protected AppBarLayout appBarLayout;
@@ -88,8 +89,9 @@ public class ProfileNew_1 extends AppCompatActivity implements AppBarLayout.OnOf
 
     private boolean isHideToolbarView = false;
 
-    private String title ="";
-    private String member_since="";
+    private String title = "";
+    private String member_since = "";
+
     private void init() {
         active = Active.getInstance(this);
         tags = Tags.getInstance();
@@ -100,6 +102,7 @@ public class ProfileNew_1 extends AppCompatActivity implements AppBarLayout.OnOf
         progress = new Progress(this);
         dmrRequest = DMRRequest.getInstance(this, TAG);
         approveMap = new HashMap<>();
+        alert = Alert.getInstance(this);
         approveMap.put(0, R.drawable.ic_u_pending);
         approveMap.put(1, R.drawable.ic_u_approved);
         approveMap.put(2, R.drawable.ic_u_rejected);
@@ -152,11 +155,13 @@ public class ProfileNew_1 extends AppCompatActivity implements AppBarLayout.OnOf
         checkVerifiedStatus();
         initUi();
     }
+
     private void initUi() {
         appBarLayout.addOnOffsetChangedListener(this);
         toolbarHeaderView.bindTo(title, member_since);
         floatHeaderView.bindTo(title, member_since);
     }
+
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int offset) {
         int maxScroll = appBarLayout.getTotalScrollRange();
@@ -172,13 +177,24 @@ public class ProfileNew_1 extends AppCompatActivity implements AppBarLayout.OnOf
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        GiftCardApp.getInstance().setConnectivityListener(this);
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        alert.showSnackIsConnected(isConnected);
+    }
+
     private void updateInformationUser() {
         if (active.isLogin()) {
             User user = active.getUser();
             mail.setText(user.getEmail());
             toolbarLayout.setTitle(user.getFirstName() + " " + user.getLastName());
-            title =  user.getFirstName() + " " + user.getLastName();
-            member_since = "Member Since: "+format.getDate(user.getJoinDate());
+            title = user.getFirstName() + " " + user.getLastName();
+            member_since = "Member Since: " + format.getDate(user.getJoinDate());
             if (user.getImage().length() > 0 && user.getImage().contains(".")) {
                 LruBitmapCache.loadCacheImageProfile(this, profile_image, config.getUserProfileImageAddress().concat(user.getImage()), TAG);
             }
@@ -210,9 +226,16 @@ public class ProfileNew_1 extends AppCompatActivity implements AppBarLayout.OnOf
     }
 
     private void getApproveForSelling() {
+        if (!active.isLogin()) {
+            return;
+        }
+        if (!isConnected()) {
+            alert.showSnackIsConnected(isConnected());
+            return;
+        }
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.CHECK_APPROVE_FOR_SELLING);
-        map.put(tags.USER_ID, active.getUser().getUserId() + "");
+        map.put(tags.USER_ID, active.getUser().getUserId());
         dmrRequest.doPost(urls.getUserInfo(), map, this);
     }
 
@@ -271,6 +294,13 @@ public class ProfileNew_1 extends AppCompatActivity implements AppBarLayout.OnOf
                 */
                 Bitmap selectedProfile = MediaStore.Images.Media.getBitmap(this.getContentResolver(), filePath);
                 if (selectedProfile != null) {
+                    if(!active.isLogin()){
+                        return;
+                    }
+                    if(!isConnected()){
+                        alert.showSnackIsConnected(isConnected());
+                        return;
+                    }
                     new UpdateProfile(selectedProfile).execute();
                 }
             } catch (IOException e) {
@@ -310,6 +340,7 @@ public class ProfileNew_1 extends AppCompatActivity implements AppBarLayout.OnOf
             super.onPostExecute(s);
             profile_progress_bar.setVisibility(View.GONE);
             profile_image.setAlpha(1.0f);
+            Log.d("PROFILE_PIC",s);
             //Toast.makeText(ProfileNew.this, "Successfully Profile Update", Toast.LENGTH_SHORT).show();
             fetchUserInfo();
         }
@@ -364,9 +395,16 @@ public class ProfileNew_1 extends AppCompatActivity implements AppBarLayout.OnOf
     }
 
     private void checkVerifiedStatus() {
+        if (!active.isLogin()) {
+            return;
+        }
+        if (!isConnected()) {
+            alert.showSnackIsConnected(isConnected());
+            return;
+        }
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.USER_ALL_APPROVE_INFO);
-        map.put(tags.USER_ID, active.getUser().getUserId() + "");
+        map.put(tags.USER_ID, active.getUser().getUserId());
         dmrRequest.doPost(urls.getUserInfo(), map, this);
     }
 
@@ -418,6 +456,13 @@ public class ProfileNew_1 extends AppCompatActivity implements AppBarLayout.OnOf
     }
 
     private void checkAvailableBalance() {
+        if (!active.isLogin()) {
+            return;
+        }
+        if (!isConnected()) {
+            alert.showSnackIsConnected(isConnected());
+            return;
+        }
         Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.AVAILABLE_FUND_BALANCE);
         map.put(tags.USER_ID, active.getUser().getUserId());
@@ -431,28 +476,44 @@ public class ProfileNew_1 extends AppCompatActivity implements AppBarLayout.OnOf
     }
 
     private void fetchContactInfo() {
-        if (active.isLogin()) {
-            User user = active.getUser();
-
-            /* LOADING USER DETAILS */
-            Map<String, String> map1 = new HashMap<>();
-            map1.put(tags.USER_ACTION, tags.USER_CONTACT_INFORMATION);
-            map1.put(tags.USER_ID, user.getUserId());
-            dmrRequest.doPost(urls.getUserInfo(), map1, this);
+        if (!active.isLogin()) {
+            return;
         }
+        if (!isConnected()) {
+            alert.showSnackIsConnected(isConnected());
+            return;
+        }
+            /* LOADING USER DETAILS */
+        Map<String, String> map1 = new HashMap<>();
+        map1.put(tags.USER_ACTION, tags.USER_CONTACT_INFORMATION);
+        map1.put(tags.USER_ID, active.getUser().getUserId());
+        dmrRequest.doPost(urls.getUserInfo(), map1, this);
     }
 
     private void fetchUserInfo() {
         /*LOADING USER PROFILE*/
-        if (active.isLogin()) {
-            Map<String, String> map1 = new HashMap<>();
-            map1.put(tags.USER_ACTION, tags.USER_INFO);
-            map1.put(tags.USER_ID, active.getUser().getUserId());
-            dmrRequest.doPost(urls.getUserInfo(), map1, this);
+        if (!active.isLogin()) {
+            return;
         }
+        if (!isConnected()) {
+            alert.showSnackIsConnected(isConnected());
+            return;
+        }
+        Map<String, String> map1 = new HashMap<>();
+        map1.put(tags.USER_ACTION, tags.USER_INFO);
+        map1.put(tags.USER_ID, active.getUser().getUserId());
+        dmrRequest.doPost(urls.getUserInfo(), map1, this);
+
     }
 
     private void resendEmail() {
+        if(!active.isLogin()){
+            return;
+        }
+        if(!isConnected()){
+            alert.showSnackIsConnected( isConnected());
+            return;
+        }
         progress.show();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, urls.getUserInfo(),
                 new Response.Listener<String>() {
@@ -493,6 +554,7 @@ public class ProfileNew_1 extends AppCompatActivity implements AppBarLayout.OnOf
         MySingleton singleton = MySingleton.getInstance(this);
         singleton.getRequestQueue().add(stringRequest);
     }
+
     private boolean isConnected() {
         return ConnectivityReceiver.isConnected();
     }

@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
+import com.b2infosoft.giftcardup.app.Alert;
+import com.b2infosoft.giftcardup.app.GiftCardApp;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
@@ -30,7 +32,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AddSSN extends AppCompatActivity implements DMRResult {
+public class AddSSN extends AppCompatActivity implements DMRResult, ConnectivityReceiver.ConnectivityReceiverListener {
     private final static String TAG = AddSSN.class.getName();
     private Active active;
     private Tags tags;
@@ -42,14 +44,18 @@ public class AddSSN extends AppCompatActivity implements DMRResult {
     private RadioButton id_type_ssn, id_type_ein;
     private RadioGroup radioGroup;
     private Button cancel, save;
+    private Alert alert;
+    View main_view;
 
     private void init() {
         tags = Tags.getInstance();
-        active = Active.getInstance(getApplicationContext());
+        active = Active.getInstance(this);
         urls = Urls.getInstance();
         dmrRequest = DMRRequest.getInstance(this, TAG);
         intent = new Intent(this, MyProfile.class);
         intent.putExtra(tags.SELECTED_TAB, 2);
+        alert = Alert.getInstance(this);
+        main_view = findViewById(R.id.main_view);
     }
 
     @Override
@@ -80,7 +86,12 @@ public class AddSSN extends AppCompatActivity implements DMRResult {
                 } else {
                     idType = "EIN";
                 }
-
+                if(!active.isLogin())
+                    return;
+                if(!isConnected()){
+                    alert.showSnackIsConnectedView(main_view,isConnected());
+                    return;
+                }
                 Map<String, String> map = new HashMap<String, String>();
                 map.put(tags.USER_ACTION, tags.ADD_IDENTIFICATION_SSN);
                 map.put(tags.USER_ID, active.getUser().getUserId() + "");
@@ -104,7 +115,17 @@ public class AddSSN extends AppCompatActivity implements DMRResult {
         }
         return super.onOptionsItemSelected(item);
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // register connection status listener
+        GiftCardApp.getInstance().setConnectivityListener(this);
+    }
 
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        alert.showSnackIsConnectedView(main_view, isConnected);
+    }
     @Override
     public void onSuccess(JSONObject jsonObject) {
         //Toast.makeText(this,jsonObject.toString(),Toast.LENGTH_SHORT).show();
@@ -116,7 +137,6 @@ public class AddSSN extends AppCompatActivity implements DMRResult {
                     box.setMessage("Your Request is Processing");
                     box.show();
                     viewBlank();
-
                 } else if (success == tags.FAIL) {
                     String message = "";
                     if (jsonObject.has(tags.MESSAGE)) {

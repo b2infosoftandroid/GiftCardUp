@@ -13,6 +13,8 @@ import com.android.volley.VolleyError;
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.adapter.BankDetailRecyclerViewAdapter;
 import com.b2infosoft.giftcardup.adapter.BankDetailRecyclerViewAdapter1;
+import com.b2infosoft.giftcardup.app.Alert;
+import com.b2infosoft.giftcardup.app.GiftCardApp;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
@@ -30,8 +32,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ProfileBankDetails extends AppCompatActivity {
-
+public class ProfileBankDetails extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
+    private Alert alert;
+    View main_view;
     private final String TAG = ProfileBankDetails.class.getName();
     private Tags tags;
     private Active active;
@@ -43,18 +46,23 @@ public class ProfileBankDetails extends AppCompatActivity {
     FloatingActionButton add_account;
     BankDetailRecyclerViewAdapter1 adapter;
 
+    private void init() {
+        urls = Urls.getInstance();
+        tags = Tags.getInstance();
+        active = Active.getInstance(this);
+        dmrRequest = DMRRequest.getInstance(this, TAG);
+        alert = Alert.getInstance(this);
+        main_view = findViewById(R.id.main_view);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bank_details);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        urls = Urls.getInstance();
-        tags = Tags.getInstance();
-        active = Active.getInstance(this);
-        dmrRequest = DMRRequest.getInstance(this, TAG);
-        recyclerView = (RecyclerView)findViewById(R.id.recycler_view);
-        add_account = (FloatingActionButton)findViewById(R.id.floating_add_account_btn);
+        init();
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        add_account = (FloatingActionButton) findViewById(R.id.floating_add_account_btn);
         add_account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,12 +70,11 @@ public class ProfileBankDetails extends AppCompatActivity {
             }
         });
         getBankDetails();
-
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 //NavUtils.navigateUpFromSameTask(this);
                 this.onBackPressed();
@@ -75,11 +82,27 @@ public class ProfileBankDetails extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // register connection status listener
+        GiftCardApp.getInstance().setConnectivityListener(this);
+    }
 
-    private void getBankDetails(){
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        alert.showSnackIsConnectedView(main_view, isConnected);
+    }
+    private void getBankDetails() {
+        if(!active.isLogin())
+            return;
+        if(!isConnected()){
+            alert.showSnackIsConnectedView(main_view,isConnected());
+            return;
+        }
         final Map<String, String> map = new HashMap<>();
         map.put(tags.USER_ACTION, tags.BANK_ACCOUNT_INFO);
-        map.put(tags.USER_ID, active.getUser().getUserId()+ "");
+        map.put(tags.USER_ID, active.getUser().getUserId());
         dmrRequest.doPost(urls.getUserInfo(), map, new DMRResult() {
             @Override
             public void onSuccess(JSONObject jsonObject) {
@@ -88,15 +111,15 @@ public class ProfileBankDetails extends AppCompatActivity {
                     if (jsonObject.has(tags.SUCCESS)) {
                         if (jsonObject.getInt(tags.SUCCESS) == tags.PASS) {
                             if (jsonObject.has(tags.BANK_ACCOUNT_INFO)) {
-                                if(bankInfos == null){
+                                if (bankInfos == null) {
                                     bankInfos = new ArrayList<>();
                                 }
-                                JSONArray jsonArray =  jsonObject.getJSONArray(tags.BANK_ACCOUNT_INFO);
-                                for(int i = 0;i< jsonArray.length();i++) {
+                                JSONArray jsonArray = jsonObject.getJSONArray(tags.BANK_ACCOUNT_INFO);
+                                for (int i = 0; i < jsonArray.length(); i++) {
                                     BankInfo info = BankInfo.fromJSON(jsonArray.getJSONObject(i));
                                     bankInfos.add(info);
                                 }
-                                adapter = new BankDetailRecyclerViewAdapter1(getApplicationContext(),bankInfos);
+                                adapter = new BankDetailRecyclerViewAdapter1(getApplicationContext(), bankInfos);
                                 recyclerView.setAdapter(adapter);
                             }
                         }
@@ -111,10 +134,11 @@ public class ProfileBankDetails extends AppCompatActivity {
             public void onError(VolleyError volleyError) {
                 volleyError.printStackTrace();
                 if (volleyError.getMessage() != null)
-                    Log.e(TAG,volleyError.getMessage());
+                    Log.e(TAG, volleyError.getMessage());
             }
         });
     }
+
     private boolean isConnected() {
         return ConnectivityReceiver.isConnected();
     }

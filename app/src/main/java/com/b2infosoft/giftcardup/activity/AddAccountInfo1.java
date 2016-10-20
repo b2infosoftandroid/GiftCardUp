@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.b2infosoft.giftcardup.R;
 import com.b2infosoft.giftcardup.app.Alert;
+import com.b2infosoft.giftcardup.app.GiftCardApp;
 import com.b2infosoft.giftcardup.app.Tags;
 import com.b2infosoft.giftcardup.app.Urls;
 import com.b2infosoft.giftcardup.credential.Active;
@@ -28,9 +29,10 @@ import com.b2infosoft.giftcardup.urlconnection.MultipartUtility;
 
 import java.io.IOException;
 
-public class AddAccountInfo1 extends AppCompatActivity {
+public class AddAccountInfo1 extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener{
     private final String TAG = AddAccountInfo1.class.getName();
     private Alert alert;
+    View main_view;
     private Tags tags;
     private Active active;
     private Urls urls;
@@ -50,6 +52,7 @@ public class AddAccountInfo1 extends AppCompatActivity {
         active = Active.getInstance(getApplicationContext());
         urls = Urls.getInstance();
         alert = Alert.getInstance(this);
+        main_view = findViewById(R.id.main_view);
     }
 
     @Override
@@ -85,11 +88,10 @@ public class AddAccountInfo1 extends AppCompatActivity {
                 account.setBankRountingNo(bank_routing);
                 account.setVoidImage(bitmap);
 
-                if(!active.isLogin()){
+                if(!active.isLogin())
                     return;
-                }
                 if(!isConnected()){
-                    alert.showSnackIsConnected(isConnected());
+                    alert.showSnackIsConnectedView(main_view,isConnected());
                     return;
                 }
 
@@ -108,7 +110,17 @@ public class AddAccountInfo1 extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // register connection status listener
+        GiftCardApp.getInstance().setConnectivityListener(this);
+    }
 
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        alert.showSnackIsConnectedView(main_view, isConnected);
+    }
     @Override
     public void onBackPressed() {
         super.onBackPressed();

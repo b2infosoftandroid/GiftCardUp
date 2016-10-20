@@ -105,7 +105,10 @@ public class Dashboard_1 extends Fragment implements Paginate.Callbacks {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                adapter.add(items);
+                if (items != null) {
+                    if (adapter != null)
+                        adapter.add(items);
+                }
             }
         });
     }
@@ -187,7 +190,7 @@ public class Dashboard_1 extends Fragment implements Paginate.Callbacks {
         if (isLoading()) {
             return;
         }
-        if(!isConnected()){
+        if (!isConnected()) {
             alert.showSnackIsConnected(isConnected());
             return;
         }
@@ -285,6 +288,7 @@ public class Dashboard_1 extends Fragment implements Paginate.Callbacks {
     public interface OnFragmentDashboard {
         void onDashboard(Uri uri);
     }
+
     // Method to manually check connection status
     private boolean isConnected() {
         return ConnectivityReceiver.isConnected();
